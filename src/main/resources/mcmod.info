@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mcflux",
+  "name": "Minecraft Flux",
+  "description": "An open energy distribution system for Minecraft mods.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/Szewek/Minecraft-Flux",
+  "updateUrl": "",
+  "authorList": ["Szewek"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
