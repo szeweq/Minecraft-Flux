@@ -1,7 +1,7 @@
 [
 {
   "modid": "mcflux",
-  "name": "Minecraft Flux",
+  "name": "Minecraft-Flux",
   "description": "An open energy distribution system for Minecraft mods.",
   "version": "${version}",
   "mcversion": "${mcversion}",
