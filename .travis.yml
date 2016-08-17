@@ -10,7 +10,7 @@ cache:
   directories:
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper/
-before-deploy:
+before_deploy:
   - echo Release $TRAVIS_TAG
   - ./gradlew curseforge
 deploy:
