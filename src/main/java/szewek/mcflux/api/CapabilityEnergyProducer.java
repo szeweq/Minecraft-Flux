@@ -22,6 +22,6 @@ public class CapabilityEnergyProducer {
 					NBTBase nbt) {
 				instance.loadEnergyNBT(nbt);
 			}
-		}, EnergyProducerStorage::createDefault);
+		}, EnergyBattery::new);
 	}
 }
