@@ -1,12 +1,30 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
 before_script:
-  - ./gradlew setupCiWorkspace
+- ./gradlew setupCiWorkspace
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
+before-deploy:
+  - echo Release $TRAVIS_TAG
+  - ./gradlew curseforge
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: gy4SQXZC9Naiy3sIB8biWHkNhdFm/61cgBuBgNosXowh/SrhdGI/e2hXv0qK6CZaMfn6Hff1SSTIa21xXCSq6hKEZqGEfIyG74i1OpbWiBQaqmXoibTT1obhUPKc9nspPLUilTD3Ggz6dkygb1G+y9CyhS0HdiWj+Hur8qER+D6RHBVpL16bK2OSkqvoZQve5rLcDyOfsvsq9C5vNYI4qGt8YBVgENLbHaCPeliyqGW7wGo/Uidx2uSGjAAal+zcvq+2UWnevsuzl9mcoi1r62Mk8EdpAjh3MiJ2nS8QrgnkgfKgMW3hI52Drs5sEqdBdveQ2HyNyOXcWaQVXjTnEFjV6CN59ZvfhA8SQyRrtC9JgOj25UmSStINdAmgCQQ5YFxF24yaf2ydHVsShq7IIAoJtFKvIgJjwOlmhB8RlFb3qr+DJH1OAlETaVRyqNDNG80s6VYZZMItgd/zLda9TtYjd2oia9BLkManGLtLCiLTqtT9qwPwgOUc4fryDe/lKP3k05kEAC8/d7e+7M8c//N+hUH2+W7wbb7fkqhAoPVt3u5/RO55UNJb/s1wdZOK/WVP5UYQS4Xgm02omkZh5BUhIqf9HaetiEsGn+un3wWtOni/8ZnJDE2gyxCHDGo15V4yJGUbSjVty7nu+DtIMg7aDXsEJfzsJsYq8Yw6P80=
+  file_glob: true
+  file:
+  - build/libs/*-dev.jar
+  - build/libs/*-sources.jar
+  on:
+    repo: Szewek/Minecraft-Flux
+    tags: true
+env:
+  global:
+    secure: BHCEM7Yxsfet+e59bu7VyNxufKiRcBDf91p9kwsVnnBDfdUzKO9AaPjNxtq+W2jgEOqMYagmOcU4sKFr9dq3/ov04T5AS1j/CDK1jha8gkWiizpMvMMhH4ehysHiNk1M9VsGW7e+VxhlKXKLB/PCVyJFBjOoR5KstiounxCDJ+xOmd10YArgd52mvJBihv2Ic+tlTXuBdSzVNV+3N7kmnJMeKE33wh9qkivYX0ry5jds6wQVy1RHz9EY0YDE5LxxzuKGH+gTRj/dCjbuut5wX79mgyADBr48TJLCNjt9sC0r0vxhjQinsjfaDrfrfVSKjNRXHxt58cdGgPFxWrN7PYi24KDCvfpkEZIxcP3h3qgr0tMyZL8GoS+D4Jzir0ap76Q3eqPufnaXWe2w0OPvYlEt94LceRpgbou/BaIFQwZr0YC448M4T2+IzZhxSNcDCnl5gFcFjp6/r6sfa+rgPGqoH/xAY7ECJOLJOe9LaAdJGzB4MHtBSzb1CupUopF3vTLrCCIOoY6hwX+vQbYQy9opMG8snAYfcc3A7/muBg7iMa1PGledyQMJmkSayloL719ZO/2QBg569U+LZM83IxZJDXFr2vglpbXW6EP6IIImOHZj6SDKUPnFV4084ViFZzWDTi1/hc58Au1NiNZC6j6crot21oZGHK4zgUJGNPc=
