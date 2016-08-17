@@ -64,7 +64,7 @@ curseforge {
 		id = "248942"
 		releaseType = 'alpha'
 		changelogType = 'markdown'
-		changelog = file('changelog.md')
+		changelog = file('CHANGELOG.md')
 	}
 }
 task deobfJar(type: Jar, dependsOn: 'jar') {
