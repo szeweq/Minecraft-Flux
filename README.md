@@ -1,4 +1,4 @@
-# Minecraft-Flux
+# Minecraft-Flux ![Minecraft Flux Logo](https://raw.githubusercontent.com/Szewek/Minecraft-Flux/master/src/main/resources/mcflux.png)
 An open energy distribution system for Minecraft mods.
 
 ## Your first question: Why?

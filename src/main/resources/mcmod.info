@@ -9,7 +9,7 @@
   "updateUrl": "",
   "authorList": ["Szewek"],
   "credits": "",
-  "logoFile": "",
+  "logoFile": "/mcflux.png",
   "screenshots": [],
   "dependencies": []
 }
