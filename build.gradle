@@ -1,5 +1,3 @@
-
-// For those who want the bleeding edge
 buildscript {
     repositories {
         jcenter()
@@ -18,7 +16,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 version = "0.1.0"
-group= "szewek.mcflux" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "szewek.mcflux"
 archivesBaseName = "mcflux"
 
 minecraft {
