@@ -1,14 +1,14 @@
 buildscript {
-    repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-    }
+	repositories {
+		jcenter()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+	}
 }
 plugins {
 	id "com.matthewprenger.cursegradle" version "1.0.7"
@@ -27,50 +27,49 @@ def getVersion() {
 }
 
 version = getVersion()
-group= "szewek.mcflux"
+group = "szewek.mcflux"
 archivesBaseName = "mcflux"
 
 minecraft {
-    version = "1.10.2-12.18.1.2065"
-    runDir = "run"
-    mappings = "snapshot_20160814"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    replace "${version}", project.version
+	version = "1.10.2-12.18.1.2065"
+	runDir = "run"
+	mappings = "snapshot_20160814"
+	// makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+	replace "${version}", project.version
 }
 
 dependencies {
 }
 
-processResources
-{
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+processResources {
+	inputs.property "version", project.version
+	inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+	// replace stuff in mcmod.info, nothing else
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+		expand 'version':project.version, 'mcversion':project.minecraft.version
+	}
+	// copy everything else, thats not the mcmod.info
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+	}
 }
 curseforge {
-	apiKey = '0'
+	apiKey = "0"
 	if (System.env.CURSEFORGE_KEY)
 		apiKey = System.env.CURSEFORGE_KEY
 	project {
 		id = "248942"
-		releaseType = 'alpha'
-		changelogType = 'markdown'
-		changelog = file('CHANGELOG.md')
+		releaseType = "alpha"
+		changelogType = "markdown"
+		changelog = file("CHANGELOG.md")
 	}
 }
-task deobfJar(type: Jar, dependsOn: 'jar') {
+task deobfJar(type: Jar, dependsOn: "jar") {
 	from sourceSets.main.output
-    classifier = "dev"
+	classifier = "dev"
 }
 artifacts {
-    archives deobfJar
+	archives deobfJar
 }

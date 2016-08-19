@@ -1,8 +1,6 @@
 language: java
 jdk:
 - oraclejdk8
-before_script:
-- ./gradlew setupCiWorkspace
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -11,7 +9,6 @@ cache:
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper/
 after_deploy:
-  - echo Release $TRAVIS_TAG
   - ./gradlew curseforge
 deploy:
   provider: releases
