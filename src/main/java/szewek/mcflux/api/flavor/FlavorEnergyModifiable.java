@@ -3,12 +3,13 @@ package szewek.mcflux.api.flavor;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Flavor energy with a modifiable amount.
+ * Flavored energy with a modifiable amount.
  */
 public class FlavorEnergyModifiable extends FlavorEnergy {
 	protected long amount;
-	public FlavorEnergyModifiable(String flavor, NBTTagCompound data) {
+	public FlavorEnergyModifiable(String flavor, NBTTagCompound data, long amount) {
 		super(flavor, data);
+		this.amount = amount;
 	}
 
 	public void addAmount(long a) {

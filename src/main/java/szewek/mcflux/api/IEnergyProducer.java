@@ -20,7 +20,6 @@ public interface IEnergyProducer extends IEnergyHolder, INBTSerializable<NBTBase
 	/**
 	 * Grabs energy from a producer.
 	 * 
-	 * @param from Facing side of object where energy can be extracted.
 	 * @param amount Energy amount available to store and transfer.
 	 * @param simulate If {@code true}, then producer doesn't change its energy value.
 	 * @return Amount of extracted energy.

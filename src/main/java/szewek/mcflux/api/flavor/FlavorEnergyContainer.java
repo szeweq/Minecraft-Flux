@@ -4,6 +4,9 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 
+/**
+ * Simple flavored energy container. It allows multiple kinds of flavors.
+ */
 public class FlavorEnergyContainer implements IFlavorEnergyProducer, IFlavorEnergyConsumer {
 	protected FlavorEnergyStorage[] storageArray;
 	
@@ -54,9 +57,7 @@ public class FlavorEnergyContainer implements IFlavorEnergyProducer, IFlavorEner
 					r = amount;
 				if (!simulate)
 					fes.substractAmount(r);
-				FlavorEnergyModifiable fem = new FlavorEnergyModifiable(fes.flavor, fes.customData.copy());
-				fem.setAmount(r);
-				return fem;
+				return new FlavorEnergyModifiable(fes.flavor, fes.customData.copy(), r);
 			}
 		}
 		return null;

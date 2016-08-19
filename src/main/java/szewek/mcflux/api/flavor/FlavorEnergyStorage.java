@@ -8,7 +8,7 @@ public class FlavorEnergyStorage extends FlavorEnergyModifiable implements IFlav
 	private final long capacity;
 
 	public FlavorEnergyStorage(String flavor, NBTTagCompound data, long cap) {
-		super(flavor, data);
+		super(flavor, data, 0);
 		capacity = cap;
 	}
 

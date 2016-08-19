@@ -3,7 +3,7 @@ package szewek.mcflux.api.flavor;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Basic implementation of flavor energy.
+ * Basic implementation of flavored energy.
  */
 public abstract class FlavorEnergy {
 	public final String flavor;

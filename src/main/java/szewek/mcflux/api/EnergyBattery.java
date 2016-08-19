@@ -1,14 +1,18 @@
 package szewek.mcflux.api;
 
+/**
+ * Basic implementation of energy producer and consumer.
+ */
 public class EnergyBattery extends EnergyStorage implements IEnergyConsumer, IEnergyProducer {
 	/**
 	 * Creates a simple battery which can send energy in and out.
-	 * @param max
+	 * 
+	 * @param max Energy capacity
 	 */
 	public EnergyBattery(int max) {
 		super(max);
 	}
-	
+
 	EnergyBattery() {
 		super(40000);
 	}

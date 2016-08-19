@@ -8,13 +8,20 @@ import szewek.mcflux.api.util.CapabilityNBTStorage;
 public final class CapabilityEnergy {
 	private static boolean ONCE = true;
 
+	/**
+	 * Energy producer capability (for extracting energy).
+	 */
 	@CapabilityInject(IEnergyProducer.class)
 	public static Capability<IEnergyProducer> ENERGY_PRODUCER = null;
+	/**
+	 * Energy consumer capability (for consuming energy).
+	 */
 	@CapabilityInject(IEnergyConsumer.class)
 	public static Capability<IEnergyConsumer> ENERGY_CONSUMER = null;
 
 	public static void register() {
-		if(!ONCE) return;
+		if (!ONCE)
+			return;
 		ONCE = false;
 		CapabilityManager.INSTANCE.register(IEnergyProducer.class, new CapabilityNBTStorage<IEnergyProducer>(), EnergyBattery::new);
 		CapabilityManager.INSTANCE.register(IEnergyConsumer.class, new CapabilityNBTStorage<IEnergyConsumer>(), EnergyBattery::new);

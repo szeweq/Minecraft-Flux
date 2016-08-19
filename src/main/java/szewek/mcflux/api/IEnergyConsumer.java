@@ -20,7 +20,6 @@ public interface IEnergyConsumer extends IEnergyHolder, INBTSerializable<NBTBase
 	/**
 	 * Adds energy to a consumer.
 	 * 
-	 * @param from Facing side of object where energy can be consumed.
 	 * @param amount Energy amount available to be consumed.
 	 * @param simulate If {@code true}, then consumer doesn't change its energy value.
 	 * @return Amount of energy consumed.
