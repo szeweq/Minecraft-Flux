@@ -5,15 +5,18 @@ buildscript {
 			name = "forge"
 			url = "http://files.minecraftforge.net/maven"
 		}
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+		classpath "net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT"
+		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.8"
 	}
 }
-plugins {
-	id "com.matthewprenger.cursegradle" version "1.0.7"
-}
-apply plugin: 'net.minecraftforge.gradle.forge'
+
+apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: "com.matthewprenger.cursegradle"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
