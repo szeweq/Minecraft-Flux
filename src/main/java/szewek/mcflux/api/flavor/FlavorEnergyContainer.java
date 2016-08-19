@@ -6,8 +6,9 @@ import net.minecraft.nbt.NBTTagLong;
 
 /**
  * Simple flavored energy container. It allows multiple kinds of flavors.
+ * You should depend on FlavorEnergyStorage internally.
  */
-public class FlavorEnergyContainer implements IFlavorEnergyProducer, IFlavorEnergyConsumer {
+public class FlavorEnergyContainer implements IFlavorEnergyProducer, IFlavorEnergyConsumer, IFlavorEnergyHolder {
 	protected FlavorEnergyStorage[] storageArray;
 	
 	public FlavorEnergyContainer(FlavorEnergyStorage... storage) {
@@ -17,58 +18,34 @@ public class FlavorEnergyContainer implements IFlavorEnergyProducer, IFlavorEner
 	@Override
 	public long consumeFlavorEnergy(FlavorEnergy fe, boolean simulate) {
 		if (fe.getAmount() == 0) return 0;
-		for (FlavorEnergyStorage fes : storageArray) {
-			if (fe.flavor.equals(fes.flavor) && fe.customData.equals(fes.customData)) {
-				long amount = fe.getAmount();
-				long r = fes.getCapacity() - fes.getAmount();
-				if (amount < r)
-					r = amount;
-				if (!simulate)
-					fes.addAmount(r);
-				return r;
-			}
-		}
+		for (FlavorEnergyStorage fes : storageArray)
+			if (fe.flavor.equals(fes.flavor) && fe.customData.equals(fes.customData))
+				return fes.consumeFlavorEnergy(fe, simulate);
 		return 0;
 	}
 
 	@Override
 	public long extractFlavorEnergy(FlavorEnergy fe, boolean simulate) {
 		if (fe.getAmount() == 0) return 0;
-		for (FlavorEnergyStorage fes : storageArray) {
-			if (fe.flavor.equals(fes.flavor) && fe.customData.equals(fes.customData)) {
-				long amount = fe.getAmount();
-				long r = fes.getAmount();
-				if (amount < r)
-					r = amount;
-				if (!simulate)
-					fes.substractAmount(r);
-				return r;
-			}
-		}
+		for (FlavorEnergyStorage fes : storageArray)
+			if (fe.flavor.equals(fes.flavor) && fe.customData.equals(fes.customData))
+				return fes.extractFlavorEnergy(fe, simulate);
 		return 0;
 	}
 
 	@Override
 	public FlavorEnergy extractAnyFlavorEnergy(long amount, boolean simulate) {
-		for (FlavorEnergyStorage fes : storageArray) {
-			if (fes.amount > 0) {
-				long r = fes.getAmount();
-				if (amount < r)
-					r = amount;
-				if (!simulate)
-					fes.substractAmount(r);
-				return new FlavorEnergyModifiable(fes.flavor, fes.customData.copy(), r);
-			}
-		}
+		for (FlavorEnergyStorage fes : storageArray)
+			if (fes.amount > 0)
+				return fes.extractAnyFlavorEnergy(amount, simulate);
 		return null;
 	}
 
 	@Override
 	public NBTBase serializeNBT() {
 		NBTTagList nbt = new NBTTagList();
-		for (FlavorEnergyStorage fes : storageArray) {
+		for (FlavorEnergyStorage fes : storageArray)
 			nbt.appendTag(fes.serializeNBT());
-		}
 		return nbt;
 	}
 
@@ -83,6 +60,20 @@ public class FlavorEnergyContainer implements IFlavorEnergyProducer, IFlavorEner
 				}
 			}
 		}
+	}
+
+	@Override
+	public IFlavorEnergyStorage[] getAllFlavors() {
+		// TODO Auto-generated method stub
+		return storageArray;
+	}
+
+	@Override
+	public IFlavorEnergyStorage getFlavor(FlavorEnergy fe) {
+		for (FlavorEnergyStorage fes : storageArray)
+			if (fe.flavor.equals(fes.flavor) && fe.customData.equals(fes.customData))
+				return fes;
+		return null;
 	}
 
 }
