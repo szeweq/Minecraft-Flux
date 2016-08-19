@@ -2,8 +2,9 @@ package szewek.mcflux.api;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;
+import net.minecraftforge.common.util.INBTSerializable;
 
-public class EnergyStorage implements IEnergyHandler {
+public class EnergyStorage implements IEnergyHolder, INBTSerializable<NBTBase> {
 	protected int energy = 0;
 	protected final int maxEnergy;
 
@@ -17,14 +18,24 @@ public class EnergyStorage implements IEnergyHandler {
 	}
 
 	@Override
-	public NBTBase saveEnergyNBT() {
+	public NBTBase serializeNBT() {
 		return new NBTTagInt(energy);
 	}
 
 	@Override
-	public void loadEnergyNBT(NBTBase nbt) {
+	public void deserializeNBT(NBTBase nbt) {
 		if (!(nbt instanceof NBTTagInt))
 			return;
 		energy = ((NBTTagInt) nbt).getInt();
+	}
+
+	@Override
+	public int getEnergy() {
+		return energy;
+	}
+
+	@Override
+	public int getEnergyCapacity() {
+		return maxEnergy;
 	}
 }

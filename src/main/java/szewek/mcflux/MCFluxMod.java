@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import szewek.mcflux.api.CapabilityEnergy;
 
 /**
  * Just to clarify that this mod is loaded.
@@ -17,6 +18,7 @@ public class MCFluxMod {
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
+		CapabilityEnergy.register();
 		log = e.getModLog();
 		if (R.MCFLUX_VERSION.charAt(0) == '$')
 			log.warn("You are running Minecraft-Flux with an unknown version");

@@ -36,5 +36,4 @@ public class EnergyBattery extends EnergyStorage implements IEnergyConsumer, IEn
 			energy += r;
 		return r;
 	}
-
 }
