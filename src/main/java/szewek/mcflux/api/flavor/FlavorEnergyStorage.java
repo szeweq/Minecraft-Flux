@@ -3,7 +3,6 @@ package szewek.mcflux.api.flavor;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagLong;
-import net.minecraftforge.common.util.INBTSerializable;
 
 public class FlavorEnergyStorage extends FlavorEnergyModifiable implements IFlavorEnergyProducer, IFlavorEnergyConsumer, IFlavorEnergyStorage {
 	private final long capacity;

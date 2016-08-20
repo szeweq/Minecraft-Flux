@@ -1,3 +1,7 @@
+## 0.3.0
+- Better RF compatibility
+- Items with RF are also compatible with Minecraft-Flux
+
 ## 0.2.0
 - Flavored Energy
 - Very simple RF compatibility (modified CoFH Energy API included)
