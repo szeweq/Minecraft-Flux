@@ -17,11 +17,13 @@ public class MCFluxMod {
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
+		log = e.getModLog();
+		if (R.MCFLUX_VERSION.charAt(0) == '@')
+			log.warn("You are running Minecraft-Flux with an unknown version (development maybe?)");
+		else
+			log.info("Minecraft-Flux version " + R.MCFLUX_VERSION);
 		CapabilityEnergy.register();
 		CapabilityFlavorEnergy.register();
-		log = e.getModLog();
-		if (R.MCFLUX_VERSION.charAt(0) == '$')
-			log.warn("You are running Minecraft-Flux with an unknown version");
 		MinecraftForge.EVENT_BUS.register(new InjectWrappers());
 	}
 	
