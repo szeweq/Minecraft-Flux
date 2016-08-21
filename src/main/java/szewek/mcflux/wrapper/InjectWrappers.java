@@ -17,7 +17,6 @@ public class InjectWrappers {
 	
 	@SubscribeEvent
 	public void capabilityWrapperInject(AttachCapabilitiesEvent e) {
-		System.out.println("ATTACH CAPABILITIES");
 		if (e instanceof AttachCapabilitiesEvent.TileEntity) {
 			AttachCapabilitiesEvent.TileEntity ete = (AttachCapabilitiesEvent.TileEntity) e;
 			TileEntity te = ete.getTileEntity();
