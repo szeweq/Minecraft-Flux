@@ -1,12 +1,12 @@
 package szewek.mcflux.wrapper;
 
-import cofh.api.energy.IEnergyProvider;
+import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxProvider;
 import szewek.mcflux.api.IEnergyProducer;
 
-public class RFTileProviderWrapper implements IEnergyProducer {
-	private final IEnergyProvider provider;
+public class IFTileProviderWrapper implements IEnergyProducer {
+	private final IFluxProvider provider;
 	
-	public RFTileProviderWrapper(IEnergyProvider provider) {
+	public IFTileProviderWrapper(IFluxProvider provider) {
 		this.provider = provider;
 	}
 

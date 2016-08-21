@@ -1,6 +1,6 @@
 package szewek.mcflux.wrapper;
 
-import cofh.api.energy.IEnergyContainerItem;
+import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxContainerItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -9,11 +9,11 @@ import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyProducer;
 
-public class RFItemContainerWrapper implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
-	private final IEnergyContainerItem item;
+public class IFItemContainerWrapper implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
+	private final IFluxContainerItem item;
 	private final ItemStack stack;
 	
-	public RFItemContainerWrapper(IEnergyContainerItem it, ItemStack is) {
+	public IFItemContainerWrapper(IFluxContainerItem it, ItemStack is) {
 		item = it;
 		stack = is;
 	}

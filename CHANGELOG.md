@@ -4,6 +4,7 @@
   * IEnergyNBT
   * IFlavoredEnergyNBT
 - Wrappers don't implement NBT serialization
+- IF Compatibility
 
 ## 0.3.0
 - Better RF compatibility
