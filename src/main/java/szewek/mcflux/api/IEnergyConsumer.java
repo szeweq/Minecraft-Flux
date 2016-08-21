@@ -1,10 +1,8 @@
 package szewek.mcflux.api;
 
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.util.INBTSerializable;
 
-public interface IEnergyConsumer extends IEnergyHolder, INBTSerializable<NBTBase> {
+public interface IEnergyConsumer extends IEnergyHolder {
 	/**
 	 * Sided version of consumeEnergy.
 	 * 

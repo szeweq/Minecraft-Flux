@@ -1,7 +1,6 @@
 package szewek.mcflux.wrapper;
 
 import cofh.api.energy.IEnergyProvider;
-import net.minecraft.nbt.NBTBase;
 import szewek.mcflux.api.IEnergyProducer;
 
 public class RFTileProviderWrapper implements IEnergyProducer {
@@ -22,17 +21,7 @@ public class RFTileProviderWrapper implements IEnergyProducer {
 	}
 
 	@Override
-	public NBTBase serializeNBT() {
-		return null;
-	}
-
-	@Override
-	public void deserializeNBT(NBTBase nbt) {
-	}
-
-	@Override
 	public int extractEnergy(int amount, boolean simulate) {
 		return provider.extractEnergy(null, amount, simulate);
 	}
-
 }

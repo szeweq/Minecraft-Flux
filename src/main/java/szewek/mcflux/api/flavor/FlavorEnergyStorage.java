@@ -4,7 +4,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagLong;
 
-public class FlavorEnergyStorage extends FlavorEnergyModifiable implements IFlavorEnergyProducer, IFlavorEnergyConsumer, IFlavorEnergyStorage {
+public class FlavorEnergyStorage extends FlavorEnergyModifiable implements IFlavorEnergyProducer, IFlavorEnergyConsumer, IFlavorEnergyStorage, IFlavorEnergyNBT {
 	private final long capacity;
 
 	public FlavorEnergyStorage(String flavor, NBTTagCompound data, long cap) {
@@ -23,12 +23,12 @@ public class FlavorEnergyStorage extends FlavorEnergyModifiable implements IFlav
 	}
 
 	@Override
-	public NBTBase serializeNBT() {
+	public NBTBase writeFlavorEnergyNBT() {
 		return new NBTTagLong(amount);
 	}
 
 	@Override
-	public void deserializeNBT(NBTBase nbt) {
+	public void readFlavorEnergyNBT(NBTBase nbt) {
 		if (nbt instanceof NBTTagLong)
 			amount = ((NBTTagLong) nbt).getLong();
 	}

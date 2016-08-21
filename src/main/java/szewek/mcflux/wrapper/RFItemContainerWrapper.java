@@ -2,7 +2,6 @@ package szewek.mcflux.wrapper;
 
 import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -27,15 +26,6 @@ public class RFItemContainerWrapper implements IEnergyProducer, IEnergyConsumer,
 	@Override
 	public int getEnergyCapacity() {
 		return item.getMaxEnergyStored(stack);
-	}
-
-	@Override
-	public NBTBase serializeNBT() {
-		return null;
-	}
-
-	@Override
-	public void deserializeNBT(NBTBase nbt) {
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package szewek.mcflux.wrapper;
 
 import cofh.api.energy.IEnergyStorage;
-import net.minecraft.nbt.NBTBase;
 import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyProducer;
 
@@ -10,15 +9,6 @@ public class RFStorageEnergyWrapper implements IEnergyProducer, IEnergyConsumer 
 	
 	public RFStorageEnergyWrapper(IEnergyStorage storage) {
 		this.storage = storage;
-	}
-
-	@Override
-	public NBTBase serializeNBT() {
-		return null;
-	}
-
-	@Override
-	public void deserializeNBT(NBTBase nbt) {
 	}
 
 	@Override

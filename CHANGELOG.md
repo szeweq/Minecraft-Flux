@@ -1,3 +1,10 @@
+## 0.4.0
+- Better NBT implementation
+- Added new interfaces:
+  * IEnergyNBT
+  * IFlavoredEnergyNBT
+- Wrappers don't implement NBT serialization
+
 ## 0.3.0
 - Better RF compatibility
 - Items with RF are also compatible with Minecraft-Flux

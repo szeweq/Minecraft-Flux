@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagLong;
  * Simple flavored energy container. It allows multiple kinds of flavors.
  * You should depend on FlavorEnergyStorage internally.
  */
-public class FlavorEnergyContainer implements IFlavorEnergyProducer, IFlavorEnergyConsumer, IFlavorEnergyHolder {
+public class FlavorEnergyContainer implements IFlavorEnergyProducer, IFlavorEnergyConsumer, IFlavorEnergyHolder, IFlavorEnergyNBT {
 	protected FlavorEnergyStorage[] storageArray;
 	
 	public FlavorEnergyContainer(FlavorEnergyStorage... storage) {
@@ -42,21 +42,21 @@ public class FlavorEnergyContainer implements IFlavorEnergyProducer, IFlavorEner
 	}
 
 	@Override
-	public NBTBase serializeNBT() {
+	public NBTBase writeFlavorEnergyNBT() {
 		NBTTagList nbt = new NBTTagList();
 		for (FlavorEnergyStorage fes : storageArray)
-			nbt.appendTag(fes.serializeNBT());
+			nbt.appendTag(fes.writeFlavorEnergyNBT());
 		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(NBTBase nbt) {
+	public void readFlavorEnergyNBT(NBTBase nbt) {
 		if (nbt instanceof NBTTagList) {
 			NBTTagList nbtlist = (NBTTagList) nbt;
 			if (nbtlist.tagCount() == storageArray.length) {
 				for (int i = 0; i < storageArray.length; i++) {
 					FlavorEnergyStorage fes = storageArray[i];
-					fes.deserializeNBT((NBTTagLong) nbtlist.get(i));
+					fes.readFlavorEnergyNBT((NBTTagLong) nbtlist.get(i));
 				}
 			}
 		}
@@ -64,7 +64,6 @@ public class FlavorEnergyContainer implements IFlavorEnergyProducer, IFlavorEner
 
 	@Override
 	public IFlavorEnergyStorage[] getAllFlavors() {
-		// TODO Auto-generated method stub
 		return storageArray;
 	}
 

@@ -12,4 +12,10 @@ public interface IEnergyHolder {
 	 * @return Amount of energy capacity.
 	 */
 	int getEnergyCapacity();
+	
+	/**
+	 * Use this only if energy value is being read from external data (like NBT).
+	 * @param amount Energy amount
+	 */
+	default void setEnergy(int amount) {}
 }

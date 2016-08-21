@@ -38,4 +38,9 @@ public class EnergyStorage implements IEnergyHolder, INBTSerializable<NBTBase> {
 	public int getEnergyCapacity() {
 		return maxEnergy;
 	}
+	
+	@Override
+	public void setEnergy(int amount) {
+		energy = amount > maxEnergy ? maxEnergy : amount;
+	}
 }

@@ -1,7 +1,6 @@
 package szewek.mcflux.wrapper;
 
 import cofh.api.energy.IEnergyReceiver;
-import net.minecraft.nbt.NBTBase;
 import szewek.mcflux.api.IEnergyConsumer;
 
 public class RFTileReceiverWrapper implements IEnergyConsumer {
@@ -18,17 +17,7 @@ public class RFTileReceiverWrapper implements IEnergyConsumer {
 
 	@Override
 	public int getEnergyCapacity() {
-		// TODO Auto-generated method stub
 		return receiver.getMaxEnergyStored(null);
-	}
-
-	@Override
-	public NBTBase serializeNBT() {
-		return null;
-	}
-
-	@Override
-	public void deserializeNBT(NBTBase nbt) {
 	}
 
 	@Override

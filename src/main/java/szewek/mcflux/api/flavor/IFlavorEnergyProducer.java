@@ -1,10 +1,8 @@
 package szewek.mcflux.api.flavor;
 
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.util.INBTSerializable;
 
-public interface IFlavorEnergyProducer extends INBTSerializable<NBTBase> {
+public interface IFlavorEnergyProducer {
 	/**
 	 * Sided version of extractFlavorEnergy.
 	 * @param from Facing side of object where flavored energy can be extracted.
