@@ -1,15 +1,16 @@
 package szewek.mcflux;
 
 import org.apache.logging.log4j.Logger;
-
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.flavor.CapabilityFlavorEnergy;
+import szewek.mcflux.fluxable.InjectFluxable;
 import szewek.mcflux.wrapper.InjectWrappers;
+
+import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
 @Mod(modid = R.MCFLUX_NAME, version = R.MCFLUX_VERSION)
 public class MCFluxMod {
@@ -24,7 +25,8 @@ public class MCFluxMod {
 			log.info("Minecraft-Flux version " + R.MCFLUX_VERSION);
 		CapabilityEnergy.register();
 		CapabilityFlavorEnergy.register();
-		MinecraftForge.EVENT_BUS.register(new InjectWrappers());
+		EVENT_BUS.register(new InjectWrappers());
+		EVENT_BUS.register(new InjectFluxable());
 	}
 	
 	public void init(FMLInitializationEvent e) {
