@@ -19,6 +19,11 @@ It is also compatible with Immersive Flux (IF; From Immersive Engineering).
 ## Flavored Energy
 Flavored Energy provides customization of energy. You can create your own custom energy flavor. Just create a name and add some NBT data. If your mod doesn't use normal energy or you are going to create a magic mod then Flavored Energy is the best option.
 
+## Fluxable
+WIP
+
+## Flux Work
+WIP
 
 ## TODO List
 - [ ] Find a good Maven repo
@@ -26,4 +31,6 @@ Flavored Energy provides customization of energy. You can create your own custom
 - [ ] Add compatibility for RF-like mods and libraries
 - [x] Add Flavored Energy (like Vis or Mana)
 - [ ] Mixing Flavors
+- [ ] Implement and document Fluxable
+- [ ] Implement and document Flux Work
 - [ ] Compatibility for non-RF mods (like InductrialCraft 2)
