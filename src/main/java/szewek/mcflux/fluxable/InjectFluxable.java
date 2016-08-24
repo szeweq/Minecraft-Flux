@@ -7,7 +7,8 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import szewek.mcflux.R;
 
-public class InjectFluxable {
+public enum InjectFluxable {
+	INSTANCE;
 	public static final ResourceLocation ENERGY_PLAYER = new ResourceLocation(R.MCFLUX_NAME, "PlayerEnergy");
 	
 	@SubscribeEvent

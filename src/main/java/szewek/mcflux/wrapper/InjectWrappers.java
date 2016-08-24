@@ -12,7 +12,8 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import szewek.mcflux.R;
 
-public class InjectWrappers {
+public enum InjectWrappers {
+	INSTANCE;
 	public static final ResourceLocation
 		RFTILE_ENERGY = new ResourceLocation(R.MCFLUX_NAME, "RFTileEnergy"),
 		RFITEM_ENERGY = new ResourceLocation(R.MCFLUX_NAME, "RFItemEnergy"),

@@ -25,8 +25,8 @@ public class MCFluxMod {
 			log.info("Minecraft-Flux version " + R.MCFLUX_VERSION);
 		CapabilityEnergy.register();
 		CapabilityFlavorEnergy.register();
-		EVENT_BUS.register(new InjectWrappers());
-		EVENT_BUS.register(new InjectFluxable());
+		EVENT_BUS.register(InjectWrappers.INSTANCE);
+		EVENT_BUS.register(InjectFluxable.INSTANCE);
 	}
 	
 	public void init(FMLInitializationEvent e) {

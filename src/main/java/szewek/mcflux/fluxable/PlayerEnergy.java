@@ -2,6 +2,7 @@ package szewek.mcflux.fluxable;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -52,6 +53,10 @@ public class PlayerEnergy implements IEnergyHolder, IEnergyProducer, IEnergyCons
 	public int consumeEnergy(int amount, boolean simulate) {
 		if (amount == 0)
 			return 0;
+		if (maxEnergy == 0) {
+			player.attackEntityFrom(DamageSource.generic, amount / 100);
+			return 0;
+		}
 		int r = maxEnergy - energy;
 		if (amount < r)
 			r = amount;
