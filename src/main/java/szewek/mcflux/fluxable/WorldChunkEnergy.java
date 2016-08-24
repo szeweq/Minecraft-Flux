@@ -13,6 +13,9 @@ import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import szewek.mcflux.api.EnergyBattery;
 
+/**
+ * World Chunk Energy implementation.
+ */
 public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<NBTTagList> {
 	private static final int CHUNK_CAPACITY = 20000000;
 	private Map<ChunkPos, EnergyBattery> energyChunks = new HashMap<>();
@@ -29,7 +32,15 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 			return (T) this;
 		return null;
 	}
-	
+
+	/**
+	 * Gets energy chunk (16x16x16) if available. If not, it creates a new one.
+	 * 
+	 * @param bx Block X position
+	 * @param by Block Y position
+	 * @param bz Block Z position
+	 * @return Chunk battery
+	 */
 	public EnergyBattery getEnergyChunk(int bx, int by, int bz) {
 		ChunkPos cp = new ChunkPos(bx / 16, by / 16, bz / 16);
 		EnergyBattery eb = energyChunks.get(cp);
@@ -42,15 +53,17 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 
 	private static class ChunkPos {
 		public final int cx, cy, cz;
+
 		ChunkPos(int x, int y, int z) {
 			cx = x;
 			cy = y;
 			cz = z;
 		}
-		
+
 		@Override
 		public boolean equals(Object obj) {
-			if (obj == null || !(obj instanceof ChunkPos)) return false;
+			if (obj == null || !(obj instanceof ChunkPos))
+				return false;
 			ChunkPos cp = (ChunkPos) obj;
 			return cx == cp.cx && cy == cp.cy && cz == cp.cz;
 		}
@@ -84,7 +97,7 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 			}
 		}
 	}
-	
+
 	public static class ChunkStorage implements Capability.IStorage<WorldChunkEnergy> {
 		@Override
 		public NBTBase writeNBT(Capability<WorldChunkEnergy> capability, WorldChunkEnergy instance, EnumFacing side) {

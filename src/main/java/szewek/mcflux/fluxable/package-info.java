@@ -1,4 +1,4 @@
 /**
- * WIP Fluxable
+ * Fluxable Package
  */
 package szewek.mcflux.fluxable;

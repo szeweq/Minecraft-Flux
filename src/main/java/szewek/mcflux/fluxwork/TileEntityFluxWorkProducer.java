@@ -6,6 +6,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyProducer;
 
+/**
+ * TileEntity producing energy by doing work. A simple energy generator implementation.
+ */
 public abstract class TileEntityFluxWorkProducer extends TileEntityFluxWork implements ITickable, IEnergyProducer {
 	
 	@Override

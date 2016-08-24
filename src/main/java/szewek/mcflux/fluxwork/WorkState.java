@@ -1,5 +1,20 @@
 package szewek.mcflux.fluxwork;
 
 public enum WorkState {
-	LAZY, WORKING, PAUSED, FINISHED;
+	/**
+	 * TileEntity can't do anything.
+	 */
+	LAZY,
+	/**
+	 * TileEntity is working.
+	 */
+	WORKING,
+	/**
+	 * TileEntity paused work because it doesn't have enough energy.
+	 */
+	PAUSED,
+	/**
+	 * TileEntity finished its work.
+	 */
+	FINISHED;
 }

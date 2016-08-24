@@ -6,6 +6,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyConsumer;
 
+/**
+ * TileEntity using energy to work. Imagine {@link net.minecraft.tileentity.TileEntityFurnace TileEntityFurnace} but better.
+ */
 public abstract class TileEntityFluxWorkConsumer extends TileEntityFluxWork implements ITickable, IEnergyConsumer {
 
 	@Override
