@@ -36,8 +36,7 @@ archivesBaseName = "mcflux"
 minecraft {
 	version = "1.10.2-12.18.1.2065"
 	runDir = "run"
-	mappings = "snapshot_20160814"
-	// makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+	mappings = "snapshot_20160821"
 	replace "@VERSION@", project.version
 }
 
