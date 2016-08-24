@@ -9,7 +9,9 @@ import szewek.mcflux.R;
 
 public enum InjectFluxable {
 	INSTANCE;
-	public static final ResourceLocation ENERGY_PLAYER = new ResourceLocation(R.MCFLUX_NAME, "PlayerEnergy");
+	public static final ResourceLocation
+		ENERGY_PLAYER = new ResourceLocation(R.MCFLUX_NAME, "PlayerEnergy"),
+		ENERGY_WORLD_CHUNK = new ResourceLocation(R.MCFLUX_NAME, "WorldChunkEnergy");
 	
 	@SubscribeEvent
 	public void inject(AttachCapabilitiesEvent e) {
@@ -18,6 +20,8 @@ public enum InjectFluxable {
 			Entity ent = ee.getEntity();
 			if (ent instanceof EntityPlayer)
 				ee.addCapability(ENERGY_PLAYER, new PlayerEnergy((EntityPlayer) ent));
+		} else if (e instanceof AttachCapabilitiesEvent.World) {
+			e.addCapability(ENERGY_WORLD_CHUNK, new WorldChunkEnergy());
 		}
 	}
 }

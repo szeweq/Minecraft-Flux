@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.flavor.CapabilityFlavorEnergy;
+import szewek.mcflux.fluxable.CapabilityFluxable;
 import szewek.mcflux.fluxable.InjectFluxable;
 import szewek.mcflux.wrapper.InjectWrappers;
 
@@ -15,7 +16,7 @@ import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 @Mod(modid = R.MCFLUX_NAME, version = R.MCFLUX_VERSION)
 public class MCFluxMod {
 	private Logger log;
-	
+
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
 		log = e.getModLog();
@@ -25,12 +26,14 @@ public class MCFluxMod {
 			log.info("Minecraft-Flux version " + R.MCFLUX_VERSION);
 		CapabilityEnergy.register();
 		CapabilityFlavorEnergy.register();
+		CapabilityFluxable.register();
 		EVENT_BUS.register(InjectWrappers.INSTANCE);
 		EVENT_BUS.register(InjectFluxable.INSTANCE);
 	}
-	
+
 	public void init(FMLInitializationEvent e) {
 	}
+
 	public void postInit(FMLPostInitializationEvent e) {
 	}
 }

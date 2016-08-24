@@ -15,6 +15,7 @@ import szewek.mcflux.api.IEnergyProducer;
 public class PlayerEnergy implements IEnergyHolder, IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
 	private int energy = 0, maxEnergy = 0;
 	private final EntityPlayer player;
+
 	public PlayerEnergy(EntityPlayer p) {
 		player = p;
 		NBTTagCompound nbtp = player.getEntityData();
@@ -36,7 +37,7 @@ public class PlayerEnergy implements IEnergyHolder, IEnergyProducer, IEnergyCons
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
 		return hasCapability(cap, f) ? (T) this : null;
 	}
-	
+
 	@Override
 	public int extractEnergy(int amount, boolean simulate) {
 		if (amount == 0)
@@ -64,7 +65,7 @@ public class PlayerEnergy implements IEnergyHolder, IEnergyProducer, IEnergyCons
 			energy += r;
 		return r;
 	}
-	
+
 	@Override
 	public int getEnergy() {
 		return energy;
@@ -74,7 +75,7 @@ public class PlayerEnergy implements IEnergyHolder, IEnergyProducer, IEnergyCons
 	public int getEnergyCapacity() {
 		return maxEnergy;
 	}
-	
+
 	@Override
 	public void setEnergy(int amount) {
 		energy = amount > maxEnergy ? maxEnergy : amount;
