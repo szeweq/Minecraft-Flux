@@ -1,3 +1,9 @@
+## 0.5.0
+- Fluxable
+  * Player can be charged with MF
+  * World chunks can be filled with energy
+- Flux Work - working cycle for Tile Entities
+
 ## 0.4.0
 - Better NBT implementation
 - Added new interfaces:

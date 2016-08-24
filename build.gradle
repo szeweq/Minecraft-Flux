@@ -26,7 +26,7 @@ def getVersion() {
 		return System.env.TRAVIS_TAG
 	if (System.env.BUILD_VERSION)
 		return System.env.BUILD_VERSION
-	return "0.0.0-unknown"
+	return "0.0.0-x"
 }
 
 version = getVersion()
@@ -40,8 +40,7 @@ minecraft {
 	replace "@VERSION@", project.version
 }
 
-dependencies {
-}
+dependencies {}
 
 processResources {
 	inputs.property "version", project.version
@@ -68,8 +67,7 @@ curseforge {
 		changelog = file("CHANGELOG.md")
 	}
 }
-jar {
-}
+
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
 	classifier = "dev"

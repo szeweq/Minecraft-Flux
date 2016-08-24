@@ -1,4 +1,4 @@
-package szewek.mcflux.fluxworks;
+package szewek.mcflux.fluxwork;
 
 public enum WorkState {
 	LAZY, WORKING, PAUSED, FINISHED;

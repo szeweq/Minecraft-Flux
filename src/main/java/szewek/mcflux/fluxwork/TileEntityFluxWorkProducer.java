@@ -1,4 +1,4 @@
-package szewek.mcflux.fluxworks;
+package szewek.mcflux.fluxwork;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
