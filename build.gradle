@@ -62,9 +62,11 @@ curseforge {
 		apiKey = System.env.CURSEFORGE_KEY
 	project {
 		id = "248942"
-		releaseType = "alpha"
+		releaseType = "beta"
 		changelogType = "markdown"
 		changelog = file("CHANGELOG.md")
+		addArtifact sourcesJar
+		addArtifact deobfJar
 	}
 }
 
