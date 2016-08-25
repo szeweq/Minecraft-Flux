@@ -1,0 +1,10 @@
+mcflux.blockcompat.start=This block is 
+mcflux.blockcompat.end= with MF from %s.
+mcflux.entitycompat.start=This entity is 
+mcflux.entitycompat.end= with MF.
+mcflux.mfcompat=compatible
+mcflux.nocompat=NOT compatible
+mcflux.energystat=Energy: %s MF
+mcflux.energystatunknown=Energy: unknown
+itemGroup.mcflux=Minecraft-Flux
+item.mftool.name=MF Tool
