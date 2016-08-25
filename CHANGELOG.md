@@ -1,3 +1,8 @@
+## 0.6.0
+- Creepers and Pigs are MF Compatible
+- Added MF Tool
+- Waila Integration
+
 ## 0.5.0
 - Fluxable
   * Player can be charged with MF

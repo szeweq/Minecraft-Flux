@@ -7,7 +7,10 @@ public final class R {
 		MCFLUX_API_NAME = "mcfluxAPI",
 		MCFLUX_FLAVORAPI_NAME = "mcfluxAPI|flavor",
 		PROXY_SERVER = "szewek.mcflux.proxy.ProxyCommon",
-		PROXY_CLIENT = "szewek.mcflux.proxy.ProxyClient";
+		PROXY_CLIENT = "szewek.mcflux.proxy.ProxyClient",
+		FORMAT_ENERGY_STAT = "%d / %d",
+		FORMAT_ENERGY_STAT_UNIT = FORMAT_ENERGY_STAT + " MF",
+		TAG_MF = "@MF";
 
 	private R() {}
 }

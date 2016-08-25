@@ -21,33 +21,34 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import szewek.mcflux.R;
 import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyHolder;
 
 public class MCFluxWailaProvider implements IWailaDataProvider, IWailaEntityProvider {
-	public static String MF_TAG_ENERGY = "MFEnergy";
 	public static void callbackRegister(IWailaRegistrar reg) {
 		MCFluxWailaProvider dp = new MCFluxWailaProvider();
+		IWailaEntityProvider iwep = (IWailaEntityProvider) dp;
 		reg.registerBodyProvider((IWailaDataProvider) dp, TileEntity.class);
-		reg.registerBodyProvider((IWailaEntityProvider) dp, EntityPlayer.class);
-		reg.registerBodyProvider((IWailaEntityProvider) dp, EntityPig.class);
-		reg.registerBodyProvider((IWailaEntityProvider) dp, EntityCreeper.class);
+		reg.registerBodyProvider(iwep, EntityPlayer.class);
+		reg.registerBodyProvider(iwep, EntityPig.class);
+		reg.registerBodyProvider(iwep, EntityCreeper.class);
 	}
 
 	@Override
-	public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
+	public ItemStack getWailaStack(IWailaDataAccessor da, IWailaConfigHandler cfg) {
 		return null;
 	}
 
 	@Override
-	public List<String> getWailaHead(ItemStack is, List<String> ctip, IWailaDataAccessor accessor, IWailaConfigHandler cfg) {
+	public List<String> getWailaHead(ItemStack is, List<String> ctip, IWailaDataAccessor da, IWailaConfigHandler cfg) {
 		return ctip;
 	}
 
 	@Override
-	public List<String> getWailaBody(ItemStack is, List<String> ctip, IWailaDataAccessor accessor, IWailaConfigHandler cfg) {
-		TileEntity te = accessor.getTileEntity();
-		EnumFacing f = accessor.getSide();
+	public List<String> getWailaBody(ItemStack is, List<String> ctip, IWailaDataAccessor da, IWailaConfigHandler cfg) {
+		TileEntity te = da.getTileEntity();
+		EnumFacing f = da.getSide();
 		IEnergyHolder ieh = null;
 		if (te.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, f)) {
 			ieh = te.getCapability(CapabilityEnergy.ENERGY_CONSUMER, f);
@@ -59,14 +60,14 @@ public class MCFluxWailaProvider implements IWailaDataProvider, IWailaEntityProv
 		@SuppressWarnings("unchecked")
 		ITaggedList<String, String> tgl = (ITaggedList<String, String>) ctip;
 		int nc = ieh.getEnergyCapacity();
-		if (nc > 0 && tgl.getEntries(MF_TAG_ENERGY).size() == 0) {
-			tgl.add(String.format("%d / %d MF", ieh.getEnergy(), nc), MF_TAG_ENERGY);
+		if (nc > 0 && tgl.getEntries(R.TAG_MF).size() == 0) {
+			tgl.add(String.format(R.FORMAT_ENERGY_STAT_UNIT, ieh.getEnergy(), nc), R.TAG_MF);
 		}
 		return ctip;
 	}
 
 	@Override
-	public List<String> getWailaTail(ItemStack is, List<String> ctip, IWailaDataAccessor accessor, IWailaConfigHandler cfg) {
+	public List<String> getWailaTail(ItemStack is, List<String> ctip, IWailaDataAccessor da, IWailaConfigHandler cfg) {
 		return ctip;
 	}
 
@@ -76,17 +77,17 @@ public class MCFluxWailaProvider implements IWailaDataProvider, IWailaEntityProv
 	}
 
 	@Override
-	public Entity getWailaOverride(IWailaEntityAccessor accessor, IWailaConfigHandler cfg) {
+	public Entity getWailaOverride(IWailaEntityAccessor ea, IWailaConfigHandler cfg) {
 		return null;
 	}
 
 	@Override
-	public List<String> getWailaHead(Entity e, List<String> ctip, IWailaEntityAccessor accessor, IWailaConfigHandler cfg) {
+	public List<String> getWailaHead(Entity e, List<String> ctip, IWailaEntityAccessor ea, IWailaConfigHandler cfg) {
 		return ctip;
 	}
 
 	@Override
-	public List<String> getWailaBody(Entity e, List<String> ctip, IWailaEntityAccessor accessor, IWailaConfigHandler cfg) {
+	public List<String> getWailaBody(Entity e, List<String> ctip, IWailaEntityAccessor ea, IWailaConfigHandler cfg) {
 		IEnergyHolder ieh = null;
 		if (e.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, null)) {
 			ieh = e.getCapability(CapabilityEnergy.ENERGY_CONSUMER, null);
@@ -97,22 +98,22 @@ public class MCFluxWailaProvider implements IWailaDataProvider, IWailaEntityProv
 		ITaggedList<String, String> tgl = (ITaggedList<String, String>) ctip;
 		if (ieh != null) {
 			int nc = ieh.getEnergyCapacity();
-			if (nc > 0 && tgl.getEntries(MF_TAG_ENERGY).size() == 0) {
-				tgl.add(nc == 1 ? I18n.format("mcflux.mfcompatible") : String.format("%d / %d MF", ieh.getEnergy(), nc), MF_TAG_ENERGY);
+			if (nc > 0 && tgl.getEntries(R.TAG_MF).size() == 0) {
+				tgl.add(nc == 1 ? I18n.format("mcflux.mfcompatible") : String.format(R.FORMAT_ENERGY_STAT_UNIT, ieh.getEnergy(), nc), R.TAG_MF);
 			}
-		} else if (tgl.getEntries(MF_TAG_ENERGY).size() == 0) {
-			tgl.add("NO MF", MF_TAG_ENERGY);
+		} else if (tgl.getEntries(R.TAG_MF).size() == 0) {
+			tgl.add("NO MF", R.TAG_MF);
 		}
 		return ctip;
 	}
 
 	@Override
-	public List<String> getWailaTail(Entity e, List<String> ctip, IWailaEntityAccessor accessor, IWailaConfigHandler cfg) {
+	public List<String> getWailaTail(Entity e, List<String> ctip, IWailaEntityAccessor ea, IWailaConfigHandler cfg) {
 		return ctip;
 	}
 
 	@Override
-	public NBTTagCompound getNBTData(EntityPlayerMP player, Entity ent, NBTTagCompound tag, World world) {
+	public NBTTagCompound getNBTData(EntityPlayerMP mp, Entity e, NBTTagCompound tag, World world) {
 		return null;
 	}
 }

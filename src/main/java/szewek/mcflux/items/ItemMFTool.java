@@ -13,6 +13,7 @@ import net.minecraft.util.text.TextComponentBase;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import szewek.mcflux.R;
 import szewek.mcflux.api.IEnergyHolder;
 
 import static szewek.mcflux.api.CapabilityEnergy.ENERGY_CONSUMER;
@@ -46,7 +47,7 @@ public class ItemMFTool extends Item {
 					IEnergyHolder ieh = te.getCapability(ENERGY_CONSUMER, null);
 					if (ieh == null)
 						ieh = te.getCapability(ENERGY_PRODUCER, null);
-					p.addChatComponentMessage(new TextComponentTranslation("mcflux.energystat", String.format("%d/%d", ieh.getEnergy(), ieh.getEnergyCapacity())));
+					p.addChatComponentMessage(new TextComponentTranslation("mcflux.energystat", String.format(R.FORMAT_ENERGY_STAT, ieh.getEnergy(), ieh.getEnergyCapacity())));
 				}
 				return EnumActionResult.SUCCESS;
 			}
@@ -67,7 +68,7 @@ public class ItemMFTool extends Item {
 				if (ieh == null)
 					ieh = elb.getCapability(ENERGY_PRODUCER, null);
 				int n = ieh.getEnergy(), nc = ieh.getEnergyCapacity();
-				p.addChatComponentMessage(nc == 1 ? textEnergyUnknown : new TextComponentTranslation("mcflux.energystat", String.format("%d/%d", n, nc)));
+				p.addChatComponentMessage(nc == 1 ? textEnergyUnknown : new TextComponentTranslation("mcflux.energystat", String.format(R.FORMAT_ENERGY_STAT, n, nc)));
 			}
 			return true;
 		}
