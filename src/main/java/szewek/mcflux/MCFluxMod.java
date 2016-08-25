@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -60,6 +61,7 @@ public class MCFluxMod {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
 		GameRegistry.addShapedRecipe(new ItemStack(MFTOOL), new String[]{"n n","rir","rrr"}, 'n', Items.GOLD_NUGGET, 'r', Items.REDSTONE, 'i', Items.IRON_INGOT);
+		FMLInterModComms.sendMessage("Waila", "register", "szewek.mcflux.compat.waila.MCFluxWailaProvider.callbackRegister");
 		PROXY.init();
 	}
 

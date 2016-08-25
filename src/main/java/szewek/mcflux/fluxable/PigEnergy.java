@@ -12,6 +12,7 @@ import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyConsumer;
 
 public class PigEnergy implements IEnergyConsumer, ICapabilityProvider {
+	private boolean charged = false;
 	private final EntityPig pig;
 	
 	public PigEnergy(EntityPig ep) {
@@ -33,19 +34,17 @@ public class PigEnergy implements IEnergyConsumer, ICapabilityProvider {
 
 	@Override
 	public int getEnergy() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int getEnergyCapacity() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 
 	@Override
 	public int consumeEnergy(int amount, boolean simulate) {
-		if (!simulate) {
+		if (!simulate && !charged) {
 			EntityPigZombie pigman = new EntityPigZombie(pig.worldObj);
 			pigman.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_AXE));
 			pigman.setLocationAndAngles(pig.posX, pig.posY, pig.posZ, pig.rotationYaw, pig.rotationPitch);
@@ -56,8 +55,10 @@ public class PigEnergy implements IEnergyConsumer, ICapabilityProvider {
             }
 			pig.worldObj.spawnEntityInWorld(pigman);
 			pig.setDead();
+			charged = true;
+			return 1;
 		}
-		return 1;
+		return charged ? 0 : 1;
 	}
 
 }

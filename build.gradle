@@ -2,8 +2,8 @@ buildscript {
 	repositories {
 		jcenter()
 		maven {
-			name = "forge"
-			url = "http://files.minecraftforge.net/maven"
+			name "forge"
+			url "http://files.minecraftforge.net/maven"
 		}
 		maven {
 			url "https://plugins.gradle.org/m2/"
@@ -28,6 +28,10 @@ def getVersion() {
 		return System.env.BUILD_VERSION
 	return "0.0.0-x"
 }
+task deobfJar(type: Jar, dependsOn: "reobfJar") {
+	from sourceSets.main.output
+	classifier = "dev"
+}
 
 version = getVersion()
 group = "szewek.mcflux"
@@ -38,9 +42,18 @@ minecraft {
 	runDir = "run"
 	mappings = "snapshot_20160821"
 	replace "@VERSION@", project.version
+	replaceIn "R.java"
 }
 
-dependencies {}
+repositories {
+	maven {
+		url "http://mobiusstrip.eu/maven"
+	}
+}
+
+dependencies {
+	deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
+}
 
 processResources {
 	inputs.property "version", project.version
@@ -51,7 +64,6 @@ processResources {
 		include 'mcmod.info'
 		expand 'version':project.version, 'mcversion':project.minecraft.version
 	}
-	// copy everything else, thats not the mcmod.info
 	from(sourceSets.main.resources.srcDirs) {
 		exclude 'mcmod.info'
 	}
@@ -65,15 +77,11 @@ curseforge {
 		releaseType = "beta"
 		changelogType = "markdown"
 		changelog = file("CHANGELOG.md")
-		addArtifact sourcesJar
+		addArtifact sourceJar
 		addArtifact deobfJar
 	}
 }
 
-task deobfJar(type: Jar, dependsOn: "reobfJar") {
-	from sourceSets.main.output
-	classifier = "dev"
-}
 artifacts {
 	archives deobfJar
 }

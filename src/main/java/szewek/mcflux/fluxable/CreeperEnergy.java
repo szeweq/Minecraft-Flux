@@ -8,6 +8,7 @@ import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyConsumer;
 
 public class CreeperEnergy implements IEnergyConsumer, ICapabilityProvider {
+	private boolean charged = false;
 	private final EntityCreeper creeper;
 	
 	public CreeperEnergy(EntityCreeper ec) {
@@ -29,13 +30,11 @@ public class CreeperEnergy implements IEnergyConsumer, ICapabilityProvider {
 
 	@Override
 	public int getEnergy() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int getEnergyCapacity() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 
@@ -43,8 +42,10 @@ public class CreeperEnergy implements IEnergyConsumer, ICapabilityProvider {
 	public int consumeEnergy(int amount, boolean simulate) {
 		if (!simulate) {
 			creeper.onStruckByLightning(null);
+			charged = true;
+			return 1;
 		}
-		return 1;
+		return charged ? 0 : 1;
 	}
 
 }
