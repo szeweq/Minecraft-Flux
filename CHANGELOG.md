@@ -1,3 +1,6 @@
+## 0.6.1
+- MF Tool can read World Chunk Energy
+
 ## 0.6.0
 - Creepers and Pigs are MF Compatible
 - Added MF Tool

@@ -14,7 +14,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import szewek.mcflux.R;
+import szewek.mcflux.api.EnergyBattery;
 import szewek.mcflux.api.IEnergyHolder;
+import szewek.mcflux.fluxable.CapabilityFluxable;
+import szewek.mcflux.fluxable.WorldChunkEnergy;
 
 import static szewek.mcflux.api.CapabilityEnergy.ENERGY_CONSUMER;
 import static szewek.mcflux.api.CapabilityEnergy.ENERGY_PRODUCER;
@@ -25,7 +28,8 @@ public class ItemMFTool extends Item {
 		textEntity = new TextComponentTranslation("mcflux.entitycompat.start"),
 		textMFCompat = new TextComponentTranslation("mcflux.mfcompat"),
 		textNoCompat = new TextComponentTranslation("mcflux.nocompat"),
-		textEnergyUnknown = new TextComponentTranslation("mcflux.energystatunknown");
+		textEnergyUnknown = new TextComponentTranslation("mcflux.energystatunknown"),
+		textWorldChunk = new TextComponentTranslation("mcflux.worldchunk");
 	
 	public ItemMFTool() {
 		setMaxStackSize(1);
@@ -49,8 +53,14 @@ public class ItemMFTool extends Item {
 						ieh = te.getCapability(ENERGY_PRODUCER, null);
 					p.addChatComponentMessage(new TextComponentTranslation("mcflux.energystat", String.format(R.FORMAT_ENERGY_STAT, ieh.getEnergy(), ieh.getEnergyCapacity())));
 				}
-				return EnumActionResult.SUCCESS;
+			} else {
+				WorldChunkEnergy wce = w.getCapability(CapabilityFluxable.FLUXABLE_WORLD_CHUNK, null);
+				EnergyBattery eb = wce.getEnergyChunk((int) p.posX, (int) (p.posY + 0.5), (int) p.posZ);
+				TextComponentBase tcb = textWorldChunk.createCopy();
+				tcb.appendSibling(new TextComponentTranslation("mcflux.energystat", String.format(R.FORMAT_ENERGY_STAT, eb.getEnergy(), eb.getEnergyCapacity())));
+				p.addChatComponentMessage(tcb);
 			}
+			return EnumActionResult.SUCCESS;
 		}
 		return super.onItemUse(is, p, w, pos, h, f, x, y, z);
 	}

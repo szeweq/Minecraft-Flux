@@ -7,5 +7,6 @@ mcflux.nocompat=NOT compatible
 mcflux.energystat=Energy: %s MF
 mcflux.energystatunknown=Energy: unknown
 mcflux.mfcompatible=MF Compatible
+mcflux.worldchunk=World Chunk 
 itemGroup.mcflux=Minecraft-Flux
 item.mftool.name=MF Tool
