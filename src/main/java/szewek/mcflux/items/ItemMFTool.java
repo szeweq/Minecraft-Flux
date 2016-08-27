@@ -13,14 +13,11 @@ import net.minecraft.util.text.TextComponentBase;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import szewek.mcflux.R;
+import szewek.mcflux.U;
 import szewek.mcflux.api.EnergyBattery;
 import szewek.mcflux.api.IEnergyHolder;
 import szewek.mcflux.fluxable.CapabilityFluxable;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
-
-import static szewek.mcflux.api.CapabilityEnergy.ENERGY_CONSUMER;
-import static szewek.mcflux.api.CapabilityEnergy.ENERGY_PRODUCER;
 
 public class ItemMFTool extends Item {
 	private final TextComponentTranslation
@@ -42,22 +39,19 @@ public class ItemMFTool extends Item {
 		if (!w.isRemote) {
 			TileEntity te = w.getTileEntity(pos);
 			if (te != null) {
-				boolean e = te.hasCapability(ENERGY_CONSUMER, f) || te.hasCapability(ENERGY_PRODUCER, f);
+				IEnergyHolder ieh = U.getEnergyHolderTile(te, f);
 				TextComponentBase tcb = textBlock.createCopy();
-				tcb.appendSibling(e ? textMFCompat : textNoCompat);
+				tcb.appendSibling(ieh != null ? textMFCompat : textNoCompat);
 				tcb.appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
 				p.addChatComponentMessage(tcb);
-				if (e) {
-					IEnergyHolder ieh = te.getCapability(ENERGY_CONSUMER, null);
-					if (ieh == null)
-						ieh = te.getCapability(ENERGY_PRODUCER, null);
-					p.addChatComponentMessage(new TextComponentTranslation("mcflux.energystat", String.format(R.FORMAT_ENERGY_STAT, ieh.getEnergy(), ieh.getEnergyCapacity())));
+				if (ieh != null) {
+					p.addChatComponentMessage(new TextComponentTranslation("mcflux.energystat", U.formatMF(ieh.getEnergy(), ieh.getEnergyCapacity())));
 				}
 			} else {
 				WorldChunkEnergy wce = w.getCapability(CapabilityFluxable.FLUXABLE_WORLD_CHUNK, null);
 				EnergyBattery eb = wce.getEnergyChunk((int) p.posX, (int) (p.posY + 0.5), (int) p.posZ);
 				TextComponentBase tcb = textWorldChunk.createCopy();
-				tcb.appendSibling(new TextComponentTranslation("mcflux.energystat", String.format(R.FORMAT_ENERGY_STAT, eb.getEnergy(), eb.getEnergyCapacity())));
+				tcb.appendSibling(new TextComponentTranslation("mcflux.energystat", U.formatMF(eb.getEnergy(), eb.getEnergyCapacity())));
 				p.addChatComponentMessage(tcb);
 			}
 			return EnumActionResult.SUCCESS;
@@ -68,17 +62,14 @@ public class ItemMFTool extends Item {
 	@Override
 	public boolean itemInteractionForEntity(ItemStack is, EntityPlayer p, EntityLivingBase elb, EnumHand h) {
 		if (!elb.worldObj.isRemote) {
-			boolean e = elb.hasCapability(ENERGY_CONSUMER, null) || elb.hasCapability(ENERGY_PRODUCER, null);
+			IEnergyHolder ieh = U.getEnergyHolderEntity(elb);
 			TextComponentBase tcb = textEntity.createCopy();
-			tcb.appendSibling(e ? textMFCompat : textNoCompat);
+			tcb.appendSibling(ieh != null ? textMFCompat : textNoCompat);
 			tcb.appendSibling(new TextComponentTranslation("mcflux.entitycompat.end"));
 			p.addChatComponentMessage(tcb);
-			if (e) {
-				IEnergyHolder ieh = elb.getCapability(ENERGY_CONSUMER, null);
-				if (ieh == null)
-					ieh = elb.getCapability(ENERGY_PRODUCER, null);
+			if (ieh != null) {
 				int n = ieh.getEnergy(), nc = ieh.getEnergyCapacity();
-				p.addChatComponentMessage(nc == 1 ? textEnergyUnknown : new TextComponentTranslation("mcflux.energystat", String.format(R.FORMAT_ENERGY_STAT, n, nc)));
+				p.addChatComponentMessage(nc == 1 ? textEnergyUnknown : new TextComponentTranslation("mcflux.energystat", U.formatMF(n, nc)));
 			}
 			return true;
 		}

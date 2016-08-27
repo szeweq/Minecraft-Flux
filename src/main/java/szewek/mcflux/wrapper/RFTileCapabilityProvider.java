@@ -7,16 +7,18 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.CapabilityEnergy;
+import szewek.mcflux.api.IEnergyConsumer;
+import szewek.mcflux.api.IEnergyProducer;
 
-public class RFTileCapabilityProvider implements ICapabilityProvider {
-	private final RFTileProviderWrapper provider;
-	private final RFTileReceiverWrapper receiver;
+public class RFTileCapabilityProvider implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
+	private final IEnergyProvider provider;
+	private final IEnergyReceiver receiver;
 	private final IEnergyHandler handler;
 
 	RFTileCapabilityProvider(IEnergyHandler ieh) {
 		handler = ieh;
-		provider = ieh instanceof IEnergyProvider ? new RFTileProviderWrapper((IEnergyProvider) ieh) : null;
-		receiver = ieh instanceof IEnergyReceiver ? new RFTileReceiverWrapper((IEnergyReceiver) ieh) : null;
+		provider = ieh instanceof IEnergyProvider ? (IEnergyProvider) ieh : null;
+		receiver = ieh instanceof IEnergyReceiver ? (IEnergyReceiver) ieh : null;
 
 	}
 
@@ -36,10 +38,30 @@ public class RFTileCapabilityProvider implements ICapabilityProvider {
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
 		if (handler.canConnectEnergy(f)) {
 			if (cap == CapabilityEnergy.ENERGY_CONSUMER)
-				return (T) receiver;
+				return receiver != null ? (T) this : null;
 			if (cap == CapabilityEnergy.ENERGY_PRODUCER)
-				return (T) provider;
+				return provider != null ? (T) this : null;
 		}
 		return null;
+	}
+
+	@Override
+	public int getEnergy() {
+		return handler.getEnergyStored(null);
+	}
+
+	@Override
+	public int getEnergyCapacity() {
+		return handler.getMaxEnergyStored(null);
+	}
+
+	@Override
+	public int extractEnergy(int amount, boolean sim) {
+		return provider != null ? provider.extractEnergy(null, amount, sim) : 0;
+	}
+
+	@Override
+	public int consumeEnergy(int amount, boolean sim) {
+		return receiver != null ? receiver.receiveEnergy(null, amount, sim) : 0;
 	}
 }

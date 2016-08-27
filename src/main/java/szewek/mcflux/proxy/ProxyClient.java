@@ -1,10 +1,10 @@
 package szewek.mcflux.proxy;
 
-import szewek.mcflux.MCFluxMod;
+import szewek.mcflux.MCFlux;
 
 public class ProxyClient extends ProxyCommon {
 	@Override
 	public void init() {
-		MCFluxMod.renders();
+		MCFlux.renders();
 	}
 }

@@ -100,12 +100,12 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 
 	public static class ChunkStorage implements Capability.IStorage<WorldChunkEnergy> {
 		@Override
-		public NBTBase writeNBT(Capability<WorldChunkEnergy> capability, WorldChunkEnergy instance, EnumFacing side) {
+		public NBTBase writeNBT(Capability<WorldChunkEnergy> cap, WorldChunkEnergy instance, EnumFacing side) {
 			return instance.serializeNBT();
 		}
 
 		@Override
-		public void readNBT(Capability<WorldChunkEnergy> capability, WorldChunkEnergy instance, EnumFacing side, NBTBase nbt) {
+		public void readNBT(Capability<WorldChunkEnergy> cap, WorldChunkEnergy instance, EnumFacing side, NBTBase nbt) {
 			if (nbt instanceof NBTTagList)
 				instance.deserializeNBT((NBTTagList) nbt);
 		}

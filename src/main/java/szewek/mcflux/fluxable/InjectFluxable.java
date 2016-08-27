@@ -1,6 +1,7 @@
 package szewek.mcflux.fluxable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,8 +14,7 @@ public enum InjectFluxable {
 	INSTANCE;
 	public static final ResourceLocation
 		ENERGY_PLAYER = new ResourceLocation(R.MCFLUX_NAME, "PlayerEnergy"),
-		ENERGY_PIG = new ResourceLocation(R.MCFLUX_NAME, "PigEnergy"),
-		ENERGY_CREEPER = new ResourceLocation(R.MCFLUX_NAME, "CreeperEnergy"),
+		ENERGY_ACTION = new ResourceLocation(R.MCFLUX_NAME, "ActionEnergy"),
 		ENERGY_WORLD_CHUNK = new ResourceLocation(R.MCFLUX_NAME, "WorldChunkEnergy");
 	
 	@SubscribeEvent
@@ -24,10 +24,8 @@ public enum InjectFluxable {
 			Entity ent = ee.getEntity();
 			if (ent instanceof EntityPlayer)
 				ee.addCapability(ENERGY_PLAYER, new PlayerEnergy((EntityPlayer) ent));
-			else if (ent instanceof EntityPig)
-				ee.addCapability(ENERGY_PIG, new PigEnergy((EntityPig) ent));
-			else if (ent instanceof EntityCreeper)
-				ee.addCapability(ENERGY_CREEPER, new CreeperEnergy((EntityCreeper) ent));
+			else if (ent instanceof EntityPig || ent instanceof EntityCreeper)
+				ee.addCapability(ENERGY_ACTION, new EntityActionEnergy((EntityCreature) ent));
 		} else if (e instanceof AttachCapabilitiesEvent.World) {
 			e.addCapability(ENERGY_WORLD_CHUNK, new WorldChunkEnergy());
 		}

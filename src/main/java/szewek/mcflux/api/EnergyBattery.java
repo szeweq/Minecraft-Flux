@@ -13,30 +13,30 @@ public class EnergyBattery extends EnergyStorage implements IEnergyConsumer, IEn
 		super(max);
 	}
 
-	EnergyBattery() {
+	public EnergyBattery() {
 		super(40000);
 	}
 
 	@Override
-	public int extractEnergy(int amount, boolean simulate) {
+	public int extractEnergy(int amount, boolean sim) {
 		if (amount == 0)
 			return 0;
 		int r = energy;
 		if (amount < r)
 			r = amount;
-		if (!simulate)
+		if (!sim)
 			energy -= r;
 		return r;
 	}
 
 	@Override
-	public int consumeEnergy(int amount, boolean simulate) {
+	public int consumeEnergy(int amount, boolean sim) {
 		if (amount == 0)
 			return 0;
 		int r = maxEnergy - energy;
 		if (amount < r)
 			r = amount;
-		if (!simulate)
+		if (!sim)
 			energy += r;
 		return r;
 	}

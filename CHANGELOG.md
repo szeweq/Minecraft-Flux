@@ -1,5 +1,8 @@
-## 0.6.1
+## 0.7.0
 - MF Tool can read World Chunk Energy
+- Code cleanup
+- Removed sided extractEnergy and consumeEnergy methods
+- EntityActionEnergy replaced PigEnergy and CreeperEnergy
 
 ## 0.6.0
 - Creepers and Pigs are MF Compatible

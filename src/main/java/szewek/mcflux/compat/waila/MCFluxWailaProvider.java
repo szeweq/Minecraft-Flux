@@ -22,7 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import szewek.mcflux.R;
-import szewek.mcflux.api.CapabilityEnergy;
+import szewek.mcflux.U;
 import szewek.mcflux.api.IEnergyHolder;
 
 public class MCFluxWailaProvider implements IWailaDataProvider, IWailaEntityProvider {
@@ -49,19 +49,14 @@ public class MCFluxWailaProvider implements IWailaDataProvider, IWailaEntityProv
 	public List<String> getWailaBody(ItemStack is, List<String> ctip, IWailaDataAccessor da, IWailaConfigHandler cfg) {
 		TileEntity te = da.getTileEntity();
 		EnumFacing f = da.getSide();
-		IEnergyHolder ieh = null;
-		if (te.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, f)) {
-			ieh = te.getCapability(CapabilityEnergy.ENERGY_CONSUMER, f);
-		} else if (te.hasCapability(CapabilityEnergy.ENERGY_PRODUCER, f)) {
-			ieh = te.getCapability(CapabilityEnergy.ENERGY_PRODUCER, f);
-		}
+		IEnergyHolder ieh = U.getEnergyHolderTile(te, f);
 		if (ieh == null)
 			return ctip;
 		@SuppressWarnings("unchecked")
 		ITaggedList<String, String> tgl = (ITaggedList<String, String>) ctip;
 		int nc = ieh.getEnergyCapacity();
 		if (nc > 0 && tgl.getEntries(R.TAG_MF).size() == 0) {
-			tgl.add(String.format(R.FORMAT_ENERGY_STAT_UNIT, ieh.getEnergy(), nc), R.TAG_MF);
+			tgl.add(U.formatMF(ieh.getEnergy(), nc), R.TAG_MF);
 		}
 		return ctip;
 	}
@@ -88,21 +83,14 @@ public class MCFluxWailaProvider implements IWailaDataProvider, IWailaEntityProv
 
 	@Override
 	public List<String> getWailaBody(Entity e, List<String> ctip, IWailaEntityAccessor ea, IWailaConfigHandler cfg) {
-		IEnergyHolder ieh = null;
-		if (e.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, null)) {
-			ieh = e.getCapability(CapabilityEnergy.ENERGY_CONSUMER, null);
-		} else if (e.hasCapability(CapabilityEnergy.ENERGY_PRODUCER, null)) {
-			ieh = e.getCapability(CapabilityEnergy.ENERGY_PRODUCER, null);
-		}
+		IEnergyHolder ieh = U.getEnergyHolderEntity(e);
 		@SuppressWarnings("unchecked")
 		ITaggedList<String, String> tgl = (ITaggedList<String, String>) ctip;
 		if (ieh != null) {
 			int nc = ieh.getEnergyCapacity();
 			if (nc > 0 && tgl.getEntries(R.TAG_MF).size() == 0) {
-				tgl.add(nc == 1 ? I18n.format("mcflux.mfcompatible") : String.format(R.FORMAT_ENERGY_STAT_UNIT, ieh.getEnergy(), nc), R.TAG_MF);
+				tgl.add(nc == 1 ? I18n.format("mcflux.mfcompatible") : U.formatMF(ieh.getEnergy(), nc), R.TAG_MF);
 			}
-		} else if (tgl.getEntries(R.TAG_MF).size() == 0) {
-			tgl.add("NO MF", R.TAG_MF);
 		}
 		return ctip;
 	}

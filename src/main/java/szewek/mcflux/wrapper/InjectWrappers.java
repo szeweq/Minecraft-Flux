@@ -15,10 +15,8 @@ import szewek.mcflux.R;
 public enum InjectWrappers {
 	INSTANCE;
 	public static final ResourceLocation
-		RFTILE_ENERGY = new ResourceLocation(R.MCFLUX_NAME, "RFTileEnergy"),
-		RFITEM_ENERGY = new ResourceLocation(R.MCFLUX_NAME, "RFItemEnergy"),
-		IFTILE_ENERGY = new ResourceLocation(R.MCFLUX_NAME, "IFTileEnergy"),
-		IFITEM_ENERGY = new ResourceLocation(R.MCFLUX_NAME, "IFItemEnergy");
+		MF_TILE_ENERGY = new ResourceLocation(R.MCFLUX_NAME, "TileMF"),
+		MF_ITEM_ENERGY = new ResourceLocation(R.MCFLUX_NAME, "ItemMF");
 
 	@SubscribeEvent
 	public void capabilityWrapperInject(AttachCapabilitiesEvent e) {
@@ -26,17 +24,17 @@ public enum InjectWrappers {
 			AttachCapabilitiesEvent.TileEntity ete = (AttachCapabilitiesEvent.TileEntity) e;
 			TileEntity te = ete.getTileEntity();
 			if (te instanceof IFluxConnection)
-				ete.addCapability(IFTILE_ENERGY, new IFTileCapabilityProvider((IFluxConnection) te));
+				ete.addCapability(MF_TILE_ENERGY, new IFTileCapabilityProvider((IFluxConnection) te));
 			if (te instanceof IEnergyHandler)
-				ete.addCapability(RFTILE_ENERGY, new RFTileCapabilityProvider((IEnergyHandler) te));
+				ete.addCapability(MF_TILE_ENERGY, new RFTileCapabilityProvider((IEnergyHandler) te));
 		} else if (e instanceof AttachCapabilitiesEvent.Item) {
 			AttachCapabilitiesEvent.Item ei = (AttachCapabilitiesEvent.Item) e;
 			ItemStack is = ei.getItemStack();
 			Item it = is.getItem();
 			if (it instanceof IFluxContainerItem)
-				ei.addCapability(IFITEM_ENERGY, new IFItemContainerWrapper((IFluxContainerItem) it, is));
+				ei.addCapability(MF_ITEM_ENERGY, new IFItemContainerWrapper((IFluxContainerItem) it, is));
 			else if (it instanceof IEnergyContainerItem)
-				ei.addCapability(RFITEM_ENERGY, new RFItemContainerWrapper((IEnergyContainerItem) it, is));
+				ei.addCapability(MF_ITEM_ENERGY, new RFItemContainerWrapper((IEnergyContainerItem) it, is));
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package szewek.mcflux.fluxable;
 
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Items;
@@ -11,12 +13,12 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyConsumer;
 
-public class PigEnergy implements IEnergyConsumer, ICapabilityProvider {
+public class EntityActionEnergy implements ICapabilityProvider, IEnergyConsumer {
 	private boolean charged = false;
-	private final EntityPig pig;
+	private final EntityCreature creature;
 	
-	public PigEnergy(EntityPig ep) {
-		pig = ep;
+	public EntityActionEnergy(EntityCreature ec) {
+		creature = ec;
 	}
 
 	@Override
@@ -45,16 +47,19 @@ public class PigEnergy implements IEnergyConsumer, ICapabilityProvider {
 	@Override
 	public int consumeEnergy(int amount, boolean simulate) {
 		if (!simulate && !charged) {
-			EntityPigZombie pigman = new EntityPigZombie(pig.worldObj);
-			pigman.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_AXE));
-			pigman.setLocationAndAngles(pig.posX, pig.posY, pig.posZ, pig.rotationYaw, pig.rotationPitch);
-			pigman.setNoAI(pig.isAIDisabled());
-			if (pig.hasCustomName()) {
-				pigman.setCustomNameTag(pig.getCustomNameTag());
-				pigman.setAlwaysRenderNameTag(pig.getAlwaysRenderNameTag());
-            }
-			pig.worldObj.spawnEntityInWorld(pigman);
-			pig.setDead();
+			if (creature instanceof EntityPig) {
+				EntityPigZombie pigman = new EntityPigZombie(creature.worldObj);
+				pigman.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_AXE));
+				pigman.setLocationAndAngles(creature.posX, creature.posY, creature.posZ, creature.rotationYaw, creature.rotationPitch);
+				pigman.setNoAI(creature.isAIDisabled());
+				if (creature.hasCustomName()) {
+					pigman.setCustomNameTag(creature.getCustomNameTag());
+					pigman.setAlwaysRenderNameTag(creature.getAlwaysRenderNameTag());
+	            }
+				creature.worldObj.spawnEntityInWorld(pigman);
+				creature.setDead();
+			} else if (creature instanceof EntityCreeper)
+				creature.onStruckByLightning(null);
 			charged = true;
 			return 1;
 		}

@@ -7,17 +7,18 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.CapabilityEnergy;
+import szewek.mcflux.api.IEnergyConsumer;
+import szewek.mcflux.api.IEnergyProducer;
 
-public class IFTileCapabilityProvider implements ICapabilityProvider {
-	private final IFTileProviderWrapper provider;
-	private final IFTileReceiverWrapper receiver;
+public class IFTileCapabilityProvider implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
+	private final IFluxProvider provider;
+	private final IFluxReceiver receiver;
 	private final IFluxConnection conn;
 
 	IFTileCapabilityProvider(IFluxConnection ifc) {
 		conn = ifc;
-		provider = ifc instanceof IFluxProvider ? new IFTileProviderWrapper((IFluxProvider) ifc) : null;
-		receiver = ifc instanceof IFluxReceiver ? new IFTileReceiverWrapper((IFluxReceiver) ifc) : null;
-
+		provider = ifc instanceof IFluxProvider ? (IFluxProvider) ifc : null;
+		receiver = ifc instanceof IFluxReceiver ? (IFluxReceiver) ifc : null;
 	}
 
 	@Override
@@ -36,10 +37,30 @@ public class IFTileCapabilityProvider implements ICapabilityProvider {
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
 		if (conn.canConnectEnergy(f)) {
 			if (cap == CapabilityEnergy.ENERGY_CONSUMER)
-				return (T) receiver;
+				return receiver != null ? (T) this : null;
 			if (cap == CapabilityEnergy.ENERGY_PRODUCER)
-				return (T) provider;
+				return provider != null ? (T) this : null;
 		}
 		return null;
+	}
+	
+	@Override
+	public int getEnergy() {
+		return provider != null ? provider.getEnergyStored(null) : receiver != null ? receiver.getEnergyStored(null): 0;
+	}
+
+	@Override
+	public int getEnergyCapacity() {
+		return provider != null ? provider.getMaxEnergyStored(null) : receiver != null ? receiver.getMaxEnergyStored(null): 0;
+	}
+
+	@Override
+	public int extractEnergy(int amount, boolean sim) {
+		return provider != null ? provider.extractEnergy(null, amount, sim) : 0;
+	}
+	
+	@Override
+	public int consumeEnergy(int amount, boolean sim) {
+		return receiver != null ? receiver.receiveEnergy(null, amount, sim) : 0;
 	}
 }
