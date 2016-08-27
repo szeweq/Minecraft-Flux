@@ -32,7 +32,7 @@ import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 public class MCFluxMod {
 	private static Logger log;
 	private static ItemMFTool MFTOOL;
-	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs("mcflux") {
+	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs(R.MCFLUX_NAME) {
 		@Override
 		public Item getTabIconItem() {
 			return MFTOOL;
