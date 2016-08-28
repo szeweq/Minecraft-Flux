@@ -13,9 +13,13 @@ import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyHolder;
 
 public class U {
+	@SideOnly(Side.CLIENT)
+	private static ItemModelMesher imm = null;
+
 	public static String formatMF(int n, int nc) {
 		return n + " / " + nc + " MF";
 	}
+
 	public static IEnergyHolder getEnergyHolderTile(TileEntity te, EnumFacing f) {
 		if (te.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, f)) {
 			return te.getCapability(CapabilityEnergy.ENERGY_CONSUMER, f);
@@ -24,6 +28,7 @@ public class U {
 		}
 		return null;
 	}
+
 	public static IEnergyHolder getEnergyHolderEntity(Entity e) {
 		if (e.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, null)) {
 			return e.getCapability(CapabilityEnergy.ENERGY_CONSUMER, null);
@@ -32,6 +37,7 @@ public class U {
 		}
 		return null;
 	}
+
 	@SideOnly(Side.CLIENT)
 	public static void registerItemModels(Item... items) {
 		ItemModelMesher imm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
@@ -40,6 +46,7 @@ public class U {
 			imm.register(i, 0, mrl);
 		}
 	}
-	
-	private U() {}
+
+	private U() {
+	}
 }

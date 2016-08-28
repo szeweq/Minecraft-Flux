@@ -1,3 +1,7 @@
+## 0.8.0
+- Resolved issue with missing APIs. Fixes #1
+- Added 2 new blocks - Work in progress
+
 ## 0.7.0
 - MF Tool can read World Chunk Energy
 - Code cleanup

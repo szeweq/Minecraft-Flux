@@ -30,6 +30,7 @@ def getVersion() {
 }
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
+	from sourceSets.api.output
 	classifier = "dev"
 }
 
@@ -53,6 +54,15 @@ repositories {
 
 dependencies {
 	deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
+}
+
+// QUICK FIX
+jar {
+	from sourceSets.main.output
+	from sourceSets.api.output
+}
+sourceJar {
+	from sourceSets.api.allSource
 }
 
 processResources {
