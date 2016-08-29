@@ -1,4 +1,5 @@
-# Minecraft-Flux ![Minecraft Flux Logo](https://raw.githubusercontent.com/Szewek/Minecraft-Flux/master/src/main/resources/mcflux.png) [![Build Status](https://travis-ci.org/Szewek/Minecraft-Flux.svg?branch=master)](https://travis-ci.org/Szewek/Minecraft-Flux)
+![Minecraft Flux Logo](https://raw.githubusercontent.com/Szewek/Minecraft-Flux/master/mcflux.png)
+# Minecraft-Flux [![Build Status](https://travis-ci.org/Szewek/Minecraft-Flux.svg?branch=master)](https://travis-ci.org/Szewek/Minecraft-Flux)
 An open energy distribution system for Minecraft mods.
 
 1 Minecraft Flux (MF) = 1 RF = 1 any other RF-based unit
