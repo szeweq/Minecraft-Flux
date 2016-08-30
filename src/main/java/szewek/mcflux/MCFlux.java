@@ -43,7 +43,7 @@ import java.util.function.Function;
 public class MCFlux {
 	private static Logger log;
 	private static ItemMFTool MFTOOL;
-	private static BlockEnergyMachine ENERGY_MACHINE;
+	public static BlockEnergyMachine ENERGY_MACHINE;
 	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs(R.MCFLUX_NAME) {
 		@Override
 		public Item getTabIconItem() {

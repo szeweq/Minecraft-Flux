@@ -1,7 +1,11 @@
 package szewek.mcflux.tileentities;
 
-import net.minecraft.tileentity.TileEntity;
-
-public class TileEntityEnergyDistributor extends TileEntity {
+public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
+	
+	@Override
+	public void update() {
+		if (worldObj.isRemote) return;
+		super.update();
+	}
 
 }

@@ -1,0 +1,6 @@
+{
+	"parent": "mcflux:block/energy_machine_side",
+	"textures": {
+		"0": "mcflux:blocks/energy_machine_in"
+	}
+}

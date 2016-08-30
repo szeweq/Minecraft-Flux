@@ -1,9 +1,9 @@
 package szewek.mcflux.blocks;
 
 import java.util.List;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -25,24 +25,33 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.tileentities.TileEntityChunkCharger;
 import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
+import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 public class BlockEnergyMachine extends BlockContainer {
 	public static final AxisAlignedBB DEF_AABB = new AxisAlignedBB(0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
 	public static final PropertyEnum<Variant> VARIANT = PropertyEnum.create("variant", Variant.class);
-	public static final PropertyInteger UP = PropertyInteger.create("up", 0, 2),
-			DOWN = PropertyInteger.create("down", 0, 2), NORTH = PropertyInteger.create("north", 0, 2),
-			SOUTH = PropertyInteger.create("south", 0, 2), EAST = PropertyInteger.create("east", 0, 2),
+	public static final PropertyInteger
+			UP = PropertyInteger.create("up", 0, 2),
+			DOWN = PropertyInteger.create("down", 0, 2),
+			NORTH = PropertyInteger.create("north", 0, 2),
+			SOUTH = PropertyInteger.create("south", 0, 2),
+			EAST = PropertyInteger.create("east", 0, 2),
 			WEST = PropertyInteger.create("west", 0, 2);
-
+	
+	public static PropertyInteger sideFromId(int id) {
+		switch (id) {
+		case 0: return DOWN;
+		case 1: return UP;
+		case 2: return NORTH;
+		case 3: return SOUTH;
+		case 4: return WEST;
+		case 5: return EAST;
+		default: return null;
+		}
+	}
+	
 	public BlockEnergyMachine() {
 		super(Material.IRON);
-		setDefaultState(blockState.getBaseState().withProperty(UP, 0).withProperty(DOWN, 0).withProperty(NORTH, 0)
-				.withProperty(SOUTH, 0).withProperty(EAST, 0).withProperty(WEST, 0));
-	}
-
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override
@@ -69,12 +78,17 @@ public class BlockEnergyMachine extends BlockContainer {
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {VARIANT, DOWN, UP, NORTH, SOUTH, WEST, EAST});
+		return new BlockStateContainer(this, VARIANT, DOWN, UP, NORTH, SOUTH, WEST, EAST);
 	}
 	
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return DEF_AABB;
+	}
+	
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
 	}
 	
 	@Override
@@ -89,6 +103,11 @@ public class BlockEnergyMachine extends BlockContainer {
 	
 	@Override
 	public boolean onBlockActivated(World w, BlockPos bp, IBlockState ibs, EntityPlayer p, EnumHand h, ItemStack is, EnumFacing f, float x, float y, float z) {
+		if (!w.isRemote && is == null) {
+			TileEntity te = w.getTileEntity(bp);
+			if (te != null && te instanceof TileEntityEnergyMachine)
+				((TileEntityEnergyMachine) te).switchSideTransfer(f);
+		}
 		return is == null;
 	}
 
