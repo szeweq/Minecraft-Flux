@@ -1,3 +1,9 @@
+## 0.9.0
+- 2 NEW BLOCKS:
+  - Energy Distributor - connect with machines to send and receive energy from world chunks.
+  - Chunk Charger - Transfers energy between world chunks.
+- Added JEI Integration
+
 ## 0.8.0
 - Resolved issue with missing APIs. Fixes #1
 - Added 2 new blocks - Work in progress

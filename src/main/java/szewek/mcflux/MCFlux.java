@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.RecipeSorter;
 import szewek.mcflux.api.EnergyBattery;
 import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyProducer;
@@ -33,6 +34,7 @@ import szewek.mcflux.items.ItemMFTool;
 import szewek.mcflux.proxy.ProxyCommon;
 import szewek.mcflux.tileentities.TileEntityChunkCharger;
 import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
+import szewek.mcflux.util.RecipeBuilder;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
@@ -76,6 +78,7 @@ public class MCFlux {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
+		RecipeSorter.register("mcflux:builtRecipe", RecipeBuilder.BuiltShapedRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 		GameRegistry.addShapedRecipe(new ItemStack(MFTOOL), new String[] {"n n", "rir", "rrr"}, 'n', Items.GOLD_NUGGET, 'r', Items.REDSTONE, 'i', Items.IRON_INGOT);
 		FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
 		PROXY.init();
