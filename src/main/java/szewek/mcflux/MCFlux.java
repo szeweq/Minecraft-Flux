@@ -31,7 +31,6 @@ import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
 import szewek.mcflux.fluxable.InjectFluxable;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.items.ItemMFTool;
-import szewek.mcflux.proxy.ProxyCommon;
 import szewek.mcflux.tileentities.TileEntityChunkCharger;
 import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
 import szewek.mcflux.util.RecipeBuilder;
@@ -53,7 +52,7 @@ public class MCFlux {
 		}
 	};
 	@SidedProxy(modId = R.MCFLUX_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
-	public static ProxyCommon PROXY = null;
+	public static szewek.mcflux.proxy.ProxyCommon PROXY = null;
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
@@ -79,7 +78,27 @@ public class MCFlux {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
 		RecipeSorter.register("mcflux:builtRecipe", RecipeBuilder.BuiltShapedRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-		GameRegistry.addShapedRecipe(new ItemStack(MFTOOL), new String[] {"n n", "rir", "rrr"}, 'n', Items.GOLD_NUGGET, 'r', Items.REDSTONE, 'i', Items.IRON_INGOT);
+		ItemStack stackRedstone = new ItemStack(Items.REDSTONE);
+		new RecipeBuilder()
+			.result(new ItemStack(MFTOOL))
+			.shapeCode(new byte[][]{{1, 0, 1}, {2, 3, 2}, {2, 2, 2}}, 3, 3)
+			.oreDictWithNumber(1, "nuggetGold")
+			.stackWithNumber(2, stackRedstone)
+			.oreDictWithNumber(3, "ingotIron")
+			.deploy();
+		ItemStack stackEnergyDist = new ItemStack(ENERGY_MACHINE, 1, 0);
+		new RecipeBuilder()
+			.result(stackEnergyDist)
+			.shapeCode(new byte[][]{{0, 1, 0}, {1, 2, 1}, {0, 1, 0}}, 3, 3)
+			.oreDictWithNumber(1, "blockIron")
+			.stackWithNumber(2, new ItemStack(Items.END_CRYSTAL))
+			.deploy();
+		new RecipeBuilder()
+			.result(new ItemStack(ENERGY_MACHINE, 1, 1))
+			.shapeCode(new byte[][]{{1, 0, 1}, {0, 2, 0}, {1, 0, 1}}, 3, 3)
+			.stackWithNumber(1, stackRedstone)
+			.stackWithNumber(2, stackEnergyDist)
+			.deploy();
 		FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
 		PROXY.init();
 	}
