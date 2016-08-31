@@ -5,8 +5,11 @@ import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.api.CapabilityEnergy;
@@ -48,10 +51,22 @@ public class U {
 
 	@SideOnly(Side.CLIENT)
 	public static void registerItemModels(Item... items) {
-		ItemModelMesher imm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+		if (imm == null)
+			imm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		for (Item i : items) {
 			ModelResourceLocation mrl = new ModelResourceLocation(i.getRegistryName(), "inventory");
 			imm.register(i, 0, mrl);
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void registerItemMultiModels(Item item, int m) {
+		ResourceLocation rl = item.getRegistryName();
+		final String dom = rl.getResourceDomain();
+		for (int i = 0; i < m; i++) {
+			ItemStack is = new ItemStack(item, 1, i);
+			ModelResourceLocation mrl = new ModelResourceLocation(dom + ':' + item.getUnlocalizedName(is).substring(5), "inventory");
+			ModelLoader.setCustomModelResourceLocation(item, i, mrl);
 		}
 	}
 

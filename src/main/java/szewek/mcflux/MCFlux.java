@@ -83,7 +83,7 @@ public class MCFlux {
 
 	@SideOnly(Side.CLIENT)
 	public static void renders() {
-		U.registerItemModels(MFTOOL, Item.getItemFromBlock(ENERGY_MACHINE));
+		U.registerItemModels(MFTOOL);
 	}
 
 	private static <T extends Item> T registerItem(String name, T i) {

@@ -36,6 +36,7 @@ public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
 			if (tt == TransferType.NONE) continue;
 			EnumFacing f = EnumFacing.VALUES[i];
 			TileEntity te = worldObj.getTileEntity(pos.offset(f));
+			if (te == null) continue;
 			f = f.getOpposite();
 			IEnergyProducer from = null;
 			IEnergyConsumer to = null;

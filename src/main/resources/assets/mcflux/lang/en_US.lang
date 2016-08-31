@@ -10,3 +10,7 @@ mcflux.mfcompatible=MF Compatible
 mcflux.worldchunk=World Chunk 
 itemGroup.mcflux=Minecraft-Flux
 item.mftool.name=MF Tool
+tile.energy_dist.name=Energy Distributor
+tile.energy_dist.desc=A medium between World Chunk Energy and blocks.
+tile.chunk_charger.name=Chunk Charger
+tile.chunk_charger.desc=Charges nearby chunks.
