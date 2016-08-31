@@ -10,7 +10,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.api.CapabilityEnergy;
+import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyHolder;
+import szewek.mcflux.api.IEnergyProducer;
 
 public class U {
 	@SideOnly(Side.CLIENT)
@@ -36,6 +38,12 @@ public class U {
 			return e.getCapability(CapabilityEnergy.ENERGY_PRODUCER, null);
 		}
 		return null;
+	}
+	
+	public static void transferEnergy(IEnergyProducer from, IEnergyConsumer to, final int amount) {
+		int r = to.consumeEnergy(from.extractEnergy(amount, false), false);
+		if (r > 0)
+			to.consumeEnergy(from.extractEnergy(amount, true), true);
 	}
 
 	@SideOnly(Side.CLIENT)
