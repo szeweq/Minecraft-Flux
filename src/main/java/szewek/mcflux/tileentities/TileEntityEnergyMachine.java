@@ -2,6 +2,8 @@ package szewek.mcflux.tileentities;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -12,24 +14,21 @@ import szewek.mcflux.util.TransferType;
 
 public abstract class TileEntityEnergyMachine extends TileEntity implements ITickable {
 	private TransferType[] sideTransfer = new TransferType[] {TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};
-	private boolean needsUpdate = false;
+	private IBlockState cachedState;
 	
-	public TransferType[] getSideTransfer() {
-		return sideTransfer;
+	public TileEntityEnergyMachine(IBlockState ibs) {
+		cachedState = ibs;
+	}
+	
+	public IBlockState getCachedState() {
+		return cachedState;
 	}
 	
 	@Override
 	public void update() {
-		if (needsUpdate) {
-			System.out.println("NEED UPDATE");
-			IBlockState ibs = worldObj.getBlockState(pos);
-			for (int i = 0; i < 6; i++) {
-				ibs = ibs.withProperty(BlockEnergyMachine.sideFromId(i), sideTransfer[i].ord);
-			}
-			worldObj.setBlockState(pos, ibs, 2);
-			needsUpdate = false;
-		}
-		
+		IBlockState ibs = worldObj.getBlockState(pos);
+		if (ibs != cachedState)
+			worldObj.setBlockState(pos, cachedState, 3);
 	}
 	
 	@Override
@@ -38,12 +37,15 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 		int[] sides = compound.getIntArray("sides");
 		if (sides.length != 6) return;
 		TransferType[] tt = TransferType.values();
+		IBlockState oldState = cachedState;
 		for (int i = 0; i < 6; i++) {
 			sideTransfer[i] = tt[sides[i]];
+			cachedState = cachedState.withProperty(BlockEnergyMachine.sideFromId(i), sides[i]);
 		}
-		needsUpdate = true;
-		System.out.println("WORLD: " + worldObj != null);
+		if (oldState != cachedState)
+			markDirty();
 	}
+	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
@@ -60,10 +62,21 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 		return obs.getBlock() != nbs.getBlock() || obs.getValue(BlockEnergyMachine.VARIANT) != nbs.getValue(BlockEnergyMachine.VARIANT);
 	}
 	
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(pos, getBlockMetadata(), writeToNBT(new NBTTagCompound()));
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		readFromNBT(pkt.getNbtCompound());
+	}
+	
 	public void switchSideTransfer(EnumFacing f) {
 		int s = f.ordinal();
 		int v = (sideTransfer[s].ordinal() + 1) % 3;
 		sideTransfer[s] = TransferType.values()[v];
-		worldObj.setBlockState(pos, worldObj.getBlockState(pos).withProperty(BlockEnergyMachine.sideFromId(s), sideTransfer[s].ord), 2);
+		cachedState = cachedState.withProperty(BlockEnergyMachine.sideFromId(s), v);
+		markDirty();
 	}
 }

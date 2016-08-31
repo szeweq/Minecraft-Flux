@@ -37,6 +37,7 @@ Flux Work is a working cycle system with energy use for Tile Entity.
 - [x] Provide FULL RF Compatiblity (including wrappers for capabilities)
 - [x] Implement and document Fluxable
 - [x] Implement and document Flux Work
+- [ ] Force update on client-side tile entities
 - [ ] Find a good Maven repo
 - [ ] Add compatibility for RF-like mods and libraries
 - [ ] Mixing Flavors

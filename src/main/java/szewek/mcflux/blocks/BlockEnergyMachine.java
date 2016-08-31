@@ -56,7 +56,8 @@ public class BlockEnergyMachine extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World w, int m) {
-		return m == 0 ? new TileEntityEnergyDistributor() : m == 1 ? new TileEntityChunkCharger() : null;
+		IBlockState ibs = getStateFromMeta(m);
+		return m == 0 ? new TileEntityEnergyDistributor(ibs) : m == 1 ? new TileEntityChunkCharger(ibs) : null;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -88,7 +89,7 @@ public class BlockEnergyMachine extends BlockContainer {
 	
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
+		return state.getValue(VARIANT).ordinal() == 0 ? EnumBlockRenderType.ENTITYBLOCK_ANIMATED : EnumBlockRenderType.MODEL;
 	}
 	
 	@Override
