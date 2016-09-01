@@ -6,7 +6,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTPrimitive;
+import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -20,6 +25,9 @@ import net.minecraftforge.oredict.RecipeSorter;
 import szewek.mcflux.api.EnergyBattery;
 import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyProducer;
+import szewek.mcflux.api.ex.Battery;
+import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.api.ex.INBTEnergy;
 import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.flavor.CapabilityFlavorEnergy;
 import szewek.mcflux.api.flavor.FlavorEnergyContainer;
@@ -39,27 +47,41 @@ import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
 import java.util.function.Function;
 
-@Mod(modid = R.MCFLUX_NAME, version = R.MCFLUX_VERSION)
+@Mod(modid = R.MF_NAME, version = R.MF_VERSION)
 public class MCFlux {
 	private static org.apache.logging.log4j.Logger log;
 	public static ItemMFTool MFTOOL;
 	public static BlockEnergyMachine ENERGY_MACHINE;
-	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs(R.MCFLUX_NAME) {
+	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs(R.MF_NAME) {
 		@Override
 		public Item getTabIconItem() {
 			return MFTOOL;
 		}
 	};
-	@SidedProxy(modId = R.MCFLUX_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
+	@SidedProxy(modId = R.MF_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
 	public static szewek.mcflux.proxy.ProxyCommon PROXY = null;
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
 		log = e.getModLog();
-		if (R.MCFLUX_VERSION.charAt(0) == '@')
+		if (R.MF_VERSION.charAt(0) == '@')
 			log.warn("You are running Minecraft-Flux with an unknown version (development maybe?)");
 		else
-			log.info("Minecraft-Flux version " + R.MCFLUX_VERSION);
+			log.info("Minecraft-Flux version " + R.MF_VERSION);
+		CapabilityManager.INSTANCE.register(IEnergy.class, new Capability.IStorage<IEnergy>() {
+			@Override
+			public NBTBase writeNBT(Capability<IEnergy> capability, IEnergy t, EnumFacing side) {
+				return t instanceof INBTEnergy ? ((INBTEnergy) t).writeNBTEnergy() : new NBTTagLong(t.getEnergy());
+			}
+
+			@Override
+			public void readNBT(Capability<IEnergy> capability, IEnergy t, EnumFacing side, NBTBase nbt) {
+				if (t instanceof INBTEnergy)
+					((INBTEnergy) t).readNBTEnergy(nbt);
+				else if (t instanceof NBTPrimitive)
+					t.setEnergy(((NBTPrimitive) nbt).getLong());
+			}
+		}, Battery::new);
 		CapabilityManager.INSTANCE.register(IEnergyProducer.class, new CapabilityEnergy.Storage<IEnergyProducer>(), EnergyBattery::new);
 		CapabilityManager.INSTANCE.register(IEnergyConsumer.class, new CapabilityEnergy.Storage<IEnergyConsumer>(), EnergyBattery::new);
 		CapabilityManager.INSTANCE.register(IFlavorEnergyProducer.class, new CapabilityFlavorEnergy.Storage<IFlavorEnergyProducer>(), FlavorEnergyContainer::new);
@@ -109,11 +131,11 @@ public class MCFlux {
 
 	private static <T extends Item> T registerItem(String name, T i) {
 		i.setUnlocalizedName(name).setCreativeTab(MCFLUX_TAB);
-		return GameRegistry.register(i, new ResourceLocation(R.MCFLUX_NAME, name));
+		return GameRegistry.register(i, new ResourceLocation(R.MF_NAME, name));
 	}
 
 	private static <T extends Block> T registerBlock(String name, T b, Function<Block, ItemBlock> ibfn) {
-		ResourceLocation rs = new ResourceLocation(R.MCFLUX_NAME, name);
+		ResourceLocation rs = new ResourceLocation(R.MF_NAME, name);
 		b.setUnlocalizedName(name).setCreativeTab(MCFLUX_TAB);
 		GameRegistry.register(b, rs);
 		GameRegistry.register(ibfn.apply(b), rs);

@@ -1,4 +1,4 @@
-@net.minecraftforge.fml.common.API(apiVersion = R.MCFLUX_VERSION, owner = R.MCFLUX_NAME, provides = R.MCFLUX_API_NAME)
+@net.minecraftforge.fml.common.API(apiVersion = R.MF_VERSION, owner = R.MF_NAME, provides = R.MF_API)
 package szewek.mcflux.api;
 
 import szewek.mcflux.R;

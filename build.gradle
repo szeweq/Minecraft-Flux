@@ -39,9 +39,9 @@ group = "szewek.mcflux"
 archivesBaseName = "mcflux"
 
 minecraft {
-	version = "1.10.2-12.18.1.2065"
+	version = "1.10.2-12.18.1.2076"
 	runDir = "run"
-	mappings = "snapshot_20160821"
+	mappings = "snapshot_20160828"
 	replace "@VERSION@", project.version
 	replaceIn "R.java"
 }
@@ -58,7 +58,6 @@ dependencies {
 
 // QUICK FIX
 jar {
-	from sourceSets.main.output
 	from sourceSets.api.output
 }
 sourceJar {
@@ -79,7 +78,7 @@ processResources {
 	}
 }
 curseforge {
-	apiKey = "0"
+	apiKey = ""
 	if (System.env.CURSEFORGE_KEY)
 		apiKey = System.env.CURSEFORGE_KEY
 	project {

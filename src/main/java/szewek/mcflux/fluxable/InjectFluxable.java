@@ -13,9 +13,9 @@ import szewek.mcflux.R;
 public enum InjectFluxable {
 	INSTANCE;
 	public static final ResourceLocation
-		ENERGY_PLAYER = new ResourceLocation(R.MCFLUX_NAME, "PlayerEnergy"),
-		ENERGY_ACTION = new ResourceLocation(R.MCFLUX_NAME, "ActionEnergy"),
-		ENERGY_WORLD_CHUNK = new ResourceLocation(R.MCFLUX_NAME, "WorldChunkEnergy");
+		ENERGY_PLAYER = new ResourceLocation(R.MF_NAME, "PlayerEnergy"),
+		ENERGY_ACTION = new ResourceLocation(R.MF_NAME, "ActionEnergy"),
+		ENERGY_WORLD_CHUNK = new ResourceLocation(R.MF_NAME, "WorldChunkEnergy");
 	
 	@SubscribeEvent
 	public void inject(AttachCapabilitiesEvent e) {

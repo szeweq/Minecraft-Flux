@@ -15,8 +15,8 @@ import szewek.mcflux.R;
 public enum InjectWrappers {
 	INSTANCE;
 	public static final ResourceLocation
-		MF_TILE_ENERGY = new ResourceLocation(R.MCFLUX_NAME, "TileMF"),
-		MF_ITEM_ENERGY = new ResourceLocation(R.MCFLUX_NAME, "ItemMF");
+		MF_TILE_ENERGY = new ResourceLocation(R.MF_NAME, "TileMF"),
+		MF_ITEM_ENERGY = new ResourceLocation(R.MF_NAME, "ItemMF");
 
 	@SubscribeEvent
 	public void capabilityWrapperInject(AttachCapabilitiesEvent e) {

@@ -2,14 +2,14 @@ package szewek.mcflux;
 
 public final class R {
 	public static final String
-		MCFLUX_VERSION = "@VERSION@",
-		MCFLUX_NAME = "mcflux",
-		MCFLUX_API_NAME = "mcfluxAPI",
-		MCFLUX_FLAVORAPI_NAME = MCFLUX_API_NAME + "|flavor",
-		MCFLUX_PKG = "szewek.mcflux",
-		PROXY_SERVER = MCFLUX_PKG + ".proxy.ProxyCommon",
-		PROXY_CLIENT = MCFLUX_PKG + ".proxy.ProxyClient",
-		WAILA_REGISTER = MCFLUX_PKG + ".compat.waila.MCFluxWailaProvider.callbackRegister",
+		MF_VERSION = "@VERSION@",
+		MF_NAME = "mcflux",
+		MF_API = "mcfluxAPI",
+		MF_API_FLAVOR = MF_API + "|flavor",
+		MF_PKG = "szewek.mcflux",
+		PROXY_SERVER = MF_PKG + ".proxy.ProxyCommon",
+		PROXY_CLIENT = MF_PKG + ".proxy.ProxyClient",
+		WAILA_REGISTER = MF_PKG + ".compat.waila.MCFluxWailaProvider.callbackRegister",
 		TAG_MF = "@MF";
 
 	private R() {}
