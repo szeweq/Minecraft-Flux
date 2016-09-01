@@ -58,7 +58,8 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 	}
 	
 	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState obs, IBlockState nbs) {
+	public boolean shouldRefresh(World w, BlockPos pos, IBlockState obs, IBlockState nbs) {
+		if (w.isRemote) return obs != nbs;
 		return obs.getBlock() != nbs.getBlock() || obs.getValue(BlockEnergyMachine.VARIANT) != nbs.getValue(BlockEnergyMachine.VARIANT);
 	}
 	

@@ -4,13 +4,18 @@ mcflux.entitycompat.start=This entity is
 mcflux.entitycompat.end= with MF.
 mcflux.mfcompat=compatible
 mcflux.nocompat=NOT compatible
-mcflux.energystat=Energy: %s MF
+mcflux.energystat=Energy: %s
 mcflux.energystatunknown=Energy: unknown
 mcflux.mfcompatible=MF Compatible
 mcflux.worldchunk=World Chunk 
 itemGroup.mcflux=Minecraft-Flux
+
 item.mftool.name=MF Tool
+item.mftool.jeidesc=Use this tool to check if a block/entity is MF compatible.\nIf it is then MF Tool shows energy stats.
+
 tile.energy_dist.name=Energy Distributor
 tile.energy_dist.desc=A medium between World Chunk Energy and blocks.
+tile.energy_dist.jeidesc=Use Energy Distributor when you want to provide simple wireless energy in your world.\nProduces less lag than cables.
 tile.chunk_charger.name=Chunk Charger
 tile.chunk_charger.desc=Charges nearby chunks.
+tile.chunk_charger.jeidesc=Chunk Charger transfers energy from/to neighbor chunks.\nOne per 16x16x16 chunk should be enough.

@@ -43,7 +43,7 @@ import java.util.function.Function;
 @Mod(modid = R.MCFLUX_NAME, version = R.MCFLUX_VERSION)
 public class MCFlux {
 	private static Logger log;
-	private static ItemMFTool MFTOOL;
+	public static ItemMFTool MFTOOL;
 	public static BlockEnergyMachine ENERGY_MACHINE;
 	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs(R.MCFLUX_NAME) {
 		@Override
