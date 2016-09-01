@@ -1,16 +1,16 @@
-package szewek.mcflux.fluxwork;
+package szewek.mcflux.api.fluxwork;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import szewek.mcflux.api.CapabilityEnergy;
-import szewek.mcflux.api.IEnergyConsumer;
+import szewek.mcflux.api.IEnergyProducer;
 
 /**
- * TileEntity using energy to work. Imagine {@link net.minecraft.tileentity.TileEntityFurnace TileEntityFurnace} but better.
+ * TileEntity producing energy by doing work. A simple energy generator implementation.
  */
-public abstract class TileEntityFluxWorkConsumer extends TileEntityFluxWork implements ITickable, IEnergyConsumer {
-
+public abstract class TileEntityFluxWorkProducer extends TileEntityFluxWork implements ITickable, IEnergyProducer {
+	
 	@Override
 	public final void update() {
 		if (worldObj.isRemote) return;
@@ -21,10 +21,10 @@ public abstract class TileEntityFluxWorkConsumer extends TileEntityFluxWork impl
 			workNeeded = beginWork();
 			workState = WorkState.WORKING;
 		} else {
-			if (energy >= energyChange) {
+			if (maxEnergy - energy >= energyChange) {
 				work();
 				workDone++;
-				energy -= energyChange;
+				energy += energyChange;
 				if (workNeeded <= workDone) {
 					finishWork();
 					workState = WorkState.FINISHED;
@@ -36,26 +36,26 @@ public abstract class TileEntityFluxWorkConsumer extends TileEntityFluxWork impl
 	}
 	
 	@Override
-	public int consumeEnergy(int amount, boolean simulate) {
+	public int extractEnergy(int amount, boolean simulate) {
 		if (amount == 0)
 			return 0;
-		int r = maxEnergy - energy;
+		int r = energy;
 		if (amount < r)
 			r = amount;
 		if (!simulate)
-			energy += r;
+			energy -= r;
 		return r;
 	}
 	
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == CapabilityEnergy.ENERGY_CONSUMER || super.hasCapability(cap, f);
+		return cap == CapabilityEnergy.ENERGY_PRODUCER || super.hasCapability(cap, f);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		if (cap == CapabilityEnergy.ENERGY_CONSUMER)
+		if (cap == CapabilityEnergy.ENERGY_PRODUCER)
 			return (T) this;
 		return super.getCapability(cap, f);
 	}

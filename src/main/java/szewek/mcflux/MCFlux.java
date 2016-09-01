@@ -1,6 +1,5 @@
 package szewek.mcflux;
 
-import org.apache.logging.log4j.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -42,7 +41,7 @@ import java.util.function.Function;
 
 @Mod(modid = R.MCFLUX_NAME, version = R.MCFLUX_VERSION)
 public class MCFlux {
-	private static Logger log;
+	private static org.apache.logging.log4j.Logger log;
 	public static ItemMFTool MFTOOL;
 	public static BlockEnergyMachine ENERGY_MACHINE;
 	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs(R.MCFLUX_NAME) {

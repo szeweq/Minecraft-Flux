@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.api.CapabilityEnergy;
@@ -66,7 +65,7 @@ public class U {
 		for (int i = 0; i < m; i++) {
 			ItemStack is = new ItemStack(item, 1, i);
 			ModelResourceLocation mrl = new ModelResourceLocation(dom + ':' + item.getUnlocalizedName(is).substring(5), "inventory");
-			ModelLoader.setCustomModelResourceLocation(item, i, mrl);
+			net.minecraftforge.client.model.ModelLoader.setCustomModelResourceLocation(item, i, mrl);
 		}
 	}
 

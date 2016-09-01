@@ -1,4 +1,4 @@
-package szewek.mcflux.fluxwork;
+package szewek.mcflux.api.fluxwork;
 
 public enum WorkState {
 	/** TileEntity can't do anything. */

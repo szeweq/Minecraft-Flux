@@ -1,5 +1,7 @@
 ## 0.9.1
 - Added JEI Descriptions
+- Moved Flux Work to API
+- Minor performance improvement
 
 ## 0.9.0
 - 2 NEW BLOCKS:

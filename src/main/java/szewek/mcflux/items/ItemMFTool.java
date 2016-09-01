@@ -9,7 +9,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentBase;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -40,7 +39,7 @@ public class ItemMFTool extends Item {
 			TileEntity te = w.getTileEntity(pos);
 			if (te != null) {
 				IEnergyHolder ieh = U.getEnergyHolderTile(te, f);
-				TextComponentBase tcb = textBlock.createCopy();
+				TextComponentTranslation tcb = textBlock.createCopy();
 				tcb.appendSibling(ieh != null ? textMFCompat : textNoCompat);
 				tcb.appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
 				p.addChatComponentMessage(tcb);
@@ -50,7 +49,7 @@ public class ItemMFTool extends Item {
 			} else {
 				WorldChunkEnergy wce = w.getCapability(CapabilityFluxable.FLUXABLE_WORLD_CHUNK, null);
 				EnergyBattery eb = wce.getEnergyChunk((int) p.posX, (int) (p.posY + 0.5), (int) p.posZ);
-				TextComponentBase tcb = textWorldChunk.createCopy();
+				TextComponentTranslation tcb = textWorldChunk.createCopy();
 				tcb.appendSibling(new TextComponentTranslation("mcflux.energystat", U.formatMF(eb.getEnergy(), eb.getEnergyCapacity())));
 				p.addChatComponentMessage(tcb);
 			}
@@ -63,7 +62,7 @@ public class ItemMFTool extends Item {
 	public boolean itemInteractionForEntity(ItemStack is, EntityPlayer p, EntityLivingBase elb, EnumHand h) {
 		if (!elb.worldObj.isRemote) {
 			IEnergyHolder ieh = U.getEnergyHolderEntity(elb);
-			TextComponentBase tcb = textEntity.createCopy();
+			TextComponentTranslation tcb = textEntity.createCopy();
 			tcb.appendSibling(ieh != null ? textMFCompat : textNoCompat);
 			tcb.appendSibling(new TextComponentTranslation("mcflux.entitycompat.end"));
 			p.addChatComponentMessage(tcb);

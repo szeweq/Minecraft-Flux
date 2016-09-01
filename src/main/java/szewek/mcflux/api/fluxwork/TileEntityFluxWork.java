@@ -1,4 +1,4 @@
-package szewek.mcflux.fluxwork;
+package szewek.mcflux.api.fluxwork;
 
 import net.minecraft.tileentity.TileEntity;
 import szewek.mcflux.api.IEnergyHolder;
