@@ -1,6 +1,4 @@
 {
 	"parent": "mcflux:block/energy_machine_core",
-	"textures": {
-		"0": "mcflux:blocks/chunk_charger"
-	}
+	"textures": {"0": "mcflux:blocks/chunk_charger"}
 }

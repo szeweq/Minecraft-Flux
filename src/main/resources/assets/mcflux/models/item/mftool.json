@@ -1,6 +1,4 @@
 {
 	"parent": "minecraft:item/generated",
-	"textures": {
-		"layer0": "mcflux:items/mftool"
-	}
+	"textures": {"layer0": "mcflux:items/mftool"}
 }
