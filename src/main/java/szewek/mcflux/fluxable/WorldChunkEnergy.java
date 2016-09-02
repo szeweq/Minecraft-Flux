@@ -67,6 +67,11 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 			ChunkPos cp = (ChunkPos) obj;
 			return cx == cp.cx && cy == cp.cy && cz == cp.cz;
 		}
+		
+		@Override
+		public int hashCode() {
+			return (cy + cz * 31) * 31 + cx;
+		}
 	}
 
 	@Override

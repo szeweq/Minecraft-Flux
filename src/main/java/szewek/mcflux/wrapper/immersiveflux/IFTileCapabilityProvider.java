@@ -1,8 +1,8 @@
-package szewek.mcflux.wrapper;
+package szewek.mcflux.wrapper.immersiveflux;
 
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyProvider;
-import cofh.api.energy.IEnergyReceiver;
+import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxConnection;
+import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxProvider;
+import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxReceiver;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -10,21 +10,20 @@ import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyProducer;
 
-public class RFTileCapabilityProvider implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
-	private final IEnergyProvider provider;
-	private final IEnergyReceiver receiver;
-	private final IEnergyHandler handler;
+public class IFTileCapabilityProvider implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
+	private final IFluxProvider provider;
+	private final IFluxReceiver receiver;
+	private final IFluxConnection conn;
 
-	RFTileCapabilityProvider(IEnergyHandler ieh) {
-		handler = ieh;
-		provider = ieh instanceof IEnergyProvider ? (IEnergyProvider) ieh : null;
-		receiver = ieh instanceof IEnergyReceiver ? (IEnergyReceiver) ieh : null;
-
+	public IFTileCapabilityProvider(IFluxConnection ifc) {
+		conn = ifc;
+		provider = ifc instanceof IFluxProvider ? (IFluxProvider) ifc : null;
+		receiver = ifc instanceof IFluxReceiver ? (IFluxReceiver) ifc : null;
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		if (handler.canConnectEnergy(f)) {
+		if (conn.canConnectEnergy(f)) {
 			if (cap == CapabilityEnergy.ENERGY_CONSUMER)
 				return receiver != null;
 			if (cap == CapabilityEnergy.ENERGY_PRODUCER)
@@ -36,7 +35,7 @@ public class RFTileCapabilityProvider implements IEnergyProducer, IEnergyConsume
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		if (handler.canConnectEnergy(f)) {
+		if (conn.canConnectEnergy(f)) {
 			if (cap == CapabilityEnergy.ENERGY_CONSUMER)
 				return receiver != null ? (T) this : null;
 			if (cap == CapabilityEnergy.ENERGY_PRODUCER)
@@ -44,22 +43,22 @@ public class RFTileCapabilityProvider implements IEnergyProducer, IEnergyConsume
 		}
 		return null;
 	}
-
+	
 	@Override
 	public int getEnergy() {
-		return handler.getEnergyStored(null);
+		return provider != null ? provider.getEnergyStored(null) : receiver != null ? receiver.getEnergyStored(null): 0;
 	}
 
 	@Override
 	public int getEnergyCapacity() {
-		return handler.getMaxEnergyStored(null);
+		return provider != null ? provider.getMaxEnergyStored(null) : receiver != null ? receiver.getMaxEnergyStored(null): 0;
 	}
 
 	@Override
 	public int extractEnergy(int amount, boolean sim) {
 		return provider != null ? provider.extractEnergy(null, amount, sim) : 0;
 	}
-
+	
 	@Override
 	public int consumeEnergy(int amount, boolean sim) {
 		return receiver != null ? receiver.receiveEnergy(null, amount, sim) : 0;

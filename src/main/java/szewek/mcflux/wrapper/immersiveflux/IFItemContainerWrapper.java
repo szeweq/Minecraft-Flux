@@ -1,4 +1,4 @@
-package szewek.mcflux.wrapper;
+package szewek.mcflux.wrapper.immersiveflux;
 
 import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxContainerItem;
 import net.minecraft.item.ItemStack;

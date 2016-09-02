@@ -42,10 +42,11 @@ public class U {
 		return null;
 	}
 	
-	public static void transferEnergy(IEnergyProducer from, IEnergyConsumer to, final int amount) {
-		int r = to.consumeEnergy(from.extractEnergy(amount, false), false);
+	public static int transferEnergy(IEnergyProducer from, IEnergyConsumer to, final int amount) {
+		int r = to.consumeEnergy(from.extractEnergy(amount, true), true);
 		if (r > 0)
-			to.consumeEnergy(from.extractEnergy(amount, true), true);
+			return to.consumeEnergy(from.extractEnergy(r, false), false);
+		return 0;
 	}
 
 	@SideOnly(Side.CLIENT)

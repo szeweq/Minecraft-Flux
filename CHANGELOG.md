@@ -1,6 +1,8 @@
 ## 0.10.0
 - Moved Flux Work to API
 - Minor performance improvement
+- IC2 Integration (90%)
+- Many minor fixes
 
 ## 0.9.1
 - Added JEI Descriptions

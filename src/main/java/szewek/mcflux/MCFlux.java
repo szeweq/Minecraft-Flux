@@ -13,8 +13,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
+import net.minecraftforge.fml.common.discovery.ASMDataTable.ASMData;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -40,16 +44,20 @@ import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.items.ItemMFTool;
 import szewek.mcflux.tileentities.TileEntityChunkCharger;
 import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
+import szewek.mcflux.util.IInjectRegistry;
+import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.util.RecipeBuilder;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
-@Mod(modid = R.MF_NAME, version = R.MF_VERSION)
+@Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true)
 public class MCFlux {
-	private static org.apache.logging.log4j.Logger log;
 	public static ItemMFTool MFTOOL;
 	public static BlockEnergyMachine ENERGY_MACHINE;
 	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs(R.MF_NAME) {
@@ -63,11 +71,11 @@ public class MCFlux {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
-		log = e.getModLog();
+		L.prepare(e.getModLog());
 		if (R.MF_VERSION.charAt(0) == '@')
-			log.warn("You are running Minecraft-Flux with an unknown version (development maybe?)");
+			L.warn("You are running Minecraft-Flux with an unknown version (development maybe?)");
 		else
-			log.info("Minecraft-Flux version " + R.MF_VERSION);
+			L.info("Minecraft-Flux version " + R.MF_VERSION);
 		CapabilityManager.INSTANCE.register(IEnergy.class, new Capability.IStorage<IEnergy>() {
 			@Override
 			public NBTBase writeNBT(Capability<IEnergy> capability, IEnergy t, EnumFacing side) {
@@ -87,13 +95,14 @@ public class MCFlux {
 		CapabilityManager.INSTANCE.register(IFlavorEnergyProducer.class, new CapabilityFlavorEnergy.Storage<IFlavorEnergyProducer>(), FlavorEnergyContainer::new);
 		CapabilityManager.INSTANCE.register(IFlavorEnergyConsumer.class, new CapabilityFlavorEnergy.Storage<IFlavorEnergyConsumer>(), FlavorEnergyContainer::new);
 		CapabilityManager.INSTANCE.register(WorldChunkEnergy.class, new WorldChunkEnergy.ChunkStorage(), WorldChunkEnergy::new);
-		EVENT_BUS.register(InjectWrappers.INSTANCE);
+		EVENT_BUS.register(InjectWrappers.INSTANCE.getEventHandler());
 		EVENT_BUS.register(InjectFluxable.INSTANCE);
 		MFTOOL = registerItem("mftool", new ItemMFTool());
 		ENERGY_MACHINE = registerBlock("energy_machine", new BlockEnergyMachine(), ItemBlockEnergyMachine::new);
 		GameRegistry.registerTileEntity(TileEntityEnergyDistributor.class, "mcflux.energyDist");
 		GameRegistry.registerTileEntity(TileEntityChunkCharger.class, "mcflux.chunkCharger");
 		PROXY.preInit();
+		registerAllInjects(e.getAsmData());
 	}
 
 	@Mod.EventHandler
@@ -122,6 +131,48 @@ public class MCFlux {
 			.deploy();
 		FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
 		PROXY.init();
+	}
+	
+	private void registerAllInjects(ASMDataTable asdt) {
+		L.info("Registering inject registries...");
+		Set<ASMData> aset = asdt.getAll(InjectRegistry.class.getCanonicalName());
+		int cnt = 0;
+		for (ASMData data : aset) {
+			String cname = data.getClassName();
+			if(!cname.equals(data.getObjectName())) continue;
+			Class<?> c;
+			try {
+				c = Class.forName(cname);
+			} catch (ClassNotFoundException e) {
+				continue;
+			}
+			Map<String, Object> info = data.getAnnotationInfo();
+			Boolean incl = (Boolean) info.get("included");
+			if (incl == null || !incl.booleanValue()) {
+				boolean found = false;
+				@SuppressWarnings("unchecked")
+				List<String> mns = (List<String>) info.get("detectMods");
+				if (mns == null || mns.size() == 0) continue;
+				Map<String, ModContainer> modmap = Loader.instance().getIndexedModList();
+				for (String mn : mns) {
+					if (modmap.containsKey(mn)) {
+						found = true;
+						break;
+					}
+				}
+				if(!found)
+					continue;
+			}
+			Class<? extends IInjectRegistry> iirc = c.asSubclass(IInjectRegistry.class);
+			try {
+				IInjectRegistry iir = iirc.newInstance();
+				iir.registerInjects();
+				cnt++;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		L.info("Registered " + cnt + " inject registries");
 	}
 
 	@SideOnly(Side.CLIENT)

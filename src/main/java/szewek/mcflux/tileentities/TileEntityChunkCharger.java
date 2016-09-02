@@ -38,8 +38,10 @@ public class TileEntityChunkCharger extends TileEntityEnergyMachine {
 			switch (tt) {
 			case INPUT:
 				U.transferEnergy(ebc, eb, ENERGY_TRANSFER);
+				break;
 			case OUTPUT:
 				U.transferEnergy(eb, ebc, ENERGY_TRANSFER);
+				break;
 			default:
 			}
 			

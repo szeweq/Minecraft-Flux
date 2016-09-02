@@ -46,11 +46,13 @@ public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
 				if (from == null)
 					continue;
 				to = eb;
+				break;
 			case OUTPUT:
 				to = te.getCapability(CapabilityEnergy.ENERGY_CONSUMER, f);
 				if (to == null)
 					continue;
 				from = eb;
+				break;
 			default:
 			}
 			U.transferEnergy(from, to, ENERGY_TRANSFER);

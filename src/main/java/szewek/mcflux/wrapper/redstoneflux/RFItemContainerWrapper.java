@@ -1,4 +1,4 @@
-package szewek.mcflux.wrapper;
+package szewek.mcflux.wrapper.redstoneflux;
 
 import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.item.ItemStack;
