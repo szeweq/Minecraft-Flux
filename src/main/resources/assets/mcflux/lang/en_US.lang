@@ -1,3 +1,4 @@
+mcflux.guiConfig.title=Minecraft-Flux Configuration
 mcflux.blockcompat.start=This block is 
 mcflux.blockcompat.end= with MF from %s.
 mcflux.entitycompat.start=This entity is 

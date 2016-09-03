@@ -31,6 +31,8 @@ public class EUInjectRegistry implements IInjectRegistry {
 			Energy e = ((TileEntityBlock) te).getComponent(Energy.class);
 			if (e != null)
 				add.accept(EU_TILE, new EUTileCapabilityProvider(e));
-		}	
+		} else if (te.getClass().getCanonicalName().startsWith("cpw.mods.compactsolars")) {
+			add.accept(EU_TILE, new EUTileCapabilityProvider());
+		}
 	}
 }

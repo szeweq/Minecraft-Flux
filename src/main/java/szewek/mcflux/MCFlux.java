@@ -39,6 +39,7 @@ import szewek.mcflux.api.flavor.IFlavorEnergyConsumer;
 import szewek.mcflux.api.flavor.IFlavorEnergyProducer;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
+import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.InjectFluxable;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.items.ItemMFTool;
@@ -56,7 +57,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-@Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true)
+@Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true, guiFactory = R.GUI_FACTORY)
 public class MCFlux {
 	public static ItemMFTool MFTOOL;
 	public static BlockEnergyMachine ENERGY_MACHINE;
@@ -71,6 +72,7 @@ public class MCFlux {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
+		MCFluxConfig.makeConfig(e.getSuggestedConfigurationFile());
 		L.prepare(e.getModLog());
 		if (R.MF_VERSION.charAt(0) == '@')
 			L.warn("You are running Minecraft-Flux with an unknown version (development maybe?)");

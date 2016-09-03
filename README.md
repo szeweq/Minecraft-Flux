@@ -1,6 +1,6 @@
 ![Minecraft Flux Logo](https://raw.githubusercontent.com/Szewek/Minecraft-Flux/master/mcflux.png)
 # Minecraft-Flux [![Build Status](https://travis-ci.org/Szewek/Minecraft-Flux.svg?branch=master)](https://travis-ci.org/Szewek/Minecraft-Flux)
-An open energy distribution system for Minecraft mods.
+An open energy distribution system for Minecraft mods. **NOW WITH IC2 SUPPORT**
 
 1 Minecraft Flux (MF) = 1 RF = 1 any other RF-based unit
 
@@ -15,7 +15,7 @@ This mod/library provides a simple way of implementing energy to items, tile ent
 ## Compatibility with RF and other energy units
 Minecraft-Flux is backward-compatible with Redstone Flux. That means every machine or item can be charged with MF energy (but you can't charge MF with RF... YET). Compatibility with other energy systems will be available in future versions.
 
-It is also compatible with Immersive Flux (IF; From Immersive Engineering).
+It is also compatible with Immersive Flux (IF; From Immersive Engineering) and EU from IndustrialCraft 2.
 
 ## Flavored Energy
 Flavored Energy provides customization of energy. You can create your own custom energy flavor. Just create a name and add some NBT data. If your mod doesn't use normal energy or you are going to create a magic mod then Flavored Energy is the best option.
@@ -37,8 +37,9 @@ Flux Work is a working cycle system with energy use for Tile Entity.
 - [x] Provide FULL RF Compatiblity (including wrappers for capabilities)
 - [x] Implement and document Fluxable
 - [x] Implement and document Flux Work
+- [x] IndustrialCraft 2 Support
 - [ ] Force update on client-side tile entities
 - [ ] Find a good Maven repo
 - [ ] Add compatibility for RF-like mods and libraries
 - [ ] Mixing Flavors
-- [ ] Compatibility for non-RF mods (like InductrialCraft 2)
+- [ ] Compatibility for non-RF mods

@@ -1,3 +1,7 @@
+## 0.11.0
+- Configuration options
+- Make IC2 Addons (like Compact Solars) work with MF
+
 ## 0.10.0
 - Moved Flux Work to API
 - Minor performance improvement

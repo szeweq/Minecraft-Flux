@@ -17,6 +17,8 @@ import szewek.mcflux.api.EnergyBattery;
 import szewek.mcflux.api.IEnergyHolder;
 import szewek.mcflux.fluxable.CapabilityFluxable;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
+import szewek.mcflux.tileentities.TileEntityChunkCharger;
+import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
 
 public class ItemMFTool extends Item {
 	private final TextComponentTranslation
@@ -37,15 +39,14 @@ public class ItemMFTool extends Item {
 	public EnumActionResult onItemUse(ItemStack is, EntityPlayer p, World w, BlockPos pos, EnumHand h, EnumFacing f, float x, float y, float z) {
 		if (!w.isRemote) {
 			TileEntity te = w.getTileEntity(pos);
-			if (te != null) {
+			if (te != null && !(te instanceof TileEntityEnergyDistributor || te instanceof TileEntityChunkCharger)) {
 				IEnergyHolder ieh = U.getEnergyHolderTile(te, f);
 				TextComponentTranslation tcb = textBlock.createCopy();
 				tcb.appendSibling(ieh != null ? textMFCompat : textNoCompat);
 				tcb.appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
 				p.addChatComponentMessage(tcb);
-				if (ieh != null) {
+				if (ieh != null)
 					p.addChatComponentMessage(new TextComponentTranslation("mcflux.energystat", U.formatMF(ieh.getEnergy(), ieh.getEnergyCapacity())));
-				}
 			} else {
 				WorldChunkEnergy wce = w.getCapability(CapabilityFluxable.FLUXABLE_WORLD_CHUNK, null);
 				EnergyBattery eb = wce.getEnergyChunk((int) p.posX, (int) (p.posY + 0.5), (int) p.posZ);
