@@ -4,13 +4,11 @@ An open energy distribution system for Minecraft mods. **NOW WITH IC2 SUPPORT**
 
 1 Minecraft Flux (MF) = 1 RF = 1 any other RF-based unit
 
-Minecraft-Flux is a mod (and a library) which uses Forge Capabilities to implement energy handling (it's optional).
+Minecraft-Flux is a mod (and a library) which uses Forge Capabilities to provide a simple way of implementing energy to items, tile entities and... even living entities..
 It requires Java 8 to run.
 
-## Story
-When CoFH Energy API (which was only a part of CoFH API) was released to public many developers started implementing it in their own mods.
-But when Minecraft 1.9 and 1.10 came out only a few of them tried implementing code recommended for 1.8 to future versions.
-This mod/library provides a simple way of implementing energy to items, tile entities and... even living entities.
+## Future: 1.0.0 (for MC 1.10 or 1.11)
+Version 1.0.0 will provide even better energy implementation, named Energy eXtensions (EX). Instead of choosing IEnergyConsumer or IEnergyProvider (or implementing both), a developer can implement single IEnergy interface (and INBTEnergy if reading/writing NBT is needed).
 
 ## Compatibility with RF and other energy units
 Minecraft-Flux is backward-compatible with Redstone Flux. That means every machine or item can be charged with MF energy (but you can't charge MF with RF... YET). Compatibility with other energy systems will be available in future versions.

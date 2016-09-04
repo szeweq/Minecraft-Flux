@@ -6,12 +6,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTPrimitive;
-import net.minecraft.nbt.NBTTagLong;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -30,8 +25,8 @@ import szewek.mcflux.api.EnergyBattery;
 import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyProducer;
 import szewek.mcflux.api.ex.Battery;
+import szewek.mcflux.api.ex.EnergyNBTStorage;
 import szewek.mcflux.api.ex.IEnergy;
-import szewek.mcflux.api.ex.INBTEnergy;
 import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.flavor.CapabilityFlavorEnergy;
 import szewek.mcflux.api.flavor.FlavorEnergyContainer;
@@ -78,20 +73,7 @@ public class MCFlux {
 			L.warn("You are running Minecraft-Flux with an unknown version (development maybe?)");
 		else
 			L.info("Minecraft-Flux version " + R.MF_VERSION);
-		CapabilityManager.INSTANCE.register(IEnergy.class, new Capability.IStorage<IEnergy>() {
-			@Override
-			public NBTBase writeNBT(Capability<IEnergy> capability, IEnergy t, EnumFacing side) {
-				return t instanceof INBTEnergy ? ((INBTEnergy) t).writeNBTEnergy() : new NBTTagLong(t.getEnergy());
-			}
-
-			@Override
-			public void readNBT(Capability<IEnergy> capability, IEnergy t, EnumFacing side, NBTBase nbt) {
-				if (t instanceof INBTEnergy)
-					((INBTEnergy) t).readNBTEnergy(nbt);
-				else if (t instanceof NBTPrimitive)
-					t.setEnergy(((NBTPrimitive) nbt).getLong());
-			}
-		}, Battery::new);
+		CapabilityManager.INSTANCE.register(IEnergy.class, new EnergyNBTStorage(), Battery::new);
 		CapabilityManager.INSTANCE.register(IEnergyProducer.class, new CapabilityEnergy.Storage<IEnergyProducer>(), EnergyBattery::new);
 		CapabilityManager.INSTANCE.register(IEnergyConsumer.class, new CapabilityEnergy.Storage<IEnergyConsumer>(), EnergyBattery::new);
 		CapabilityManager.INSTANCE.register(IFlavorEnergyProducer.class, new CapabilityFlavorEnergy.Storage<IFlavorEnergyProducer>(), FlavorEnergyContainer::new);

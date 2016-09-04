@@ -61,9 +61,7 @@ public class EUTileCapabilityProvider implements IEnergyProducer, IEnergyConsume
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		if (hasCapability(cap, f))
-			return (T) this;
-		return null;
+		return hasCapability(cap, f) ? (T) this : null;
 	}
 
 	@Override
