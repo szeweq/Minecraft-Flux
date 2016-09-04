@@ -1,6 +1,10 @@
 ## 0.11.0
 - Configuration options
 - Make IC2 Addons (like Compact Solars) work with MF
+- [EX] Added SidedEnergyAccess
+- Energy Machine block has hardness
+- Fixed bug with block activation
+- Performance improvements
 
 ## 0.10.0
 - Moved Flux Work to API

@@ -1,5 +1,6 @@
 package szewek.mcflux.blocks;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.BlockContainer;
@@ -52,9 +53,21 @@ public class BlockEnergyMachine extends BlockContainer {
 	}
 	
 	public BlockEnergyMachine() {
-		super(Material.IRON);
-		setHardness(0.4F);
+		super(Material.PISTON);
+		setHardness(0.5F);
 		setSoundType(SoundType.METAL);
+	}
+	
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		List<ItemStack> list = new ArrayList<>();
+		list.add(new ItemStack(this, 1, state.getValue(VARIANT).ordinal()));
+		return list;
+	}
+	
+	@Override
+	public int damageDropped(IBlockState state) {
+		return state.getValue(VARIANT).ordinal();
 	}
 
 	@Override
@@ -107,12 +120,13 @@ public class BlockEnergyMachine extends BlockContainer {
 	
 	@Override
 	public boolean onBlockActivated(World w, BlockPos bp, IBlockState ibs, EntityPlayer p, EnumHand h, ItemStack is, EnumFacing f, float x, float y, float z) {
-		if (!w.isRemote && is == null) {
+		boolean b = is == null && h == EnumHand.MAIN_HAND;
+		if (!w.isRemote && b) {
 			TileEntity te = w.getTileEntity(bp);
 			if (te != null && te instanceof TileEntityEnergyMachine)
 				((TileEntityEnergyMachine) te).switchSideTransfer(f);
 		}
-		return is == null;
+		return b;
 	}
 
 	public static enum Variant implements IStringSerializable {
