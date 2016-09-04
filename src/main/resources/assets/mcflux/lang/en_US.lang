@@ -1,6 +1,8 @@
 mcflux.config.title=Minecraft-Flux Configuration
 mcflux.config.EUValue.tooltip=Amount of MF needed to convert from/into 1 EU (IC2)
-mcflux.config.worldChunkEnergy.tooltip=World Chunk Energy capacity
+mcflux.config.worldChunkCapacity.tooltip=World Chunk Energy capacity
+mcflux.config.energyDistTransfer.tooltip=Energy transferred per tick by Energy Distributor
+mcflux.config.chunkChargerTransfer.tooltip=Energy transferred per tick by Chunk Charger
 mcflux.blockcompat.start=This block is 
 mcflux.blockcompat.end= with MF from %s.
 mcflux.entitycompat.start=This entity is 

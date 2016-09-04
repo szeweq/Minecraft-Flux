@@ -10,6 +10,6 @@ import szewek.mcflux.config.MCFluxConfig;
 
 public class MCFluxGuiConfig extends GuiConfig {
 	public MCFluxGuiConfig(GuiScreen screen) {
-		super(screen, new ConfigElement(MCFluxConfig.getConfig().getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(), R.MF_NAME, false, false, I18n.format("mcflux.guiConfig.title"));
+		super(screen, new ConfigElement(MCFluxConfig.getConfig().getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(), R.MF_NAME, false, false, I18n.format("mcflux.config.title"));
 	}
 }

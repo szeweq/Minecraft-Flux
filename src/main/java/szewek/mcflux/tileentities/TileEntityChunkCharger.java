@@ -11,13 +11,13 @@ import szewek.mcflux.fluxable.CapabilityFluxable;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.util.TransferType;
 
+import static szewek.mcflux.config.MCFluxConfig.CHUNK_CHARGER_TRANS;
+
 public class TileEntityChunkCharger extends TileEntityEnergyMachine {
-	private static final int ENERGY_TRANSFER = 2000000;
-	
 	public TileEntityChunkCharger() {
 		super(MCFlux.ENERGY_MACHINE.getDefaultState().withProperty(BlockEnergyMachine.VARIANT, BlockEnergyMachine.Variant.CHUNK_CHARGER));
 	}
-	
+
 	public TileEntityChunkCharger(IBlockState ibs) {
 		super(ibs);
 	}
@@ -25,26 +25,29 @@ public class TileEntityChunkCharger extends TileEntityEnergyMachine {
 	@Override
 	public void update() {
 		super.update();
-		if (worldObj.isRemote) return;
+		if (worldObj.isRemote)
+			return;
 		WorldChunkEnergy wce = worldObj.getCapability(CapabilityFluxable.FLUXABLE_WORLD_CHUNK, null);
 		EnergyBattery eb = wce.getEnergyChunk(pos.getX(), pos.getY(), pos.getZ());
 		for (int i = 0; i < 6; i++) {
 			TransferType tt = sideTransfer[i];
-			if (tt == TransferType.NONE) continue;
+			if (tt == TransferType.NONE)
+				continue;
 			EnumFacing f = EnumFacing.VALUES[i];
 			BlockPos bpc = pos.offset(f, 16);
 			EnergyBattery ebc = wce.getEnergyChunk(bpc.getX(), bpc.getY(), bpc.getZ());
-			if (ebc == null) continue;
+			if (ebc == null)
+				continue;
 			switch (tt) {
 			case INPUT:
-				U.transferEnergy(ebc, eb, ENERGY_TRANSFER);
+				U.transferEnergy(ebc, eb, CHUNK_CHARGER_TRANS);
 				break;
 			case OUTPUT:
-				U.transferEnergy(eb, ebc, ENERGY_TRANSFER);
+				U.transferEnergy(eb, ebc, CHUNK_CHARGER_TRANS);
 				break;
 			default:
 			}
-			
+
 		}
 	}
 
