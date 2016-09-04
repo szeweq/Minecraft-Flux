@@ -3,6 +3,7 @@ package szewek.mcflux.blocks;
 import java.util.List;
 
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
@@ -52,6 +53,8 @@ public class BlockEnergyMachine extends BlockContainer {
 	
 	public BlockEnergyMachine() {
 		super(Material.IRON);
+		setHardness(0.4F);
+		setSoundType(SoundType.METAL);
 	}
 
 	@Override
