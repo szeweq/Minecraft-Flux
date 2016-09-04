@@ -17,6 +17,7 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 	private IBlockState cachedState;
 	
 	public TileEntityEnergyMachine(IBlockState ibs) {
+		super();
 		cachedState = ibs;
 	}
 	

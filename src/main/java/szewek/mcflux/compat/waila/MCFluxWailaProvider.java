@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import szewek.mcflux.R;
 import szewek.mcflux.U;
 import szewek.mcflux.api.IEnergyHolder;
+import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 public class MCFluxWailaProvider implements IWailaDataProvider, IWailaEntityProvider {
 	public static void callbackRegister(IWailaRegistrar reg) {
@@ -48,6 +49,8 @@ public class MCFluxWailaProvider implements IWailaDataProvider, IWailaEntityProv
 	@Override
 	public List<String> getWailaBody(ItemStack is, List<String> ctip, IWailaDataAccessor da, IWailaConfigHandler cfg) {
 		TileEntity te = da.getTileEntity();
+		if (te instanceof TileEntityEnergyMachine)
+			return ctip;
 		EnumFacing f = da.getSide();
 		IEnergyHolder ieh = U.getEnergyHolderTile(te, f);
 		if (ieh == null)
