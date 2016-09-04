@@ -5,17 +5,16 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import szewek.mcflux.R;
+import szewek.mcflux.util.MCFluxLocation;
 
 public enum InjectFluxable {
 	INSTANCE;
-	public static final ResourceLocation
-		ENERGY_PLAYER = new ResourceLocation(R.MF_NAME, "PlayerEnergy"),
-		ENERGY_ACTION = new ResourceLocation(R.MF_NAME, "ActionEnergy"),
-		ENERGY_WORLD_CHUNK = new ResourceLocation(R.MF_NAME, "WorldChunkEnergy");
+	public static final MCFluxLocation
+		ENERGY_PLAYER = new MCFluxLocation("PlayerEnergy"),
+		ENERGY_ACTION = new MCFluxLocation("ActionEnergy"),
+		ENERGY_WORLD_CHUNK = new MCFluxLocation("WorldChunkEnergy");
 	
 	@SubscribeEvent
 	public void inject(AttachCapabilitiesEvent e) {

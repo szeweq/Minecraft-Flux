@@ -9,14 +9,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.R;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectRegistry;
+import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 @InjectRegistry(detectMods = {"immersiveengineering", "Immersive Engineering"})
 public class IFInjectRegistry implements IInjectRegistry {
-	private static final ResourceLocation IF_TILE = new ResourceLocation(R.MF_NAME, "MFTileIF"), IF_ITEM = new ResourceLocation(R.MF_NAME, "MFItemIF");
+	private static final MCFluxLocation IF_TILE = new MCFluxLocation("MFTileIF"), IF_ITEM = new MCFluxLocation("MFItemIF");
 
 	@Override
 	public void registerInjects() {

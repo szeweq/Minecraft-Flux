@@ -51,7 +51,7 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 		super.writeToNBT(compound);
 		int[] sides = new int[6];
 		for (int i = 0; i < 6; i++) {
-			sides[i] = sideTransfer[i].ordinal();
+			sides[i] = sideTransfer[i].ord;
 		}
 		compound.setIntArray("sides", sides);
 		return compound;
@@ -74,8 +74,8 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 	}
 	
 	public void switchSideTransfer(EnumFacing f) {
-		int s = f.ordinal();
-		int v = (sideTransfer[s].ordinal() + 1) % 3;
+		int s = f.getIndex();
+		int v = (sideTransfer[s].ord + 1) % 3;
 		sideTransfer[s] = TransferType.values()[v];
 		cachedState = cachedState.withProperty(BlockEnergyMachine.sideFromId(s), v);
 		markDirty();

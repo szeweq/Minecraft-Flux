@@ -9,15 +9,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.R;
 import szewek.mcflux.util.EmptyCapabilityStorage;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectRegistry;
+import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 @InjectRegistry(detectMods = {"IC2", "IndustrialCraft 2"})
 public class EUInjectRegistry implements IInjectRegistry {
-	private static final ResourceLocation EU_TILE = new ResourceLocation(R.MF_NAME, "MFTileEU");
+	private static final MCFluxLocation EU_TILE = new MCFluxLocation("MFTileEU");
 
 	@Override
 	public void registerInjects() {

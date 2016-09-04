@@ -6,7 +6,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -42,6 +41,7 @@ import szewek.mcflux.tileentities.TileEntityChunkCharger;
 import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectRegistry;
+import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.util.RecipeBuilder;
 import szewek.mcflux.wrapper.InjectWrappers;
 
@@ -166,11 +166,11 @@ public class MCFlux {
 
 	private static <T extends Item> T registerItem(String name, T i) {
 		i.setUnlocalizedName(name).setCreativeTab(MCFLUX_TAB);
-		return GameRegistry.register(i, new ResourceLocation(R.MF_NAME, name));
+		return GameRegistry.register(i, new MCFluxLocation(name));
 	}
 
 	private static <T extends Block> T registerBlock(String name, T b, Function<Block, ItemBlock> ibfn) {
-		ResourceLocation rs = new ResourceLocation(R.MF_NAME, name);
+		MCFluxLocation rs = new MCFluxLocation(name);
 		b.setUnlocalizedName(name).setCreativeTab(MCFLUX_TAB);
 		GameRegistry.register(b, rs);
 		GameRegistry.register(ibfn.apply(b), rs);

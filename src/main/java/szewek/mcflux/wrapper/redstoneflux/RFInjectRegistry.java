@@ -9,14 +9,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.R;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectRegistry;
+import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 @InjectRegistry(included = true, detectMods = {})
 public class RFInjectRegistry implements IInjectRegistry {
-	private static final ResourceLocation RF_TILE = new ResourceLocation(R.MF_NAME, "MFTileRF"), RF_ITEM = new ResourceLocation(R.MF_NAME, "MFItemRF");
+	private static final MCFluxLocation RF_TILE = new MCFluxLocation("MFTileRF"), RF_ITEM = new MCFluxLocation("MFItemRF");
 
 	@Override
 	public void registerInjects() {

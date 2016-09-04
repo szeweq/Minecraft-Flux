@@ -55,17 +55,19 @@ repositories {
 dependencies {
 	deobfCompile "mezz.jei:jei_1.10.2:3.7.8.234"
 	deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
-	deobfCompile "net.industrial-craft:industrialcraft-2:2.6.54-ex110:dev"
+	deobfCompile "net.industrial-craft:industrialcraft-2:2.6.54-ex110:api"
 }
 
 // QUICK FIX
 jar {
 	from sourceSets.api.output
 	exclude "blusunrize/**"
+	exclude "ic2/**"
 }
 sourceJar {
 	from sourceSets.api.allSource
 	exclude "blusunrize/**"
+	exclude "ic2/**"
 }
 
 processResources {
