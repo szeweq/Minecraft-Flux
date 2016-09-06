@@ -1,3 +1,7 @@
+## 0.12.0
+- Furnace and Mob Spawner are fluxable (they support MF)
+- IF and RF now compatible with sides
+
 ## 0.11.0
 - Configuration options
 - Make IC2 Addons (like Compact Solars) work with MF
