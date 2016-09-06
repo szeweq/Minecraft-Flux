@@ -62,12 +62,10 @@ dependencies {
 jar {
 	from sourceSets.api.output
 	exclude "blusunrize/**"
-	exclude "ic2/**"
 }
 sourceJar {
 	from sourceSets.api.allSource
 	exclude "blusunrize/**"
-	exclude "ic2/**"
 }
 
 processResources {

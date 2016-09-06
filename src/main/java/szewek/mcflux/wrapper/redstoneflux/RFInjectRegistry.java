@@ -1,7 +1,5 @@
 package szewek.mcflux.wrapper.redstoneflux;
 
-import java.util.function.BiConsumer;
-
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import net.minecraft.item.Item;
@@ -13,6 +11,8 @@ import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.wrapper.InjectWrappers;
+
+import java.util.function.BiConsumer;
 
 @InjectRegistry(included = true, detectMods = {})
 public class RFInjectRegistry implements IInjectRegistry {

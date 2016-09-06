@@ -1,8 +1,5 @@
 package szewek.mcflux.fluxable;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -11,13 +8,17 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.INBTSerializable;
+import szewek.mcflux.L;
 import szewek.mcflux.api.EnergyBattery;
 import szewek.mcflux.config.MCFluxConfig;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * World Chunk Energy implementation.
  */
-public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<NBTTagList> {
+public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<NBTBase> {
 	private Map<ChunkPos, EnergyBattery> energyChunks = new HashMap<>();
 
 	@Override
@@ -52,7 +53,7 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 	}
 
 	private static class ChunkPos {
-		public final int cx, cy, cz;
+		final int cx, cy, cz;
 
 		ChunkPos(int x, int y, int z) {
 			cx = x;
@@ -75,30 +76,36 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 	}
 
 	@Override
-	public NBTTagList serializeNBT() {
+	public NBTBase serializeNBT() {
 		NBTTagList nbtl = new NBTTagList();
 		for (Map.Entry<ChunkPos, EnergyBattery> e : energyChunks.entrySet()) {
+			EnergyBattery eb = e.getValue();
+			if (eb.getEnergy() <= 0)
+				continue;
 			NBTTagCompound nbt = new NBTTagCompound();
 			ChunkPos cp = e.getKey();
 			nbt.setInteger("x", cp.cx);
 			nbt.setInteger("y", cp.cy);
 			nbt.setInteger("z", cp.cz);
-			nbt.setTag("e", e.getValue().writeEnergyNBT());
+			nbt.setTag("e", eb.writeEnergyNBT());
 			nbtl.appendTag(nbt);
 		}
 		return nbtl;
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagList nbtl) {
-		for (int i = 0; i < nbtl.tagCount(); i++) {
-			NBTTagCompound nbt = nbtl.getCompoundTagAt(i);
-			if (nbt.hasKey("x", NBT.TAG_INT) && nbt.hasKey("z", NBT.TAG_INT)) {
-				ChunkPos cp = new ChunkPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
-				EnergyBattery eb = new EnergyBattery(MCFluxConfig.WORLDCHUNK_CAP);
-				if (nbt.hasKey("e", NBT.TAG_COMPOUND))
-					eb.readEnergyNBT(nbt.getCompoundTag("e"));
-				energyChunks.put(cp, eb);
+	public void deserializeNBT(NBTBase nbtb) {
+		if (nbtb instanceof NBTTagList) {
+			NBTTagList nbtl = (NBTTagList) nbtb;
+			for (int i = 0; i < nbtl.tagCount(); i++) {
+				NBTTagCompound nbt = nbtl.getCompoundTagAt(i);
+				if (nbt.hasKey("x", NBT.TAG_INT) && nbt.hasKey("z", NBT.TAG_INT)) {
+					ChunkPos cp = new ChunkPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
+					EnergyBattery eb = new EnergyBattery(MCFluxConfig.WORLDCHUNK_CAP);
+					if (nbt.hasKey("e", NBT.TAG_INT))
+						eb.setEnergy(nbt.getInteger("e"));
+					energyChunks.put(cp, eb);
+				}
 			}
 		}
 	}
@@ -106,13 +113,14 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 	public static class ChunkStorage implements Capability.IStorage<WorldChunkEnergy> {
 		@Override
 		public NBTBase writeNBT(Capability<WorldChunkEnergy> cap, WorldChunkEnergy instance, EnumFacing side) {
+			L.info("WRITING World Chunk Energy NBT");
 			return instance.serializeNBT();
 		}
 
 		@Override
 		public void readNBT(Capability<WorldChunkEnergy> cap, WorldChunkEnergy instance, EnumFacing side, NBTBase nbt) {
-			if (nbt instanceof NBTTagList)
-				instance.deserializeNBT((NBTTagList) nbt);
+			L.info("READING World Chunk Energy NBT " + nbt);
+			instance.deserializeNBT(nbt);
 		}
 	}
 }

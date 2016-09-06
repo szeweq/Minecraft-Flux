@@ -55,10 +55,10 @@ public class TileEntityChunkCharger extends TileEntityEnergyMachine {
 				continue;
 			switch (tt) {
 			case INPUT:
-				U.transferEnergy(ebc, eb, CHUNK_CHARGER_TRANS);
+				sideValues[i] = U.transferEnergy(ebc, eb, CHUNK_CHARGER_TRANS);
 				break;
 			case OUTPUT:
-				U.transferEnergy(eb, ebc, CHUNK_CHARGER_TRANS);
+				sideValues[i] = U.transferEnergy(eb, ebc, CHUNK_CHARGER_TRANS);
 				break;
 			default:
 			}

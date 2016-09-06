@@ -16,6 +16,8 @@ import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyHolder;
 import szewek.mcflux.api.IEnergyProducer;
 
+import java.lang.reflect.Method;
+
 public class U {
 	@SideOnly(Side.CLIENT)
 	private static ItemModelMesher imm = null;
@@ -68,6 +70,25 @@ public class U {
 			ModelResourceLocation mrl = new ModelResourceLocation(dom + ':' + item.getUnlocalizedName(is).substring(5), "inventory");
 			net.minecraftforge.client.model.ModelLoader.setCustomModelResourceLocation(item, i, mrl);
 		}
+	}
+
+	public static Class<?> getClassSafely(String name) {
+		Class<?> c = null;
+		try {
+			c = Class.forName(name);
+		} catch (ClassNotFoundException e) {
+			L.warn(e);
+		}
+		return c;
+	}
+	public static Method getMethodSafely(Class<?> cl, String name, Class<?>... cargs) {
+		Method m = null;
+		try {
+			m = cl.getDeclaredMethod(name, cargs);
+		} catch (Exception e) {
+			L.warn(e);
+		}
+		return m;
 	}
 
 	private U() {

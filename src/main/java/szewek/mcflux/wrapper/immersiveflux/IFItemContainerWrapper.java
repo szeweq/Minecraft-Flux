@@ -9,11 +9,11 @@ import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyProducer;
 
-public class IFItemContainerWrapper implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
+class IFItemContainerWrapper implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
 	private final IFluxContainerItem item;
 	private final ItemStack stack;
 	
-	public IFItemContainerWrapper(IFluxContainerItem it, ItemStack is) {
+	IFItemContainerWrapper(IFluxContainerItem it, ItemStack is) {
 		item = it;
 		stack = is;
 	}

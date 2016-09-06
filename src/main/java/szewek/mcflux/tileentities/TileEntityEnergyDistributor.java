@@ -30,8 +30,8 @@ public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
 	}
 	
 	@Override
-	public void setWorldObj(World worldIn) {
-		super.setWorldObj(worldIn);
+	public void setWorldObj(World w) {
+		super.setWorldObj(w);
 		wce = worldObj != null && !worldObj.isRemote ? worldObj.getCapability(CapabilityFluxable.FLUXABLE_WORLD_CHUNK, null) : null;
 	}
 
@@ -72,7 +72,7 @@ public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
 				break;
 			default:
 			}
-			U.transferEnergy(from, to, MCFluxConfig.ENERGY_DIST_TRANS);
+			sideValues[i] = U.transferEnergy(from, to, MCFluxConfig.ENERGY_DIST_TRANS);
 		}
 	}
 }

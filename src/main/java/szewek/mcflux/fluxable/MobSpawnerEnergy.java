@@ -8,10 +8,10 @@ import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyConsumer;
 import static szewek.mcflux.config.MCFluxConfig.MOB_SPAWNER_USE;
 
-public class MobSpawnerEnergy implements IEnergyConsumer, ICapabilityProvider {
+class MobSpawnerEnergy implements IEnergyConsumer, ICapabilityProvider {
 	private final TileEntityMobSpawner spawner;
 
-	public MobSpawnerEnergy(TileEntityMobSpawner tems) {
+	MobSpawnerEnergy(TileEntityMobSpawner tems) {
 		spawner = tems;
 	}
 

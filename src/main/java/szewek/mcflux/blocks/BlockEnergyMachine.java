@@ -1,8 +1,5 @@
 package szewek.mcflux.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -29,6 +26,9 @@ import szewek.mcflux.tileentities.TileEntityChunkCharger;
 import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BlockEnergyMachine extends BlockContainer {
 	public static final AxisAlignedBB DEF_AABB = new AxisAlignedBB(0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
 	public static final PropertyEnum<Variant> VARIANT = PropertyEnum.create("variant", Variant.class);
@@ -48,7 +48,7 @@ public class BlockEnergyMachine extends BlockContainer {
 		case 3: return SOUTH;
 		case 4: return WEST;
 		case 5: return EAST;
-		default: return null;
+		default: return DOWN;
 		}
 	}
 	

@@ -53,6 +53,7 @@ public class FurnaceEnergy implements IEnergyConsumer, ICapabilityProvider {
 				r = amount;
 			if (!sim)
 				furnace.setField(0, f + r);
+			return r;
 		}
 		return 0;
 	}

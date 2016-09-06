@@ -23,4 +23,11 @@ public class L {
 		if (!ready) return;
 		l.log(Level.WARN, msg);
 	}
+	public static void warn(Throwable t) {
+		if (!ready) {
+			t.printStackTrace();
+			return;
+		}
+		l.warn("Minecraft-Flux received an error", t);
+	}
 }

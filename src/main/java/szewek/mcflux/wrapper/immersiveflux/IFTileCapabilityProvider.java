@@ -10,13 +10,13 @@ import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyProducer;
 
-public class IFTileCapabilityProvider implements ICapabilityProvider {
+class IFTileCapabilityProvider implements ICapabilityProvider {
 	private final IFluxProvider provider;
 	private final IFluxReceiver receiver;
 	private final IFluxConnection conn;
 	private final Sided[] sides = new Sided[7];
 
-	public IFTileCapabilityProvider(IFluxConnection ifc) {
+	IFTileCapabilityProvider(IFluxConnection ifc) {
 		conn = ifc;
 		provider = ifc instanceof IFluxProvider ? (IFluxProvider) ifc : null;
 		receiver = ifc instanceof IFluxReceiver ? (IFluxReceiver) ifc : null;
@@ -49,7 +49,7 @@ public class IFTileCapabilityProvider implements ICapabilityProvider {
 		return null;
 	}
 
-	public class Sided implements IEnergyProducer, IEnergyConsumer {
+	private class Sided implements IEnergyProducer, IEnergyConsumer {
 		private final EnumFacing face;
 
 		private Sided(EnumFacing f) {

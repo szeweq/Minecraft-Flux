@@ -12,17 +12,17 @@ import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyHolder;
 import szewek.mcflux.api.IEnergyProducer;
 
-public class PlayerEnergy implements IEnergyHolder, IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
+class PlayerEnergy implements IEnergyHolder, IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
 	private int energy = 0, maxEnergy = 0;
 	private final EntityPlayer player;
 
-	public PlayerEnergy(EntityPlayer p) {
+	PlayerEnergy(EntityPlayer p) {
 		player = p;
 		NBTTagCompound nbtp = player.getEntityData();
 		if (nbtp.hasKey("fluxLvl", NBT.TAG_BYTE)) {
 			byte lvl = nbtp.getByte("fluxLvl");
-			if (lvl > 10)
-				lvl = 10;
+			if (lvl > 30)
+				lvl = 30;
 			maxEnergy = 100000 * lvl;
 		}
 	}

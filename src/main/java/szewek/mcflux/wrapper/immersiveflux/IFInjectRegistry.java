@@ -1,7 +1,5 @@
 package szewek.mcflux.wrapper.immersiveflux;
 
-import java.util.function.BiConsumer;
-
 import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxConnection;
 import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxContainerItem;
 import net.minecraft.item.Item;
@@ -13,6 +11,8 @@ import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.wrapper.InjectWrappers;
+
+import java.util.function.BiConsumer;
 
 @InjectRegistry(detectMods = {"immersiveengineering", "Immersive Engineering"})
 public class IFInjectRegistry implements IInjectRegistry {

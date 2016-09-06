@@ -17,8 +17,7 @@ import szewek.mcflux.api.EnergyBattery;
 import szewek.mcflux.api.IEnergyHolder;
 import szewek.mcflux.fluxable.CapabilityFluxable;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
-import szewek.mcflux.tileentities.TileEntityChunkCharger;
-import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
+import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 public class ItemMFTool extends Item {
 	private final TextComponentTranslation
@@ -28,7 +27,7 @@ public class ItemMFTool extends Item {
 		textNoCompat = new TextComponentTranslation("mcflux.nocompat"),
 		textEnergyUnknown = new TextComponentTranslation("mcflux.energystatunknown"),
 		textWorldChunk = new TextComponentTranslation("mcflux.worldchunk");
-	
+
 	public ItemMFTool() {
 		setMaxStackSize(1);
 		textMFCompat.getStyle().setColor(TextFormatting.GREEN).setBold(true);
@@ -39,11 +38,14 @@ public class ItemMFTool extends Item {
 	public EnumActionResult onItemUse(ItemStack is, EntityPlayer p, World w, BlockPos pos, EnumHand h, EnumFacing f, float x, float y, float z) {
 		if (!w.isRemote) {
 			TileEntity te = w.getTileEntity(pos);
-			if (te != null && !(te instanceof TileEntityEnergyDistributor || te instanceof TileEntityChunkCharger)) {
+			if (te != null) {
+				if (te instanceof TileEntityEnergyMachine) {
+					p.addChatComponentMessage(new TextComponentTranslation("mcflux.transfer", ((TileEntityEnergyMachine) te).getTransferSide(f)));
+					return EnumActionResult.SUCCESS;
+				}
 				IEnergyHolder ieh = U.getEnergyHolderTile(te, f);
 				TextComponentTranslation tcb = textBlock.createCopy();
-				tcb.appendSibling(ieh != null ? textMFCompat : textNoCompat);
-				tcb.appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
+				tcb.appendSibling(ieh != null ? textMFCompat : textNoCompat).appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
 				p.addChatComponentMessage(tcb);
 				if (ieh != null)
 					p.addChatComponentMessage(new TextComponentTranslation("mcflux.energystat", U.formatMF(ieh.getEnergy(), ieh.getEnergyCapacity())));

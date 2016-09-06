@@ -13,11 +13,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyConsumer;
 
-public class EntityActionEnergy implements ICapabilityProvider, IEnergyConsumer {
+class EntityActionEnergy implements ICapabilityProvider, IEnergyConsumer {
 	private boolean charged = false;
 	private final EntityCreature creature;
 	
-	public EntityActionEnergy(EntityCreature ec) {
+	EntityActionEnergy(EntityCreature ec) {
 		creature = ec;
 	}
 
@@ -65,5 +65,4 @@ public class EntityActionEnergy implements ICapabilityProvider, IEnergyConsumer 
 		}
 		return charged ? 0 : 1;
 	}
-
 }

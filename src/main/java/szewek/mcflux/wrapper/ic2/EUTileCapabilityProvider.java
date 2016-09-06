@@ -1,14 +1,11 @@
 package szewek.mcflux.wrapper.ic2;
 
-import java.util.function.DoubleSupplier;
-
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.prefab.BasicSink;
 import ic2.api.energy.prefab.BasicSource;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.energy.tile.IEnergyTile;
-import ic2.core.block.comp.Energy;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -17,9 +14,12 @@ import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyProducer;
 
+import java.lang.reflect.Method;
+import java.util.function.DoubleSupplier;
+
 import static szewek.mcflux.config.MCFluxConfig.CFG_EU_VALUE;
 
-public class EUTileCapabilityProvider implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
+class EUTileCapabilityProvider implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
 	@CapabilityInject(EUTileCapabilityProvider.class)
 	static Capability<EUTileCapabilityProvider> SELF_CAP = null;
 
@@ -31,13 +31,6 @@ public class EUTileCapabilityProvider implements IEnergyProducer, IEnergyConsume
 	EUTileCapabilityProvider() {
 	}
 
-	public EUTileCapabilityProvider(Energy e) {
-		source = (IEnergySource) e.getDelegate();
-		sink = (IEnergySink) e.getDelegate();
-		capMethod = e::getCapacity;
-		energyMethod = e::getEnergy;
-	}
-
 	void updateEnergyTile(IEnergyTile iet) {
 		source = iet instanceof IEnergySource ? (IEnergySource) iet : null;
 		sink = iet instanceof IEnergySink ? (IEnergySink) iet : null;
@@ -45,6 +38,25 @@ public class EUTileCapabilityProvider implements IEnergyProducer, IEnergyConsume
 			capMethod = iet instanceof BasicSource ? ((BasicSource) iet)::getCapacity : iet instanceof BasicSink ? ((BasicSink) iet)::getCapacity : null;
 		if (energyMethod == null)
 			energyMethod = iet instanceof BasicSource ? ((BasicSource) iet)::getEnergyStored : iet instanceof BasicSink ? ((BasicSink) iet)::getEnergyStored : null;
+	}
+
+	void updateEnergyMethods(Object o, Method cm, Method em) {
+		capMethod = () -> {
+			try {
+				return (double) cm.invoke(o);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return 0;
+		};
+		energyMethod = () -> {
+			try {
+				return (double) em.invoke(o);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return 0;
+		};
 	}
 
 	@Override
@@ -92,7 +104,7 @@ public class EUTileCapabilityProvider implements IEnergyProducer, IEnergyConsume
 			if (!sim) {
 				sink.injectEnergy(null, r / 4, EnergyNet.instance.getPowerFromTier(sink.getSinkTier()));
 			}
-			return (int) r;
+			return r;
 		}
 		return 0;
 	}

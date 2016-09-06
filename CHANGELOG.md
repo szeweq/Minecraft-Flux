@@ -1,6 +1,12 @@
 ## 0.12.0
+- Furnace is now fluxable (smelts items when supplied with MF)
+- Mob Spawner is now fluxable (speeds up spawning only when specific amount of MF transferred
 - Furnace and Mob Spawner are fluxable (they support MF)
 - IF and RF now compatible with sides
+- Totally reworked IC2 Support
+- Checking energy transfer from each side in Energy Distributor and Chunk Charger using MF Tool.
+- World Chunk Energy is properly saved and loaded
+- Minor improvements
 
 ## 0.11.0
 - Configuration options

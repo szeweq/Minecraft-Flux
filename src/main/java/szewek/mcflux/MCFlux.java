@@ -20,13 +20,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.RecipeSorter;
+import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.EnergyBattery;
 import szewek.mcflux.api.IEnergyConsumer;
 import szewek.mcflux.api.IEnergyProducer;
 import szewek.mcflux.api.ex.Battery;
 import szewek.mcflux.api.ex.EnergyNBTStorage;
 import szewek.mcflux.api.ex.IEnergy;
-import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.flavor.CapabilityFlavorEnergy;
 import szewek.mcflux.api.flavor.FlavorEnergyContainer;
 import szewek.mcflux.api.flavor.IFlavorEnergyConsumer;
@@ -45,12 +45,12 @@ import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.util.RecipeBuilder;
 import szewek.mcflux.wrapper.InjectWrappers;
 
-import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+
+import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
 @Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true, guiFactory = R.GUI_FACTORY)
 public class MCFlux {
@@ -63,7 +63,7 @@ public class MCFlux {
 		}
 	};
 	@SidedProxy(modId = R.MF_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
-	public static szewek.mcflux.proxy.ProxyCommon PROXY = null;
+	private static szewek.mcflux.proxy.ProxyCommon PROXY = null;
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
@@ -74,10 +74,10 @@ public class MCFlux {
 		else
 			L.info("Minecraft-Flux version " + R.MF_VERSION);
 		CapabilityManager.INSTANCE.register(IEnergy.class, new EnergyNBTStorage(), Battery::new);
-		CapabilityManager.INSTANCE.register(IEnergyProducer.class, new CapabilityEnergy.Storage<IEnergyProducer>(), EnergyBattery::new);
-		CapabilityManager.INSTANCE.register(IEnergyConsumer.class, new CapabilityEnergy.Storage<IEnergyConsumer>(), EnergyBattery::new);
-		CapabilityManager.INSTANCE.register(IFlavorEnergyProducer.class, new CapabilityFlavorEnergy.Storage<IFlavorEnergyProducer>(), FlavorEnergyContainer::new);
-		CapabilityManager.INSTANCE.register(IFlavorEnergyConsumer.class, new CapabilityFlavorEnergy.Storage<IFlavorEnergyConsumer>(), FlavorEnergyContainer::new);
+		CapabilityManager.INSTANCE.register(IEnergyProducer.class, new CapabilityEnergy.Storage<>(), EnergyBattery::new);
+		CapabilityManager.INSTANCE.register(IEnergyConsumer.class, new CapabilityEnergy.Storage<>(), EnergyBattery::new);
+		CapabilityManager.INSTANCE.register(IFlavorEnergyProducer.class, new CapabilityFlavorEnergy.Storage<>(), FlavorEnergyContainer::new);
+		CapabilityManager.INSTANCE.register(IFlavorEnergyConsumer.class, new CapabilityFlavorEnergy.Storage<>(), FlavorEnergyContainer::new);
 		CapabilityManager.INSTANCE.register(WorldChunkEnergy.class, new WorldChunkEnergy.ChunkStorage(), WorldChunkEnergy::new);
 		EVENT_BUS.register(InjectWrappers.INSTANCE.getEventHandler());
 		EVENT_BUS.register(InjectFluxable.INSTANCE);
@@ -132,7 +132,7 @@ public class MCFlux {
 			}
 			Map<String, Object> info = data.getAnnotationInfo();
 			Boolean incl = (Boolean) info.get("included");
-			if (incl == null || !incl.booleanValue()) {
+			if (incl == null || !incl) {
 				boolean found = false;
 				@SuppressWarnings("unchecked")
 				List<String> mns = (List<String>) info.get("detectMods");
