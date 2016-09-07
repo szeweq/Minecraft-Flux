@@ -10,42 +10,50 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.api.CapabilityEnergy;
-import szewek.mcflux.api.IEnergyConsumer;
+import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
-class EntityActionEnergy implements ICapabilityProvider, IEnergyConsumer {
+class EntityActionEnergy implements ICapabilityProvider, IEnergy {
 	private boolean charged = false;
 	private final EntityCreature creature;
-	
+	private final CompatEnergyWrapper cew;
+
 	EntityActionEnergy(EntityCreature ec) {
 		creature = ec;
+		cew = new CompatEnergyWrapper(this);
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == CapabilityEnergy.ENERGY_CONSUMER;
+		return cap == IEnergy.CAP_ENERGY || cew.isCompatInputSuitable(cap);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		if (cap == CapabilityEnergy.ENERGY_CONSUMER)
-			return (T) this;
-		return null;
+		return (T) (cap == IEnergy.CAP_ENERGY ? this : cew.isCompatInputSuitable(cap) ? cew : null);
 	}
 
 	@Override
-	public int getEnergy() {
+	public long getEnergy() {
 		return 0;
 	}
 
 	@Override
-	public int getEnergyCapacity() {
+	public long getEnergyCapacity() {
 		return 1;
 	}
 
+	@Override public boolean canInputEnergy() {
+		return !charged;
+	}
+
+	@Override public boolean canOutputEnergy() {
+		return false;
+	}
+
 	@Override
-	public int consumeEnergy(int amount, boolean simulate) {
+	public long inputEnergy(long amount, boolean simulate) {
 		if (!simulate && !charged) {
 			if (creature instanceof EntityPig) {
 				EntityPigZombie pigman = new EntityPigZombie(creature.worldObj);
@@ -55,7 +63,7 @@ class EntityActionEnergy implements ICapabilityProvider, IEnergyConsumer {
 				if (creature.hasCustomName()) {
 					pigman.setCustomNameTag(creature.getCustomNameTag());
 					pigman.setAlwaysRenderNameTag(creature.getAlwaysRenderNameTag());
-	            }
+				}
 				creature.worldObj.spawnEntityInWorld(pigman);
 				creature.setDead();
 			} else if (creature instanceof EntityCreeper)
@@ -64,5 +72,9 @@ class EntityActionEnergy implements ICapabilityProvider, IEnergyConsumer {
 			return 1;
 		}
 		return charged ? 0 : 1;
+	}
+
+	@Override public long outputEnergy(long amount, boolean sim) {
+		return 0;
 	}
 }

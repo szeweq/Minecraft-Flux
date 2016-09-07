@@ -51,9 +51,11 @@ public class U {
 	}
 	
 	public static long transferEnergy(IEnergy from, IEnergy to, final long amount) {
-		long r = to.inputEnergy(from.outputEnergy(amount, true), true);
-		if (r > 0)
-			return to.inputEnergy(from.outputEnergy(r, false), false);
+		if (from.canOutputEnergy() && to.canInputEnergy()) {
+			long r = to.inputEnergy(from.outputEnergy(amount, true), true);
+			if (r > 0)
+				return to.inputEnergy(from.outputEnergy(r, false), false);
+		}
 		return 0;
 	}
 

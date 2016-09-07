@@ -5,49 +5,60 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.api.CapabilityEnergy;
-import szewek.mcflux.api.IEnergyConsumer;
-import szewek.mcflux.api.IEnergyProducer;
+import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
-class IFItemContainerWrapper implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
+class IFItemContainerWrapper implements IEnergy, ICapabilityProvider {
 	private final IFluxContainerItem item;
 	private final ItemStack stack;
-	
+	private final CompatEnergyWrapper cew;
+
 	IFItemContainerWrapper(IFluxContainerItem it, ItemStack is) {
 		item = it;
 		stack = is;
+		cew = new CompatEnergyWrapper(this);
 	}
 
 	@Override
-	public int getEnergy() {
+	public long getEnergy() {
 		return item.getEnergyStored(stack);
 	}
 
 	@Override
-	public int getEnergyCapacity() {
+	public long getEnergyCapacity() {
 		return item.getMaxEnergyStored(stack);
 	}
 
-	@Override
-	public int consumeEnergy(int amount, boolean simulate) {
-		return item.receiveEnergy(stack, amount, simulate);
+	@Override public boolean canInputEnergy() {
+		return true;
+	}
+
+	@Override public boolean canOutputEnergy() {
+		return item.getEnergyStored(stack) > 0;
 	}
 
 	@Override
-	public int extractEnergy(int amount, boolean simulate) {
-		return item.extractEnergy(stack, amount, simulate);
+	public long inputEnergy(long amount, boolean sim) {
+		return item.receiveEnergy(stack, amount > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) amount, sim);
+	}
+
+	@Override
+	public long outputEnergy(long amount, boolean sim) {
+		return item.extractEnergy(stack, amount > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) amount, sim);
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == CapabilityEnergy.ENERGY_CONSUMER || cap == CapabilityEnergy.ENERGY_PRODUCER;
+		return cap == IEnergy.CAP_ENERGY || cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		if (cap == CapabilityEnergy.ENERGY_CONSUMER || cap == CapabilityEnergy.ENERGY_PRODUCER)
+		if (cap == IEnergy.CAP_ENERGY)
 			return (T) this;
+		if (cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap))
+			return (T) cew;
 		return null;
 	}
 }

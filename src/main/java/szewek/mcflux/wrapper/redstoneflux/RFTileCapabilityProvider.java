@@ -10,6 +10,7 @@ import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
 class RFTileCapabilityProvider implements ICapabilityProvider {
+	private final boolean broken;
 	private final IEnergyProvider provider;
 	private final IEnergyReceiver receiver;
 	private final IEnergyHandler handler;
@@ -20,6 +21,7 @@ class RFTileCapabilityProvider implements ICapabilityProvider {
 		handler = ieh;
 		provider = ieh instanceof IEnergyProvider ? (IEnergyProvider) ieh : null;
 		receiver = ieh instanceof IEnergyReceiver ? (IEnergyReceiver) ieh : null;
+		broken = provider == null && receiver == null;
 		for (int i = 0; i < 6; i++) {
 			sides[i] = new Sided(EnumFacing.VALUES[i]);
 			compatSides[i] = new CompatEnergyWrapper(sides[i]);
@@ -32,7 +34,7 @@ class RFTileCapabilityProvider implements ICapabilityProvider {
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
 		if (handler.canConnectEnergy(f)) {
 			if (cap == IEnergy.CAP_ENERGY)
-				return receiver != null || provider != null;
+				return !broken;
 			CompatEnergyWrapper cew = compatSides[f == null ? 6 : f.getIndex()];
 			return cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap);
 		}
@@ -45,7 +47,7 @@ class RFTileCapabilityProvider implements ICapabilityProvider {
 		if (handler.canConnectEnergy(f)) {
 			int g = f == null ? 6 : f.getIndex();
 			if (cap == IEnergy.CAP_ENERGY)
-				return receiver != null || provider != null ? (T) sides[g] : null;
+				return broken ? null : (T) sides[g];
 			CompatEnergyWrapper cew = compatSides[g];
 			if (cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap))
 				return (T) cew;

@@ -10,25 +10,31 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.api.CapabilityEnergy;
-import szewek.mcflux.api.IEnergyConsumer;
-import szewek.mcflux.api.IEnergyProducer;
+import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
 import java.lang.reflect.Method;
 import java.util.function.DoubleSupplier;
 
 import static szewek.mcflux.config.MCFluxConfig.CFG_EU_VALUE;
 
-class EUTileCapabilityProvider implements IEnergyProducer, IEnergyConsumer, ICapabilityProvider {
+class EUTileCapabilityProvider implements ICapabilityProvider {
 	@CapabilityInject(EUTileCapabilityProvider.class)
 	static Capability<EUTileCapabilityProvider> SELF_CAP = null;
 
 	private IEnergySource source = null;
 	private IEnergySink sink = null;
-	
+	private Sided[] sides = new Sided[7];
+	private CompatEnergyWrapper[] compatSides = new CompatEnergyWrapper[7];
 	private DoubleSupplier capMethod = null, energyMethod = null;
-	
+
 	EUTileCapabilityProvider() {
+		for (int i = 0; i < 6; i++) {
+			sides[i] = new Sided(EnumFacing.VALUES[i]);
+			compatSides[i] = new CompatEnergyWrapper(sides[i]);
+		}
+		sides[6] = new Sided(null);
+		compatSides[6] = new CompatEnergyWrapper(sides[6]);
 	}
 
 	void updateEnergyTile(IEnergyTile iet) {
@@ -61,68 +67,89 @@ class EUTileCapabilityProvider implements IEnergyProducer, IEnergyConsumer, ICap
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		if (cap == CapabilityEnergy.ENERGY_CONSUMER) {
-			return sink != null && sink.acceptsEnergyFrom(null, f);
-		}
-		if (cap == CapabilityEnergy.ENERGY_PRODUCER) {
-			return source != null && source.emitsEnergyTo(null, f);
-		}
-		return cap == SELF_CAP;
+		if (cap == IEnergy.CAP_ENERGY)
+			return source != null || sink != null;
+		if (cap == SELF_CAP)
+			return true;
+		CompatEnergyWrapper cew = compatSides[f == null ? 6 : f.getIndex()];
+		return cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		return hasCapability(cap, f) ? (T) this : null;
+		if (cap == SELF_CAP)
+			return (T) this;
+		int g = f == null ? 6 : f.getIndex();
+		if (cap == IEnergy.CAP_ENERGY)
+			return source != null || sink != null ? (T) sides[g] : null;
+		CompatEnergyWrapper cew = compatSides[g];
+		return cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap) ? (T) cew : null;
 	}
 
-	@Override
-	public int getEnergy() {
-		double dc = 0;
-		if (energyMethod != null)
-			dc = energyMethod.getAsDouble();
-		return (int) (dc * CFG_EU_VALUE);
-	}
+	private class Sided implements IEnergy {
+		private final EnumFacing face;
 
-	@Override
-	public int getEnergyCapacity() {
-		double dc = 0;
-		if (capMethod != null)
-			dc = capMethod.getAsDouble();
-		return (int) (dc * CFG_EU_VALUE);
-	}
-
-	@Override
-	public int consumeEnergy(int amount, boolean sim) {
-		if (amount < CFG_EU_VALUE)
-			return 0;
-		if (sink != null) {
-			int e = (int) sink.getDemandedEnergy() * CFG_EU_VALUE;
-			int r = amount - (amount % CFG_EU_VALUE);
-			if (r > e)
-				r = e;
-			if (!sim) {
-				sink.injectEnergy(null, r / 4, EnergyNet.instance.getPowerFromTier(sink.getSinkTier()));
-			}
-			return r;
+		private Sided(EnumFacing f) {
+			face = f;
 		}
-		return 0;
-	}
 
-	@Override
-	public int extractEnergy(int amount, boolean sim) {
-		if (amount < CFG_EU_VALUE)
-			return 0;
-		if (source != null) {
-			int e = (int) source.getOfferedEnergy() * CFG_EU_VALUE;
-			int r = amount - (amount % CFG_EU_VALUE);
-			if (r > e)
-				r = e;
-			if (!sim) {
-				source.drawEnergy(r / 4);
-			}
-			return r;
+		@Override
+		public long getEnergy() {
+			double dc = 0;
+			if (energyMethod != null)
+				dc = energyMethod.getAsDouble();
+			return (long) (dc * CFG_EU_VALUE);
 		}
-		return 0;
+
+		@Override
+		public long getEnergyCapacity() {
+			double dc = 0;
+			if (capMethod != null)
+				dc = capMethod.getAsDouble();
+			return (long) (dc * CFG_EU_VALUE);
+		}
+
+		@Override public boolean canInputEnergy() {
+			return sink != null && sink.acceptsEnergyFrom(null, face);
+		}
+
+		@Override public boolean canOutputEnergy() {
+			return source != null && source.emitsEnergyTo(null, face);
+		}
+
+		@Override
+		public long inputEnergy(long amount, boolean sim) {
+			if (amount < CFG_EU_VALUE)
+				return 0;
+			if (sink != null) {
+				long e = (long) sink.getDemandedEnergy() * CFG_EU_VALUE;
+				long r = amount - (amount % CFG_EU_VALUE);
+				if (r > e)
+					r = e;
+				if (!sim) {
+					sink.injectEnergy(face, r / CFG_EU_VALUE, EnergyNet.instance.getPowerFromTier(sink.getSinkTier()));
+				}
+				return r;
+			}
+			return 0;
+		}
+
+		@Override
+		public long outputEnergy(long amount, boolean sim) {
+			if (amount < CFG_EU_VALUE)
+				return 0;
+			if (source != null) {
+				long e = (long) source.getOfferedEnergy() * CFG_EU_VALUE;
+				long r = amount - (amount % CFG_EU_VALUE);
+				if (r > e)
+					r = e;
+				if (!sim) {
+					source.drawEnergy(r / CFG_EU_VALUE);
+				}
+				return r;
+			}
+			return 0;
+		}
 	}
 }
