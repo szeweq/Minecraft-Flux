@@ -12,9 +12,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.api.CapabilityEnergy;
-import szewek.mcflux.api.IEnergyConsumer;
-import szewek.mcflux.api.IEnergyHolder;
-import szewek.mcflux.api.IEnergyProducer;
+import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.wrapper.EnergyWrapperConsumer;
+import szewek.mcflux.wrapper.EnergyWrapperProducer;
 
 import java.lang.reflect.Method;
 
@@ -22,32 +22,38 @@ public class U {
 	@SideOnly(Side.CLIENT)
 	private static ItemModelMesher imm = null;
 
-	public static String formatMF(int n, int nc) {
+	public static String formatMF(long n, long nc) {
 		return n + " / " + nc + " MF";
 	}
 
-	public static IEnergyHolder getEnergyHolderTile(TileEntity te, EnumFacing f) {
+	public static IEnergy getEnergyHolderTile(TileEntity te, EnumFacing f) {
+		IEnergy ie = te.getCapability(IEnergy.CAP_ENERGY, f);
+		if (ie != null)
+			return ie;
 		if (te.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, f)) {
-			return te.getCapability(CapabilityEnergy.ENERGY_CONSUMER, f);
+			return new EnergyWrapperConsumer(te.getCapability(CapabilityEnergy.ENERGY_CONSUMER, f));
 		} else if (te.hasCapability(CapabilityEnergy.ENERGY_PRODUCER, f)) {
-			return te.getCapability(CapabilityEnergy.ENERGY_PRODUCER, f);
+			return new EnergyWrapperProducer(te.getCapability(CapabilityEnergy.ENERGY_PRODUCER, f));
 		}
 		return null;
 	}
 
-	public static IEnergyHolder getEnergyHolderEntity(Entity e) {
+	public static IEnergy getEnergyHolderEntity(Entity e) {
+		IEnergy ie = e.getCapability(IEnergy.CAP_ENERGY, null);
+		if (ie != null)
+			return ie;
 		if (e.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, null)) {
-			return e.getCapability(CapabilityEnergy.ENERGY_CONSUMER, null);
+			return new EnergyWrapperConsumer(e.getCapability(CapabilityEnergy.ENERGY_CONSUMER, null));
 		} else if (e.hasCapability(CapabilityEnergy.ENERGY_PRODUCER, null)) {
-			return e.getCapability(CapabilityEnergy.ENERGY_PRODUCER, null);
+			return new EnergyWrapperProducer(e.getCapability(CapabilityEnergy.ENERGY_PRODUCER, null));
 		}
 		return null;
 	}
 	
-	public static int transferEnergy(IEnergyProducer from, IEnergyConsumer to, final int amount) {
-		int r = to.consumeEnergy(from.extractEnergy(amount, true), true);
+	public static long transferEnergy(IEnergy from, IEnergy to, final long amount) {
+		long r = to.inputEnergy(from.outputEnergy(amount, true), true);
 		if (r > 0)
-			return to.consumeEnergy(from.extractEnergy(r, false), false);
+			return to.inputEnergy(from.outputEnergy(r, false), false);
 		return 0;
 	}
 

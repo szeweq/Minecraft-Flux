@@ -14,7 +14,7 @@ import szewek.mcflux.util.TransferType;
 
 public abstract class TileEntityEnergyMachine extends TileEntity implements ITickable {
 	TransferType[] sideTransfer = new TransferType[] {TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};
-	int[] sideValues = new int[] {0, 0, 0, 0, 0, 0};
+	long[] sideValues = new long[] {0, 0, 0, 0, 0, 0};
 	private IBlockState cachedState;
 	
 	public TileEntityEnergyMachine(IBlockState ibs) {
@@ -82,7 +82,7 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 		cachedState = cachedState.withProperty(BlockEnergyMachine.sideFromId(s), v);
 		markDirty();
 	}
-	public int getTransferSide(EnumFacing f) {
+	public long getTransferSide(EnumFacing f) {
 		return sideValues[f.getIndex()];
 	}
 }

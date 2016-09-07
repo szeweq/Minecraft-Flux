@@ -5,11 +5,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import szewek.mcflux.L;
-import szewek.mcflux.api.EnergyBattery;
+import szewek.mcflux.api.ex.Battery;
 import szewek.mcflux.config.MCFluxConfig;
 
 import java.util.HashMap;
@@ -19,17 +20,20 @@ import java.util.Map;
  * World Chunk Energy implementation.
  */
 public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<NBTBase> {
-	private Map<ChunkPos, EnergyBattery> energyChunks = new HashMap<>();
+	@CapabilityInject(WorldChunkEnergy.class)
+	public static Capability<WorldChunkEnergy> CAP_WCE = null;
+
+	private Map<ChunkPos, Battery> energyChunks = new HashMap<>();
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == CapabilityFluxable.FLUXABLE_WORLD_CHUNK;
+		return cap == CAP_WCE;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		if (cap == CapabilityFluxable.FLUXABLE_WORLD_CHUNK)
+		if (cap == CAP_WCE)
 			return (T) this;
 		return null;
 	}
@@ -42,11 +46,11 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 	 * @param bz Block Z position
 	 * @return Chunk battery
 	 */
-	public EnergyBattery getEnergyChunk(int bx, int by, int bz) {
+	public Battery getEnergyChunk(int bx, int by, int bz) {
 		ChunkPos cp = new ChunkPos(bx / 16, by / 16, bz / 16);
-		EnergyBattery eb = energyChunks.get(cp);
+		Battery eb = energyChunks.get(cp);
 		if (eb == null) {
-			eb = new EnergyBattery(MCFluxConfig.WORLDCHUNK_CAP);
+			eb = new Battery(MCFluxConfig.WORLDCHUNK_CAP);
 			energyChunks.put(cp, eb);
 		}
 		return eb;
@@ -78,8 +82,8 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 	@Override
 	public NBTBase serializeNBT() {
 		NBTTagList nbtl = new NBTTagList();
-		for (Map.Entry<ChunkPos, EnergyBattery> e : energyChunks.entrySet()) {
-			EnergyBattery eb = e.getValue();
+		for (Map.Entry<ChunkPos, Battery> e : energyChunks.entrySet()) {
+			Battery eb = e.getValue();
 			if (eb.getEnergy() <= 0)
 				continue;
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -87,7 +91,7 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 			nbt.setInteger("x", cp.cx);
 			nbt.setInteger("y", cp.cy);
 			nbt.setInteger("z", cp.cz);
-			nbt.setTag("e", eb.writeEnergyNBT());
+			nbt.setTag("e", eb.serializeNBT());
 			nbtl.appendTag(nbt);
 		}
 		return nbtl;
@@ -101,9 +105,9 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 				NBTTagCompound nbt = nbtl.getCompoundTagAt(i);
 				if (nbt.hasKey("x", NBT.TAG_INT) && nbt.hasKey("z", NBT.TAG_INT)) {
 					ChunkPos cp = new ChunkPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
-					EnergyBattery eb = new EnergyBattery(MCFluxConfig.WORLDCHUNK_CAP);
-					if (nbt.hasKey("e", NBT.TAG_INT))
-						eb.setEnergy(nbt.getInteger("e"));
+					Battery eb = new Battery(MCFluxConfig.WORLDCHUNK_CAP);
+					if (nbt.hasKey("e"))
+						eb.deserializeNBT(nbt.getTag("e"));
 					energyChunks.put(cp, eb);
 				}
 			}

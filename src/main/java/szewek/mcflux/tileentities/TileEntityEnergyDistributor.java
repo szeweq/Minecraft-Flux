@@ -7,19 +7,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import szewek.mcflux.MCFlux;
 import szewek.mcflux.U;
-import szewek.mcflux.api.CapabilityEnergy;
-import szewek.mcflux.api.EnergyBattery;
-import szewek.mcflux.api.IEnergyConsumer;
-import szewek.mcflux.api.IEnergyProducer;
+import szewek.mcflux.api.ex.Battery;
+import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.config.MCFluxConfig;
-import szewek.mcflux.fluxable.CapabilityFluxable;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.util.TransferType;
 
 public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
-	private WorldChunkEnergy wce;
-	private EnergyBattery eb;
+	private WorldChunkEnergy wce = null;
+	private Battery bat = null;
 	
 	public TileEntityEnergyDistributor() {
 		super(MCFlux.ENERGY_MACHINE.getDefaultState().withProperty(BlockEnergyMachine.VARIANT, BlockEnergyMachine.Variant.ENERGY_DIST));
@@ -32,19 +29,19 @@ public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
 	@Override
 	public void setWorldObj(World w) {
 		super.setWorldObj(w);
-		wce = worldObj != null && !worldObj.isRemote ? worldObj.getCapability(CapabilityFluxable.FLUXABLE_WORLD_CHUNK, null) : null;
+		wce = worldObj != null && !worldObj.isRemote ? worldObj.getCapability(WorldChunkEnergy.CAP_WCE, null) : null;
 	}
 
 	@Override
 	public void setPos(BlockPos posIn) {
 		super.setPos(posIn);
-		eb = worldObj != null && !worldObj.isRemote && pos != null ? wce.getEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
+		bat = worldObj != null && !worldObj.isRemote && pos != null ? wce.getEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		if (wce == null || eb == null)
+		if (wce == null || bat == null)
 			return;
 		for (int i = 0; i < 6; i++) {
 			TransferType tt = sideTransfer[i];
@@ -55,20 +52,19 @@ public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
 			if (te == null)
 				continue;
 			f = f.getOpposite();
-			IEnergyProducer from = null;
-			IEnergyConsumer to = null;
+			IEnergy from = null, to = null;
 			switch (tt) {
 			case INPUT:
-				from = te.getCapability(CapabilityEnergy.ENERGY_PRODUCER, f);
+				from = U.getEnergyHolderTile(te, f);
 				if (from == null)
 					continue;
-				to = eb;
+				to = bat;
 				break;
 			case OUTPUT:
-				to = te.getCapability(CapabilityEnergy.ENERGY_CONSUMER, f);
+				to = U.getEnergyHolderTile(te, f);
 				if (to == null)
 					continue;
-				from = eb;
+				from = bat;
 				break;
 			default:
 			}

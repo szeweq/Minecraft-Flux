@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import szewek.mcflux.R;
 import szewek.mcflux.U;
-import szewek.mcflux.api.IEnergyHolder;
+import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 import java.util.List;
@@ -48,13 +48,13 @@ public class MCFluxWailaProvider {
 			if (te instanceof TileEntityEnergyMachine)
 				return ctip;
 			EnumFacing f = da.getSide();
-			IEnergyHolder ieh = U.getEnergyHolderTile(te, f);
-			if (ieh == null)
+			IEnergy ie = U.getEnergyHolderTile(te, f);
+			if (ie == null)
 				return ctip;
 			ITaggedList<String, String> tgl = (ITaggedList<String, String>) ctip;
-			int nc = ieh.getEnergyCapacity();
+			long nc = ie.getEnergyCapacity();
 			if (nc > 0 && tgl.getEntries(R.TAG_MF).size() == 0) {
-				tgl.add(U.formatMF(ieh.getEnergy(), nc), R.TAG_MF);
+				tgl.add(U.formatMF(ie.getEnergy(), nc), R.TAG_MF);
 			}
 			return ctip;
 		}
@@ -82,13 +82,13 @@ public class MCFluxWailaProvider {
 
 		@Override
 		public List<String> getWailaBody(Entity e, List<String> ctip, IWailaEntityAccessor ea, IWailaConfigHandler cfg) {
-			IEnergyHolder ieh = U.getEnergyHolderEntity(e);
+			IEnergy ie = U.getEnergyHolderEntity(e);
 			@SuppressWarnings("unchecked")
 			ITaggedList<String, String> tgl = (ITaggedList<String, String>) ctip;
-			if (ieh != null) {
-				int nc = ieh.getEnergyCapacity();
+			if (ie != null) {
+				long nc = ie.getEnergyCapacity();
 				if (nc > 0 && tgl.getEntries(R.TAG_MF).size() == 0) {
-					tgl.add(nc == 1 ? I18n.format("mcflux.mfcompatible") : U.formatMF(ieh.getEnergy(), nc), R.TAG_MF);
+					tgl.add(nc == 1 ? I18n.format("mcflux.mfcompatible") : U.formatMF(ie.getEnergy(), nc), R.TAG_MF);
 				}
 			}
 			return ctip;
