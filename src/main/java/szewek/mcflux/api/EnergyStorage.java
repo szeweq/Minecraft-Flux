@@ -3,6 +3,7 @@ package szewek.mcflux.api;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;
 
+@Deprecated
 public class EnergyStorage implements IEnergyHolder, IEnergyNBT {
 	protected int energy = 0;
 	protected final int maxEnergy;

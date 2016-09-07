@@ -2,6 +2,7 @@ package szewek.mcflux.api;
 
 import net.minecraft.nbt.NBTBase;
 
+@Deprecated
 public interface IEnergyNBT {
 	/**
 	 * Reads energy value from NBT data.

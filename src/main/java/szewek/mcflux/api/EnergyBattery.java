@@ -3,6 +3,7 @@ package szewek.mcflux.api;
 /**
  * Basic implementation of energy producer and consumer.
  */
+@Deprecated
 public class EnergyBattery extends EnergyStorage implements IEnergyConsumer, IEnergyProducer {
 	/**
 	 * Creates a simple battery which can send energy in and out.

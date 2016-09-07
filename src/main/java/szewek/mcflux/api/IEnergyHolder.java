@@ -1,5 +1,6 @@
 package szewek.mcflux.api;
 
+@Deprecated
 public interface IEnergyHolder {
 	/**
 	 * Getter of stored energy.

@@ -7,6 +7,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
+@Deprecated
 public final class CapabilityEnergy {
 	/**
 	 * Energy producer capability (for extracting energy).

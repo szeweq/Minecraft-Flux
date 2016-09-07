@@ -1,5 +1,6 @@
 package szewek.mcflux.api;
 
+@Deprecated
 public interface IEnergyProducer extends IEnergyHolder {
 	/**
 	 * Grabs energy from a producer.
