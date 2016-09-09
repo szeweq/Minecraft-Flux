@@ -17,7 +17,7 @@ public class MCFluxJEIPlugin implements IModPlugin {
 		reg.addRecipeHandlers(
 			new BuiltShapedRecipeHandler()
 		);
-		reg.addDescription(new ItemStack(MCFlux.MFTOOL), MCFlux.MFTOOL.getUnlocalizedName() + ".jeidesc");
+		addItemDescriptions(reg, MCFlux.MFTOOL, MCFlux.UPCHIP);
 		for (int i = 0; i < 2; i++) {
 			Item it = Item.getItemFromBlock(MCFlux.ENERGY_MACHINE);
 			ItemStack is = new ItemStack(it, 1, i);
@@ -27,6 +27,11 @@ public class MCFluxJEIPlugin implements IModPlugin {
 
 	@Override
 	public void onRuntimeAvailable(IJeiRuntime jeiRT) {
+	}
+
+	private void addItemDescriptions(IModRegistry reg, Item... items) {
+		for (Item it : items)
+			reg.addDescription(new ItemStack(it), it.getUnlocalizedName() + ".jeidesc");
 	}
 
 }

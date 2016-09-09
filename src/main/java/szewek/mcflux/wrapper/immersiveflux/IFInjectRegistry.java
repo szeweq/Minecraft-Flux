@@ -20,8 +20,8 @@ public class IFInjectRegistry implements IInjectRegistry {
 
 	@Override
 	public void registerInjects() {
-		InjectWrappers.INSTANCE.registerTileWrapperInject(IFInjectRegistry::wrapIFTile);
-		InjectWrappers.INSTANCE.registerItemWrapperInject(IFInjectRegistry::wrapIFItem);
+		InjectWrappers.registerTileWrapperInject(IFInjectRegistry::wrapIFTile);
+		InjectWrappers.registerItemWrapperInject(IFInjectRegistry::wrapIFItem);
 	}
 	
 	private static void wrapIFTile(TileEntity te, BiConsumer<ResourceLocation, ICapabilityProvider> add) {

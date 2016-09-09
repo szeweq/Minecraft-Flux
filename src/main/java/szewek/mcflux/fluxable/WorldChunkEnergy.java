@@ -9,7 +9,6 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.INBTSerializable;
-import szewek.mcflux.L;
 import szewek.mcflux.api.ex.Battery;
 import szewek.mcflux.config.MCFluxConfig;
 
@@ -111,20 +110,6 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 					energyChunks.put(cp, eb);
 				}
 			}
-		}
-	}
-
-	public static class ChunkStorage implements Capability.IStorage<WorldChunkEnergy> {
-		@Override
-		public NBTBase writeNBT(Capability<WorldChunkEnergy> cap, WorldChunkEnergy instance, EnumFacing side) {
-			L.info("WRITING World Chunk Energy NBT");
-			return instance.serializeNBT();
-		}
-
-		@Override
-		public void readNBT(Capability<WorldChunkEnergy> cap, WorldChunkEnergy instance, EnumFacing side, NBTBase nbt) {
-			L.info("READING World Chunk Energy NBT " + nbt);
-			instance.deserializeNBT(nbt);
 		}
 	}
 }

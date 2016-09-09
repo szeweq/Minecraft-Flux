@@ -21,7 +21,7 @@ public class EUInjectRegistry implements IInjectRegistry {
 	public void registerInjects() {
 		MinecraftForge.EVENT_BUS.register(EUEnergyEvents.INSTANCE);
 		CapabilityManager.INSTANCE.register(EUTileCapabilityProvider.class, new EmptyCapabilityStorage<>(), EUTileCapabilityProvider::new);
-		InjectWrappers.INSTANCE.registerTileWrapperInject(EUInjectRegistry::wrapEUTile);
+		InjectWrappers.registerTileWrapperInject(EUInjectRegistry::wrapEUTile);
 	}
 	
 	private static void wrapEUTile(TileEntity te, BiConsumer<ResourceLocation, ICapabilityProvider> add) {

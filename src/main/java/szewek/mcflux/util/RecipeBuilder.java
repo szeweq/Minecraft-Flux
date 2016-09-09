@@ -1,47 +1,59 @@
 package szewek.mcflux.util;
 
-import java.util.List;
-
+import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.List;
+
 public class RecipeBuilder {
-	private byte[][] shapeBytes;
-	private int width, height, resultSize = 1;
-	private ItemStack result;
+	private IX[][] recipeShape;
+	private int width, height, meta = 0, resultSize = 1;
+	private Item result;
+	private NBTTagCompound tags = null;
 	private ItemStack[] stacks = new ItemStack[9];
 	private String[] oreDicts = new String[9];
 	private EnumRecipeMirror mirror = EnumRecipeMirror.NO_MIRROR;
 
-	public RecipeBuilder() {
+	public static void deployAll(RecipeBuilder... rbs) {
+		for (RecipeBuilder rb : rbs)
+			net.minecraftforge.fml.common.registry.GameRegistry.addRecipe(rb.build());
 	}
 
-	public RecipeBuilder shapeCode(byte[][] bs, int w, int h) {
-		if (bs.length != h)
-			throw new RuntimeException("Height of shape bytes (" + bs.length + ") is not equal to actual height (" + h + ").");
-		for (byte[] bw : bs) {
-			if (bw.length != w)
-				throw new RuntimeException("Width of shape bytes (" + bw.length + ") is not equal to actual width (" + w + ").");
-			for (byte b : bw) {
-				if (b < 0 || b > 9)
-					throw new RuntimeException("Only items with numbers 1-9 and 0 (as empty space) are allowed.");
-			}
+	public RecipeBuilder() {}
+
+	public RecipeBuilder(Item it) {
+		result = it;
+	}
+
+	public RecipeBuilder(Block b) {
+		result = Item.getItemFromBlock(b);
+	}
+
+	public RecipeBuilder withShape(IX[][] shape, int w, int h) {
+		if (shape.length != h)
+			throw new RuntimeException("Height of shape bytes (" + shape.length + ") is not equal to actual height (" + h + ").");
+		for (IX[] sw : shape) {
+			if (sw.length != w)
+				throw new RuntimeException("Width of shape bytes (" + sw.length + ") is not equal to actual width (" + w + ").");
 		}
-		shapeBytes = bs;
+		recipeShape = shape;
 		width = w;
 		height = h;
 		return this;
 	}
 
-	public RecipeBuilder clearNumbers(int... bs) {
-		for (int b : bs) {
-			if (b < 1 || b > 9)
+	public RecipeBuilder clear(IX... ix) {
+		for (IX id : ix) {
+			if (id == null)
 				continue;
-			stacks[b - 1] = null;
-			oreDicts[b - 1] = null;
+			stacks[id.ord] = null;
+			oreDicts[id.ord] = null;
 		}
 		return this;
 	}
@@ -51,8 +63,13 @@ public class RecipeBuilder {
 		return this;
 	}
 
-	public RecipeBuilder result(ItemStack is) {
-		result = is;
+	public RecipeBuilder result(Item it) {
+		result = it;
+		return this;
+	}
+
+	public RecipeBuilder result(Block b) {
+		result = Item.getItemFromBlock(b);
 		return this;
 	}
 
@@ -61,32 +78,39 @@ public class RecipeBuilder {
 		return this;
 	}
 
-	public RecipeBuilder stackWithNumber(int i, ItemStack is) {
-		if (i > 0 && i < 10) {
-			stacks[i - 1] = is;
-		}
+	public RecipeBuilder resultMeta(int m) {
+		meta = m;
 		return this;
 	}
 
-	public RecipeBuilder oreDictWithNumber(int i, String s) {
-		if (i > 0 && i < 10) {
-			oreDicts[i - 1] = s;
-		}
+	public RecipeBuilder resultNBT(NBTTagCompound nbt) {
+		tags = nbt;
+		return this;
+	}
+
+	public RecipeBuilder withStack(IX id, ItemStack is) {
+		if (id != null)
+			stacks[id.ord] = is;
+		return this;
+	}
+
+	public RecipeBuilder withOreDict(IX id, String s) {
+		if (id != null)
+			oreDicts[id.ord] = s;
 		return this;
 	}
 
 	public IRecipe build() {
-		if (result != null)
-			result.stackSize = resultSize;
-		return new BuiltShapedRecipe(shapeBytes.clone(), width, height, result.copy(), stacks.clone(), oreDicts.clone(), mirror);
+		return result == null? null : new BuiltShapedRecipe(recipeShape.clone(), width, height, new ItemStack(result, resultSize, meta, tags), stacks.clone(), oreDicts.clone(), mirror);
 	}
 
-	public void deploy() {
+	public RecipeBuilder deploy() {
 		net.minecraftforge.fml.common.registry.GameRegistry.addRecipe(build());
+		return this;
 	}
 
 	public static class BuiltShapedRecipe implements IRecipe {
-		private final byte[][] shapeCode;
+		private final IX[][] shapeCode;
 		private final int width, height;
 		private final ItemStack result;
 		private final ItemStack[] stacks;
@@ -94,8 +118,8 @@ public class RecipeBuilder {
 		private final EnumRecipeMirror mirror;
 		private final Object[] cached;
 
-		private BuiltShapedRecipe(byte[][] bytes, int w, int h, ItemStack result, ItemStack[] stacks, String[] oreDicts, EnumRecipeMirror m) {
-			shapeCode = bytes;
+		private BuiltShapedRecipe(IX[][] shape, int w, int h, ItemStack result, ItemStack[] stacks, String[] oreDicts, EnumRecipeMirror m) {
+			shapeCode = shape;
 			width = w;
 			height = h;
 			this.result = result;
@@ -105,15 +129,15 @@ public class RecipeBuilder {
 			Object[] pc = new Object[width * height];
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
-					int code = shapeCode[y][x] - 1;
-					if (code < 0)
+					IX id = shapeCode[y][x];
+					if (id == null)
 						continue;
-					List<ItemStack> lis = this.oreDicts[code] != null ? OreDictionary.getOres(this.oreDicts[code]) : null;
+					List<ItemStack> lis = this.oreDicts[id.ord] != null ? OreDictionary.getOres(this.oreDicts[id.ord]) : null;
 					if (lis != null) {
 						pc[y * width + x] = lis;
 						continue;
 					}
-					ItemStack is = this.stacks[code];
+					ItemStack is = this.stacks[id.ord];
 					pc[y * width + x] = is;
 				}
 			}
@@ -156,8 +180,8 @@ public class RecipeBuilder {
 					int zx = x + ox;
 					int zy = y + oy;
 					ItemStack slot = inv.getStackInRowAndColumn(zx, zy);
-					int code = shapeCode[mirrorY ? height - y - 1 : y][mirrorX ? width - x - 1 : x] - 1;
-					if (code < 0) {
+					IX id = shapeCode[mirrorY ? height - y - 1 : y][mirrorX ? width - x - 1 : x];
+					if (id == null) {
 						if (slot != null)
 							break;
 						else {
@@ -165,21 +189,14 @@ public class RecipeBuilder {
 							continue;
 						}
 					}
-					ItemStack recipeItem = stacks[code] != null ? stacks[code] : null;
-					List<ItemStack> oreDictItems = oreDicts[code] != null ? OreDictionary.getOres(oreDicts[code]) : null;
+					List<ItemStack> oreDictItems = oreDicts[id.ord] != null ? OreDictionary.getOres(oreDicts[id.ord]) : null;
 					boolean emptyList = oreDictItems == null || oreDictItems.isEmpty();
-					if (recipeItem == null && emptyList && slot != null)
+					if ((stacks[id.ord] == null && emptyList) != (slot == null))
 						break;
-					if (recipeItem != null) {
-						if (slot == null)
+					if (slot != null) {
+						if (stacks[id.ord] == null || !OreDictionary.itemMatches(stacks[id.ord], slot, false))
 							break;
-						if (!OreDictionary.itemMatches(recipeItem, slot, false))
-							break;
-					}
-					if (!emptyList) {
-						if (slot == null)
-							break;
-						if (!OreDictionary.containsMatch(false, oreDictItems, slot))
+						if (emptyList || !OreDictionary.containsMatch(false, oreDictItems, slot))
 							break;
 					}
 					m++;

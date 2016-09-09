@@ -1,0 +1,57 @@
+package szewek.mcflux.items;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.server.SPacketTitle;
+import net.minecraft.stats.StatList;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+import szewek.mcflux.fluxable.PlayerEnergy;
+
+import javax.annotation.Nullable;
+
+public class ItemUpChip extends Item {
+	private static final String PF = "mcflux.upchip.";
+	private static final TextComponentTranslation
+			textInstalled = new TextComponentTranslation(PF + "installed"),
+			textLvlMax = new TextComponentTranslation(PF + "lvlmax");
+
+	@Override public EnumAction getItemUseAction(ItemStack stack) {
+		return EnumAction.BOW;
+	}
+
+	@Override public int getMaxItemUseDuration(ItemStack stack) {
+		return 40;
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack is, World w, EntityPlayer p, EnumHand h) {
+		p.setActiveHand(h);
+		return new ActionResult<>(EnumActionResult.SUCCESS, is);
+	}
+
+	@Nullable @Override
+	public ItemStack onItemUseFinish(ItemStack is, World w, EntityLivingBase elb) {
+		if (!w.isRemote && elb instanceof EntityPlayerMP) {
+			EntityPlayerMP mp = (EntityPlayerMP) elb;
+			PlayerEnergy pe = mp.getCapability(PlayerEnergy.SELF_CAP, null);
+			if (pe == null)
+				return is;
+			byte lvl = pe.updateLevel();
+			if (lvl == -1)
+				return is;
+			--is.stackSize;
+			mp.connection.sendPacket(new SPacketTitle(SPacketTitle.Type.TITLE, textInstalled, 100, 500, 100));
+			mp.connection.sendPacket(new SPacketTitle(SPacketTitle.Type.SUBTITLE, lvl == 30 ? textLvlMax : new TextComponentTranslation(PF + "lvlup", lvl)));
+			mp.addStat(StatList.getObjectUseStats(this));
+		}
+		return is;
+	}
+}

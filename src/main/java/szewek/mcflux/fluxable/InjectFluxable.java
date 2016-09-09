@@ -8,37 +8,41 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.util.MCFluxLocation;
+import szewek.mcflux.wrapper.InjectWrappers;
 
-public enum InjectFluxable {
-	INSTANCE;
-	public static final MCFluxLocation
+import java.util.function.BiConsumer;
+
+public class InjectFluxable {
+	private static final MCFluxLocation
 		ENERGY_PLAYER = new MCFluxLocation("PlayerEnergy"),
 		ENERGY_ACTION = new MCFluxLocation("ActionEnergy"),
 		ENERGY_WORLD_CHUNK = new MCFluxLocation("WorldChunkEnergy"),
 		ENERGY_FURNACE = new MCFluxLocation("FurnaceEnergy"),
 		ENERGY_MOB_SPAWNER = new MCFluxLocation("MobSpawnerEnergy");
-	
-	@SubscribeEvent
-	public void inject(AttachCapabilitiesEvent e) {
-		if (e instanceof AttachCapabilitiesEvent.TileEntity) {
-			AttachCapabilitiesEvent.TileEntity ete = (AttachCapabilitiesEvent.TileEntity) e;
-			TileEntity te = ete.getTileEntity();
-			if (te instanceof TileEntityFurnace)
-				ete.addCapability(ENERGY_FURNACE, new FurnaceEnergy((TileEntityFurnace) te));
-			else if (te instanceof TileEntityMobSpawner)
-				ete.addCapability(ENERGY_MOB_SPAWNER, new MobSpawnerEnergy((TileEntityMobSpawner) te));
-		} else if (e instanceof AttachCapabilitiesEvent.Entity) {
-			AttachCapabilitiesEvent.Entity ee = (AttachCapabilitiesEvent.Entity) e;
-			Entity ent = ee.getEntity();
-			if (ent instanceof EntityPlayer)
-				ee.addCapability(ENERGY_PLAYER, new PlayerEnergy((EntityPlayer) ent));
-			else if (ent instanceof EntityPig || ent instanceof EntityCreeper)
-				ee.addCapability(ENERGY_ACTION, new EntityActionEnergy((EntityCreature) ent));
-		} else if (e instanceof AttachCapabilitiesEvent.World) {
-			e.addCapability(ENERGY_WORLD_CHUNK, new WorldChunkEnergy());
-		}
+
+	public static void registerWrappers() {
+		InjectWrappers.registerTileWrapperInject(InjectFluxable::tileWrappers);
+		InjectWrappers.registerEntityWrapperInject(InjectFluxable::entityWrappers);
+		InjectWrappers.registerWorldWrapperInject(InjectFluxable::worldWrappers);
+	}
+
+	private static void tileWrappers(TileEntity te, BiConsumer<ResourceLocation, ICapabilityProvider> add) {
+		if (te instanceof TileEntityFurnace)
+			add.accept(ENERGY_FURNACE, new FurnaceEnergy((TileEntityFurnace) te));
+		else if (te instanceof TileEntityMobSpawner)
+			add.accept(ENERGY_MOB_SPAWNER, new MobSpawnerEnergy((TileEntityMobSpawner) te));
+	}
+	private static void entityWrappers(Entity ntt, BiConsumer<ResourceLocation, ICapabilityProvider> add) {
+		if (ntt instanceof EntityPlayer)
+			add.accept(ENERGY_PLAYER, new PlayerEnergy((EntityPlayer) ntt));
+		else if (ntt instanceof EntityPig || ntt instanceof EntityCreeper)
+			add.accept(ENERGY_ACTION, new EntityActionEnergy((EntityCreature) ntt));
+	}
+	private static void worldWrappers(World w, BiConsumer<ResourceLocation, ICapabilityProvider> add) {
+		add.accept(ENERGY_WORLD_CHUNK, new WorldChunkEnergy());
 	}
 }

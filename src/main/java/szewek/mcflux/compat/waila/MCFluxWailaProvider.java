@@ -51,6 +51,7 @@ public class MCFluxWailaProvider {
 			IEnergy ie = U.getEnergyHolderTile(te, f);
 			if (ie == null)
 				return ctip;
+			@SuppressWarnings("unchecked")
 			ITaggedList<String, String> tgl = (ITaggedList<String, String>) ctip;
 			long nc = ie.getEnergyCapacity();
 			if (nc > 0 && tgl.getEntries(R.TAG_MF).size() == 0) {

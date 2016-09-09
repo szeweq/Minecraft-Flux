@@ -129,7 +129,7 @@ public class BlockEnergyMachine extends BlockContainer {
 		return b;
 	}
 
-	public static enum Variant implements IStringSerializable {
+	public enum Variant implements IStringSerializable {
 		ENERGY_DIST("energy_dist"), CHUNK_CHARGER("chunk_charger");
 
 		public static final Variant[] ALL_VARIANTS;

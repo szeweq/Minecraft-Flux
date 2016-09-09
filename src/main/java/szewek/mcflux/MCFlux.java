@@ -16,9 +16,10 @@ import net.minecraftforge.fml.common.discovery.ASMDataTable.ASMData;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.RecipeSorter;
 import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.EnergyBattery;
@@ -35,14 +36,17 @@ import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
 import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.InjectFluxable;
+import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.items.ItemMFTool;
+import szewek.mcflux.items.ItemUpChip;
+import szewek.mcflux.network.MessageHandlerDummy;
+import szewek.mcflux.network.MessageHandlerServer;
+import szewek.mcflux.network.UpdateMessageClient;
+import szewek.mcflux.network.UpdateMessageServer;
 import szewek.mcflux.tileentities.TileEntityChunkCharger;
 import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
-import szewek.mcflux.util.IInjectRegistry;
-import szewek.mcflux.util.InjectRegistry;
-import szewek.mcflux.util.MCFluxLocation;
-import szewek.mcflux.util.RecipeBuilder;
+import szewek.mcflux.util.*;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 import java.util.List;
@@ -52,10 +56,14 @@ import java.util.function.Function;
 
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
+@SuppressWarnings("unused")
 @Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true, guiFactory = R.GUI_FACTORY)
 public class MCFlux {
+	public static SimpleNetworkWrapper SNW;
 	public static ItemMFTool MFTOOL;
+	public static ItemUpChip UPCHIP;
 	public static BlockEnergyMachine ENERGY_MACHINE;
+	public static final int UPDATE_CLI = 67, UPDATE_SRV = 69;
 	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs(R.MF_NAME) {
 		@Override
 		public Item getTabIconItem() {
@@ -63,28 +71,35 @@ public class MCFlux {
 		}
 	};
 	@SidedProxy(modId = R.MF_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
-	private static szewek.mcflux.proxy.ProxyCommon PROXY = null;
+	static szewek.mcflux.proxy.ProxyCommon PROXY = null;
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
-		MCFluxConfig.makeConfig(e.getSuggestedConfigurationFile());
 		L.prepare(e.getModLog());
+		MCFluxConfig.makeConfig(e.getSuggestedConfigurationFile());
 		if (R.MF_VERSION.charAt(0) == '@')
 			L.warn("You are running Minecraft-Flux with an unknown version (development maybe?)");
 		else
 			L.info("Minecraft-Flux version " + R.MF_VERSION);
-		CapabilityManager.INSTANCE.register(IEnergy.class, new EnergyNBTStorage(), Battery::new);
-		CapabilityManager.INSTANCE.register(IEnergyProducer.class, new CapabilityEnergy.Storage<>(), EnergyBattery::new);
-		CapabilityManager.INSTANCE.register(IEnergyConsumer.class, new CapabilityEnergy.Storage<>(), EnergyBattery::new);
-		CapabilityManager.INSTANCE.register(IFlavorEnergyProducer.class, new CapabilityFlavorEnergy.Storage<>(), FlavorEnergyContainer::new);
-		CapabilityManager.INSTANCE.register(IFlavorEnergyConsumer.class, new CapabilityFlavorEnergy.Storage<>(), FlavorEnergyContainer::new);
-		CapabilityManager.INSTANCE.register(WorldChunkEnergy.class, new WorldChunkEnergy.ChunkStorage(), WorldChunkEnergy::new);
-		EVENT_BUS.register(InjectWrappers.INSTANCE.getEventHandler());
-		EVENT_BUS.register(InjectFluxable.INSTANCE);
+		CapabilityManager cm = CapabilityManager.INSTANCE;
+		cm.register(IEnergy.class, new EnergyNBTStorage(), Battery::new);
+		cm.register(IEnergyProducer.class, new CapabilityEnergy.Storage<>(), EnergyBattery::new);
+		cm.register(IEnergyConsumer.class, new CapabilityEnergy.Storage<>(), EnergyBattery::new);
+		cm.register(IFlavorEnergyProducer.class, new CapabilityFlavorEnergy.Storage<>(), FlavorEnergyContainer::new);
+		cm.register(IFlavorEnergyConsumer.class, new CapabilityFlavorEnergy.Storage<>(), FlavorEnergyContainer::new);
+		cm.register(WorldChunkEnergy.class, new NBTSerializableCapabilityStorage<>(), WorldChunkEnergy::new);
+		cm.register(PlayerEnergy.class, new NBTSerializableCapabilityStorage<>(), PlayerEnergy::new);
+		EVENT_BUS.register(InjectWrappers.events);
+		EVENT_BUS.register(MCFluxEvents.INSTANCE);
 		MFTOOL = registerItem("mftool", new ItemMFTool());
+		UPCHIP = registerItem("upchip", new ItemUpChip());
 		ENERGY_MACHINE = registerBlock("energy_machine", new BlockEnergyMachine(), ItemBlockEnergyMachine::new);
 		GameRegistry.registerTileEntity(TileEntityEnergyDistributor.class, "mcflux.energyDist");
 		GameRegistry.registerTileEntity(TileEntityChunkCharger.class, "mcflux.chunkCharger");
+		SNW = NetworkRegistry.INSTANCE.newSimpleChannel(R.MF_NAME);
+		SNW.registerMessage(MessageHandlerServer.class, UpdateMessageClient.class, UPDATE_CLI, Side.SERVER);
+		SNW.registerMessage(MessageHandlerDummy.class, UpdateMessageServer.class, UPDATE_SRV, Side.SERVER);
+		InjectFluxable.registerWrappers();
 		PROXY.preInit();
 		registerAllInjects(e.getAsmData());
 	}
@@ -93,37 +108,35 @@ public class MCFlux {
 	public void init(FMLInitializationEvent e) {
 		RecipeSorter.register("mcflux:builtRecipe", RecipeBuilder.BuiltShapedRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 		ItemStack stackRedstone = new ItemStack(Items.REDSTONE);
-		new RecipeBuilder()
-			.result(new ItemStack(MFTOOL))
-			.shapeCode(new byte[][]{{1, 0, 1}, {2, 3, 2}, {2, 2, 2}}, 3, 3)
-			.oreDictWithNumber(1, "nuggetGold")
-			.stackWithNumber(2, stackRedstone)
-			.oreDictWithNumber(3, "ingotIron")
-			.deploy();
 		ItemStack stackEnergyDist = new ItemStack(ENERGY_MACHINE, 1, 0);
-		new RecipeBuilder()
-			.result(stackEnergyDist)
-			.shapeCode(new byte[][]{{0, 1, 0}, {1, 2, 1}, {0, 1, 0}}, 3, 3)
-			.oreDictWithNumber(1, "blockIron")
-			.stackWithNumber(2, new ItemStack(Items.END_CRYSTAL))
-			.deploy();
-		new RecipeBuilder()
-			.result(new ItemStack(ENERGY_MACHINE, 1, 1))
-			.shapeCode(new byte[][]{{1, 0, 1}, {0, 2, 0}, {1, 0, 1}}, 3, 3)
-			.stackWithNumber(1, stackRedstone)
-			.stackWithNumber(2, stackEnergyDist)
-			.deploy();
+		new RecipeBuilder(MFTOOL)
+				.withShape(new IX[][]{{IX.A, null, IX.A}, {IX.B, IX.C, IX.B}, {IX.B, IX.B, IX.B}}, 3, 3)
+				.withOreDict(IX.A, "nuggetGold")
+				.withStack(IX.B, stackRedstone)
+				.withOreDict(IX.C, "ingotIron")
+				.deploy();
+		new RecipeBuilder(ENERGY_MACHINE)
+				.withShape(new IX[][]{{null, IX.A, null}, {IX.A, IX.B, IX.A}, {null, IX.A, null}}, 3, 3)
+				.withOreDict(IX.A, "blockIron")
+				.withStack(IX.B, new ItemStack(Items.END_CRYSTAL))
+				.deploy()
+				.resultMeta(1)
+				.clear(IX.A, IX.B)
+				.withShape(new IX[][]{{IX.A, null, IX.A}, {null, IX.B, null}, {IX.A, null, IX.A}}, 3, 3)
+				.withStack(IX.A, stackRedstone)
+				.withStack(IX.B, stackEnergyDist)
+				.deploy();
 		FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
 		PROXY.init();
 	}
-	
+
 	private void registerAllInjects(ASMDataTable asdt) {
 		L.info("Registering inject registries...");
 		Set<ASMData> aset = asdt.getAll(InjectRegistry.class.getCanonicalName());
 		int cnt = 0;
 		for (ASMData data : aset) {
 			String cname = data.getClassName();
-			if(!cname.equals(data.getObjectName())) continue;
+			if (!cname.equals(data.getObjectName())) continue;
 			Class<?> c;
 			try {
 				c = Class.forName(cname);
@@ -144,7 +157,7 @@ public class MCFlux {
 						break;
 					}
 				}
-				if(!found)
+				if (!found)
 					continue;
 			}
 			Class<? extends IInjectRegistry> iirc = c.asSubclass(IInjectRegistry.class);
@@ -153,15 +166,10 @@ public class MCFlux {
 				iir.registerInjects();
 				cnt++;
 			} catch (Exception e) {
-				e.printStackTrace();
+				L.warn(e);
 			}
 		}
 		L.info("Registered " + cnt + " inject registries");
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static void renders() {
-		U.registerItemModels(MFTOOL);
 	}
 
 	private static <T extends Item> T registerItem(String name, T i) {

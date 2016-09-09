@@ -20,8 +20,8 @@ public class RFInjectRegistry implements IInjectRegistry {
 
 	@Override
 	public void registerInjects() {
-		InjectWrappers.INSTANCE.registerTileWrapperInject(RFInjectRegistry::wrapRFTile);
-		InjectWrappers.INSTANCE.registerItemWrapperInject(RFInjectRegistry::wrapRFItem);
+		InjectWrappers.registerTileWrapperInject(RFInjectRegistry::wrapRFTile);
+		InjectWrappers.registerItemWrapperInject(RFInjectRegistry::wrapRFItem);
 	}
 	private static void wrapRFTile(TileEntity te, BiConsumer<ResourceLocation, ICapabilityProvider> add) {
 		if (te instanceof IEnergyHandler)

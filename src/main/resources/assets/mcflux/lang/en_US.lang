@@ -15,11 +15,17 @@ mcflux.energystat=Energy: %s
 mcflux.energystatunknown=Energy: unknown
 mcflux.mfcompatible=MF Compatible
 mcflux.transfer=Transfer: %s MF/t
-mcflux.worldchunk=World Chunk 
+mcflux.worldchunk=World Chunk
+mcflux.upchip.installed=Chip installed
+mcflux.upchip.lvlup=You reached energy level %s.
+mcflux.upchip.lvlmax=You reached the final level.
+
 itemGroup.mcflux=Minecraft-Flux
 
 item.mftool.name=MF Tool
 item.mftool.jeidesc=Use this tool to check if a block/entity is MF compatible.\nIf it is then MF Tool shows energy stats.
+item.upchip.name=MF Upgrade Chip
+item.upchip.jeidesc=EAT IT! Upgrade your energy with this chip.
 
 tile.energy_dist.name=Energy Distributor
 tile.energy_dist.desc=A medium between World Chunk Energy and blocks.

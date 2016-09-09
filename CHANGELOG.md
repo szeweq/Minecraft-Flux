@@ -1,3 +1,9 @@
+## 1.0.0
+- Fixed sides rendering
+- Everything now works with Energy eXtensions
+- Old Energy API is marked as deprecated.
+- Added MF Upgrade Chip (can be found in loot chests)
+
 ## 0.12.0
 - Furnace is now fluxable (smelts items when supplied with MF)
 - Mob Spawner is now fluxable (speeds up spawning only when specific amount of MF transferred
@@ -22,13 +28,4 @@
 - IC2 Integration (90%)
 - Many minor fixes
 
-## 0.9.1
-- Added JEI Descriptions
-
-## 0.9.0
-- 2 NEW BLOCKS:
-  - Energy Distributor - connect with machines to send and receive energy from world chunks.
-  - Chunk Charger - Transfers energy between world chunks.
-- Added JEI Integration
-
-Before 0.9.0: See [0.8.0 CHANGELOG](https://github.com/Szewek/Minecraft-Flux/blob/0.8.0/CHANGELOG.md).
+**Before 0.10.0:** See [0.9.1 CHANGELOG](https://github.com/Szewek/Minecraft-Flux/blob/0.9.1/CHANGELOG.md).

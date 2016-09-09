@@ -2,45 +2,54 @@ package szewek.mcflux.fluxable;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTPrimitive;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
-class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializable<NBTBase> {
+public class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializable<NBTBase> {
+	@CapabilityInject(PlayerEnergy.class)
+	public static Capability<PlayerEnergy> SELF_CAP;
+
 	private long energy = 0, maxEnergy = 0;
+	private byte lvl = 0;
 	private final EntityPlayer player;
 	private final CompatEnergyWrapper cew;
 
+	public PlayerEnergy() {
+		this(null);
+	}
+
 	PlayerEnergy(EntityPlayer p) {
 		player = p;
-		NBTTagCompound nbtp = player.getEntityData();
-		if (nbtp.hasKey("fluxLvl", NBT.TAG_BYTE)) {
-			byte lvl = nbtp.getByte("fluxLvl");
-			if (lvl > 30)
-				lvl = 30;
-			maxEnergy = 100000 * lvl;
-		}
 		cew = new CompatEnergyWrapper(this);
+	}
+
+	public byte updateLevel() {
+		if (lvl == 30)
+			return -1;
+		++lvl;
+		maxEnergy = 100000 * lvl;
+		return lvl;
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return maxEnergy > 0 && (cap == IEnergy.CAP_ENERGY || cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap));
+		return cap == SELF_CAP || (maxEnergy > 0 && (cap == CAP_ENERGY || cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap)));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
+		if (cap == SELF_CAP)
+			return (T) this;
 		if (maxEnergy > 0) {
-			if (cap == IEnergy.CAP_ENERGY)
+			if (cap == CAP_ENERGY)
 				return (T) this;
 			if (cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap))
 				return (T) cew;
@@ -95,11 +104,17 @@ class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializable<NBT
 	}
 
 	@Override public NBTBase serializeNBT() {
-		return new NBTTagLong(energy);
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setByte("lvl", lvl);
+		nbt.setLong("e", energy);
+		return nbt;
 	}
 
 	@Override public void deserializeNBT(NBTBase nbt) {
-		if (nbt instanceof NBTPrimitive)
-			energy = ((NBTPrimitive) nbt).getLong();
+		if (nbt instanceof NBTTagCompound) {
+			NBTTagCompound nbttc = (NBTTagCompound) nbt;
+			lvl = nbttc.getByte("lvl");
+			energy = nbttc.getLong("e");
+		}
 	}
 }
