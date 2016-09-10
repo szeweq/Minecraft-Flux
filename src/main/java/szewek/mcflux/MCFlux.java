@@ -64,6 +64,8 @@ public class MCFlux {
 	public static ItemUpChip UPCHIP;
 	public static BlockEnergyMachine ENERGY_MACHINE;
 	public static final int UPDATE_CLI = 67, UPDATE_SRV = 69;
+	private static final MessageHandlerServer MSG_SRV = new MessageHandlerServer();
+	private static final MessageHandlerDummy MSG_DMM = new MessageHandlerDummy();
 	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs(R.MF_NAME) {
 		@Override
 		public Item getTabIconItem() {
@@ -97,8 +99,8 @@ public class MCFlux {
 		GameRegistry.registerTileEntity(TileEntityEnergyDistributor.class, "mcflux.energyDist");
 		GameRegistry.registerTileEntity(TileEntityChunkCharger.class, "mcflux.chunkCharger");
 		SNW = NetworkRegistry.INSTANCE.newSimpleChannel(R.MF_NAME);
-		SNW.registerMessage(MessageHandlerServer.class, UpdateMessageClient.class, UPDATE_CLI, Side.SERVER);
-		SNW.registerMessage(MessageHandlerDummy.class, UpdateMessageServer.class, UPDATE_SRV, Side.SERVER);
+		SNW.registerMessage(MSG_SRV, UpdateMessageClient.class, UPDATE_CLI, Side.SERVER);
+		SNW.registerMessage(MSG_DMM, UpdateMessageServer.class, UPDATE_SRV, Side.SERVER);
 		InjectFluxable.registerWrappers();
 		PROXY.preInit();
 		registerAllInjects(e.getAsmData());

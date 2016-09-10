@@ -13,10 +13,11 @@ import szewek.mcflux.network.UpdateMessageServer;
 import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
 
 public class ProxyClient extends ProxyCommon {
+	private static final MessageHandlerClient MSG_CLI = new MessageHandlerClient();
 	@Override
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(new ConfigEvents());
-		MCFlux.SNW.registerMessage(MessageHandlerClient.class, UpdateMessageServer.class, MCFlux.UPDATE_SRV, Side.CLIENT);
+		MCFlux.SNW.registerMessage(MSG_CLI, UpdateMessageServer.class, MCFlux.UPDATE_SRV, Side.CLIENT);
 		U.registerItemMultiModels(Item.getItemFromBlock(MCFlux.ENERGY_MACHINE), 2);
 	}
 
