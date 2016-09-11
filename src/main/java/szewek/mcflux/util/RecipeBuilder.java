@@ -11,6 +11,9 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
 
+/**
+ * Simple Recipe Builder class. Builds and automatically register recipes without wasting resources.
+ */
 public class RecipeBuilder {
 	private IX[][] recipeShape;
 	private int width, height, meta = 0, resultSize = 1;

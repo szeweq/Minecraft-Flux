@@ -3,39 +3,21 @@ package szewek.mcflux.tileentities;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import szewek.mcflux.MCFlux;
 import szewek.mcflux.U;
 import szewek.mcflux.api.ex.Battery;
 import szewek.mcflux.blocks.BlockEnergyMachine;
-import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.util.TransferType;
 
 import static szewek.mcflux.config.MCFluxConfig.CHUNK_CHARGER_TRANS;
 
 public class TileEntityChunkCharger extends TileEntityEnergyMachine {
-	private WorldChunkEnergy wce = null;
-	private Battery bat = null;
-	
 	public TileEntityChunkCharger() {
 		super(MCFlux.ENERGY_MACHINE.getDefaultState().withProperty(BlockEnergyMachine.VARIANT, BlockEnergyMachine.Variant.CHUNK_CHARGER));
 	}
 
 	public TileEntityChunkCharger(IBlockState ibs) {
 		super(ibs);
-	}
-	
-	@Override
-	public void setWorldObj(World w) {
-		super.setWorldObj(w);
-		if (!worldObj.isRemote)
-			wce = worldObj != null && !worldObj.isRemote ? worldObj.getCapability(WorldChunkEnergy.CAP_WCE, null) : null;
-	}
-	
-	@Override
-	public void setPos(BlockPos posIn) {
-		super.setPos(posIn);
-		bat = worldObj != null && !worldObj.isRemote && pos != null ? wce.getEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
 	}
 
 	@Override

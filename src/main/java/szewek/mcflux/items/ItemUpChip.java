@@ -48,7 +48,7 @@ public class ItemUpChip extends Item {
 			if (lvl == -1)
 				return is;
 			--is.stackSize;
-			mp.connection.sendPacket(new SPacketTitle(SPacketTitle.Type.TITLE, textInstalled, 100, 500, 100));
+			mp.connection.sendPacket(new SPacketTitle(SPacketTitle.Type.TITLE, textInstalled, 50, 500, 50));
 			mp.connection.sendPacket(new SPacketTitle(SPacketTitle.Type.SUBTITLE, lvl == 30 ? textLvlMax : new TextComponentTranslation(PF + "lvlup", lvl)));
 			mp.addStat(StatList.getObjectUseStats(this));
 		}

@@ -10,11 +10,15 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import szewek.mcflux.MCFlux;
+import szewek.mcflux.api.ex.Battery;
 import szewek.mcflux.blocks.BlockEnergyMachine;
+import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.network.UpdateMessageClient;
 import szewek.mcflux.util.TransferType;
 
 public abstract class TileEntityEnergyMachine extends TileEntity implements ITickable {
+	protected WorldChunkEnergy wce = null;
+	protected Battery bat = null;
 	TransferType[] sideTransfer = new TransferType[]{TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};
 	long[] sideValues = new long[]{0, 0, 0, 0, 0, 0};
 	private IBlockState cachedState;
@@ -27,6 +31,18 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 
 	public IBlockState getCachedState() {
 		return cachedState;
+	}
+
+	@Override
+	public void setWorldObj(World w) {
+		super.setWorldObj(w);
+		wce = w != null && !w.isRemote ? w.getCapability(WorldChunkEnergy.CAP_WCE, null) : null;
+	}
+
+	@Override
+	public void setPos(BlockPos bp) {
+		super.setPos(bp);
+		bat = worldObj != null && !worldObj.isRemote && bp != null ? wce.getEnergyChunk(bp.getX(), bp.getY(), bp.getZ()) : null;
 	}
 
 	@Override public void onLoad() {
@@ -46,7 +62,6 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 		int[] sides = compound.getIntArray("sides");
 		if (sides.length != 6) return;
 		TransferType[] tt = TransferType.values();
-		IBlockState oldState = cachedState;
 		for (int i = 0; i < 6; i++) {
 			sideTransfer[i] = tt[sides[i]];
 			cachedState = cachedState.withProperty(BlockEnergyMachine.sideFromId(i), sides[i]);

@@ -49,7 +49,6 @@ import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
 import szewek.mcflux.util.*;
 import szewek.mcflux.wrapper.InjectWrappers;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -139,19 +138,19 @@ public class MCFlux {
 		for (ASMData data : aset) {
 			String cname = data.getClassName();
 			if (!cname.equals(data.getObjectName())) continue;
-			Class<?> c;
+			Class<? extends IInjectRegistry> c;
 			try {
-				c = Class.forName(cname);
+				c = Class.forName(cname).asSubclass(IInjectRegistry.class);
 			} catch (ClassNotFoundException e) {
 				continue;
 			}
-			Map<String, Object> info = data.getAnnotationInfo();
-			Boolean incl = (Boolean) info.get("included");
-			if (incl == null || !incl) {
+			InjectRegistry ann = c.getAnnotation(InjectRegistry.class);
+			boolean incl = ann.included();
+			if (!incl) {
 				boolean found = false;
 				@SuppressWarnings("unchecked")
-				List<String> mns = (List<String>) info.get("detectMods");
-				if (mns == null || mns.size() == 0) continue;
+				String[] mns = ann.detectMods();
+				if (mns == null || mns.length == 0) continue;
 				Map<String, ModContainer> modmap = Loader.instance().getIndexedModList();
 				for (String mn : mns) {
 					if (modmap.containsKey(mn)) {
@@ -162,9 +161,8 @@ public class MCFlux {
 				if (!found)
 					continue;
 			}
-			Class<? extends IInjectRegistry> iirc = c.asSubclass(IInjectRegistry.class);
 			try {
-				IInjectRegistry iir = iirc.newInstance();
+				IInjectRegistry iir = c.newInstance();
 				iir.registerInjects();
 				cnt++;
 			} catch (Exception e) {

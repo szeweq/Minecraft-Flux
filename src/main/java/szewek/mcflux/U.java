@@ -19,8 +19,6 @@ import szewek.mcflux.wrapper.EnergyWrapperProducer;
 import java.lang.reflect.Method;
 
 public class U {
-	@SideOnly(Side.CLIENT)
-	private static ItemModelMesher imm = null;
 
 	public static String formatMF(long n, long nc) {
 		return n + " / " + nc + " MF";
@@ -61,8 +59,7 @@ public class U {
 
 	@SideOnly(Side.CLIENT)
 	public static void registerItemModels(Item... items) {
-		if (imm == null)
-			imm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+			ItemModelMesher imm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		for (Item i : items) {
 			ModelResourceLocation mrl = new ModelResourceLocation(i.getRegistryName(), "inventory");
 			imm.register(i, 0, mrl);

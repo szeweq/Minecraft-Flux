@@ -1,19 +1,19 @@
 package szewek.mcflux.blocks.itemblocks;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemMultiTexture;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 
+import java.util.List;
+
 @SuppressWarnings("deprecation")
-public class ItemBlockEnergyMachine extends ItemMultiTexture {
+public class ItemBlockEnergyMachine extends ItemBlock {
 
 	public ItemBlockEnergyMachine(Block block) {
-		super(block, block, BlockEnergyMachine.Variant::nameFromStack);
+		super(block);
 	}
 	
 	@Override
@@ -23,7 +23,7 @@ public class ItemBlockEnergyMachine extends ItemMultiTexture {
 	
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		return "tile." + nameFunction.apply(stack);
+		return "tile." + BlockEnergyMachine.Variant.nameFromStack(stack);
 	}
 	
 	@Override

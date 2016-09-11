@@ -1,3 +1,8 @@
+## 1.0.1
+- **Fixed server-side issue with ItemModelMesher**
+- Force Flux Work API to use EX instead of old Energy API
+- Minor performance improvements
+
 ## 1.0.0
 - Fixed sides rendering
 - Everything now works with Energy eXtensions

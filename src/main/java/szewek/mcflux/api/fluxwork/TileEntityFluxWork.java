@@ -1,14 +1,18 @@
 package szewek.mcflux.api.fluxwork;
 
 import net.minecraft.tileentity.TileEntity;
-import szewek.mcflux.api.IEnergyHolder;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
+import szewek.mcflux.api.ex.IEnergy;
 
 /**
  * TileEntity working cycle template.
  */
-public abstract class TileEntityFluxWork extends TileEntity implements IEnergyHolder {
+public abstract class TileEntityFluxWork extends TileEntity implements IEnergy, ITickable {
 	protected WorkState workState = WorkState.LAZY;
-	protected int energy, maxEnergy, workNeeded, workDone, energyChange;
+	protected long energy, maxEnergy;
+	protected int workNeeded, workDone;
 
 	/**
 	 * Checks if TileEntity can work.
@@ -59,13 +63,58 @@ public abstract class TileEntityFluxWork extends TileEntity implements IEnergyHo
 	 */
 	protected abstract void tick();
 
+	/**
+	 * Tick update hapenning on client side.
+	 */
+	protected abstract void tickClient();
+
+	/**
+	 * Checks if energy value can change.
+	 *
+	 * @return {@code true} if energy can be changed, otherwise {@code false}.
+	 */
+	protected abstract boolean canChangeEnergy();
+
 	@Override
-	public int getEnergy() {
+	public final void update() {
+		if (worldObj.isRemote) {
+			tickClient();
+			return;
+		}
+		if (!canWork()) {
+			workState = WorkState.LAZY;
+		} else if (!hasWork()) {
+			workDone = 0;
+			workNeeded = beginWork();
+			workState = WorkState.WORKING;
+		} else if (canChangeEnergy()) {
+			work();
+			++workDone;
+			if (workNeeded <= workDone) {
+				finishWork();
+				workState = WorkState.FINISHED;
+			}
+		}
+	}
+
+	@Override
+	public long getEnergy() {
 		return energy;
 	}
 
 	@Override
-	public int getEnergyCapacity() {
+	public long getEnergyCapacity() {
 		return maxEnergy;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
+		return cap == IEnergy.CAP_ENERGY || super.hasCapability(cap, f);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
+		return cap == IEnergy.CAP_ENERGY? (T) this : super.getCapability(cap, f);
 	}
 }
