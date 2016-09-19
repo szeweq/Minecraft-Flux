@@ -1,3 +1,8 @@
+## 1.1.0
+- Minor performance improvements
+- Sources are added in dev jar.
+- Removed old obfuscated sources
+
 ## 1.0.1
 - **Fixed server-side issue with ItemModelMesher**
 - Force Flux Work API to use EX instead of old Energy API
@@ -33,4 +38,4 @@
 - IC2 Integration (90%)
 - Many minor fixes
 
-**Before 0.10.0:** See [0.9.1 CHANGELOG](https://github.com/Szewek/Minecraft-Flux/blob/0.9.1/CHANGELOG.md).
+**Before 1.0.0:** See [0.12.0 CHANGELOG](https://github.com/Szewek/Minecraft-Flux/blob/0.12.0/CHANGELOG.md).

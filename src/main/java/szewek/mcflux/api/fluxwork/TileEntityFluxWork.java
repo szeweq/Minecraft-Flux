@@ -4,6 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
+import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 
 /**
@@ -109,12 +110,12 @@ public abstract class TileEntityFluxWork extends TileEntity implements IEnergy, 
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == IEnergy.CAP_ENERGY || super.hasCapability(cap, f);
+		return cap == EX.CAP_ENERGY || super.hasCapability(cap, f);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		return cap == IEnergy.CAP_ENERGY? (T) this : super.getCapability(cap, f);
+		return cap == EX.CAP_ENERGY? (T) this : super.getCapability(cap, f);
 	}
 }

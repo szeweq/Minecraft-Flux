@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
@@ -49,13 +50,13 @@ class IFItemContainerWrapper implements IEnergy, ICapabilityProvider {
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == IEnergy.CAP_ENERGY || cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap);
+		return cap == EX.CAP_ENERGY || cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		if (cap == IEnergy.CAP_ENERGY)
+		if (cap == EX.CAP_ENERGY)
 			return (T) this;
 		if (cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap))
 			return (T) cew;

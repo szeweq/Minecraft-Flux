@@ -21,11 +21,8 @@ public class TileEntityChunkCharger extends TileEntityEnergyMachine {
 	}
 
 	@Override
-	public void update() {
-		super.update();
-		if (wce == null || bat == null)
-			return;
-		for (int i = 0; i < 6; i++) {
+	public void checkSides(int i, int m) {
+		for (; i < m; i++) {
 			TransferType tt = sideTransfer[i];
 			if (tt == TransferType.NONE)
 				continue;

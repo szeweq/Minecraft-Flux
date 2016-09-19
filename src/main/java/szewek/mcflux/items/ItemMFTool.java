@@ -14,6 +14,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import szewek.mcflux.U;
 import szewek.mcflux.api.ex.Battery;
+import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
@@ -42,7 +43,7 @@ public class ItemMFTool extends Item {
 					p.addChatComponentMessage(new TextComponentTranslation("mcflux.transfer", ((TileEntityEnergyMachine) te).getTransferSide(f)));
 					return EnumActionResult.SUCCESS;
 				}
-				IEnergy ie = te.getCapability(IEnergy.CAP_ENERGY, f);
+				IEnergy ie = te.getCapability(EX.CAP_ENERGY, f);
 				TextComponentTranslation tcb = textBlock.createCopy();
 				tcb.appendSibling(ie != null ? textMFCompat : textNoCompat).appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
 				p.addChatComponentMessage(tcb);
@@ -63,7 +64,7 @@ public class ItemMFTool extends Item {
 	@Override
 	public boolean itemInteractionForEntity(ItemStack is, EntityPlayer p, EntityLivingBase elb, EnumHand h) {
 		if (!elb.worldObj.isRemote) {
-			IEnergy ie = elb.getCapability(IEnergy.CAP_ENERGY, null);
+			IEnergy ie = elb.getCapability(EX.CAP_ENERGY, null);
 			TextComponentTranslation tcb = textEntity.createCopy();
 			tcb.appendSibling(ie != null ? textMFCompat : textNoCompat);
 			tcb.appendSibling(new TextComponentTranslation("mcflux.entitycompat.end"));

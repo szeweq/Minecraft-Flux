@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.api.CapabilityEnergy;
+import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.wrapper.EnergyWrapperConsumer;
 import szewek.mcflux.wrapper.EnergyWrapperProducer;
@@ -25,7 +26,7 @@ public class U {
 	}
 
 	public static IEnergy getEnergyHolderTile(TileEntity te, EnumFacing f) {
-		IEnergy ie = te.getCapability(IEnergy.CAP_ENERGY, f);
+		IEnergy ie = te.getCapability(EX.CAP_ENERGY, f);
 		if (ie != null)
 			return ie;
 		if (te.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, f)) {
@@ -37,7 +38,7 @@ public class U {
 	}
 
 	public static IEnergy getEnergyHolderEntity(Entity e) {
-		IEnergy ie = e.getCapability(IEnergy.CAP_ENERGY, null);
+		IEnergy ie = e.getCapability(EX.CAP_ENERGY, null);
 		if (ie != null)
 			return ie;
 		if (e.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, null)) {

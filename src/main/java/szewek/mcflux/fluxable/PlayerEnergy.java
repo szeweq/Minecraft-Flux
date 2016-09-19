@@ -9,6 +9,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
+import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
@@ -40,7 +41,7 @@ public class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializa
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == SELF_CAP || (maxEnergy > 0 && (cap == CAP_ENERGY || cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap)));
+		return cap == SELF_CAP || (maxEnergy > 0 && (cap == EX.CAP_ENERGY || cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap)));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -49,7 +50,7 @@ public class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializa
 		if (cap == SELF_CAP)
 			return (T) this;
 		if (maxEnergy > 0) {
-			if (cap == CAP_ENERGY)
+			if (cap == EX.CAP_ENERGY)
 				return (T) this;
 			if (cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap))
 				return (T) cew;

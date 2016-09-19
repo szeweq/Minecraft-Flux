@@ -19,13 +19,13 @@ import szewek.mcflux.util.TransferType;
 public abstract class TileEntityEnergyMachine extends TileEntity implements ITickable {
 	protected WorldChunkEnergy wce = null;
 	protected Battery bat = null;
+	protected boolean oddTick = true;
 	TransferType[] sideTransfer = new TransferType[]{TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};
 	long[] sideValues = new long[]{0, 0, 0, 0, 0, 0};
 	private IBlockState cachedState;
 	private boolean refresh;
 
 	public TileEntityEnergyMachine(IBlockState ibs) {
-		super();
 		cachedState = ibs;
 	}
 
@@ -54,7 +54,12 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 	public void update() {
 		if (refresh)
 			worldObj.setBlockState(pos, cachedState, 3);
+		if (wce != null && bat != null)
+			checkSides(oddTick ? 0 : 3, oddTick ? 3 : 6);
+		oddTick = !oddTick;
 	}
+
+	protected abstract void checkSides(int i, int m);
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {

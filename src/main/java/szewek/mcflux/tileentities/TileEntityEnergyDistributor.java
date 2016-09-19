@@ -20,36 +20,29 @@ public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
 	}
 
 	@Override
-	public void update() {
-		super.update();
-		if (wce == null || bat == null)
-			return;
-		for (int i = 0; i < 6; i++) {
+	public void checkSides(int i, int m) {
+		for (; i < m; i++) {
 			TransferType tt = sideTransfer[i];
-			if (tt == TransferType.NONE)
+			if (tt == TransferType.NONE) {
+				sideValues[i] = 0;
 				continue;
+			}
 			EnumFacing f = EnumFacing.VALUES[i];
-			TileEntity te = worldObj.getTileEntity(pos.offset(f));
+			TileEntity te = worldObj.getTileEntity(pos.offset(f, 1));
 			if (te == null)
 				continue;
 			f = f.getOpposite();
-			IEnergy from = null, to = null;
+			IEnergy ea = U.getEnergyHolderTile(te, f);
+			if (ea == null)
+				continue;
 			switch (tt) {
 			case INPUT:
-				from = U.getEnergyHolderTile(te, f);
-				if (from == null)
-					continue;
-				to = bat;
+				sideValues[i] = U.transferEnergy(ea, bat, MCFluxConfig.ENERGY_DIST_TRANS);
 				break;
 			case OUTPUT:
-				to = U.getEnergyHolderTile(te, f);
-				if (to == null)
-					continue;
-				from = bat;
+				sideValues[i] = U.transferEnergy(bat, ea, MCFluxConfig.ENERGY_DIST_TRANS);
 				break;
-			default:
 			}
-			sideValues[i] = U.transferEnergy(from, to, MCFluxConfig.ENERGY_DIST_TRANS);
 		}
 	}
 }

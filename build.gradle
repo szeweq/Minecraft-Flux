@@ -31,6 +31,7 @@ def getVersion() {
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
 	from sourceSets.api.output
+	from sourceSets.main.allJava
 	classifier = "dev"
 }
 
@@ -87,14 +88,12 @@ curseforge {
 		apiKey = System.env.CURSEFORGE_KEY
 	project {
 		id = "248942"
-		releaseType = "beta"
+		releaseType = "release"
 		changelogType = "markdown"
 		changelog = file("CHANGELOG.md")
-		addArtifact sourceJar
 		addArtifact deobfJar
 	}
 }
-
 artifacts {
 	archives deobfJar
 }

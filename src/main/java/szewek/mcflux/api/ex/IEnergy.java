@@ -1,18 +1,11 @@
 package szewek.mcflux.api.ex;
 
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-
 /**
  * NEW Energy Implementation
  * 
  * @author Szewek
  */
 public interface IEnergy {
-	
-	@CapabilityInject(IEnergy.class)
-	public static Capability<IEnergy> CAP_ENERGY = null;
-	
 	/**
 	 * Checks if object can accept energy input.
 	 * 

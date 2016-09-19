@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
@@ -22,13 +23,13 @@ class FurnaceEnergy implements IEnergy, ICapabilityProvider {
 	
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == IEnergy.CAP_ENERGY || cew.isCompatInputSuitable(cap);
+		return cap == EX.CAP_ENERGY || cew.isCompatInputSuitable(cap);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		return (T) (cap == IEnergy.CAP_ENERGY ?  this : cew.isCompatInputSuitable(cap) ? cew : null);
+		return (T) (cap == EX.CAP_ENERGY ?  this : cew.isCompatInputSuitable(cap) ? cew : null);
 	}
 
 	@Override

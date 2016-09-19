@@ -18,7 +18,6 @@ deploy:
   file_glob: true
   file:
   - build/libs/*-dev.jar
-  - build/libs/*-sources.jar
   on:
     repo: Szewek/Minecraft-Flux
     tags: true

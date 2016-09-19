@@ -1,0 +1,4 @@
+{
+	"parent": "mcflux:block/emachine_side",
+	"textures": {"0": "mcflux:blocks/emachine_in"}
+}
