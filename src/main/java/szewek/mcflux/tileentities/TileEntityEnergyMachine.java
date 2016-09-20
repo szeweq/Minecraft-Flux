@@ -42,7 +42,7 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 	@Override
 	public void setPos(BlockPos bp) {
 		super.setPos(bp);
-		bat = worldObj != null && !worldObj.isRemote && bp != null ? wce.getEnergyChunk(bp.getX(), bp.getY(), bp.getZ()) : null;
+		bat = worldObj != null && !worldObj.isRemote ? wce.getEnergyChunk(bp.getX(), bp.getY(), bp.getZ()) : null;
 	}
 
 	@Override public void onLoad() {
@@ -54,8 +54,12 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 	public void update() {
 		if (refresh)
 			worldObj.setBlockState(pos, cachedState, 3);
-		if (wce != null && bat != null)
-			checkSides(oddTick ? 0 : 3, oddTick ? 3 : 6);
+		if (wce != null && bat != null) {
+			int i = oddTick ? 0 : 3, m = oddTick ? 3 : 6;
+			for (int j = i; j < m; j++)
+				sideValues[j] = 0;
+			checkSides(i, m);
+		}
 		oddTick = !oddTick;
 	}
 

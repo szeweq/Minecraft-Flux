@@ -11,11 +11,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import szewek.mcflux.api.CapabilityEnergy;
 import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
-import szewek.mcflux.wrapper.EnergyWrapperConsumer;
-import szewek.mcflux.wrapper.EnergyWrapperProducer;
 
 import java.lang.reflect.Method;
 
@@ -26,27 +23,11 @@ public class U {
 	}
 
 	public static IEnergy getEnergyHolderTile(TileEntity te, EnumFacing f) {
-		IEnergy ie = te.getCapability(EX.CAP_ENERGY, f);
-		if (ie != null)
-			return ie;
-		if (te.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, f)) {
-			return new EnergyWrapperConsumer(te.getCapability(CapabilityEnergy.ENERGY_CONSUMER, f));
-		} else if (te.hasCapability(CapabilityEnergy.ENERGY_PRODUCER, f)) {
-			return new EnergyWrapperProducer(te.getCapability(CapabilityEnergy.ENERGY_PRODUCER, f));
-		}
-		return null;
+		return te.getCapability(EX.CAP_ENERGY, f);
 	}
 
 	public static IEnergy getEnergyHolderEntity(Entity e) {
-		IEnergy ie = e.getCapability(EX.CAP_ENERGY, null);
-		if (ie != null)
-			return ie;
-		if (e.hasCapability(CapabilityEnergy.ENERGY_CONSUMER, null)) {
-			return new EnergyWrapperConsumer(e.getCapability(CapabilityEnergy.ENERGY_CONSUMER, null));
-		} else if (e.hasCapability(CapabilityEnergy.ENERGY_PRODUCER, null)) {
-			return new EnergyWrapperProducer(e.getCapability(CapabilityEnergy.ENERGY_PRODUCER, null));
-		}
-		return null;
+		return e.getCapability(EX.CAP_ENERGY, null);
 	}
 	
 	public static long transferEnergy(IEnergy from, IEnergy to, final long amount) {

@@ -5,14 +5,10 @@ import cofh.api.energy.IEnergyHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.wrapper.InjectWrappers;
-
-import java.util.function.BiConsumer;
 
 @InjectRegistry(included = true, detectMods = {})
 public class RFInjectRegistry implements IInjectRegistry {
@@ -23,14 +19,14 @@ public class RFInjectRegistry implements IInjectRegistry {
 		InjectWrappers.registerTileWrapperInject(RFInjectRegistry::wrapRFTile);
 		InjectWrappers.registerItemWrapperInject(RFInjectRegistry::wrapRFItem);
 	}
-	private static void wrapRFTile(TileEntity te, BiConsumer<ResourceLocation, ICapabilityProvider> add) {
+	private static void wrapRFTile(TileEntity te, InjectWrappers.Registry reg) {
 		if (te instanceof IEnergyHandler)
-			add.accept(RF_TILE, new RFTileCapabilityProvider((IEnergyHandler) te));
+			reg.add(RF_TILE, new RFTileCapabilityProvider((IEnergyHandler) te));
 	}
 	
-	private static void wrapRFItem(ItemStack is, BiConsumer<ResourceLocation, ICapabilityProvider> add) {
+	private static void wrapRFItem(ItemStack is, InjectWrappers.Registry reg) {
 		Item it = is.getItem();
 		if (it instanceof IEnergyContainerItem)
-			add.accept(RF_ITEM, new RFItemContainerWrapper((IEnergyContainerItem) it, is));
+			reg.add(RF_ITEM, new RFItemContainerWrapper((IEnergyContainerItem) it, is));
 	}
 }

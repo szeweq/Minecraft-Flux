@@ -21,22 +21,20 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.RecipeSorter;
-import szewek.mcflux.api.CapabilityEnergy;
-import szewek.mcflux.api.EnergyBattery;
-import szewek.mcflux.api.IEnergyConsumer;
-import szewek.mcflux.api.IEnergyProducer;
-import szewek.mcflux.api.ex.*;
-import szewek.mcflux.api.flavor.CapabilityFlavorEnergy;
-import szewek.mcflux.api.flavor.FlavorEnergyContainer;
-import szewek.mcflux.api.flavor.IFlavorEnergyConsumer;
-import szewek.mcflux.api.flavor.IFlavorEnergyProducer;
-import szewek.mcflux.blocks.*;
-import szewek.mcflux.blocks.itemblocks.*;
+import szewek.mcflux.api.ex.Battery;
+import szewek.mcflux.api.ex.EnergyNBTStorage;
+import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.api.fe.FlavorNBTStorage;
+import szewek.mcflux.api.fe.FlavoredStorage;
+import szewek.mcflux.api.fe.IFlavorEnergy;
+import szewek.mcflux.blocks.BlockEnergyMachine;
+import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
 import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.InjectFluxable;
 import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
-import szewek.mcflux.items.*;
+import szewek.mcflux.items.ItemMFTool;
+import szewek.mcflux.items.ItemUpChip;
 import szewek.mcflux.network.MessageHandlerDummy;
 import szewek.mcflux.network.MessageHandlerServer;
 import szewek.mcflux.network.UpdateMessageClient;
@@ -46,6 +44,7 @@ import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
 import szewek.mcflux.util.*;
 import szewek.mcflux.wrapper.InjectWrappers;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -59,11 +58,12 @@ public class MCFlux {
 	public static ItemMFTool MFTOOL;
 	public static ItemUpChip UPCHIP;
 	public static BlockEnergyMachine ENERGY_MACHINE;
-	public static final int UPDATE_CLI = 67, UPDATE_SRV = 69;
+	private static final int UPDATE_CLI = 67;
+	public static final int UPDATE_SRV = 69;
 	private static final MessageHandlerServer MSG_SRV = new MessageHandlerServer();
 	private static final MessageHandlerDummy MSG_DMM = new MessageHandlerDummy();
 	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs(R.MF_NAME) {
-		@Override
+		@Override @Nonnull
 		public Item getTabIconItem() {
 			return MFTOOL;
 		}
@@ -81,10 +81,7 @@ public class MCFlux {
 			L.info("Minecraft-Flux version " + R.MF_VERSION);
 		CapabilityManager cm = CapabilityManager.INSTANCE;
 		cm.register(IEnergy.class, new EnergyNBTStorage(), Battery::new);
-		cm.register(IEnergyProducer.class, new CapabilityEnergy.Storage<>(), EnergyBattery::new);
-		cm.register(IEnergyConsumer.class, new CapabilityEnergy.Storage<>(), EnergyBattery::new);
-		cm.register(IFlavorEnergyProducer.class, new CapabilityFlavorEnergy.Storage<>(), FlavorEnergyContainer::new);
-		cm.register(IFlavorEnergyConsumer.class, new CapabilityFlavorEnergy.Storage<>(), FlavorEnergyContainer::new);
+		cm.register(IFlavorEnergy.class, new FlavorNBTStorage(), FlavoredStorage::new);
 		cm.register(WorldChunkEnergy.class, new NBTSerializableCapabilityStorage<>(), WorldChunkEnergy::new);
 		cm.register(PlayerEnergy.class, new NBTSerializableCapabilityStorage<>(), PlayerEnergy::new);
 		EVENT_BUS.register(InjectWrappers.events);

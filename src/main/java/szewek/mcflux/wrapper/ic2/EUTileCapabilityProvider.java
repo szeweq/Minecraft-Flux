@@ -10,7 +10,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.ex.EX;
-import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
 import java.lang.reflect.Method;
 import java.util.function.DoubleSupplier;
@@ -22,7 +21,6 @@ class EUTileCapabilityProvider implements ICapabilityProvider {
 	private IEnergySource source = null;
 	private IEnergySink sink = null;
 	private EUSided[] sides = new EUSided[7];
-	private CompatEnergyWrapper[] compatSides = new CompatEnergyWrapper[7];
 	private DoubleSupplier capMethod = null, energyMethod = null;
 
 	EUTileCapabilityProvider() {
@@ -32,10 +30,8 @@ class EUTileCapabilityProvider implements ICapabilityProvider {
 	private void updateSides() {
 		for (int i = 0; i < 6; i++) {
 			sides[i] = new EUSided(capMethod, energyMethod, sink, source, EnumFacing.VALUES[i]);
-			compatSides[i] = new CompatEnergyWrapper(sides[i]);
 		}
 		sides[6] = new EUSided(capMethod, energyMethod, sink, source, null);
-		compatSides[6] = new CompatEnergyWrapper(sides[6]);
 	}
 
 	void updateEnergyTile(IEnergyTile iet) {
@@ -72,10 +68,7 @@ class EUTileCapabilityProvider implements ICapabilityProvider {
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
 		if (cap == EX.CAP_ENERGY)
 			return source != null || sink != null;
-		if (cap == SELF_CAP)
-			return true;
-		CompatEnergyWrapper cew = compatSides[f == null ? 6 : f.getIndex()];
-		return cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap);
+		return cap == SELF_CAP;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -83,10 +76,6 @@ class EUTileCapabilityProvider implements ICapabilityProvider {
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
 		if (cap == SELF_CAP)
 			return (T) this;
-		int g = f == null ? 6 : f.getIndex();
-		if (cap == EX.CAP_ENERGY)
-			return source != null || sink != null ? (T) sides[g] : null;
-		CompatEnergyWrapper cew = compatSides[g];
-		return cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap) ? (T) cew : null;
+		return cap == EX.CAP_ENERGY && (source != null || sink != null) ? (T) sides[f == null ? 6 : f.getIndex()] : null;
 	}
 }

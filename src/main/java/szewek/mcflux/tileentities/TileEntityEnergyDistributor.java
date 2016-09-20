@@ -23,10 +23,8 @@ public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
 	public void checkSides(int i, int m) {
 		for (; i < m; i++) {
 			TransferType tt = sideTransfer[i];
-			if (tt == TransferType.NONE) {
-				sideValues[i] = 0;
+			if (tt == TransferType.NONE)
 				continue;
-			}
 			EnumFacing f = EnumFacing.VALUES[i];
 			TileEntity te = worldObj.getTileEntity(pos.offset(f, 1));
 			if (te == null)
@@ -37,10 +35,10 @@ public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
 				continue;
 			switch (tt) {
 			case INPUT:
-				sideValues[i] = U.transferEnergy(ea, bat, MCFluxConfig.ENERGY_DIST_TRANS);
+				sideValues[i] = U.transferEnergy(ea, bat, MCFluxConfig.ENERGY_DIST_TRANS) / 2;
 				break;
 			case OUTPUT:
-				sideValues[i] = U.transferEnergy(bat, ea, MCFluxConfig.ENERGY_DIST_TRANS);
+				sideValues[i] = U.transferEnergy(bat, ea, MCFluxConfig.ENERGY_DIST_TRANS) / 2;
 				break;
 			}
 		}

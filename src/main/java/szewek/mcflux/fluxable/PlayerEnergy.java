@@ -11,7 +11,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
-import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
 public class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializable<NBTBase> {
 	@CapabilityInject(PlayerEnergy.class)
@@ -20,7 +19,6 @@ public class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializa
 	private long energy = 0, maxEnergy = 0;
 	private byte lvl = 0;
 	private final EntityPlayer player;
-	private final CompatEnergyWrapper cew;
 
 	public PlayerEnergy() {
 		this(null);
@@ -28,7 +26,6 @@ public class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializa
 
 	PlayerEnergy(EntityPlayer p) {
 		player = p;
-		cew = new CompatEnergyWrapper(this);
 	}
 
 	public byte updateLevel() {
@@ -41,21 +38,13 @@ public class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializa
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == SELF_CAP || (maxEnergy > 0 && (cap == EX.CAP_ENERGY || cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap)));
+		return cap == SELF_CAP || (maxEnergy > 0 && cap == EX.CAP_ENERGY);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		if (cap == SELF_CAP)
-			return (T) this;
-		if (maxEnergy > 0) {
-			if (cap == EX.CAP_ENERGY)
-				return (T) this;
-			if (cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap))
-				return (T) cew;
-		}
-		return null;
+		return cap == SELF_CAP || (maxEnergy > 0 && cap == EX.CAP_ENERGY) ? (T) this : null;
 	}
 
 	@Override

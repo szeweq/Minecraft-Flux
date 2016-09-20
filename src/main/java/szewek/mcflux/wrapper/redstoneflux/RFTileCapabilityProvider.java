@@ -4,7 +4,6 @@ import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.util.EnumFacing;
-import szewek.mcflux.wrapper.CompatEnergyWrapper;
 import szewek.mcflux.wrapper.EnergyCapabilityProvider;
 
 class RFTileCapabilityProvider extends EnergyCapabilityProvider {
@@ -17,10 +16,8 @@ class RFTileCapabilityProvider extends EnergyCapabilityProvider {
 		broken = provider == null && receiver == null;
 		for (int i = 0; i < 6; i++) {
 			sides[i] = new RFSided(handler, provider, receiver, EnumFacing.VALUES[i]);
-			compatSides[i] = new CompatEnergyWrapper(sides[i]);
 		}
 		sides[6] = new RFSided(handler, provider, receiver, null);
-		compatSides[6] = new CompatEnergyWrapper(sides[6]);
 	}
 
 	@Override protected boolean canConnect(EnumFacing f) {

@@ -39,7 +39,7 @@ public interface IEnergy {
 	long outputEnergy(long amount, boolean sim);
 
 	/**
-	 * Getter of stored energy.
+	 * Getter for stored energy.
 	 * 
 	 * @return Amount of stored energy.
 	 */

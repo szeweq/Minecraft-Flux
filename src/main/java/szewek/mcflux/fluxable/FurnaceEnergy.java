@@ -8,28 +8,25 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
-import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
 import static szewek.mcflux.config.MCFluxConfig.FURNACE_CAP;
 
 class FurnaceEnergy implements IEnergy, ICapabilityProvider {
 	private final TileEntityFurnace furnace;
-	private final CompatEnergyWrapper cew;
 
 	FurnaceEnergy(TileEntityFurnace tef) {
 		furnace = tef;
-		cew = new CompatEnergyWrapper(this);
 	}
 	
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == EX.CAP_ENERGY || cew.isCompatInputSuitable(cap);
+		return cap == EX.CAP_ENERGY;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		return (T) (cap == EX.CAP_ENERGY ?  this : cew.isCompatInputSuitable(cap) ? cew : null);
+		return cap == EX.CAP_ENERGY ? (T) this : null;
 	}
 
 	@Override

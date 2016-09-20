@@ -12,27 +12,24 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
-import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
 class EntityActionEnergy implements ICapabilityProvider, IEnergy {
 	private boolean charged = false;
 	private final EntityCreature creature;
-	private final CompatEnergyWrapper cew;
 
 	EntityActionEnergy(EntityCreature ec) {
 		creature = ec;
-		cew = new CompatEnergyWrapper(this);
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == EX.CAP_ENERGY || cew.isCompatInputSuitable(cap);
+		return cap == EX.CAP_ENERGY;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		return (T) (cap == EX.CAP_ENERGY ? this : cew.isCompatInputSuitable(cap) ? cew : null);
+		return cap == EX.CAP_ENERGY ? (T) this : null;
 	}
 
 	@Override

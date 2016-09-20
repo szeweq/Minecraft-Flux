@@ -7,17 +7,14 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
-import szewek.mcflux.wrapper.CompatEnergyWrapper;
 
 class IFItemContainerWrapper implements IEnergy, ICapabilityProvider {
 	private final IFluxContainerItem item;
 	private final ItemStack stack;
-	private final CompatEnergyWrapper cew;
 
 	IFItemContainerWrapper(IFluxContainerItem it, ItemStack is) {
 		item = it;
 		stack = is;
-		cew = new CompatEnergyWrapper(this);
 	}
 
 	@Override
@@ -50,16 +47,12 @@ class IFItemContainerWrapper implements IEnergy, ICapabilityProvider {
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == EX.CAP_ENERGY || cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap);
+		return cap == EX.CAP_ENERGY;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		if (cap == EX.CAP_ENERGY)
-			return (T) this;
-		if (cew.isCompatInputSuitable(cap) || cew.isCompatOutputSuitable(cap))
-			return (T) cew;
-		return null;
+		return cap == EX.CAP_ENERGY ? (T) this : null;
 	}
 }

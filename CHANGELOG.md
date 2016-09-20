@@ -1,3 +1,8 @@
+## 1.2.0
+- Added TESLA support
+- Replaced old Flavored Energy API (now similar to EX)
+- Removed old Energy API
+
 ## 1.1.0
 - Minor performance improvements
 - Sources are added in dev jar.
