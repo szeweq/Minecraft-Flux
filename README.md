@@ -9,6 +9,22 @@ It requires Java 8 to run.
 
 Check [CurseForge page](https://minecraft.curseforge.com/projects/minecraft-flux) for more details.
 
+## Add as dependency in your _build.gradle_ file
+```gradle
+// NOT IN BUILDSCRIPT
+repositories {
+    // Here you can place dependency repositories
+    maven {
+        url "https://dl.bintray.com/szewek/MC"
+    }
+}
+dependencies {
+    // Here you can add dependencies
+    deobfCompile "szewek.mcflux:mcflux:<VERSION>:dev"
+}
+```
+Replace `<VERSION>` with a release version.
+
 ## TODO List
 - [x] Add Flavored Energy (like Vis or Mana)
 - [x] Provide FULL RF Compatiblity (including wrappers for capabilities)
@@ -16,7 +32,6 @@ Check [CurseForge page](https://minecraft.curseforge.com/projects/minecraft-flux
 - [x] Implement and document Flux Work
 - [x] IndustrialCraft 2 Support
 - [x] Force update on client-side tile entities
-- [ ] Find a good Maven repository
 - [ ] Add compatibility for RF-like mods and libraries (few mods left)
 - [ ] Mixing Flavors
 - [ ] Compatibility for non-RF mods

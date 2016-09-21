@@ -12,27 +12,31 @@ buildscript {
 	dependencies {
 		classpath "net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT"
 		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.8"
+		classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7"
 	}
 }
 
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "com.matthewprenger.cursegradle"
+apply plugin: "com.jfrog.bintray"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 def getVersion() {
-	if (System.env.TRAVIS_TAG)
-		return System.env.TRAVIS_TAG
-	if (System.env.BUILD_VERSION)
-		return System.env.BUILD_VERSION
+	if (System.getenv("TRAVIS_TAG"))
+		return System.getenv("TRAVIS_TAG")
 	return "0.0.0-x"
 }
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
 	from sourceSets.api.output
-	from sourceSets.main.allJava
 	classifier = "dev"
+}
+task sourcesJar(type: Jar, dependsOn: "sourceJar") {
+	from sourceSets.main.allJava
+	from sourceSets.api.allJava
+	classifier = "sources"
 }
 
 version = getVersion()
@@ -45,6 +49,21 @@ minecraft {
 	mappings = "snapshot_20160828"
 	replace "@VERSION@", project.version
 	replaceIn "R.java"
+}
+
+bintray {
+	user = System.getenv("BINTRAY_USER")
+	key = System.getenv("BINTRAY_KEY")
+	configurations = ["archives"]
+	publish = true
+	override = true
+	pkg {
+		repo = "MC"
+		name = project.group
+		version {
+			name = project.version
+		}
+	}
 }
 
 repositories {
@@ -64,10 +83,6 @@ dependencies {
 // QUICK FIX
 jar {
 	from sourceSets.api.output
-	exclude "blusunrize/**"
-}
-sourceJar {
-	from sourceSets.api.allSource
 	exclude "blusunrize/**"
 }
 
@@ -94,8 +109,10 @@ curseforge {
 		changelogType = "markdown"
 		changelog = file("CHANGELOG.md")
 		addArtifact deobfJar
+		addArtifact sourcesJar
 	}
 }
 artifacts {
 	archives deobfJar
+	archives sourcesJar
 }
