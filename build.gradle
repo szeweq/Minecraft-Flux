@@ -108,8 +108,6 @@ curseforge {
 		releaseType = "release"
 		changelogType = "markdown"
 		changelog = file("CHANGELOG.md")
-		addArtifact deobfJar
-		addArtifact sourcesJar
 	}
 }
 artifacts {
