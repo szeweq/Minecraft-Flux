@@ -1,3 +1,7 @@
+## 1.3.0
+- RF API will not be included with the mod (it will look for API from another mod)
+- Minor code improvements
+
 ## 1.2.0
 - Added TESLA support
 - Replaced old Flavored Energy API (now similar to EX)

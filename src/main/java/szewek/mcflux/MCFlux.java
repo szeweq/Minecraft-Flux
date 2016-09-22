@@ -129,17 +129,14 @@ public class MCFlux {
 		for (ASMData data : aset) {
 			String cname = data.getClassName();
 			if (!cname.equals(data.getObjectName())) continue;
-			Class<? extends IInjectRegistry> c;
-			try {
-				c = Class.forName(cname).asSubclass(IInjectRegistry.class);
-			} catch (ClassNotFoundException e) {
+			Class<?> c = U.getClassSafely(cname);
+			if (c == null)
 				continue;
-			}
 			InjectRegistry ann = c.getAnnotation(InjectRegistry.class);
 			if(!ann.requires().check(ann.args()))
 				continue;
 			try {
-				IInjectRegistry iir = c.newInstance();
+				IInjectRegistry iir = c.asSubclass(IInjectRegistry.class).newInstance();
 				iir.registerInjects();
 				cnt++;
 			} catch (Exception e) {

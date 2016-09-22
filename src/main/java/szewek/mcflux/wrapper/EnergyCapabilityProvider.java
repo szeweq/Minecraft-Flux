@@ -18,6 +18,7 @@ public abstract class EnergyCapabilityProvider implements ICapabilityProvider {
 		return canConnect(f) && cap == EX.CAP_ENERGY && !broken;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override public <T> T getCapability(Capability<T> cap, @Nullable EnumFacing f) {
 		return canConnect(f) && cap == EX.CAP_ENERGY && !broken ? (T) sides[f == null ? 6 : f.getIndex()]: null;
 	}
