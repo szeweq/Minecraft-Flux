@@ -80,10 +80,9 @@ dependencies {
 	deobfCompile "net.darkhax.tesla:Tesla:1.10.2-1.2.1.49"
 }
 
-// QUICK FIX
 jar {
-	from sourceSets.api.output
-	exclude "blusunrize/**"
+	//from sourceSets.api.output
+	//exclude "blusunrize/**"
 }
 
 processResources {

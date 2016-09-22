@@ -15,7 +15,7 @@ Check [CurseForge page](https://minecraft.curseforge.com/projects/minecraft-flux
 repositories {
     // Here you can place dependency repositories
     maven {
-        url "https://dl.bintray.com/szewek/MC"
+        url "http://dl.bintray.com/szewek/MC"
     }
 }
 dependencies {

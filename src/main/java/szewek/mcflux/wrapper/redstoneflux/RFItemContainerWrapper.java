@@ -2,13 +2,9 @@ package szewek.mcflux.wrapper.redstoneflux;
 
 import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.api.ex.EX;
-import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.api.ex.EnergyCapable;
 
-class RFItemContainerWrapper implements IEnergy, ICapabilityProvider {
+class RFItemContainerWrapper extends EnergyCapable {
 	private final IEnergyContainerItem item;
 	private final ItemStack stack;
 
@@ -43,16 +39,5 @@ class RFItemContainerWrapper implements IEnergy, ICapabilityProvider {
 	@Override
 	public long outputEnergy(long amount, boolean sim) {
 		return item.extractEnergy(stack, amount > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) amount, sim);
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == EX.CAP_ENERGY;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		return cap == EX.CAP_ENERGY ? (T) this : null;
 	}
 }

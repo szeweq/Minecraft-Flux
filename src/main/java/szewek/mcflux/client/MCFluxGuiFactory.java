@@ -1,15 +1,15 @@
 package szewek.mcflux.client;
 
-import java.util.Set;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
 
+import java.util.Set;
+
 public class MCFluxGuiFactory implements IModGuiFactory {
 
 	@Override
-	public void initialize(Minecraft minecraftInstance) {
+	public void initialize(Minecraft mc) {
 
 	}
 

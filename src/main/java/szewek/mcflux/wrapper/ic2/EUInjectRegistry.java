@@ -3,13 +3,10 @@ package szewek.mcflux.wrapper.ic2;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import szewek.mcflux.util.EmptyCapabilityStorage;
-import szewek.mcflux.util.IInjectRegistry;
-import szewek.mcflux.util.InjectRegistry;
-import szewek.mcflux.util.MCFluxLocation;
+import szewek.mcflux.util.*;
 import szewek.mcflux.wrapper.InjectWrappers;
 
-@InjectRegistry(detectMods = {"IC2", "IndustrialCraft 2"})
+@InjectRegistry(requires = InjectCond.MOD, args = {"IC2", "IndustrialCraft 2"})
 public class EUInjectRegistry implements IInjectRegistry {
 	private static final MCFluxLocation EU_TILE = new MCFluxLocation("MFTileEU");
 

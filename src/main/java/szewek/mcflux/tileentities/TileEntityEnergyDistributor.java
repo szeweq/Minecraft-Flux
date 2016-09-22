@@ -5,6 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import szewek.mcflux.MCFlux;
 import szewek.mcflux.U;
+import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.config.MCFluxConfig;
@@ -30,7 +31,7 @@ public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
 			if (te == null)
 				continue;
 			f = f.getOpposite();
-			IEnergy ea = U.getEnergyHolderTile(te, f);
+			IEnergy ea = te.getCapability(EX.CAP_ENERGY, f);
 			if (ea == null)
 				continue;
 			switch (tt) {

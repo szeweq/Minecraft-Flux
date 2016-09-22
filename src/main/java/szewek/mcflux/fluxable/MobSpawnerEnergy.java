@@ -1,30 +1,15 @@
 package szewek.mcflux.fluxable;
 
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.api.ex.EX;
-import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.api.ex.EnergyCapable;
 
 import static szewek.mcflux.config.MCFluxConfig.MOB_SPAWNER_USE;
 
-class MobSpawnerEnergy implements IEnergy, ICapabilityProvider {
+class MobSpawnerEnergy extends EnergyCapable {
 	private final TileEntityMobSpawner spawner;
 
 	MobSpawnerEnergy(TileEntityMobSpawner tems) {
 		spawner = tems;
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == EX.CAP_ENERGY;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		return cap == EX.CAP_ENERGY ? (T) this : null;
 	}
 
 	@Override

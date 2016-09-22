@@ -8,11 +8,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.util.IInjectRegistry;
+import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.wrapper.InjectWrappers;
 
-@InjectRegistry(detectMods = {"tesla", "TESLA"})
+@InjectRegistry(requires = InjectCond.MOD, args = {"tesla", "TESLA"})
 public class TeslaInjectRegistry implements IInjectRegistry {
 	private static final MCFluxLocation TESLA = new MCFluxLocation("MFTesla");
 
@@ -57,6 +58,7 @@ public class TeslaInjectRegistry implements IInjectRegistry {
 	private static void wrapTeslaWorld(World w, InjectWrappers.Registry reg) {
 		if (wrapGlobal(w, reg))
 			return;
+		wrapMappedTeslaProvider(w, reg);
 	}
 
 	private static void wrapTeslaItem(ItemStack is, InjectWrappers.Registry reg) {

@@ -6,11 +6,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import szewek.mcflux.util.IInjectRegistry;
+import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.wrapper.InjectWrappers;
 
-@InjectRegistry(included = true, detectMods = {})
+@InjectRegistry(requires = InjectCond.CLASS, args = {"cofh.api.energy.IEnergyHandler"})
 public class RFInjectRegistry implements IInjectRegistry {
 	private static final MCFluxLocation RF_TILE = new MCFluxLocation("MFTileRF"), RF_ITEM = new MCFluxLocation("MFItemRF");
 

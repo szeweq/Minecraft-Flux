@@ -12,21 +12,21 @@ import java.lang.reflect.Method;
 enum EUEnergyEvents {
 	INSTANCE;
 
-	private Class<?> IC2_TEB_CLASS, IC2_ENERGY_CLASS;
-	private Method GET_COMPONENT, GET_CAPACITY, GET_ENERGY;
+	private Class<?> IC2_TEB, IC2_ENERGY;
+	private Method COMPONENT, CAPACITY, ENERGY;
 	private final boolean broken;
 
 	EUEnergyEvents() {
-		IC2_TEB_CLASS = U.getClassSafely("ic2.core.block.TileEntityBlock");
-		IC2_ENERGY_CLASS = U.getClassSafely("ic2.core.block.comp.Energy");
-		if (IC2_TEB_CLASS == null || IC2_ENERGY_CLASS == null) {
-			GET_COMPONENT = GET_CAPACITY = GET_ENERGY = null;
+		IC2_TEB = U.getClassSafely("ic2.core.block.TileEntityBlock");
+		IC2_ENERGY = U.getClassSafely("ic2.core.block.comp.Energy");
+		if (IC2_TEB == null || IC2_ENERGY == null) {
+			COMPONENT = CAPACITY = ENERGY = null;
 		} else {
-			GET_COMPONENT = U.getMethodSafely(IC2_TEB_CLASS, "getComponent", Class.class);
-			GET_CAPACITY = U.getMethodSafely(IC2_ENERGY_CLASS, "getCapacity");
-			GET_ENERGY = U.getMethodSafely(IC2_ENERGY_CLASS, "getEnergy");
+			COMPONENT = U.getMethodSafely(IC2_TEB, "getComponent", Class.class);
+			CAPACITY = U.getMethodSafely(IC2_ENERGY, "getCapacity");
+			ENERGY = U.getMethodSafely(IC2_ENERGY, "getEnergy");
 		}
-		broken = GET_COMPONENT == null || GET_CAPACITY == null || GET_ENERGY == null;
+		broken = COMPONENT == null || CAPACITY == null || ENERGY == null;
 		if (broken)
 			L.warn("EUEnergyEvents is broken");
 	}
@@ -37,20 +37,20 @@ enum EUEnergyEvents {
 		if (te == null) return;
 		EUTileCapabilityProvider cap = te.getCapability(EUTileCapabilityProvider.SELF_CAP, null);
 		if (cap == null) {
-			L.warn("Tile class " + te.getClass().getCanonicalName() + " has no SELF_CAP");
+			L.warn("Tile " + te.getClass().getCanonicalName() + " has no MF capability");
 			return;
 		}
 		cap.updateEnergyTile(e.tile);
-		if (!broken && IC2_TEB_CLASS.isInstance(te)) {
+		if (!broken && IC2_TEB.isInstance(te)) {
 			Object o = null;
 			try {
-				o = GET_COMPONENT.invoke(te, IC2_ENERGY_CLASS);
+				o = COMPONENT.invoke(te, IC2_ENERGY);
 			} catch (Exception e1) {
 				L.warn(e1);
 			}
 			if (o == null)
 				return;
-			cap.updateEnergyMethods(o, GET_CAPACITY, GET_ENERGY);
+			cap.updateEnergyMethods(o, CAPACITY, ENERGY);
 		}
 	}
 }

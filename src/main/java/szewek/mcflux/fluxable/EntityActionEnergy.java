@@ -7,29 +7,14 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.api.ex.EX;
-import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.api.ex.EnergyCapable;
 
-class EntityActionEnergy implements ICapabilityProvider, IEnergy {
+class EntityActionEnergy extends EnergyCapable {
 	private boolean charged = false;
 	private final EntityCreature creature;
 
 	EntityActionEnergy(EntityCreature ec) {
 		creature = ec;
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == EX.CAP_ENERGY;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		return cap == EX.CAP_ENERGY ? (T) this : null;
 	}
 
 	@Override

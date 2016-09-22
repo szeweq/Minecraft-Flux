@@ -12,7 +12,7 @@ public abstract class Flavored {
 	}
 
 	public boolean areSameFlavor(Flavored fl) {
-		return ((name == null && fl.name == null) || name.equals(fl.name)) && ((data == null && fl.data == null) || data.equals(fl.data));
+		return !(name == null || fl.name == null) && name.equals(fl.name) && ((data == null && fl.data == null) || (data != null && data.equals(fl.data)));
 	}
 
 	public abstract long getAmount();

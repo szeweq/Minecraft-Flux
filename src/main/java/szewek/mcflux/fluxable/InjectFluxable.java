@@ -14,11 +14,11 @@ import szewek.mcflux.wrapper.InjectWrappers;
 
 public class InjectFluxable {
 	private static final MCFluxLocation
-		ENERGY_PLAYER = new MCFluxLocation("PlayerEnergy"),
-		ENERGY_ACTION = new MCFluxLocation("ActionEnergy"),
-		ENERGY_WORLD_CHUNK = new MCFluxLocation("WorldChunkEnergy"),
-		ENERGY_FURNACE = new MCFluxLocation("FurnaceEnergy"),
-		ENERGY_MOB_SPAWNER = new MCFluxLocation("MobSpawnerEnergy");
+			MF_PLAYER = new MCFluxLocation("PlayerEnergy"),
+			MF_ACTION = new MCFluxLocation("ActionEnergy"),
+			MF_WORLD_CHUNK = new MCFluxLocation("WorldChunkEnergy"),
+			MF_FURNACE = new MCFluxLocation("FurnaceEnergy"),
+			MF_MOB_SPAWNER = new MCFluxLocation("MobSpawnerEnergy");
 
 	public static void registerWrappers() {
 		InjectWrappers.registerTileWrapperInject(InjectFluxable::tileWrappers);
@@ -28,17 +28,17 @@ public class InjectFluxable {
 
 	private static void tileWrappers(TileEntity te, InjectWrappers.Registry reg) {
 		if (te instanceof TileEntityFurnace)
-			reg.add(ENERGY_FURNACE, new FurnaceEnergy((TileEntityFurnace) te));
+			reg.add(MF_FURNACE, new FurnaceEnergy((TileEntityFurnace) te));
 		else if (te instanceof TileEntityMobSpawner)
-			reg.add(ENERGY_MOB_SPAWNER, new MobSpawnerEnergy((TileEntityMobSpawner) te));
+			reg.add(MF_MOB_SPAWNER, new MobSpawnerEnergy((TileEntityMobSpawner) te));
 	}
 	private static void entityWrappers(Entity ntt, InjectWrappers.Registry reg) {
 		if (ntt instanceof EntityPlayer)
-			reg.add(ENERGY_PLAYER, new PlayerEnergy((EntityPlayer) ntt));
+			reg.add(MF_PLAYER, new PlayerEnergy((EntityPlayer) ntt));
 		else if (ntt instanceof EntityPig || ntt instanceof EntityCreeper)
-			reg.add(ENERGY_ACTION, new EntityActionEnergy((EntityCreature) ntt));
+			reg.add(MF_ACTION, new EntityActionEnergy((EntityCreature) ntt));
 	}
 	private static void worldWrappers(World w, InjectWrappers.Registry reg) {
-		reg.add(ENERGY_WORLD_CHUNK, new WorldChunkEnergy());
+		reg.add(MF_WORLD_CHUNK, new WorldChunkEnergy());
 	}
 }

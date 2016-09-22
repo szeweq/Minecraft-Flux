@@ -3,15 +3,11 @@ package szewek.mcflux;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 
 import java.lang.reflect.Method;
@@ -20,14 +16,6 @@ public class U {
 
 	public static String formatMF(long n, long nc) {
 		return n + " / " + nc + " MF";
-	}
-
-	public static IEnergy getEnergyHolderTile(TileEntity te, EnumFacing f) {
-		return te.getCapability(EX.CAP_ENERGY, f);
-	}
-
-	public static IEnergy getEnergyHolderEntity(Entity e) {
-		return e.getCapability(EX.CAP_ENERGY, null);
 	}
 	
 	public static long transferEnergy(IEnergy from, IEnergy to, final long amount) {

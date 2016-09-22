@@ -9,6 +9,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface InjectRegistry {
-	boolean included() default false;
-	String[] detectMods();
+	InjectCond requires();
+	String[] args();
+
 }

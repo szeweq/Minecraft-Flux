@@ -7,9 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.discovery.ASMDataTable.ASMData;
@@ -45,7 +43,6 @@ import szewek.mcflux.util.*;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -139,22 +136,8 @@ public class MCFlux {
 				continue;
 			}
 			InjectRegistry ann = c.getAnnotation(InjectRegistry.class);
-			boolean incl = ann.included();
-			if (!incl) {
-				boolean found = false;
-				@SuppressWarnings("unchecked")
-				String[] mns = ann.detectMods();
-				if (mns == null || mns.length == 0) continue;
-				Map<String, ModContainer> modmap = Loader.instance().getIndexedModList();
-				for (String mn : mns) {
-					if (modmap.containsKey(mn)) {
-						found = true;
-						break;
-					}
-				}
-				if (!found)
-					continue;
-			}
+			if(!ann.requires().check(ann.args()))
+				continue;
 			try {
 				IInjectRegistry iir = c.newInstance();
 				iir.registerInjects();

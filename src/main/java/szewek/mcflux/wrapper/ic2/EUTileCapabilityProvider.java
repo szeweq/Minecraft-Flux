@@ -18,6 +18,7 @@ class EUTileCapabilityProvider implements ICapabilityProvider {
 	@CapabilityInject(EUTileCapabilityProvider.class)
 	static Capability<EUTileCapabilityProvider> SELF_CAP = null;
 
+	private boolean complete = true;
 	private IEnergySource source = null;
 	private IEnergySink sink = null;
 	private EUSided[] sides = new EUSided[7];
@@ -41,6 +42,7 @@ class EUTileCapabilityProvider implements ICapabilityProvider {
 			capMethod = iet instanceof BasicSource ? ((BasicSource) iet)::getCapacity : iet instanceof BasicSink ? ((BasicSink) iet)::getCapacity : null;
 		if (energyMethod == null)
 			energyMethod = iet instanceof BasicSource ? ((BasicSource) iet)::getEnergyStored : iet instanceof BasicSink ? ((BasicSink) iet)::getEnergyStored : null;
+		complete = source != null || sink != null;
 		updateSides();
 	}
 
@@ -66,9 +68,7 @@ class EUTileCapabilityProvider implements ICapabilityProvider {
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		if (cap == EX.CAP_ENERGY)
-			return source != null || sink != null;
-		return cap == SELF_CAP;
+		return cap == SELF_CAP || (cap == EX.CAP_ENERGY && complete);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -76,6 +76,6 @@ class EUTileCapabilityProvider implements ICapabilityProvider {
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
 		if (cap == SELF_CAP)
 			return (T) this;
-		return cap == EX.CAP_ENERGY && (source != null || sink != null) ? (T) sides[f == null ? 6 : f.getIndex()] : null;
+		return cap == EX.CAP_ENERGY && complete ? (T) sides[f == null ? 6 : f.getIndex()] : null;
 	}
 }

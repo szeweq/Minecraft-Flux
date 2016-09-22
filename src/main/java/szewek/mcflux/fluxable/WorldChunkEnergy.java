@@ -32,9 +32,7 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
-		if (cap == CAP_WCE)
-			return (T) this;
-		return null;
+		return cap == CAP_WCE ? (T) this : null;
 	}
 
 	/**
@@ -102,7 +100,7 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 			NBTTagList nbtl = (NBTTagList) nbtb;
 			for (int i = 0; i < nbtl.tagCount(); i++) {
 				NBTTagCompound nbt = nbtl.getCompoundTagAt(i);
-				if (nbt.hasKey("x", NBT.TAG_INT) && nbt.hasKey("z", NBT.TAG_INT)) {
+				if (nbt.hasKey("x", NBT.TAG_INT) && nbt.hasKey("y", NBT.TAG_INT) && nbt.hasKey("z", NBT.TAG_INT)) {
 					ChunkPos cp = new ChunkPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
 					Battery eb = new Battery(MCFluxConfig.WORLDCHUNK_CAP);
 					if (nbt.hasKey("e"))
