@@ -24,11 +24,6 @@ apply plugin: "maven-publish"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-def getVersion() {
-	if (System.getenv("TRAVIS_TAG"))
-		return System.getenv("TRAVIS_TAG")
-	return "0.0.0-x"
-}
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
 	from sourceSets.api.output
@@ -39,8 +34,8 @@ task sourcesJar(type: Jar, dependsOn: "sourceJar") {
 	from sourceSets.api.allJava
 	classifier = "sources"
 }
-
-version = getVersion()
+String ttag = System.getenv("TRAVIS_TAG")
+version = ttag ? ttag : "0.0.0-x"
 group = "szewek.mcflux"
 archivesBaseName = "mcflux"
 
@@ -108,9 +103,8 @@ processResources {
 	}
 }
 curseforge {
-	apiKey = ""
-	if (System.env.CURSEFORGE_KEY)
-		apiKey = System.env.CURSEFORGE_KEY
+	String cfkey = System.getenv("CURSEFORGE_KEY")
+	apiKey = cfkey ? cfkey : ""
 	project {
 		id = "248942"
 		releaseType = "release"
