@@ -19,6 +19,7 @@ buildscript {
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "com.matthewprenger.cursegradle"
 apply plugin: "com.jfrog.bintray"
+apply plugin: "maven-publish"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -51,12 +52,25 @@ minecraft {
 	replaceIn "R.java"
 }
 
+publishing {
+	publications {
+		MCFluxPublish(MavenPublication) {
+			from components.java
+			artifact deobfJar
+			artifact sourcesJar
+			groupId project.group
+			artifactId project.archivesBaseName
+			version project.version
+		}
+	}
+}
+
 bintray {
 	user = System.getenv("BINTRAY_USER")
 	key = System.getenv("BINTRAY_KEY")
-	configurations = ["archives"]
+	publications = ["MCFluxPublish"]
 	publish = true
-	override = true
+	override = false
 	pkg {
 		repo = "MC"
 		name = project.group
@@ -78,11 +92,6 @@ dependencies {
 	deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
 	deobfCompile "net.industrial-craft:industrialcraft-2:2.6.54-ex110:api"
 	deobfCompile "net.darkhax.tesla:Tesla:1.10.2-1.2.1.49"
-}
-
-jar {
-	//from sourceSets.api.output
-	//exclude "blusunrize/**"
 }
 
 processResources {
