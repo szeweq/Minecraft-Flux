@@ -5,6 +5,7 @@ public final class R {
 		MF_VERSION = "@VERSION@",
 		MF_NAME = "mcflux",
 		MF_FULL_NAME = "Minecraft-Flux",
+		MF_DEPENDENCIES = "required-after:Forge@[12.18.1.2094,)",
 		MF_API = "mcfluxAPI",
 		MF_API_EX = MF_API + "|ex",
 		MF_API_FE = MF_API + "|fe",

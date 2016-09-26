@@ -49,7 +49,7 @@ import java.util.function.Function;
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
 @SuppressWarnings("unused")
-@Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true, guiFactory = R.GUI_FACTORY)
+@Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true, guiFactory = R.GUI_FACTORY, dependencies = R.MF_DEPENDENCIES)
 public class MCFlux {
 	public static SimpleNetworkWrapper SNW;
 	public static ItemMFTool MFTOOL;
@@ -81,7 +81,7 @@ public class MCFlux {
 		cm.register(IFlavorEnergy.class, new FlavorNBTStorage(), FlavoredStorage::new);
 		cm.register(WorldChunkEnergy.class, new NBTSerializableCapabilityStorage<>(), WorldChunkEnergy::new);
 		cm.register(PlayerEnergy.class, new NBTSerializableCapabilityStorage<>(), PlayerEnergy::new);
-		EVENT_BUS.register(InjectWrappers.events);
+		EVENT_BUS.register(InjectWrappers.EVENTS);
 		EVENT_BUS.register(MCFluxEvents.INSTANCE);
 		MFTOOL = registerItem("mftool", new ItemMFTool());
 		UPCHIP = registerItem("upchip", new ItemUpChip());

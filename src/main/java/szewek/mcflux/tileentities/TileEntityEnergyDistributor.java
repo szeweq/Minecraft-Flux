@@ -36,10 +36,10 @@ public class TileEntityEnergyDistributor extends TileEntityEnergyMachine {
 				continue;
 			switch (tt) {
 			case INPUT:
-				sideValues[i] = U.transferEnergy(ea, bat, MCFluxConfig.ENERGY_DIST_TRANS) / 2;
+				sideValues[i] = U.transferEnergy(ea, bat, MCFluxConfig.ENERGY_DIST_TRANS * 2) / 2;
 				break;
 			case OUTPUT:
-				sideValues[i] = U.transferEnergy(bat, ea, MCFluxConfig.ENERGY_DIST_TRANS) / 2;
+				sideValues[i] = U.transferEnergy(bat, ea, MCFluxConfig.ENERGY_DIST_TRANS * 2) / 2;
 				break;
 			}
 		}

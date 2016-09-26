@@ -8,13 +8,11 @@ import net.minecraft.tileentity.TileEntity;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
-import szewek.mcflux.util.MCFluxLocation;
+import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 @InjectRegistry(requires = InjectCond.MOD, args = {"immersiveengineering", "Immersive Engineering"})
 public class IFInjectRegistry implements IInjectRegistry {
-	private static final MCFluxLocation IF_TILE = new MCFluxLocation("MFTileIF"), IF_ITEM = new MCFluxLocation("MFItemIF");
-
 	@Override
 	public void registerInjects() {
 		InjectWrappers.registerTileWrapperInject(IFInjectRegistry::wrapIFTile);
@@ -23,13 +21,13 @@ public class IFInjectRegistry implements IInjectRegistry {
 	
 	private static void wrapIFTile(TileEntity te, InjectWrappers.Registry reg) {
 		if (te instanceof IFluxConnection)
-			reg.add(IF_TILE, new IFTileCapabilityProvider((IFluxConnection) te));
+			reg.add(EnergyType.IF, new IFTileCapabilityProvider((IFluxConnection) te));
 	}
 	
 	private static void wrapIFItem(ItemStack is, InjectWrappers.Registry reg) {
 		Item it = is.getItem();
 		if (it instanceof IFluxContainerItem)
-			reg.add(IF_ITEM, new IFItemContainerWrapper((IFluxContainerItem) it, is));
+			reg.add(EnergyType.IF, new IFItemContainerWrapper((IFluxContainerItem) it, is));
 	}
 
 }

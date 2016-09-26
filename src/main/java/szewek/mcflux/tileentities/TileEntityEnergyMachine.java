@@ -36,13 +36,13 @@ public abstract class TileEntityEnergyMachine extends TileEntity implements ITic
 	@Override
 	public void setWorldObj(World w) {
 		super.setWorldObj(w);
-		wce = w != null && !w.isRemote ? w.getCapability(WorldChunkEnergy.CAP_WCE, null) : null;
+		wce = worldObj != null && !worldObj.isRemote ? worldObj.getCapability(WorldChunkEnergy.CAP_WCE, null) : null;
 	}
 
 	@Override
 	public void setPos(BlockPos bp) {
 		super.setPos(bp);
-		bat = worldObj != null && !worldObj.isRemote ? wce.getEnergyChunk(bp.getX(), bp.getY(), bp.getZ()) : null;
+		bat = worldObj != null && !worldObj.isRemote ? wce.getEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
 	}
 
 	@Override public void onLoad() {

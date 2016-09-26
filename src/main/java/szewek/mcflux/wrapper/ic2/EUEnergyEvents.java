@@ -12,8 +12,8 @@ import java.lang.reflect.Method;
 enum EUEnergyEvents {
 	INSTANCE;
 
-	private Class<?> IC2_TEB, IC2_ENERGY;
-	private Method COMPONENT, CAPACITY, ENERGY;
+	private final Class<?> IC2_TEB, IC2_ENERGY;
+	private final Method COMPONENT, CAPACITY, ENERGY;
 	private final boolean broken;
 
 	EUEnergyEvents() {
@@ -30,27 +30,27 @@ enum EUEnergyEvents {
 		if (broken)
 			L.warn("EUEnergyEvents is broken");
 	}
-	
+
 	@SubscribeEvent
 	public void loadEnergyTile(EnergyTileLoadEvent e) {
+		if (broken)
+			return;
 		TileEntity te = e.getWorld().getTileEntity(EnergyNet.instance.getPos(e.tile));
 		if (te == null) return;
 		EUTileCapabilityProvider cap = te.getCapability(EUTileCapabilityProvider.SELF_CAP, null);
-		if (cap == null) {
-			L.warn("Tile " + te.getClass().getCanonicalName() + " has no MF capability");
-			return;
-		}
-		cap.updateEnergyTile(e.tile);
-		if (!broken && IC2_TEB.isInstance(te)) {
-			Object o = null;
-			try {
-				o = COMPONENT.invoke(te, IC2_ENERGY);
-			} catch (Exception e1) {
-				L.warn(e1);
+		if (cap != null) {
+			cap.updateEnergyTile(e.tile);
+			if (IC2_TEB.isInstance(te)) {
+				Object o = null;
+				try {
+					o = COMPONENT.invoke(te, IC2_ENERGY);
+				} catch (Exception e1) {
+					L.warn(e1);
+				}
+				if (o == null)
+					return;
+				cap.updateEnergyMethods(o, CAPACITY, ENERGY);
 			}
-			if (o == null)
-				return;
-			cap.updateEnergyMethods(o, CAPACITY, ENERGY);
 		}
 	}
 }

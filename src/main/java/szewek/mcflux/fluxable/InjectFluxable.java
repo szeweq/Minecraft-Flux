@@ -28,17 +28,17 @@ public class InjectFluxable {
 
 	private static void tileWrappers(TileEntity te, InjectWrappers.Registry reg) {
 		if (te instanceof TileEntityFurnace)
-			reg.add(MF_FURNACE, new FurnaceEnergy((TileEntityFurnace) te));
+			reg.register(MF_FURNACE, new FurnaceEnergy((TileEntityFurnace) te));
 		else if (te instanceof TileEntityMobSpawner)
-			reg.add(MF_MOB_SPAWNER, new MobSpawnerEnergy((TileEntityMobSpawner) te));
+			reg.register(MF_MOB_SPAWNER, new MobSpawnerEnergy((TileEntityMobSpawner) te));
 	}
 	private static void entityWrappers(Entity ntt, InjectWrappers.Registry reg) {
 		if (ntt instanceof EntityPlayer)
-			reg.add(MF_PLAYER, new PlayerEnergy((EntityPlayer) ntt));
+			reg.register(MF_PLAYER, new PlayerEnergy((EntityPlayer) ntt));
 		else if (ntt instanceof EntityPig || ntt instanceof EntityCreeper)
-			reg.add(MF_ACTION, new EntityActionEnergy((EntityCreature) ntt));
+			reg.register(MF_ACTION, new EntityActionEnergy((EntityCreature) ntt));
 	}
 	private static void worldWrappers(World w, InjectWrappers.Registry reg) {
-		reg.add(MF_WORLD_CHUNK, new WorldChunkEnergy());
+		reg.register(MF_WORLD_CHUNK, new WorldChunkEnergy());
 	}
 }

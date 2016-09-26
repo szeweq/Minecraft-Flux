@@ -40,9 +40,9 @@ group = "szewek.mcflux"
 archivesBaseName = "mcflux"
 
 minecraft {
-	version = "1.10.2-12.18.1.2076"
+	version = "1.10.2-12.18.1.2094"
 	runDir = "run"
-	mappings = "snapshot_20160828"
+	mappings = "snapshot_20160924"
 	replace "@VERSION@", project.version
 	replaceIn "R.java"
 }
@@ -96,10 +96,10 @@ processResources {
 	// replace stuff in mcmod.info, nothing else
 	from(sourceSets.main.resources.srcDirs) {
 		include 'mcmod.info'
-		expand 'version':project.version, 'mcversion':project.minecraft.version
+		expand "version":project.version, "mcversion":project.minecraft.version
 	}
 	from(sourceSets.main.resources.srcDirs) {
-		exclude 'mcmod.info'
+		exclude "mcmod.info"
 	}
 }
 curseforge {

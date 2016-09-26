@@ -10,13 +10,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
-import szewek.mcflux.util.MCFluxLocation;
+import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 @InjectRegistry(requires = InjectCond.MOD, args = {"tesla", "TESLA"})
 public class TeslaInjectRegistry implements IInjectRegistry {
-	private static final MCFluxLocation TESLA = new MCFluxLocation("MFTesla");
-
 	@Override public void registerInjects() {
 		InjectWrappers.registerTileWrapperInject(TeslaInjectRegistry::wrapTeslaTile);
 		InjectWrappers.registerEntityWrapperInject(TeslaInjectRegistry::wrapTeslaEntity);
@@ -26,11 +24,11 @@ public class TeslaInjectRegistry implements IInjectRegistry {
 
 	private static boolean wrapGlobal(ICapabilityProvider icp, InjectWrappers.Registry reg) {
 		if (TeslaUtils.hasTeslaSupport(icp, null)) {
-			reg.add(TESLA, new TeslaCapabilityProvider(icp));
+			reg.add(EnergyType.TESLA, new TeslaCapabilityProvider(icp));
 			return true;
 		} else for (EnumFacing f : EnumFacing.VALUES)
 			if (TeslaUtils.hasTeslaSupport(icp, f)) {
-				reg.add(TESLA, new TeslaCapabilityProvider(icp));
+				reg.add(EnergyType.TESLA, new TeslaCapabilityProvider(icp));
 				return true;
 			}
 		return false;
