@@ -1,18 +1,17 @@
 package szewek.mcflux.wrapper;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import szewek.mcflux.L;
 
-import java.lang.reflect.Type;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -64,7 +63,7 @@ public enum InjectWrappers {
 	private static <T> void wrap(AttachCapabilitiesEvent<T> att, Iterable<IWrapperInject<T>> iwis) {
 		T t = att.getObject();
 		if (t == null) {
-			L.warn("While attaching capabilities: Object is null");
+			L.warn("Cannot attach capabilities: Object is null");
 			return;
 		}
 		Registry reg = new Registry(att);
@@ -74,7 +73,6 @@ public enum InjectWrappers {
 			ICapabilityProvider icp = reg.energyCapMap.get(et);
 			if (icp != null) {
 				att.addCapability(et.loc, icp);
-				L.info("Added cap: " + et + " for " + t.getClass());
 				break;
 			}
 		}
@@ -82,6 +80,10 @@ public enum InjectWrappers {
 
 	public static void wrapItem(AttachCapabilitiesEvent.Item ei, Iterable<IWrapperInject<ItemStack>> iwis) {
 		ItemStack is = ei.getItemStack();
+		if (is == null) {
+			L.warn("Cannot attach capabilities: ItemStack is null");
+			return;
+		}
 		Registry reg = new Registry(ei);
 		for (IWrapperInject<ItemStack> iwi : iwis)
 			iwi.injectWrapper(is, reg);
@@ -89,25 +91,35 @@ public enum InjectWrappers {
 			ICapabilityProvider icp = reg.energyCapMap.get(et);
 			if (icp != null) {
 				ei.addCapability(et.loc, icp);
-				L.info("Added cap: " + et + " for " + is);
 				break;
 			}
 		}
 	}
 
-	@SuppressWarnings({"unchecked", "unused"})
-	@SubscribeEvent(priority = EventPriority.LOW)
-	public void wrap(AttachCapabilitiesEvent att) {
-		Type tt = att.getGenericType();
-		if (tt == TileEntity.class)
-			wrap(att, tileInjects);
-		else if (tt == ItemStack.class)
+	@SubscribeEvent
+	public void wrapTile(AttachCapabilitiesEvent<TileEntity> att) {
+		wrap(att, tileInjects);
+	}
+
+	@SubscribeEvent
+	public void wrapStack(AttachCapabilitiesEvent<ItemStack> att) {
+		if (Loader.instance().hasReachedState(LoaderState.AVAILABLE))
 			wrap(att, itemInjects);
-		else if (tt == Entity.class)
-			wrap(att, entityInjects);
-		else if (tt == World.class)
-			wrap(att, worldInjects);
-		else if (tt == Item.class && att instanceof AttachCapabilitiesEvent.Item)
-			wrapItem((AttachCapabilitiesEvent.Item) att, itemInjects);
+	}
+
+	@SubscribeEvent
+	public void wrapEntity(AttachCapabilitiesEvent<Entity> att) {
+		wrap(att, entityInjects);
+	}
+
+	@SubscribeEvent
+	public void wrapWorld(AttachCapabilitiesEvent<World> att) {
+		wrap(att, worldInjects);
+	}
+
+	@SubscribeEvent
+	public void wrapItem(AttachCapabilitiesEvent.Item ei) {
+		if (Loader.instance().hasReachedState(LoaderState.AVAILABLE))
+			wrapItem(ei, itemInjects);
 	}
 }

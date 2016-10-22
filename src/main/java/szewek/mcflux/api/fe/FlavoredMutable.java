@@ -5,8 +5,13 @@ import net.minecraft.nbt.NBTTagCompound;
 public class FlavoredMutable extends Flavored {
 	protected long amount;
 
-	protected FlavoredMutable(String name, long amount, NBTTagCompound data) {
+	public FlavoredMutable(String name, long amount, NBTTagCompound data) {
 		super(name, data);
+		this.amount = amount;
+	}
+
+	public FlavoredMutable(Flavored fl, long amount) {
+		super(fl.name, fl.data);
 		this.amount = amount;
 	}
 

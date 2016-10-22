@@ -1,0 +1,14 @@
+{"multipart": [
+  {"when": {"up": 1}, "apply": {"model": "mcflux:emachine_in"}},
+  {"when": {"up": 2}, "apply": {"model": "mcflux:emachine_out"}},
+  {"when": {"down": 1}, "apply": {"model": "mcflux:emachine_in", "x": 180}},
+  {"when": {"down": 2}, "apply": {"model": "mcflux:emachine_out", "x": 180}},
+  {"when": {"north": 1}, "apply": {"model": "mcflux:emachine_in", "x": 90}},
+  {"when": {"north": 2}, "apply": {"model": "mcflux:emachine_out", "x": 90}},
+  {"when": {"south": 1}, "apply": {"model": "mcflux:emachine_in", "x": 90, "y": 180}},
+  {"when": {"south": 2}, "apply": {"model": "mcflux:emachine_out", "x": 90, "y": 180}},
+  {"when": {"east": 1}, "apply": {"model": "mcflux:emachine_in", "x": 90, "y": 90}},
+  {"when": {"east": 2}, "apply": {"model": "mcflux:emachine_out", "x": 90, "y": 90}},
+  {"when": {"west": 1}, "apply": {"model": "mcflux:emachine_in", "x": 90, "y": 270}},
+  {"when": {"west": 2}, "apply": {"model": "mcflux:emachine_out", "x": 90, "y": 270}}
+]}

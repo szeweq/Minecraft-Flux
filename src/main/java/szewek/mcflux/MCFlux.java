@@ -26,19 +26,20 @@ import szewek.mcflux.api.fe.FlavorNBTStorage;
 import szewek.mcflux.api.fe.FlavoredStorage;
 import szewek.mcflux.api.fe.IFlavorEnergy;
 import szewek.mcflux.blocks.BlockEnergyMachine;
+import szewek.mcflux.blocks.BlockSided;
 import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
 import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.InjectFluxable;
 import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
+import szewek.mcflux.items.ItemFESniffer;
 import szewek.mcflux.items.ItemMFTool;
 import szewek.mcflux.items.ItemUpChip;
 import szewek.mcflux.network.MessageHandlerDummy;
 import szewek.mcflux.network.MessageHandlerServer;
 import szewek.mcflux.network.UpdateMessageClient;
 import szewek.mcflux.network.UpdateMessageServer;
-import szewek.mcflux.tileentities.TileEntityChunkCharger;
-import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
+import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 import szewek.mcflux.util.*;
 import szewek.mcflux.wrapper.InjectWrappers;
 
@@ -53,7 +54,9 @@ import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 public class MCFlux {
 	public static SimpleNetworkWrapper SNW;
 	public static ItemMFTool MFTOOL;
+	public static ItemFESniffer FESNIFFER;
 	public static ItemUpChip UPCHIP;
+	public static BlockSided SIDED;
 	public static BlockEnergyMachine ENERGY_MACHINE;
 	private static final int UPDATE_CLI = 67;
 	public static final int UPDATE_SRV = 69;
@@ -84,10 +87,11 @@ public class MCFlux {
 		EVENT_BUS.register(InjectWrappers.EVENTS);
 		EVENT_BUS.register(MCFluxEvents.INSTANCE);
 		MFTOOL = registerItem("mftool", new ItemMFTool());
+		FESNIFFER = registerItem("fesniffer", new ItemFESniffer());
 		UPCHIP = registerItem("upchip", new ItemUpChip());
+		SIDED = new BlockSided("sided");
 		ENERGY_MACHINE = registerBlock("energy_machine", new BlockEnergyMachine(), ItemBlockEnergyMachine::new);
-		GameRegistry.registerTileEntity(TileEntityEnergyDistributor.class, "mcflux.energyDist");
-		GameRegistry.registerTileEntity(TileEntityChunkCharger.class, "mcflux.chunkCharger");
+		GameRegistry.registerTileEntity(TileEntityEnergyMachine.class, "mcflux.emachine");
 		SNW = NetworkRegistry.INSTANCE.newSimpleChannel(R.MF_NAME);
 		SNW.registerMessage(MSG_SRV, UpdateMessageClient.class, UPDATE_CLI, Side.SERVER);
 		SNW.registerMessage(MSG_DMM, UpdateMessageServer.class, UPDATE_SRV, Side.SERVER);
@@ -99,24 +103,40 @@ public class MCFlux {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
 		RecipeSorter.register("mcflux:builtRecipe", RecipeBuilder.BuiltShapedRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-		ItemStack stackRedstone = new ItemStack(Items.REDSTONE);
-		ItemStack stackEnergyDist = new ItemStack(ENERGY_MACHINE, 1, 0);
+		ItemStack iRedstone = new ItemStack(Items.REDSTONE);
+		ItemStack iEndCrystal = new ItemStack(Items.END_CRYSTAL);
+		ItemStack iEnergyDist = new ItemStack(ENERGY_MACHINE, 1, 0);
+		ItemStack iFlavorDist = new ItemStack(ENERGY_MACHINE, 1, 2);
+		IX[][] ixStar = new IX[][]{{null, IX.A, null}, {IX.A, IX.B, IX.A}, {null, IX.A, null}};
+		IX[][] ixCross = new IX[][]{{IX.A, null, IX.A}, {null, IX.B, null}, {IX.A, null, IX.A}};
 		new RecipeBuilder(MFTOOL)
 				.withShape(new IX[][]{{IX.A, null, IX.A}, {IX.B, IX.C, IX.B}, {IX.B, IX.B, IX.B}}, 3, 3)
 				.withOreDict(IX.A, "nuggetGold")
-				.withStack(IX.B, stackRedstone)
+				.withStack(IX.B, iRedstone)
 				.withOreDict(IX.C, "ingotIron")
 				.deploy();
 		new RecipeBuilder(ENERGY_MACHINE)
-				.withShape(new IX[][]{{null, IX.A, null}, {IX.A, IX.B, IX.A}, {null, IX.A, null}}, 3, 3)
-				.withOreDict(IX.A, "blockIron")
-				.withStack(IX.B, new ItemStack(Items.END_CRYSTAL))
+				.withShape(ixStar, 3, 3)
+				.withOreDict(IX.A, "ingotIron")
+				.withStack(IX.B, iEndCrystal)
 				.deploy()
 				.resultMeta(1)
 				.clear(IX.A, IX.B)
-				.withShape(new IX[][]{{IX.A, null, IX.A}, {null, IX.B, null}, {IX.A, null, IX.A}}, 3, 3)
-				.withStack(IX.A, stackRedstone)
-				.withStack(IX.B, stackEnergyDist)
+				.withShape(ixCross, 3, 3)
+				.withStack(IX.A, iRedstone)
+				.withStack(IX.B, iEnergyDist)
+				.deploy()
+				.resultMeta(2)
+				.clear(IX.A, IX.B)
+				.withShape(ixStar, 3, 3)
+				.withOreDict(IX.A, "ingotGold")
+				.withStack(IX.B, iEndCrystal)
+				.deploy()
+				.resultMeta(3)
+				.clear(IX.A, IX.B)
+				.withShape(ixCross, 3, 3)
+				.withStack(IX.A, iRedstone)
+				.withStack(IX.B, iFlavorDist)
 				.deploy();
 		FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
 		PROXY.init();
@@ -133,7 +153,7 @@ public class MCFlux {
 			if (c == null)
 				continue;
 			InjectRegistry ann = c.getAnnotation(InjectRegistry.class);
-			if(!ann.requires().check(ann.args()))
+			if (!ann.requires().check(ann.args()))
 				continue;
 			try {
 				IInjectRegistry iir = c.asSubclass(IInjectRegistry.class).newInstance();

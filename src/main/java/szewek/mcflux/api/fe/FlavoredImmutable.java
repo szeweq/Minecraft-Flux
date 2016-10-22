@@ -15,6 +15,11 @@ public final class FlavoredImmutable extends Flavored {
 		this.amount = amount;
 	}
 
+	public FlavoredImmutable(Flavored fl, long amount) {
+		super(fl.name, fl.data);
+		this.amount = amount;
+	}
+
 	@Override public long getAmount() {
 		return amount;
 	}

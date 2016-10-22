@@ -87,6 +87,7 @@ dependencies {
 	deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
 	deobfCompile "net.industrial-craft:industrialcraft-2:2.6.54-ex110:api"
 	deobfCompile "net.darkhax.tesla:Tesla:1.10.2-1.2.1.49"
+	runtime fileTree(dir: "libs", include: "*.jar")
 }
 
 processResources {
@@ -107,7 +108,7 @@ curseforge {
 	apiKey = cfkey ? cfkey : ""
 	project {
 		id = "248942"
-		releaseType = "release"
+		releaseType = "beta"
 		changelogType = "markdown"
 		changelog = file("CHANGELOG.md")
 	}

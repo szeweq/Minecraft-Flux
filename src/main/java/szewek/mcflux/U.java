@@ -9,6 +9,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.api.fe.Flavored;
+import szewek.mcflux.api.fe.FlavoredMutable;
+import szewek.mcflux.api.fe.IFlavorEnergy;
 
 import java.lang.reflect.Method;
 
@@ -23,6 +26,22 @@ public class U {
 			long r = to.inputEnergy(from.outputEnergy(amount, true), true);
 			if (r > 0)
 				return to.inputEnergy(from.outputEnergy(r, false), false);
+		}
+		return 0;
+	}
+
+	public static long transferFlavorEnergy(IFlavorEnergy from, IFlavorEnergy to, Flavored fl, final long amount) {
+		if (from.canOutputFlavorEnergy(fl) && to.canInputFlavorEnergy(fl)) {
+			FlavoredMutable fli = new FlavoredMutable(fl, amount);
+			long r = from.outputFlavorEnergy(fli.toImmutable(), true);
+			fli.setAmount(r);
+			r = to.inputFlavorEnergy(fli.toImmutable(), true);
+			if (r > 0) {
+				fli.setAmount(r);
+				r = from.outputFlavorEnergy(fli.toImmutable(), false);
+				fli.setAmount(r);
+				return to.inputFlavorEnergy(fli.toImmutable(), false);
+			}
 		}
 		return 0;
 	}

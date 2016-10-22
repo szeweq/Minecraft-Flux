@@ -23,14 +23,14 @@ public class ItemMFTool extends Item {
 	private final TextComponentTranslation
 		textBlock = new TextComponentTranslation("mcflux.blockcompat.start"),
 		textEntity = new TextComponentTranslation("mcflux.entitycompat.start"),
-		textMFCompat = new TextComponentTranslation("mcflux.mfcompat"),
+		textIsCompat = new TextComponentTranslation("mcflux.iscompat"),
 		textNoCompat = new TextComponentTranslation("mcflux.nocompat"),
 		textEnergyUnknown = new TextComponentTranslation("mcflux.energystatunknown"),
 		textWorldChunk = new TextComponentTranslation("mcflux.worldchunk");
 
 	public ItemMFTool() {
 		setMaxStackSize(1);
-		textMFCompat.getStyle().setColor(TextFormatting.GREEN).setBold(true);
+		textIsCompat.getStyle().setColor(TextFormatting.GREEN).setBold(true);
 		textNoCompat.getStyle().setColor(TextFormatting.RED).setBold(true);
 	}
 	
@@ -40,12 +40,14 @@ public class ItemMFTool extends Item {
 			TileEntity te = w.getTileEntity(pos);
 			if (te != null) {
 				if (te instanceof TileEntityEnergyMachine) {
-					p.addChatComponentMessage(new TextComponentTranslation("mcflux.transfer", ((TileEntityEnergyMachine) te).getTransferSide(f)));
+					TileEntityEnergyMachine teem = (TileEntityEnergyMachine) te;
+					if (teem.getModuleId() < 2)
+						p.addChatComponentMessage(new TextComponentTranslation("mcflux.transfer", ((TileEntityEnergyMachine) te).getTransferSide(f)));
 					return EnumActionResult.SUCCESS;
 				}
 				IEnergy ie = te.getCapability(EX.CAP_ENERGY, f);
 				TextComponentTranslation tcb = textBlock.createCopy();
-				tcb.appendSibling(ie != null ? textMFCompat : textNoCompat).appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
+				tcb.appendSibling(ie != null ? textIsCompat : textNoCompat).appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
 				p.addChatComponentMessage(tcb);
 				if (ie != null)
 					p.addChatComponentMessage(new TextComponentTranslation("mcflux.energystat", U.formatMF(ie.getEnergy(), ie.getEnergyCapacity())));
@@ -58,7 +60,7 @@ public class ItemMFTool extends Item {
 			}
 			return EnumActionResult.SUCCESS;
 		}
-		return super.onItemUse(is, p, w, pos, h, f, x, y, z);
+		return EnumActionResult.PASS;
 	}
 
 	@Override
@@ -66,7 +68,7 @@ public class ItemMFTool extends Item {
 		if (!elb.worldObj.isRemote) {
 			IEnergy ie = elb.getCapability(EX.CAP_ENERGY, null);
 			TextComponentTranslation tcb = textEntity.createCopy();
-			tcb.appendSibling(ie != null ? textMFCompat : textNoCompat);
+			tcb.appendSibling(ie != null ? textIsCompat : textNoCompat);
 			tcb.appendSibling(new TextComponentTranslation("mcflux.entitycompat.end"));
 			p.addChatComponentMessage(tcb);
 			if (ie != null) {

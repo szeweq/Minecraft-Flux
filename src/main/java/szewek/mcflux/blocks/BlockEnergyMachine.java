@@ -4,7 +4,6 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,8 +21,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import szewek.mcflux.tileentities.TileEntityChunkCharger;
-import szewek.mcflux.tileentities.TileEntityEnergyDistributor;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 import java.util.ArrayList;
@@ -32,25 +29,6 @@ import java.util.List;
 public class BlockEnergyMachine extends BlockContainer {
 	private static final AxisAlignedBB DEF_AABB = new AxisAlignedBB(0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
 	public static final PropertyEnum<Variant> VARIANT = PropertyEnum.create("variant", Variant.class);
-	public static final PropertyInteger
-			UP = PropertyInteger.create("up", 0, 2),
-			DOWN = PropertyInteger.create("down", 0, 2),
-			NORTH = PropertyInteger.create("north", 0, 2),
-			SOUTH = PropertyInteger.create("south", 0, 2),
-			EAST = PropertyInteger.create("east", 0, 2),
-			WEST = PropertyInteger.create("west", 0, 2);
-	
-	public static PropertyInteger sideFromId(int id) {
-		switch (id) {
-		case 0: return DOWN;
-		case 1: return UP;
-		case 2: return NORTH;
-		case 3: return SOUTH;
-		case 4: return WEST;
-		case 5: return EAST;
-		default: return DOWN;
-		}
-	}
 	
 	public BlockEnergyMachine() {
 		super(Material.PISTON);
@@ -72,14 +50,15 @@ public class BlockEnergyMachine extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World w, int m) {
-		IBlockState ibs = getStateFromMeta(m);
-		return m == 0 ? new TileEntityEnergyDistributor(ibs) : m == 1 ? new TileEntityChunkCharger(ibs) : null;
+		TileEntityEnergyMachine teem = new TileEntityEnergyMachine();
+		teem.setModuleId(m);
+		return teem;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < Variant.ALL_VARIANTS.length; i++)
 			list.add(new ItemStack(item, 1, i));
 	}
 	
@@ -95,7 +74,7 @@ public class BlockEnergyMachine extends BlockContainer {
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, VARIANT, DOWN, UP, NORTH, SOUTH, WEST, EAST);
+		return new BlockStateContainer(this, VARIANT);
 	}
 	
 	@Override
@@ -105,7 +84,7 @@ public class BlockEnergyMachine extends BlockContainer {
 	
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return state.getValue(VARIANT).ordinal() == 0 ? EnumBlockRenderType.ENTITYBLOCK_ANIMATED : EnumBlockRenderType.MODEL;
+		return EnumBlockRenderType.MODEL;
 	}
 	
 	@Override
@@ -121,7 +100,7 @@ public class BlockEnergyMachine extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World w, BlockPos bp, IBlockState ibs, EntityPlayer p, EnumHand h, ItemStack is, EnumFacing f, float x, float y, float z) {
 		boolean b = is == null && h == EnumHand.MAIN_HAND;
-		if (!w.isRemote && b) {
+		if (b && !w.isRemote) {
 			TileEntity te = w.getTileEntity(bp);
 			if (te != null && te instanceof TileEntityEnergyMachine)
 				((TileEntityEnergyMachine) te).switchSideTransfer(f);
@@ -130,7 +109,7 @@ public class BlockEnergyMachine extends BlockContainer {
 	}
 
 	public enum Variant implements IStringSerializable {
-		ENERGY_DIST("energy_dist"), CHUNK_CHARGER("chunk_charger");
+		ENERGY_DIST("energy_dist"), CHUNK_CHARGER("chunk_charger"), FLAVOR_DIST("flavor_dist"), CHUNK_SPRAYER("chunk_sprayer");
 
 		public static final Variant[] ALL_VARIANTS;
 		public final String name;

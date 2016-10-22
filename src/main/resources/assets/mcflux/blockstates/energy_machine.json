@@ -1,16 +1,6 @@
 {"multipart": [
 	{"when": {"variant": "energy_dist"}, "apply": {"model": "mcflux:energy_dist"}},
 	{"when": {"variant": "chunk_charger"}, "apply": {"model": "mcflux:chunk_charger"}},
-	{"when": {"up": 1}, "apply": {"model": "mcflux:emachine_in"}},
-	{"when": {"up": 2}, "apply": {"model": "mcflux:emachine_out"}},
-	{"when": {"down": 1}, "apply": {"model": "mcflux:emachine_in", "x": 180}},
-	{"when": {"down": 2}, "apply": {"model": "mcflux:emachine_out", "x": 180}},
-	{"when": {"north": 1}, "apply": {"model": "mcflux:emachine_in", "x": 90}},
-	{"when": {"north": 2}, "apply": {"model": "mcflux:emachine_out", "x": 90}},
-	{"when": {"south": 1}, "apply": {"model": "mcflux:emachine_in", "x": 90, "y": 180}},
-	{"when": {"south": 2}, "apply": {"model": "mcflux:emachine_out", "x": 90, "y": 180}},
-	{"when": {"east": 1}, "apply": {"model": "mcflux:emachine_in", "x": 90, "y": 90}},
-	{"when": {"east": 2}, "apply": {"model": "mcflux:emachine_out", "x": 90, "y": 90}},
-	{"when": {"west": 1}, "apply": {"model": "mcflux:emachine_in", "x": 90, "y": 270}},
-	{"when": {"west": 2}, "apply": {"model": "mcflux:emachine_out", "x": 90, "y": 270}}
+	{"when": {"variant": "flavor_dist"}, "apply": {"model": "mcflux:flavor_dist"}},
+	{"when": {"variant": "chunk_sprayer"}, "apply": {"model": "mcflux:chunk_sprayer"}}
 ]}
