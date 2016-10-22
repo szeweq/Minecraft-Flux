@@ -1,3 +1,9 @@
+## 1.4.0 (BETA 1)
+- Botania support
+- Added Flavor Distributor and Chunk Sprayer
+
+This is in beta. All changes will be listed on _release_ version.
+
 ## 1.3.0
 - RF API will not be included with the mod (it will look for API from another mod)
 - Minor code improvements
