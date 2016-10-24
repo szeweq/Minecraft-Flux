@@ -1,4 +1,4 @@
-## 1.4.0 (BETA 2)
+## 1.4.0 (BETA 3)
 - Botania compatibility
 - ProjectE compatibility
 - Added Flavor Distributor and Chunk Sprayer
