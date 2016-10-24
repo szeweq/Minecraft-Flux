@@ -14,10 +14,10 @@ import javax.annotation.Nullable;
 import static szewek.mcflux.wrapper.botania.BotaniaInjectRegistry.BOTANIA_MANA;
 
 public class ManaPoolFlavorWrapper implements IFlavorEnergy, ICapabilityProvider {
+	private static final Flavored[] poolFill = new Flavored[]{new FlavoredImmutable(BOTANIA_MANA, null)};
 	private final TilePool pool;
-	private final Flavored[] poolFill = new Flavored[]{new FlavoredImmutable(BOTANIA_MANA, null)};
 
-	public ManaPoolFlavorWrapper(TilePool tp) {
+	ManaPoolFlavorWrapper(TilePool tp) {
 		pool = tp;
 	}
 
