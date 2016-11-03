@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import szewek.mcflux.L;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
@@ -23,14 +24,27 @@ public class TeslaInjectRegistry implements IInjectRegistry {
 	}
 
 	private static boolean wrapGlobal(ICapabilityProvider icp, InjectWrappers.Registry reg) {
-		if (TeslaUtils.hasTeslaSupport(icp, null)) {
-			reg.add(EnergyType.TESLA, new TeslaCapabilityProvider(icp));
-			return true;
-		} else for (EnumFacing f : EnumFacing.VALUES)
-			if (TeslaUtils.hasTeslaSupport(icp, f)) {
+		try {
+			for (EnumFacing f : EnumFacing.VALUES)
+				if (TeslaUtils.hasTeslaSupport(icp, f)) {
+					reg.add(EnergyType.TESLA, new TeslaCapabilityProvider(icp));
+					return true;
+				}
+		} catch (Exception e) {
+			L.warn("Bad TESLA implementation (checked WITH SIDES)");
+			L.warn("Crashed capability provider class" + icp.getClass().getName());
+			L.warn(e);
+		}
+		try {
+			if (TeslaUtils.hasTeslaSupport(icp, null)) {
 				reg.add(EnergyType.TESLA, new TeslaCapabilityProvider(icp));
 				return true;
 			}
+		} catch (Exception e) {
+			L.warn("Bad TESLA implementation (checked SIDELESS)");
+			L.warn("Crashed capability provider class" + icp.getClass().getName());
+			L.warn(e);
+		}
 		return false;
 	}
 
