@@ -2,6 +2,7 @@
 - Botania compatibility
 - ProjectE compatibility
 - Added Flavor Distributor and Chunk Sprayer
+- Safer TESLA capability checks (less crashes, more logs)
 
 This is in beta. All changes will be listed on _release_ version.
 
