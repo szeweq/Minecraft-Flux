@@ -7,7 +7,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.L;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
@@ -31,9 +30,7 @@ public class TeslaInjectRegistry implements IInjectRegistry {
 					return true;
 				}
 		} catch (Exception e) {
-			L.warn("Bad TESLA implementation (checked WITH SIDES)");
-			L.warn("Crashed capability provider class" + icp.getClass().getName());
-			L.warn(e);
+			InjectWrappers.reportBadImplementation("TESLA", true, icp, e);
 		}
 		try {
 			if (TeslaUtils.hasTeslaSupport(icp, null)) {
@@ -41,9 +38,7 @@ public class TeslaInjectRegistry implements IInjectRegistry {
 				return true;
 			}
 		} catch (Exception e) {
-			L.warn("Bad TESLA implementation (checked SIDELESS)");
-			L.warn("Crashed capability provider class" + icp.getClass().getName());
-			L.warn(e);
+			InjectWrappers.reportBadImplementation("TESLA", false, icp, e);
 		}
 		return false;
 	}
