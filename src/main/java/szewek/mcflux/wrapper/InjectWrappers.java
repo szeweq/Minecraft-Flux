@@ -41,11 +41,11 @@ public enum InjectWrappers {
 	}
 
 	public static void reportBadImplementation(String name, boolean sides, ICapabilityProvider icp, Throwable th) {
-		L.warn("+---= An error occured when trying to attach a capability =---");
+		L.warn("+----= An error occured when trying to attach a capability =----");
 		L.warn("| Bad " + name + " implementation (checked " + (sides ? "WITH SIDES" : "SIDELESS") + ")");
 		L.warn("| Tell authors of this implementation about it!");
 		L.warn("| This is not a Minecraft-Flux problem, it's theirs.");
-		L.warn("+---");
+		L.warn("+----");
 		L.warn(th);
 	}
 

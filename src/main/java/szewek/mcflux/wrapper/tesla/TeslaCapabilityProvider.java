@@ -6,15 +6,18 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.wrapper.EnergyCapabilityProvider;
 
 public class TeslaCapabilityProvider extends EnergyCapabilityProvider {
-	ICapabilityProvider capabilityProvider;
+	ICapabilityProvider capProvider;
+
 	TeslaCapabilityProvider(ICapabilityProvider icp) {
-		capabilityProvider = icp;
+		capProvider = icp;
 		broken = false;
 		for (int i = 0; i < 6; i++) {
-			sides[i] = new TeslaSided(capabilityProvider, EnumFacing.VALUES[i]);
+			sides[i] = new TeslaSided(capProvider, EnumFacing.VALUES[i]);
 		}
+		sides[6] = new TeslaSided(capProvider, null);
 	}
+
 	@Override protected boolean canConnect(EnumFacing f) {
-		return TeslaUtils.hasTeslaSupport(capabilityProvider, f);
+		return TeslaUtils.hasTeslaSupport(capProvider, f);
 	}
 }
