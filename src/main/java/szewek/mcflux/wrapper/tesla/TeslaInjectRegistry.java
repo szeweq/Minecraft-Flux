@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import szewek.mcflux.util.ErrorReport;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
@@ -23,14 +24,17 @@ public class TeslaInjectRegistry implements IInjectRegistry {
 	}
 
 	private static boolean wrapGlobal(ICapabilityProvider icp, InjectWrappers.Registry reg) {
+		EnumFacing f = null;
 		try {
-			for (EnumFacing f : EnumFacing.VALUES)
+			for (int i = 0; i < EnumFacing.VALUES.length; i++) {
+				f = EnumFacing.VALUES[i];
 				if (TeslaUtils.hasTeslaSupport(icp, f)) {
 					reg.add(EnergyType.TESLA, new TeslaCapabilityProvider(icp));
 					return true;
 				}
+			}
 		} catch (Exception e) {
-			InjectWrappers.reportBadImplementation("TESLA", true, icp, e);
+			ErrorReport.badImplementation("TESLA", f, icp, e);
 		}
 		try {
 			if (TeslaUtils.hasTeslaSupport(icp, null)) {
@@ -38,12 +42,12 @@ public class TeslaInjectRegistry implements IInjectRegistry {
 				return true;
 			}
 		} catch (Exception e) {
-			InjectWrappers.reportBadImplementation("TESLA", false, icp, e);
+			ErrorReport.badImplementation("TESLA", null, icp, e);
 		}
 		return false;
 	}
 
-	private static void wrapMappedTeslaProvider(ICapabilityProvider icp, InjectWrappers.Registry reg) {
+	private static void wrapMappedTeslaProvider(InjectWrappers.Registry reg) {
 		for (ICapabilityProvider icx : reg.capMap.values()) {
 			if (wrapGlobal(icx, reg))
 				break;
@@ -53,22 +57,22 @@ public class TeslaInjectRegistry implements IInjectRegistry {
 	private static void wrapTeslaTile(TileEntity te, InjectWrappers.Registry reg) {
 		if (wrapGlobal(te, reg))
 			return;
-		wrapMappedTeslaProvider(te, reg);
+		wrapMappedTeslaProvider(reg);
 	}
 
 	private static void wrapTeslaEntity(Entity ent, InjectWrappers.Registry reg) {
 		if (wrapGlobal(ent, reg))
 			return;
-		wrapMappedTeslaProvider(ent, reg);
+		wrapMappedTeslaProvider(reg);
 	}
 
 	private static void wrapTeslaWorld(World w, InjectWrappers.Registry reg) {
 		if (wrapGlobal(w, reg))
 			return;
-		wrapMappedTeslaProvider(w, reg);
+		wrapMappedTeslaProvider(reg);
 	}
 
 	private static void wrapTeslaItem(ItemStack is, InjectWrappers.Registry reg) {
-		wrapMappedTeslaProvider(is, reg);
+		wrapMappedTeslaProvider(reg);
 	}
 }
