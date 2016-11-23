@@ -8,6 +8,8 @@ cache:
   directories:
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper/
+before_build:
+- ./gradlew setupCiWorkspace
 after_deploy:
 - ./gradlew curseforge
 - ./gradlew bintrayUpload
