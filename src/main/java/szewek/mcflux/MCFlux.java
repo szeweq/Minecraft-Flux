@@ -1,7 +1,6 @@
 package szewek.mcflux;
 
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -61,7 +60,7 @@ public class MCFlux {
 	public static final int UPDATE_SRV = 69;
 	private static final MessageHandlerServer MSG_SRV = new MessageHandlerServer();
 	private static final MessageHandlerDummy MSG_DMM = new MessageHandlerDummy();
-	private static final CreativeTabs MCFLUX_TAB = new MCFluxCreativeTab();
+	private static final MCFluxCreativeTab MCFLUX_TAB = new MCFluxCreativeTab();
 	@SidedProxy(modId = R.MF_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
 	static szewek.mcflux.proxy.ProxyCommon PROXY = null;
 
@@ -85,6 +84,7 @@ public class MCFlux {
 		UPCHIP = registerItem("upchip", new ItemUpChip());
 		SIDED = new BlockSided("sided");
 		ENERGY_MACHINE = registerBlock("energy_machine", new BlockEnergyMachine(), ItemBlockEnergyMachine::new);
+		MCFLUX_TAB.init();
 		GameRegistry.registerTileEntity(TileEntityEnergyMachine.class, "mcflux.emachine");
 		SNW = NetworkRegistry.INSTANCE.newSimpleChannel(R.MF_NAME);
 		SNW.registerMessage(MSG_SRV, UpdateMessageClient.class, UPDATE_CLI, Side.SERVER);

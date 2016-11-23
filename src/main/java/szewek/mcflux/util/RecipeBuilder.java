@@ -9,7 +9,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import szewek.mcflux.U;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -120,7 +122,7 @@ public class RecipeBuilder {
 		private final ItemStack[] stacks;
 		private final String[] oreDicts;
 		private final EnumRecipeMirror mirror;
-		private final Object[] cached;
+		private final List<List<ItemStack>> cached;
 
 		private BuiltShapedRecipe(IX[][] shape, int w, int h, ItemStack result, ItemStack[] stacks, String[] oreDicts, EnumRecipeMirror m) {
 			shapeCode = shape;
@@ -130,7 +132,7 @@ public class RecipeBuilder {
 			this.stacks = stacks;
 			this.oreDicts = oreDicts;
 			this.mirror = m;
-			Object[] pc = new Object[width * height];
+			NonNullList<List<ItemStack>> pc = NonNullList.withSize(width * height, Collections.emptyList());
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
 					IX id = shapeCode[y][x];
@@ -138,14 +140,14 @@ public class RecipeBuilder {
 						continue;
 					List<ItemStack> lis = this.oreDicts[id.ord] != null ? OreDictionary.getOres(this.oreDicts[id.ord]) : null;
 					if (lis != null) {
-						pc[y * width + x] = lis;
+						pc.set(y * width + x, lis);
 						continue;
 					}
 					ItemStack is = this.stacks[id.ord];
-					pc[y * width + x] = is;
+					pc.set(y * width + x, Collections.singletonList(is));
 				}
 			}
-			cached = pc;
+			cached = Collections.unmodifiableList(pc);
 		}
 
 		public int getWidth() {
@@ -157,7 +159,7 @@ public class RecipeBuilder {
 		}
 
 		@Override
-		public boolean matches(InventoryCrafting inv, World worldIn) {
+		public boolean matches(InventoryCrafting inv, World w) {
 			int full = width * height;
 			for (int x = 0; x < 4 - width; x++)
 				for (int y = 0; y < 4 - height; y++) {
@@ -186,7 +188,7 @@ public class RecipeBuilder {
 					ItemStack slot = inv.getStackInRowAndColumn(zx, zy);
 					IX id = shapeCode[mirrorY ? height - y - 1 : y][mirrorX ? width - x - 1 : x];
 					if (id == null) {
-						if (slot != null)
+						if (!U.isItemEmpty(slot))
 							break;
 						else {
 							m++;
@@ -195,9 +197,9 @@ public class RecipeBuilder {
 					}
 					NonNullList<ItemStack> oreDictItems = oreDicts[id.ord] != null ? OreDictionary.getOres(oreDicts[id.ord]) : null;
 					boolean emptyList = oreDictItems == null || oreDictItems.isEmpty();
-					if ((stacks[id.ord] == null && emptyList) != (slot == null))
+					if ((stacks[id.ord] == null && emptyList) != U.isItemEmpty(slot))
 						break;
-					if (slot != null) {
+					if (!U.isItemEmpty(slot)) {
 						if (stacks[id.ord] == null || !OreDictionary.itemMatches(stacks[id.ord], slot, false))
 							break;
 						if (emptyList || !OreDictionary.containsMatch(false, oreDictItems, slot))
@@ -210,7 +212,7 @@ public class RecipeBuilder {
 
 		}
 
-		public Object[] getCached() {
+		public List<List<ItemStack>> getCached() {
 			return cached;
 		}
 
