@@ -30,7 +30,7 @@ public class ItemFESniffer extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack is, EntityPlayer p, World w, BlockPos pos, EnumHand h, EnumFacing f, float x, float y, float z) {
+	public EnumActionResult onItemUse(EntityPlayer p, World w, BlockPos pos, EnumHand h, EnumFacing f, float x, float y, float z) {
 		if (!w.isRemote) {
 			TileEntity te = w.getTileEntity(pos);
 			if (te != null) {
@@ -40,7 +40,7 @@ public class ItemFESniffer extends Item {
 				IFlavorEnergy ife = te.getCapability(FE.CAP_FLAVOR_ENERGY, f);
 				TextComponentTranslation tct = textBlock.createCopy();
 				tct.appendSibling(ife != null ? textIsCompat : textNoCompat).appendSibling(new TextComponentTranslation("mcflux.blockcompat.feend", f));
-				p.addChatComponentMessage(tct);
+				p.sendMessage(tct);
 				return EnumActionResult.SUCCESS;
 			}
 		}
@@ -49,11 +49,11 @@ public class ItemFESniffer extends Item {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack is, EntityPlayer p, EntityLivingBase elb, EnumHand h) {
-		if (!elb.worldObj.isRemote) {
+		if (!elb.world.isRemote) {
 			IFlavorEnergy ife = elb.getCapability(FE.CAP_FLAVOR_ENERGY, null);
 			TextComponentTranslation tct = textEntity.createCopy();
 			tct.appendSibling(ife != null ? textIsCompat : textNoCompat).appendSibling(new TextComponentTranslation("mcflux.entitycompat.feend"));
-			p.addChatComponentMessage(tct);
+			p.sendMessage(tct);
 			return true;
 		}
 		return false;

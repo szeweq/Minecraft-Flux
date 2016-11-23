@@ -72,7 +72,7 @@ public class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializa
 		if (amount == 0)
 			return 0;
 		if (maxEnergy == 0) {
-			player.attackEntityFrom(DamageSource.generic, amount / 100);
+			player.attackEntityFrom(DamageSource.GENERIC, amount / 100);
 			return 0;
 		}
 		long r = maxEnergy - energy;

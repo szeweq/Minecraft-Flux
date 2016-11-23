@@ -20,6 +20,10 @@ public class U {
 	public static String formatMF(long n, long nc) {
 		return n + " / " + nc + " MF";
 	}
+
+	public static boolean isItemEmpty(ItemStack is) {
+		return is == null || is.isEmpty();
+	}
 	
 	public static long transferEnergy(IEnergy from, IEnergy to, final long amount) {
 		if (from.canOutputEnergy() && to.canInputEnergy()) {

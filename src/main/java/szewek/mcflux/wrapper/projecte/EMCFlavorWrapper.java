@@ -22,6 +22,7 @@ public class EMCFlavorWrapper implements ICapabilityProvider {
 		return cap == FE.CAP_FLAVOR_ENERGY;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override public <T> T getCapability(Capability<T> cap, @Nullable EnumFacing f) {
 		return cap == FE.CAP_FLAVOR_ENERGY ? (T) sides[f == null ? 6 : f.getIndex()] : null;
 	}

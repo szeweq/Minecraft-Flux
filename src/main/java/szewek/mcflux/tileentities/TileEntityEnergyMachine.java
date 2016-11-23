@@ -66,22 +66,22 @@ public class TileEntityEnergyMachine extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public void setWorldObj(@Nonnull World w) {
-		super.setWorldObj(w);
-		wce = worldObj != null && !worldObj.isRemote ? worldObj.getCapability(WorldChunkEnergy.CAP_WCE, null) : null;
+	public void setWorld(@Nonnull World w) {
+		super.setWorld(w);
+		wce = world != null && !world.isRemote ? world.getCapability(WorldChunkEnergy.CAP_WCE, null) : null;
 	}
 
 	@Override
 	public void setPos(@Nonnull BlockPos bp) {
 		super.setPos(bp);
 		if (moduleId < 2)
-			bat = worldObj != null && !worldObj.isRemote ? wce.getEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
+			bat = world != null && !world.isRemote ? wce.getEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
 		else
-			cnt = worldObj != null && !worldObj.isRemote ? wce.getFlavorEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
+			cnt = world != null && !world.isRemote ? wce.getFlavorEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
 	}
 
 	@Override public void onLoad() {
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			MCFlux.SNW.sendToServer(new UpdateMessageClient(pos));
 			clientUpdate = false;
 		}
@@ -89,14 +89,14 @@ public class TileEntityEnergyMachine extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (worldObj.isRemote && clientUpdate) {
+		if (world.isRemote && clientUpdate) {
 			MCFlux.SNW.sendToServer(new UpdateMessageClient(pos));
 			clientUpdate = false;
-		} else if (!worldObj.isRemote && serverUpdate) {
-			MCFlux.SNW.sendToDimension(new UpdateMessageServer(pos, sideTransfer), worldObj.provider.getDimension());
+		} else if (!world.isRemote && serverUpdate) {
+			MCFlux.SNW.sendToDimension(new UpdateMessageServer(pos, sideTransfer), world.provider.getDimension());
 			serverUpdate = false;
 		}
-		if (!worldObj.isRemote && wce != null && ((moduleId < 2 && bat != null) || cnt != null)) {
+		if (!world.isRemote && wce != null && ((moduleId < 2 && bat != null) || cnt != null)) {
 			int i = oddTick ? 0 : 3, m = oddTick ? 3 : 6;
 			for (int j = i; j < m; j++)
 				sideValues[j] = 0;
@@ -154,7 +154,7 @@ public class TileEntityEnergyMachine extends TileEntity implements ITickable {
 		int v = (sideTransfer[s].ord + 1) % 3;
 		sideTransfer[s] = TransferType.values()[v];
 		cachedState = cachedState.withProperty(BlockSided.sideFromId(s), v);
-		MCFlux.SNW.sendToDimension(new UpdateMessageServer(pos, sideTransfer), worldObj.provider.getDimension());
+		MCFlux.SNW.sendToDimension(new UpdateMessageServer(pos, sideTransfer), world.provider.getDimension());
 		markDirty();
 	}
 
@@ -179,7 +179,7 @@ public class TileEntityEnergyMachine extends TileEntity implements ITickable {
 			if (tt == TransferType.NONE)
 				continue;
 			EnumFacing f = EnumFacing.VALUES[i];
-			TileEntity te = worldObj.getTileEntity(pos.offset(f, 1));
+			TileEntity te = world.getTileEntity(pos.offset(f, 1));
 			if (te == null)
 				continue;
 			f = f.getOpposite();
@@ -227,7 +227,7 @@ public class TileEntityEnergyMachine extends TileEntity implements ITickable {
 			if (tt == TransferType.NONE)
 				continue;
 			EnumFacing f = EnumFacing.VALUES[i];
-			TileEntity te = worldObj.getTileEntity(pos.offset(f, 1));
+			TileEntity te = world.getTileEntity(pos.offset(f, 1));
 			if (te == null)
 				continue;
 			f = f.getOpposite();

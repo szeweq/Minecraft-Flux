@@ -27,7 +27,7 @@ public class MessageHandlerServer implements IMessageHandler<UpdateMessageClient
 	}
 
 	private void respond(BlockPos bp, EntityPlayerMP mp) {
-		TileEntity te = mp.worldObj.getTileEntity(bp);
+		TileEntity te = mp.world.getTileEntity(bp);
 		if (te instanceof TileEntityEnergyMachine) {
 			MCFlux.SNW.sendTo(new UpdateMessageServer(bp, ((TileEntityEnergyMachine) te).getAllTransferSides()), mp);
 		}

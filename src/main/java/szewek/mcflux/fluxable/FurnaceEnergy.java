@@ -3,6 +3,7 @@ package szewek.mcflux.fluxable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
+import szewek.mcflux.U;
 import szewek.mcflux.api.ex.EnergyCapable;
 
 import static szewek.mcflux.config.MCFluxConfig.FURNACE_CAP;
@@ -27,17 +28,17 @@ class FurnaceEnergy extends EnergyCapable {
 
 	@Override public boolean canInputEnergy() {
 		ItemStack is0 = furnace.getStackInSlot(0);
-		if (is0 == null)
+		if (U.isItemEmpty(is0))
 			return false;
 		ItemStack is = FurnaceRecipes.instance().getSmeltingResult(is0);
-		if (is == null)
+		if (U.isItemEmpty(is))
 			return false;
 		ItemStack is2 = furnace.getStackInSlot(2);
-		if (is2 == null)
+		if (U.isItemEmpty(is2))
 			return true;
 		if (!is2.isItemEqual(is))
 			return false;
-		int r = is2.stackSize + is.stackSize;
+		int r = is2.getCount() + is.getCount();
 		return r <= furnace.getInventoryStackLimit() && r <= is2.getMaxStackSize();
 	}
 

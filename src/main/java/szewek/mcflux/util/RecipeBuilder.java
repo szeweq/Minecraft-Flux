@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -192,7 +193,7 @@ public class RecipeBuilder {
 							continue;
 						}
 					}
-					List<ItemStack> oreDictItems = oreDicts[id.ord] != null ? OreDictionary.getOres(oreDicts[id.ord]) : null;
+					NonNullList<ItemStack> oreDictItems = oreDicts[id.ord] != null ? OreDictionary.getOres(oreDicts[id.ord]) : null;
 					boolean emptyList = oreDictItems == null || oreDictItems.isEmpty();
 					if ((stacks[id.ord] == null && emptyList) != (slot == null))
 						break;
@@ -229,7 +230,7 @@ public class RecipeBuilder {
 		}
 
 		@Override
-		public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+		public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
 			return net.minecraftforge.common.ForgeHooks.defaultRecipeGetRemainingItems(inv);
 		}
 	}

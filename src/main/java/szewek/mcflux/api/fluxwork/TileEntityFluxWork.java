@@ -78,7 +78,7 @@ public abstract class TileEntityFluxWork extends TileEntity implements IEnergy, 
 
 	@Override
 	public final void update() {
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			tickClient();
 			return;
 		}

@@ -11,16 +11,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import szewek.mcflux.U;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 import java.util.ArrayList;
@@ -57,11 +55,11 @@ public class BlockEnergyMachine extends BlockContainer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < Variant.ALL_VARIANTS.length; i++)
 			list.add(new ItemStack(item, 1, i));
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(VARIANT, Variant.ALL_VARIANTS[meta % Variant.ALL_VARIANTS.length]);
@@ -96,10 +94,10 @@ public class BlockEnergyMachine extends BlockContainer {
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override
-	public boolean onBlockActivated(World w, BlockPos bp, IBlockState ibs, EntityPlayer p, EnumHand h, ItemStack is, EnumFacing f, float x, float y, float z) {
-		boolean b = is == null && h == EnumHand.MAIN_HAND;
+	public boolean onBlockActivated(World w, BlockPos bp, IBlockState ibs, EntityPlayer p, EnumHand h, EnumFacing f, float x, float y, float z) {
+		boolean b = U.isItemEmpty(p.getHeldItem(h)) && h == EnumHand.MAIN_HAND;
 		if (b && !w.isRemote) {
 			TileEntity te = w.getTileEntity(bp);
 			if (te != null && te instanceof TileEntityEnergyMachine)

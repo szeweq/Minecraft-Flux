@@ -23,7 +23,7 @@ public class MessageHandlerClient implements IMessageHandler<UpdateMessageServer
 			return null;
 		}
 		Minecraft mc = Minecraft.getMinecraft();
-		mc.addScheduledTask(() -> process(mc.theWorld, message.getPos(), message.getSides()));
+		mc.addScheduledTask(() -> process(mc.world, message.getPos(), message.getSides()));
 		return null;
 	}
 

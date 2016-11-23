@@ -33,30 +33,30 @@ public class ItemMFTool extends Item {
 		textIsCompat.getStyle().setColor(TextFormatting.GREEN).setBold(true);
 		textNoCompat.getStyle().setColor(TextFormatting.RED).setBold(true);
 	}
-	
+
 	@Override
-	public EnumActionResult onItemUse(ItemStack is, EntityPlayer p, World w, BlockPos pos, EnumHand h, EnumFacing f, float x, float y, float z) {
+	public EnumActionResult onItemUse(EntityPlayer p, World w, BlockPos pos, EnumHand h, EnumFacing f, float x, float y, float z) {
 		if (!w.isRemote) {
 			TileEntity te = w.getTileEntity(pos);
 			if (te != null) {
 				if (te instanceof TileEntityEnergyMachine) {
 					TileEntityEnergyMachine teem = (TileEntityEnergyMachine) te;
 					if (teem.getModuleId() < 2)
-						p.addChatComponentMessage(new TextComponentTranslation("mcflux.transfer", ((TileEntityEnergyMachine) te).getTransferSide(f)));
+						p.sendMessage(new TextComponentTranslation("mcflux.transfer", ((TileEntityEnergyMachine) te).getTransferSide(f)));
 					return EnumActionResult.SUCCESS;
 				}
 				IEnergy ie = te.getCapability(EX.CAP_ENERGY, f);
 				TextComponentTranslation tcb = textBlock.createCopy();
 				tcb.appendSibling(ie != null ? textIsCompat : textNoCompat).appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
-				p.addChatComponentMessage(tcb);
+				p.sendMessage(tcb);
 				if (ie != null)
-					p.addChatComponentMessage(new TextComponentTranslation("mcflux.energystat", U.formatMF(ie.getEnergy(), ie.getEnergyCapacity())));
+					p.sendMessage(new TextComponentTranslation("mcflux.energystat", U.formatMF(ie.getEnergy(), ie.getEnergyCapacity())));
 			} else {
 				WorldChunkEnergy wce = w.getCapability(WorldChunkEnergy.CAP_WCE, null);
 				Battery bat = wce.getEnergyChunk((int) p.posX, (int) (p.posY + 0.5), (int) p.posZ);
 				TextComponentTranslation tcb = textWorldChunk.createCopy();
 				tcb.appendSibling(new TextComponentTranslation("mcflux.energystat", U.formatMF(bat.getEnergy(), bat.getEnergyCapacity())));
-				p.addChatComponentMessage(tcb);
+				p.sendMessage(tcb);
 			}
 			return EnumActionResult.SUCCESS;
 		}
@@ -65,15 +65,15 @@ public class ItemMFTool extends Item {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack is, EntityPlayer p, EntityLivingBase elb, EnumHand h) {
-		if (!elb.worldObj.isRemote) {
+		if (!elb.world.isRemote) {
 			IEnergy ie = elb.getCapability(EX.CAP_ENERGY, null);
 			TextComponentTranslation tcb = textEntity.createCopy();
 			tcb.appendSibling(ie != null ? textIsCompat : textNoCompat);
 			tcb.appendSibling(new TextComponentTranslation("mcflux.entitycompat.end"));
-			p.addChatComponentMessage(tcb);
+			p.sendMessage(tcb);
 			if (ie != null) {
 				long n = ie.getEnergy(), nc = ie.getEnergyCapacity();
-				p.addChatComponentMessage(nc == 1 ? textEnergyUnknown : new TextComponentTranslation("mcflux.energystat", U.formatMF(n, nc)));
+				p.sendMessage(nc == 1 ? textEnergyUnknown : new TextComponentTranslation("mcflux.energystat", U.formatMF(n, nc)));
 			}
 			return true;
 		}

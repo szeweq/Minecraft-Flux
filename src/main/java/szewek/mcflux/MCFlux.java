@@ -43,7 +43,6 @@ import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 import szewek.mcflux.util.*;
 import szewek.mcflux.wrapper.InjectWrappers;
 
-import javax.annotation.Nonnull;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -62,12 +61,7 @@ public class MCFlux {
 	public static final int UPDATE_SRV = 69;
 	private static final MessageHandlerServer MSG_SRV = new MessageHandlerServer();
 	private static final MessageHandlerDummy MSG_DMM = new MessageHandlerDummy();
-	private static final CreativeTabs MCFLUX_TAB = new CreativeTabs(R.MF_NAME) {
-		@Override @Nonnull
-		public Item getTabIconItem() {
-			return MFTOOL;
-		}
-	};
+	private static final CreativeTabs MCFLUX_TAB = new MCFluxCreativeTab();
 	@SidedProxy(modId = R.MF_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
 	static szewek.mcflux.proxy.ProxyCommon PROXY = null;
 

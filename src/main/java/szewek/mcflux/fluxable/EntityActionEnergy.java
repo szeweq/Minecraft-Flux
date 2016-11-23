@@ -39,7 +39,7 @@ class EntityActionEnergy extends EnergyCapable {
 	public long inputEnergy(long amount, boolean simulate) {
 		if (!simulate && !charged) {
 			if (creature instanceof EntityPig) {
-				EntityPigZombie pigman = new EntityPigZombie(creature.worldObj);
+				EntityPigZombie pigman = new EntityPigZombie(creature.world);
 				pigman.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_AXE));
 				pigman.setLocationAndAngles(creature.posX, creature.posY, creature.posZ, creature.rotationYaw, creature.rotationPitch);
 				pigman.setNoAI(creature.isAIDisabled());
@@ -47,7 +47,7 @@ class EntityActionEnergy extends EnergyCapable {
 					pigman.setCustomNameTag(creature.getCustomNameTag());
 					pigman.setAlwaysRenderNameTag(creature.getAlwaysRenderNameTag());
 				}
-				creature.worldObj.spawnEntityInWorld(pigman);
+				creature.world.spawnEntity(pigman);
 				creature.setDead();
 			} else if (creature instanceof EntityCreeper)
 				creature.onStruckByLightning(null);
