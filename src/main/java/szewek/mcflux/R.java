@@ -9,12 +9,12 @@ public final class R {
 		MF_API = "mcfluxAPI",
 		MF_API_EX = MF_API + "|ex",
 		MF_API_FE = MF_API + "|fe",
+		MF_API_ASSISTANT = MF_API + "|assistant",
 		MF_PKG = "szewek.mcflux",
 		GUI_FACTORY = MF_PKG + ".client.MCFluxGuiFactory",
 		PROXY_SERVER = MF_PKG + ".proxy.ProxyCommon",
 		PROXY_CLIENT = MF_PKG + ".proxy.ProxyClient",
-		WAILA_REGISTER = MF_PKG + ".compat.waila.MCFluxWailaProvider.callbackRegister",
-		TAG_MF = "@MF";
+		WAILA_REGISTER = MF_PKG + ".compat.waila.MCFluxWailaProvider.callbackRegister";
 
 	private R() {}
 }
