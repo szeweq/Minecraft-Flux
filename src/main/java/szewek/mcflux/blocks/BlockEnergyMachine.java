@@ -28,20 +28,20 @@ import java.util.List;
 public class BlockEnergyMachine extends BlockContainer {
 	private static final AxisAlignedBB DEF_AABB = new AxisAlignedBB(0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
 	public static final PropertyEnum<Variant> VARIANT = PropertyEnum.create("variant", Variant.class);
-	
+
 	public BlockEnergyMachine() {
 		super(Material.PISTON);
 		setHardness(0.5F);
 		setSoundType(SoundType.METAL);
 	}
-	
+
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> list = new ArrayList<>();
 		list.add(new ItemStack(this, 1, state.getValue(VARIANT).ordinal()));
 		return list;
 	}
-	
+
 	@Override
 	public int damageDropped(IBlockState state) {
 		return state.getValue(VARIANT).ordinal();
@@ -65,17 +65,17 @@ public class BlockEnergyMachine extends BlockContainer {
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(VARIANT, Variant.ALL_VARIANTS[meta % Variant.ALL_VARIANTS.length]);
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(VARIANT).ordinal();
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, VARIANT);
 	}
-	
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return DEF_AABB;
@@ -86,7 +86,7 @@ public class BlockEnergyMachine extends BlockContainer {
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;
@@ -122,11 +122,11 @@ public class BlockEnergyMachine extends BlockContainer {
 		public String getName() {
 			return name;
 		}
-		
+
 		public static String nameFromStack(ItemStack is) {
 			return ALL_VARIANTS[is.getMetadata() % ALL_VARIANTS.length].name;
 		}
-		
+
 		static {
 			ALL_VARIANTS = Variant.values();
 		}

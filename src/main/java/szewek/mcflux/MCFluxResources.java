@@ -12,6 +12,7 @@ import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockEntityCharger;
 import szewek.mcflux.blocks.BlockSided;
 import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
+import szewek.mcflux.blocks.itemblocks.ItemMCFluxBlock;
 import szewek.mcflux.items.ItemFESniffer;
 import szewek.mcflux.items.ItemMFTool;
 import szewek.mcflux.items.ItemUpChip;
@@ -45,7 +46,7 @@ public enum MCFluxResources {
 		UPCHIP = item("upchip", new ItemUpChip());
 		SIDED = new BlockSided("sided");
 		ENERGY_MACHINE = block("energy_machine", new BlockEnergyMachine(), ItemBlockEnergyMachine::new);
-		ECHARGER = block("echarger", new BlockEntityCharger(), ItemBlock::new);
+		ECHARGER = block("echarger", new BlockEntityCharger(), ItemMCFluxBlock::new);
 		GameRegistry.registerTileEntity(TileEntityEnergyMachine.class, "mcflux.emachine");
 		GameRegistry.registerTileEntity(TileEntityECharger.class, "mcflux.echarger");
 	}
@@ -54,7 +55,7 @@ public enum MCFluxResources {
 			return;
 		state++;
 		ItemStack iRedstone = new ItemStack(Items.REDSTONE);
-		ItemStack iEndCrystal = new ItemStack(Items.END_CRYSTAL);
+		ItemStack iEnderEye = new ItemStack(Items.ENDER_EYE);
 		ItemStack iEnergyDist = new ItemStack(ENERGY_MACHINE, 1, 0);
 		ItemStack iFlavorDist = new ItemStack(ENERGY_MACHINE, 1, 2);
 		IX[][] ixStar = new IX[][]{{null, IX.A, null}, {IX.A, IX.B, IX.A}, {null, IX.A, null}};
@@ -68,7 +69,7 @@ public enum MCFluxResources {
 		new RecipeBuilder(ENERGY_MACHINE)
 				.shape(ixStar, 3, 3)
 				.with(IX.A, "ingotIron")
-				.with(IX.B, iEndCrystal)
+				.with(IX.B, iEnderEye)
 				.deploy()
 				.resultMeta(1)
 				.clear(IX.A, IX.B)
@@ -80,7 +81,7 @@ public enum MCFluxResources {
 				.clear(IX.A, IX.B)
 				.shape(ixStar, 3, 3)
 				.with(IX.A, "ingotGold")
-				.with(IX.B, iEndCrystal)
+				.with(IX.B, iEnderEye)
 				.deploy()
 				.resultMeta(3)
 				.clear(IX.A, IX.B)

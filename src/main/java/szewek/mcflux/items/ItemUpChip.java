@@ -4,7 +4,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketTitle;
 import net.minecraft.stats.StatList;
@@ -15,7 +14,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import szewek.mcflux.fluxable.PlayerEnergy;
 
-public class ItemUpChip extends Item {
+public class ItemUpChip extends ItemMCFlux {
 	private static final String PF = "mcflux.upchip.";
 	private static final TextComponentTranslation
 			textInstalled = new TextComponentTranslation(PF + "installed"),

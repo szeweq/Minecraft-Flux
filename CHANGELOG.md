@@ -1,11 +1,14 @@
-## 1.4.0 (BETA 5)
+## 2.0.0 (BETA)
+- Changed recipes for Energy Distributor and Flavor Distributor (Ender Eye instead of End Crystal)
+- Added Entity Charger
+- Added item and block descriptions
+
+## 1.4.1
 - Botania compatibility
 - ProjectE compatibility
 - Added Flavor Distributor and Chunk Sprayer
 - Safer TESLA capability checks (less crashes, more logs)
 - Added Forge Energy compatibility
-
-This is in beta. All changes will be listed on _release_ version.
 
 ## 1.3.0
 - RF API will not be included with the mod (it will look for API from another mod)

@@ -4,8 +4,9 @@ import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import szewek.mcflux.MCFluxResources;
 import szewek.mcflux.compat.jei.crafting.BuiltShapedRecipeHandler;
+
+import static szewek.mcflux.MCFluxResources.*;
 
 @JEIPlugin
 public class MCFluxJEIPlugin implements IModPlugin {
@@ -21,9 +22,9 @@ public class MCFluxJEIPlugin implements IModPlugin {
 		reg.addRecipeHandlers(
 			new BuiltShapedRecipeHandler()
 		);
-		addItemDescriptions(reg, MCFluxResources.MFTOOL, MCFluxResources.UPCHIP);
+		addItemDescriptions(reg, MFTOOL, UPCHIP, Item.getItemFromBlock(ECHARGER));
 		for (int i = 0; i < 2; i++) {
-			Item it = Item.getItemFromBlock(MCFluxResources.ENERGY_MACHINE);
+			Item it = Item.getItemFromBlock(ENERGY_MACHINE);
 			ItemStack is = new ItemStack(it, 1, i);
 			reg.addDescription(is, it.getUnlocalizedName(is) + ".jeidesc");
 		}

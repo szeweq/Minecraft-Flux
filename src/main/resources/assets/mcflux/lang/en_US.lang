@@ -25,8 +25,10 @@ mcflux.upchip.lvlmax=You reached the final level.
 itemGroup.mcflux=Minecraft-Flux
 
 item.mftool.name=MF Tool
+item.mftool.desc=Compatibility checker
 item.mftool.jeidesc=Use this tool to check if a block/entity is MF compatible.\nIf it is then MF Tool shows energy stats.
 item.upchip.name=MF Upgrade Chip
+item.upchip.desc=Omnomnom!
 item.upchip.jeidesc=EAT IT! Upgrade your energy with this chip.
 
 tile.energy_dist.name=Energy Distributor
@@ -37,5 +39,10 @@ tile.chunk_charger.desc=Charges nearby chunks with energy.
 tile.chunk_charger.jeidesc=Chunk Charger transfers energy from/to neighbor chunks.\nOne per 16x16x16 chunk should be enough.
 tile.flavor_dist.name=Flavor Distributor
 tile.flavor_dist.desc=Transfers Flavor Energy.
+tile.flavor_dist.jeidesc=It's a flavored version of Energy Distributor.\nIt transfers flavored energy (like mana).
 tile.chunk_sprayer.name=Chunk sprayer
 tile.chunk_sprayer.desc=Charges nearby chunks with Flavor Energy.
+tile.chunk_sprayer.jeidesc=Flavored version of Chunk Sprayer.
+tile.echarger.name=Entity Charger
+tile.echarger.desc=Takes energy from nearby blocks or World Chunk Energy
+tile.echarger.jeidesc=It doesn't contain any energy.\nConnect an Entity Charger to a nearby block or charge a chunk using Energy Distributor and Chunk Charger.

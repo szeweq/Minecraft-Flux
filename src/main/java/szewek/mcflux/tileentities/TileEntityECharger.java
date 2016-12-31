@@ -46,6 +46,7 @@ public class TileEntityECharger extends TileEntityWCEAware implements ITickable 
 	public void addEntityEnergy(IEnergy ie) {
 		chargeables.add(ie);
 	}
+
 	public void removeEntityEnergy(IEnergy ie) {
 		chargeables.remove(ie);
 	}

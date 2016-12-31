@@ -2,7 +2,6 @@ package szewek.mcflux.items;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
@@ -19,7 +18,7 @@ import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
-public class ItemMFTool extends Item {
+public class ItemMFTool extends ItemMCFlux {
 	private final TextComponentTranslation
 		textBlock = new TextComponentTranslation("mcflux.blockcompat.start"),
 		textEntity = new TextComponentTranslation("mcflux.entitycompat.start"),
