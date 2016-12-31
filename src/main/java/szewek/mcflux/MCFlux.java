@@ -1,10 +1,5 @@
 package szewek.mcflux;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -15,7 +10,6 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.RecipeSorter;
 import szewek.mcflux.api.ex.Battery;
@@ -24,26 +18,18 @@ import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.api.fe.FlavorNBTStorage;
 import szewek.mcflux.api.fe.FlavoredStorage;
 import szewek.mcflux.api.fe.IFlavorEnergy;
-import szewek.mcflux.blocks.BlockEnergyMachine;
-import szewek.mcflux.blocks.BlockSided;
-import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
 import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.InjectFluxable;
 import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
-import szewek.mcflux.items.ItemFESniffer;
-import szewek.mcflux.items.ItemMFTool;
-import szewek.mcflux.items.ItemUpChip;
 import szewek.mcflux.network.MessageHandlerDummy;
 import szewek.mcflux.network.MessageHandlerServer;
 import szewek.mcflux.network.UpdateMessageClient;
 import szewek.mcflux.network.UpdateMessageServer;
-import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 import szewek.mcflux.util.*;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 import java.util.Set;
-import java.util.function.Function;
 
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
@@ -51,16 +37,11 @@ import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 @Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true, guiFactory = R.GUI_FACTORY, dependencies = R.MF_DEPENDENCIES)
 public class MCFlux {
 	public static SimpleNetworkWrapper SNW;
-	public static ItemMFTool MFTOOL;
-	public static ItemFESniffer FESNIFFER;
-	public static ItemUpChip UPCHIP;
-	public static BlockSided SIDED;
-	public static BlockEnergyMachine ENERGY_MACHINE;
 	private static final int UPDATE_CLI = 67;
 	public static final int UPDATE_SRV = 69;
 	private static final MessageHandlerServer MSG_SRV = new MessageHandlerServer();
 	private static final MessageHandlerDummy MSG_DMM = new MessageHandlerDummy();
-	private static final MCFluxCreativeTab MCFLUX_TAB = new MCFluxCreativeTab();
+	static final MCFluxCreativeTab MCFLUX_TAB = new MCFluxCreativeTab();
 	@SidedProxy(modId = R.MF_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
 	static szewek.mcflux.proxy.ProxyCommon PROXY = null;
 
@@ -79,13 +60,8 @@ public class MCFlux {
 		cm.register(PlayerEnergy.class, new NBTSerializableCapabilityStorage<>(), PlayerEnergy::new);
 		EVENT_BUS.register(InjectWrappers.EVENTS);
 		EVENT_BUS.register(MCFluxEvents.INSTANCE);
-		MFTOOL = registerItem("mftool", new ItemMFTool());
-		FESNIFFER = registerItem("fesniffer", new ItemFESniffer());
-		UPCHIP = registerItem("upchip", new ItemUpChip());
-		SIDED = new BlockSided("sided");
-		ENERGY_MACHINE = registerBlock("energy_machine", new BlockEnergyMachine(), ItemBlockEnergyMachine::new);
+		MCFluxResources.preInit();
 		MCFLUX_TAB.init();
-		GameRegistry.registerTileEntity(TileEntityEnergyMachine.class, "mcflux.emachine");
 		SNW = NetworkRegistry.INSTANCE.newSimpleChannel(R.MF_NAME);
 		SNW.registerMessage(MSG_SRV, UpdateMessageClient.class, UPDATE_CLI, Side.SERVER);
 		SNW.registerMessage(MSG_DMM, UpdateMessageServer.class, UPDATE_SRV, Side.SERVER);
@@ -97,41 +73,7 @@ public class MCFlux {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
 		RecipeSorter.register("mcflux:builtRecipe", RecipeBuilder.BuiltShapedRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-		ItemStack iRedstone = new ItemStack(Items.REDSTONE);
-		ItemStack iEndCrystal = new ItemStack(Items.END_CRYSTAL);
-		ItemStack iEnergyDist = new ItemStack(ENERGY_MACHINE, 1, 0);
-		ItemStack iFlavorDist = new ItemStack(ENERGY_MACHINE, 1, 2);
-		IX[][] ixStar = new IX[][]{{null, IX.A, null}, {IX.A, IX.B, IX.A}, {null, IX.A, null}};
-		IX[][] ixCross = new IX[][]{{IX.A, null, IX.A}, {null, IX.B, null}, {IX.A, null, IX.A}};
-		new RecipeBuilder(MFTOOL)
-				.withShape(new IX[][]{{IX.A, null, IX.A}, {IX.B, IX.C, IX.B}, {IX.B, IX.B, IX.B}}, 3, 3)
-				.withOreDict(IX.A, "nuggetGold")
-				.withStack(IX.B, iRedstone)
-				.withOreDict(IX.C, "ingotIron")
-				.deploy();
-		new RecipeBuilder(ENERGY_MACHINE)
-				.withShape(ixStar, 3, 3)
-				.withOreDict(IX.A, "ingotIron")
-				.withStack(IX.B, iEndCrystal)
-				.deploy()
-				.resultMeta(1)
-				.clear(IX.A, IX.B)
-				.withShape(ixCross, 3, 3)
-				.withStack(IX.A, iRedstone)
-				.withStack(IX.B, iEnergyDist)
-				.deploy()
-				.resultMeta(2)
-				.clear(IX.A, IX.B)
-				.withShape(ixStar, 3, 3)
-				.withOreDict(IX.A, "ingotGold")
-				.withStack(IX.B, iEndCrystal)
-				.deploy()
-				.resultMeta(3)
-				.clear(IX.A, IX.B)
-				.withShape(ixCross, 3, 3)
-				.withStack(IX.A, iRedstone)
-				.withStack(IX.B, iFlavorDist)
-				.deploy();
+		MCFluxResources.init();
 		FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
 		PROXY.init();
 	}
@@ -158,18 +100,5 @@ public class MCFlux {
 			}
 		}
 		L.info("Registered " + cnt + " inject registries");
-	}
-
-	private static <T extends Item> T registerItem(String name, T i) {
-		i.setUnlocalizedName(name).setCreativeTab(MCFLUX_TAB);
-		return GameRegistry.register(i, new MCFluxLocation(name));
-	}
-
-	private static <T extends Block> T registerBlock(String name, T b, Function<Block, ItemBlock> ibfn) {
-		MCFluxLocation rs = new MCFluxLocation(name);
-		b.setUnlocalizedName(name).setCreativeTab(MCFLUX_TAB);
-		GameRegistry.register(b, rs);
-		GameRegistry.register(ibfn.apply(b), rs);
-		return b;
 	}
 }

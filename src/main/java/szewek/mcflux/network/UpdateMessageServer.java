@@ -5,7 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import szewek.mcflux.L;
 import szewek.mcflux.util.TransferType;
 
-public class UpdateMessageServer extends BreakableMessage {
+public class UpdateMessageServer extends FragileMessage {
 	private BlockPos pos = null;
 	private TransferType[] sides = null;
 

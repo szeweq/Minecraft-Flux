@@ -22,7 +22,7 @@ enum MCFluxEvents {
 			if (lp == null)
 				lp = lt.getPool("main");
 			if (lp != null) {
-				lp.addEntry(new LootEntryItem(MCFlux.UPCHIP, 20, 0, new LootFunction[0], new LootCondition[0], "mcflux:loot/upchip"));
+				lp.addEntry(new LootEntryItem(MCFluxResources.UPCHIP, 20, 0, new LootFunction[0], new LootCondition[0], "mcflux:loot/upchip"));
 			}
 		}
 	}

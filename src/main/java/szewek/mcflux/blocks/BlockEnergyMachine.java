@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.U;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,8 +80,9 @@ public class BlockEnergyMachine extends BlockContainer {
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return DEF_AABB;
 	}
-	
+
 	@Override
+	@Nonnull
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}

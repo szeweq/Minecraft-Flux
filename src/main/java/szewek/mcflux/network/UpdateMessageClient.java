@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
 import szewek.mcflux.L;
 
-public class UpdateMessageClient extends BreakableMessage {
+public class UpdateMessageClient extends FragileMessage {
 	private BlockPos pos = null;
 
 	public UpdateMessageClient(BlockPos bp) {

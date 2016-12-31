@@ -10,6 +10,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import szewek.mcflux.MCFlux;
+import szewek.mcflux.MCFluxResources;
 import szewek.mcflux.U;
 import szewek.mcflux.api.ex.Battery;
 import szewek.mcflux.api.ex.EX;
@@ -21,7 +22,6 @@ import szewek.mcflux.api.fe.IFlavorEnergy;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockSided;
 import szewek.mcflux.config.MCFluxConfig;
-import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.network.UpdateMessageClient;
 import szewek.mcflux.network.UpdateMessageServer;
 import szewek.mcflux.util.TransferType;
@@ -31,14 +31,13 @@ import java.util.function.IntBinaryOperator;
 
 import static szewek.mcflux.config.MCFluxConfig.CHUNK_CHARGER_TRANS;
 
-public class TileEntityEnergyMachine extends TileEntity implements ITickable {
-	private WorldChunkEnergy wce = null;
+public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITickable {
 	private Battery bat = null;
 	private FlavoredContainer cnt = null;
 	private boolean oddTick = true, clientUpdate = true, serverUpdate = false;
 	private TransferType[] sideTransfer = new TransferType[]{TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};
 	private long[] sideValues = new long[]{0, 0, 0, 0, 0, 0};
-	private IBlockState cachedState = MCFlux.SIDED.getDefaultState();
+	private IBlockState cachedState = MCFluxResources.SIDED.getDefaultState();
 	private IntBinaryOperator module;
 	private int moduleId;
 
@@ -63,12 +62,6 @@ public class TileEntityEnergyMachine extends TileEntity implements ITickable {
 			case 3: return this::moduleChunkSprayer;
 		}
 		return null;
-	}
-
-	@Override
-	public void setWorld(@Nonnull World w) {
-		super.setWorld(w);
-		wce = world != null && !world.isRemote ? world.getCapability(WorldChunkEnergy.CAP_WCE, null) : null;
 	}
 
 	@Override

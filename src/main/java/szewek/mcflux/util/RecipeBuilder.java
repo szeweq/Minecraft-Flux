@@ -41,7 +41,7 @@ public class RecipeBuilder {
 		result = Item.getItemFromBlock(b);
 	}
 
-	public RecipeBuilder withShape(IX[][] shape, int w, int h) {
+	public RecipeBuilder shape(IX[][] shape, int w, int h) {
 		if (shape.length != h)
 			throw new RuntimeException("Height of shape bytes (" + shape.length + ") is not equal to actual height (" + h + ").");
 		for (IX[] sw : shape) {
@@ -94,13 +94,13 @@ public class RecipeBuilder {
 		return this;
 	}
 
-	public RecipeBuilder withStack(IX id, ItemStack is) {
+	public RecipeBuilder with(IX id, ItemStack is) {
 		if (id != null)
 			stacks[id.ord] = is;
 		return this;
 	}
 
-	public RecipeBuilder withOreDict(IX id, String s) {
+	public RecipeBuilder with(IX id, String s) {
 		if (id != null)
 			oreDicts[id.ord] = s;
 		return this;

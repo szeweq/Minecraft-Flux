@@ -1,6 +1,6 @@
-{"multipart": [
-	{"when": {"variant": "energy_dist"}, "apply": {"model": "mcflux:energy_dist"}},
-	{"when": {"variant": "chunk_charger"}, "apply": {"model": "mcflux:chunk_charger"}},
-	{"when": {"variant": "flavor_dist"}, "apply": {"model": "mcflux:flavor_dist"}},
-	{"when": {"variant": "chunk_sprayer"}, "apply": {"model": "mcflux:chunk_sprayer"}}
-]}
+{"variants": {
+	"variant=energy_dist": {"model": "mcflux:energy_dist"},
+	"variant=chunk_charger": {"model": "mcflux:chunk_charger"},
+	"variant=flavor_dist": {"model": "mcflux:flavor_dist"},
+	"variant=chunk_sprayer": {"model": "mcflux:chunk_sprayer"}
+}}
