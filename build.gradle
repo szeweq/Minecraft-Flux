@@ -24,6 +24,8 @@ apply plugin: "maven-publish"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+String[] versionsMC = ["1.11", "1.11.2"]
+
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
 	from sourceSets.api.output
@@ -40,7 +42,7 @@ group = "szewek.mcflux"
 archivesBaseName = "mcflux"
 
 minecraft {
-	version = "1.11-13.19.0.2157"
+	version = versionsMC[0] + "-13.19.0.2157"
 	runDir = "run"
 	mappings = "snapshot_20161120"
 	replace "@VERSION@", project.version
@@ -111,6 +113,9 @@ curseforge {
 		releaseType = "beta"
 		changelogType = "markdown"
 		changelog = file("CHANGELOG.md")
+		versionsMC.each {
+			addGameVersion it
+		}
 	}
 }
 artifacts {

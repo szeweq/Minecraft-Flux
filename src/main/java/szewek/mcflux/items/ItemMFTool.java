@@ -52,10 +52,14 @@ public class ItemMFTool extends ItemMCFlux {
 					p.sendMessage(new TextComponentTranslation("mcflux.energystat", U.formatMF(ie.getEnergy(), ie.getEnergyCapacity())));
 			} else {
 				WorldChunkEnergy wce = w.getCapability(WorldChunkEnergy.CAP_WCE, null);
-				Battery bat = wce.getEnergyChunk((int) p.posX, (int) (p.posY + 0.5), (int) p.posZ);
-				TextComponentTranslation tcb = textWorldChunk.createCopy();
-				tcb.appendSibling(new TextComponentTranslation("mcflux.energystat", U.formatMF(bat.getEnergy(), bat.getEnergyCapacity())));
-				p.sendMessage(tcb);
+				if (wce != null) {
+					Battery bat = wce.getEnergyChunk((int) p.posX, (int) (p.posY + 0.5), (int) p.posZ);
+					TextComponentTranslation tcb = textWorldChunk.createCopy();
+					tcb.appendSibling(new TextComponentTranslation("mcflux.energystat", U.formatMF(bat.getEnergy(), bat.getEnergyCapacity())));
+					p.sendMessage(tcb);
+				} else {
+					return EnumActionResult.PASS;
+				}
 			}
 			return EnumActionResult.SUCCESS;
 		}

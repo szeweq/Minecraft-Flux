@@ -14,6 +14,7 @@ import szewek.mcflux.blocks.BlockSided;
 import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
 import szewek.mcflux.blocks.itemblocks.ItemMCFluxBlock;
 import szewek.mcflux.items.ItemFESniffer;
+import szewek.mcflux.items.ItemFluxAssistant;
 import szewek.mcflux.items.ItemMFTool;
 import szewek.mcflux.items.ItemUpChip;
 import szewek.mcflux.tileentities.TileEntityECharger;
@@ -30,6 +31,7 @@ public enum MCFluxResources {
 	public static ItemMFTool MFTOOL;
 	public static ItemFESniffer FESNIFFER;
 	public static ItemUpChip UPCHIP;
+	public static ItemFluxAssistant ASSISTANT;
 	// BLOCKS
 	public static BlockSided SIDED;
 	public static BlockEnergyMachine ENERGY_MACHINE;
@@ -44,6 +46,7 @@ public enum MCFluxResources {
 		MFTOOL = item("mftool", new ItemMFTool());
 		FESNIFFER = item("fesniffer", new ItemFESniffer());
 		UPCHIP = item("upchip", new ItemUpChip());
+		ASSISTANT = item("flux_assistant", new ItemFluxAssistant());
 		SIDED = new BlockSided("sided");
 		ENERGY_MACHINE = block("energy_machine", new BlockEnergyMachine(), ItemBlockEnergyMachine::new);
 		ECHARGER = block("echarger", new BlockEntityCharger(), ItemMCFluxBlock::new);
