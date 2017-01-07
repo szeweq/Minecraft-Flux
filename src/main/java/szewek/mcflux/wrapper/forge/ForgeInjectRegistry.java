@@ -17,10 +17,10 @@ import szewek.mcflux.wrapper.InjectWrappers;
 @InjectRegistry(requires = InjectCond.CLASS, args = "net.minecraftforge.energy.IEnergyStorage")
 public class ForgeInjectRegistry implements IInjectRegistry {
 	@Override public void registerInjects() {
-		InjectWrappers.registerTileWrapperInject(ForgeInjectRegistry::wrapTile);
-		InjectWrappers.registerEntityWrapperInject(ForgeInjectRegistry::wrapEntity);
-		InjectWrappers.registerWorldWrapperInject(ForgeInjectRegistry::wrapWorld);
-		InjectWrappers.registerItemWrapperInject(ForgeInjectRegistry::wrapItem);
+		InjectWrappers.addTileWrapperInject(ForgeInjectRegistry::wrapTile);
+		InjectWrappers.addEntityWrapperInject(ForgeInjectRegistry::wrapEntity);
+		InjectWrappers.addWorldWrapperInject(ForgeInjectRegistry::wrapWorld);
+		InjectWrappers.addItemWrapperInject(ForgeInjectRegistry::wrapItem);
 	}
 
 	private static boolean wrapGlobal(ICapabilityProvider icp, InjectWrappers.Registry reg) {

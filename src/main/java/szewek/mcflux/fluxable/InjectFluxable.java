@@ -21,9 +21,9 @@ public class InjectFluxable {
 			MF_MOB_SPAWNER = new MCFluxLocation("MobSpawnerEnergy");
 
 	public static void registerWrappers() {
-		InjectWrappers.registerTileWrapperInject(InjectFluxable::tileWrappers);
-		InjectWrappers.registerEntityWrapperInject(InjectFluxable::entityWrappers);
-		InjectWrappers.registerWorldWrapperInject(InjectFluxable::worldWrappers);
+		InjectWrappers.addTileWrapperInject(InjectFluxable::tileWrappers);
+		InjectWrappers.addEntityWrapperInject(InjectFluxable::entityWrappers);
+		InjectWrappers.addWorldWrapperInject(InjectFluxable::worldWrappers);
 	}
 
 	private static void tileWrappers(TileEntity te, InjectWrappers.Registry reg) {

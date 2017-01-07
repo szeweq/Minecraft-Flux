@@ -17,8 +17,8 @@ public class RFInjectRegistry implements IInjectRegistry {
 	private static final String RF_API_NAME = "CoFHAPI|energy";
 	@Override
 	public void registerInjects() {
-		InjectWrappers.registerTileWrapperInject(RFInjectRegistry::wrapRFTile);
-		InjectWrappers.registerItemWrapperInject(RFInjectRegistry::wrapRFItem);
+		InjectWrappers.addTileWrapperInject(RFInjectRegistry::wrapRFTile);
+		InjectWrappers.addItemWrapperInject(RFInjectRegistry::wrapRFItem);
 	}
 	private static void wrapRFTile(TileEntity te, InjectWrappers.Registry reg) {
 		if (te instanceof IEnergyHandler) {

@@ -24,19 +24,19 @@ public enum InjectWrappers {
 	private static Set<IWrapperInject<Entity>> entityInjects = new HashSet<>();
 	private static Set<IWrapperInject<World>> worldInjects = new HashSet<>();
 
-	public static void registerTileWrapperInject(IWrapperInject<TileEntity> iwi) {
+	public static void addTileWrapperInject(IWrapperInject<TileEntity> iwi) {
 		tileInjects.add(iwi);
 	}
 
-	public static void registerItemWrapperInject(IWrapperInject<ItemStack> iwi) {
+	public static void addItemWrapperInject(IWrapperInject<ItemStack> iwi) {
 		itemInjects.add(iwi);
 	}
 
-	public static void registerEntityWrapperInject(IWrapperInject<Entity> iwi) {
+	public static void addEntityWrapperInject(IWrapperInject<Entity> iwi) {
 		entityInjects.add(iwi);
 	}
 
-	public static void registerWorldWrapperInject(IWrapperInject<World> iwi) {
+	public static void addWorldWrapperInject(IWrapperInject<World> iwi) {
 		worldInjects.add(iwi);
 	}
 

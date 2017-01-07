@@ -6,6 +6,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.fe.FE;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class EMCFlavorWrapper implements ICapabilityProvider {
@@ -18,12 +19,12 @@ public class EMCFlavorWrapper implements ICapabilityProvider {
 		sides[6] = new EMCSided(storage, null);
 	}
 
-	@Override public boolean hasCapability(Capability<?> cap, @Nullable EnumFacing f) {
+	@Override public boolean hasCapability(@Nonnull Capability<?> cap, @Nullable EnumFacing f) {
 		return cap == FE.CAP_FLAVOR_ENERGY;
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override public <T> T getCapability(Capability<T> cap, @Nullable EnumFacing f) {
+	@Override public <T> T getCapability(@Nonnull Capability<T> cap, @Nullable EnumFacing f) {
 		return cap == FE.CAP_FLAVOR_ENERGY ? (T) sides[f == null ? 6 : f.getIndex()] : null;
 	}
 

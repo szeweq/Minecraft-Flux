@@ -11,7 +11,6 @@ import szewek.mcflux.api.fe.IFlavorEnergy;
 import static szewek.mcflux.wrapper.projecte.ProjectEInjectRegistry.EMC;
 
 public class EMCSided implements IFlavorEnergy {
-	private static final Flavored[] emcFill = new Flavored[]{new FlavoredImmutable(EMC, null)};
 	private final EnumFacing face;
 	private final IEmcStorage storage;
 
@@ -71,10 +70,10 @@ public class EMCSided implements IFlavorEnergy {
 	}
 
 	@Override public Flavored[] allFlavorsContained() {
-		return emcFill;
+		return ProjectEInjectRegistry.emcFill;
 	}
 
 	@Override public Flavored[] allFlavorsAcceptable() {
-		return emcFill;
+		return ProjectEInjectRegistry.emcFill;
 	}
 }
