@@ -3,6 +3,7 @@
 - Added Entity Charger
 - Added item and block descriptions
 
+
 ## 1.4.1
 - Botania compatibility
 - ProjectE compatibility

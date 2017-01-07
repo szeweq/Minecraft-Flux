@@ -20,6 +20,12 @@ public enum L {
 		l.log(Level.WARN, msg);
 	}
 
+	public static void warn(String[] msgs) {
+		for (String s : msgs) {
+			l.log(Level.WARN, s);
+		}
+	}
+
 	public static void warn(Throwable t) {
 		l.log(Level.WARN, "Minecraft-Flux received an error", t);
 	}

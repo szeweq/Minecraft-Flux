@@ -6,7 +6,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.discovery.ASMDataTable.ASMData;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -74,7 +73,8 @@ public class MCFlux {
 	public void init(FMLInitializationEvent e) {
 		RecipeSorter.register("mcflux:builtRecipe", RecipeBuilder.BuiltShapedRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 		MCFluxResources.init();
-		FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
+		// Waila not available
+		// FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
 		PROXY.init();
 	}
 
