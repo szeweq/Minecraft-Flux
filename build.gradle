@@ -25,6 +25,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 String[] versionsMC = ["1.11", "1.11.2"]
+String versionForge = "13.19.0.2157"
 
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
@@ -42,7 +43,7 @@ group = "szewek.mcflux"
 archivesBaseName = "mcflux"
 
 minecraft {
-	version = versionsMC[0] + "-13.19.0.2157"
+	version = versionsMC[0] + "-" + versionForge
 	runDir = "run"
 	mappings = "snapshot_20161120"
 	replace "@VERSION@", project.version

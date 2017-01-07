@@ -5,6 +5,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import szewek.mcflux.R;
 
+@SuppressWarnings("unused")
 public class ConfigEvents {
 	@SubscribeEvent
 	public void cfgChanged(ConfigChangedEvent.OnConfigChangedEvent e) {

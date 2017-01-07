@@ -4,7 +4,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
-import net.minecraftforge.fml.common.discovery.ASMDataTable.ASMData;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -26,6 +25,7 @@ import szewek.mcflux.network.MessageHandlerServer;
 import szewek.mcflux.network.UpdateMessageClient;
 import szewek.mcflux.network.UpdateMessageServer;
 import szewek.mcflux.util.*;
+import szewek.mcflux.util.recipe.BuiltShapedRecipe;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 import java.util.Set;
@@ -71,7 +71,7 @@ public class MCFlux {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
-		RecipeSorter.register("mcflux:builtRecipe", RecipeBuilder.BuiltShapedRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
+		RecipeSorter.register("mcflux:builtRecipe", BuiltShapedRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 		MCFluxResources.init();
 		// Waila not available
 		// FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
@@ -80,9 +80,9 @@ public class MCFlux {
 
 	private void registerAllInjects(ASMDataTable asdt) {
 		L.info("Registering inject registries...");
-		Set<ASMData> aset = asdt.getAll(InjectRegistry.class.getCanonicalName());
+		Set<ASMDataTable.ASMData> aset = asdt.getAll(InjectRegistry.class.getCanonicalName());
 		int cnt = 0;
-		for (ASMData data : aset) {
+		for (ASMDataTable.ASMData data : aset) {
 			String cname = data.getClassName();
 			if (!cname.equals(data.getObjectName())) continue;
 			Class<?> c = U.getClassSafely(cname);

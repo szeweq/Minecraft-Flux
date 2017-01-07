@@ -21,7 +21,7 @@ import szewek.mcflux.tileentities.TileEntityECharger;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 import szewek.mcflux.util.IX;
 import szewek.mcflux.util.MCFluxLocation;
-import szewek.mcflux.util.RecipeBuilder;
+import szewek.mcflux.util.recipe.RecipeBuilder;
 
 import java.util.function.Function;
 
@@ -63,13 +63,13 @@ public enum MCFluxResources {
 		ItemStack iFlavorDist = new ItemStack(ENERGY_MACHINE, 1, 2);
 		IX[][] ixStar = new IX[][]{{null, IX.A, null}, {IX.A, IX.B, IX.A}, {null, IX.A, null}};
 		IX[][] ixCross = new IX[][]{{IX.A, null, IX.A}, {null, IX.B, null}, {IX.A, null, IX.A}};
-		new RecipeBuilder(MFTOOL)
+		RecipeBuilder.buildRecipeFor(MFTOOL, 1)
 				.shape(new IX[][]{{IX.A, null, IX.A}, {IX.B, IX.C, IX.B}, {IX.B, IX.B, IX.B}}, 3, 3)
 				.with(IX.A, "nuggetGold")
 				.with(IX.B, iRedstone)
 				.with(IX.C, "ingotIron")
 				.deploy();
-		new RecipeBuilder(ENERGY_MACHINE)
+		RecipeBuilder.buildRecipeFor(ENERGY_MACHINE, 1)
 				.shape(ixStar, 3, 3)
 				.with(IX.A, "ingotIron")
 				.with(IX.B, iEnderEye)
@@ -92,7 +92,7 @@ public enum MCFluxResources {
 				.with(IX.A, iRedstone)
 				.with(IX.B, iFlavorDist)
 				.deploy();
-		new RecipeBuilder(ECHARGER)
+		RecipeBuilder.buildRecipeFor(ECHARGER, 1)
 				.shape(new IX[][]{{IX.A, IX.A, IX.A}, {IX.B, IX.C, IX.B}, {IX.A, IX.A, IX.A}}, 3, 3)
 				.with(IX.A, "ingotIron")
 				.with(IX.B, new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage()))

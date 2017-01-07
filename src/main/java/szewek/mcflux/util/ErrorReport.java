@@ -15,14 +15,13 @@ public enum ErrorReport {
 	public static void badImplementation(String name, EnumFacing face, ICapabilityProvider icp, Throwable th) {
 		Class<?> cl = icp.getClass();
 		if (badClasses.add(cl)) {
-			L.warn(new String[] {
-					"+----= An error occured when trying to attach a capability =----",
-					"| Bad/incomplete " + name + " implementation (checked " + (face != null ? "WITH SIDE " + face : "SIDELESS") + ")",
-					"| Capability provider class: " + cl.getName(),
-					"| Tell authors of this implementation about it!",
-					"| This is not a Minecraft-Flux problem.",
-					"+----"
-			});
+			L.warn("\n+----= An error occured when trying to attach a capability =----"
+					+ "\n| Bad/incomplete " + name + " implementation (checked " + (face != null ? "WITH SIDE " + face : "SIDELESS") + ")"
+					+ "\n| Capability provider class: " + cl.getName()
+					+ "\n| Tell authors of this implementation about it!"
+					+ "\n| This is not a Minecraft-Flux problem."
+					+ "\n+----"
+			);
 			L.warn(th);
 		} else
 			L.warn("Bad/incomplete " + name + " implementation error for \"" + cl.getName() + "\" happened again (checked " + (face != null ? "WITH SIDE " + face : "SIDELESS") + ")!");
@@ -31,13 +30,12 @@ public enum ErrorReport {
 	public static void oldAPI(String name, Object o) {
 		Class<?> cl = o.getClass();
 		if (oldClassAPIs.add(cl)) {
-			L.warn(new String[] {
-					"+----= Warning: Use of old API =----",
-					"| Minecraft-Flux has detected use of API: " + name,
-					"| This API may be not supported in the future",
-					"| Object class: " + cl.getName(),
-					"+----"
-			});
+			L.warn("\n+----= Warning: Use of old API =----"
+					+ "\n| Minecraft-Flux has detected use of API: " + name
+					+ "\n| This API may be not supported in the future"
+					+ "\n| Object class: " + cl.getName()
+					+ "\n+----"
+			);
 		} else
 			L.warn("Use of old API (" + name + ") on \"" + cl.getName() + "\" detected again!");
 	}

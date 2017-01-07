@@ -1,12 +1,11 @@
 package szewek.mcflux;
 
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 public enum L {
 	;
-	private static Logger l = FMLLog.getLogger();
+	private static Logger l = net.minecraftforge.fml.common.FMLLog.getLogger();
 
 	static void prepare(Logger logger) {
 		l = logger;
@@ -18,12 +17,6 @@ public enum L {
 
 	public static void warn(String msg) {
 		l.log(Level.WARN, msg);
-	}
-
-	public static void warn(String[] msgs) {
-		for (String s : msgs) {
-			l.log(Level.WARN, s);
-		}
 	}
 
 	public static void warn(Throwable t) {

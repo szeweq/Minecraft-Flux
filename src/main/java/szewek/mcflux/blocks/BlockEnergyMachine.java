@@ -56,7 +56,7 @@ public class BlockEnergyMachine extends BlockContainer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < Variant.ALL_VARIANTS.length; i++)
 			list.add(new ItemStack(item, 1, i));
 	}

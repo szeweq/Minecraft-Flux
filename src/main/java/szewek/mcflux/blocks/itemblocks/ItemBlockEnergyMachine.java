@@ -14,6 +14,7 @@ public class ItemBlockEnergyMachine extends ItemBlock {
 
 	public ItemBlockEnergyMachine(Block block) {
 		super(block);
+		setHasSubtypes(true);
 	}
 	
 	@Override
