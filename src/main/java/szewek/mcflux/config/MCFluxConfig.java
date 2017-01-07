@@ -7,7 +7,7 @@ import java.io.File;
 
 public class MCFluxConfig {
 	public static int CFG_EU_VALUE = 4, WORLDCHUNK_CAP = 20000000, ENERGY_DIST_TRANS = 1000000, CHUNK_CHARGER_TRANS = 2000000, FURNACE_CAP = 50000, MOB_SPAWNER_USE = 500;
-	public static boolean SHY_ERROR_REPORT = true;
+	public static boolean ONLINE_ERROR_REPORT = true;
 	private static Configuration config;
 
 	public static void makeConfig(File file) {
@@ -29,7 +29,7 @@ public class MCFluxConfig {
 			CHUNK_CHARGER_TRANS = cfgInt("chunkChargerTransfer", 2000000, 1, Integer.MAX_VALUE, "Chunk Charger transfer (MF/t)");
 			FURNACE_CAP = cfgInt("furnaceCapacity", 50000, 1000, Integer.MAX_VALUE, "Energy capacity for Vanilla Furnace");
 			MOB_SPAWNER_USE = cfgInt("mobSpawnerEnergyUse", 500, 100, Integer.MAX_VALUE, "Energy needed for Vanilla Monster Spawner to speed up");
-			SHY_ERROR_REPORT = cfgBool("shyErrorReport", true, "Reports all capability-related crashes made by Minedraft-Flux");
+			ONLINE_ERROR_REPORT = cfgBool("onlineErrorReport", true, "Reports all capability-related crashes made by Minedraft-Flux online");
 		}
 		if (config.hasChanged())
 			config.save();
