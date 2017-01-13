@@ -11,6 +11,7 @@ import szewek.mcflux.util.ErrorReport;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
+import szewek.mcflux.util.error.ErrMsgBadImplementation;
 import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.InjectWrappers;
 
@@ -34,7 +35,7 @@ public class ForgeInjectRegistry implements IInjectRegistry {
 				}
 			}
 		} catch (Exception e) {
-			ErrorReport.badImplementation("Forge Energy", f, icp, e);
+			ErrorReport.addErrMsg(new ErrMsgBadImplementation("Forge Energy", icp.getClass(), e, f));
 		}
 		try {
 			if (icp.hasCapability(CapabilityEnergy.ENERGY, null)) {
@@ -42,7 +43,7 @@ public class ForgeInjectRegistry implements IInjectRegistry {
 				return true;
 			}
 		} catch (Exception e) {
-			ErrorReport.badImplementation("Forge Energy", null, icp, e);
+			ErrorReport.addErrMsg(new ErrMsgBadImplementation("Forge Energy", icp.getClass(), e, null));
 		}
 		return false;
 	}

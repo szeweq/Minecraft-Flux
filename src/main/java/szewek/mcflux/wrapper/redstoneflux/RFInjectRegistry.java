@@ -9,6 +9,7 @@ import szewek.mcflux.util.ErrorReport;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
+import szewek.mcflux.util.error.ErrMsgOldAPI;
 import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.InjectWrappers;
 
@@ -22,7 +23,7 @@ public class RFInjectRegistry implements IInjectRegistry {
 	}
 	private static void wrapRFTile(TileEntity te, InjectWrappers.Registry reg) {
 		if (te instanceof IEnergyHandler) {
-			ErrorReport.oldAPI(RF_API_NAME, te);
+			ErrorReport.addErrMsg(new ErrMsgOldAPI(RF_API_NAME, te.getClass()));
 			reg.add(EnergyType.RF, new RFTileCapabilityProvider((IEnergyHandler) te));
 		}
 
@@ -31,7 +32,7 @@ public class RFInjectRegistry implements IInjectRegistry {
 	private static void wrapRFItem(ItemStack is, InjectWrappers.Registry reg) {
 		Item it = is.getItem();
 		if (it instanceof IEnergyContainerItem) {
-			ErrorReport.oldAPI(RF_API_NAME, it);
+			ErrorReport.addErrMsg(new ErrMsgOldAPI(RF_API_NAME, it.getClass()));
 			reg.add(EnergyType.RF, new RFItemContainerWrapper((IEnergyContainerItem) it, is));
 		}
 	}
