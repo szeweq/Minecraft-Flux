@@ -28,9 +28,15 @@ itemGroup.mcflux=Minecraft-Flux
 item.mftool.name=MF Tool
 item.mftool.desc=Compatibility checker
 item.mftool.jeidesc=Use this tool to check if a block/entity is MF compatible.\nIf it is then MF Tool shows energy stats.
+item.fesniffer.name=Flavor Sniffer
+item.fesniffer.desc=Looking for flavors
+item.fesniffer.jeidesc=This tool checks compatibility with Flavor Energy.
 item.upchip.name=MF Upgrade Chip
 item.upchip.desc=Omnomnom!
 item.upchip.jeidesc=EAT IT! Upgrade your energy with this chip.
+item.fluxassistant.name=Flux Assistant [WIP]
+item.fluxassistant.desc=Your personal assistant!
+item.fluxassistant.jeidesc=[Work In Progress]
 
 tile.energy_dist.name=Energy Distributor
 tile.energy_dist.desc=A medium between World Chunk Energy and blocks.

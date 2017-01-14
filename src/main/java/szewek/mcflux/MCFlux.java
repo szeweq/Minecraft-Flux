@@ -24,7 +24,10 @@ import szewek.mcflux.network.MessageHandlerDummy;
 import szewek.mcflux.network.MessageHandlerServer;
 import szewek.mcflux.network.UpdateMessageClient;
 import szewek.mcflux.network.UpdateMessageServer;
-import szewek.mcflux.util.*;
+import szewek.mcflux.util.IInjectRegistry;
+import szewek.mcflux.util.InjectRegistry;
+import szewek.mcflux.util.MCFluxCreativeTab;
+import szewek.mcflux.util.NBTSerializableCapabilityStorage;
 import szewek.mcflux.util.recipe.BuiltShapedRecipe;
 import szewek.mcflux.wrapper.InjectWrappers;
 

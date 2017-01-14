@@ -46,7 +46,7 @@ public enum MCFluxResources {
 		MFTOOL = item("mftool", new ItemMFTool());
 		FESNIFFER = item("fesniffer", new ItemFESniffer());
 		UPCHIP = item("upchip", new ItemUpChip());
-		ASSISTANT = item("flux_assistant", new ItemFluxAssistant());
+		ASSISTANT = item("fluxassistant", new ItemFluxAssistant());
 		SIDED = new BlockSided("sided");
 		ENERGY_MACHINE = block("energy_machine", new BlockEnergyMachine(), ItemBlockEnergyMachine::new);
 		ECHARGER = block("echarger", new BlockEntityCharger(), ItemMCFluxBlock::new);
@@ -59,15 +59,23 @@ public enum MCFluxResources {
 		state++;
 		ItemStack iRedstone = new ItemStack(Items.REDSTONE);
 		ItemStack iEnderEye = new ItemStack(Items.ENDER_EYE);
+		ItemStack iLapis = new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage());
 		ItemStack iEnergyDist = new ItemStack(ENERGY_MACHINE, 1, 0);
 		ItemStack iFlavorDist = new ItemStack(ENERGY_MACHINE, 1, 2);
 		IX[][] ixStar = new IX[][]{{null, IX.A, null}, {IX.A, IX.B, IX.A}, {null, IX.A, null}};
 		IX[][] ixCross = new IX[][]{{IX.A, null, IX.A}, {null, IX.B, null}, {IX.A, null, IX.A}};
+		IX[][] ixTool = new IX[][]{{IX.A, null, IX.A}, {IX.B, IX.C, IX.B}, {IX.B, IX.B, IX.B}};
 		RecipeBuilder.buildRecipeFor(MFTOOL, 1)
-				.shape(new IX[][]{{IX.A, null, IX.A}, {IX.B, IX.C, IX.B}, {IX.B, IX.B, IX.B}}, 3, 3)
+				.shape(ixTool, 3, 3)
 				.with(IX.A, "nuggetGold")
 				.with(IX.B, iRedstone)
 				.with(IX.C, "ingotIron")
+				.deploy();
+		RecipeBuilder.buildRecipeFor(FESNIFFER, 1)
+				.shape(ixTool, 3, 3)
+				.with(IX.A, "nuggetGold")
+				.with(IX.B, iLapis)
+				.with(IX.C, "ingotGold")
 				.deploy();
 		RecipeBuilder.buildRecipeFor(ENERGY_MACHINE, 1)
 				.shape(ixStar, 3, 3)

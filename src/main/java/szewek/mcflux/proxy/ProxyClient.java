@@ -26,6 +26,12 @@ public class ProxyClient extends ProxyCommon {
 	@Override
 	public void init() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEnergyMachine.class, new EnergyMachineRenderer());
-		U.registerItemModels(MCFluxResources.MFTOOL, MCFluxResources.FESNIFFER, MCFluxResources.UPCHIP, Item.getItemFromBlock(MCFluxResources.ECHARGER), Item.getItemFromBlock(MCFluxResources.SIDED));
+		U.registerItemModels(
+				MCFluxResources.MFTOOL,
+				MCFluxResources.FESNIFFER,
+				MCFluxResources.UPCHIP,
+				MCFluxResources.ASSISTANT,
+				Item.getItemFromBlock(MCFluxResources.ECHARGER),
+				Item.getItemFromBlock(MCFluxResources.SIDED));
 	}
 }
