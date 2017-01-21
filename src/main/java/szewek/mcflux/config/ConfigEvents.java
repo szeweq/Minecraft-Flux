@@ -11,6 +11,6 @@ public class ConfigEvents {
 	public void cfgChanged(ConfigChangedEvent.OnConfigChangedEvent e) {
 		if (R.MF_NAME.equals(e.getModID()) && !e.isWorldRunning())
 			if (e.getConfigID().equals(Configuration.CATEGORY_GENERAL))
-				MCFluxConfig.syncConfig(false, true);
+				MCFluxConfig.syncConfig(false);
 	}
 }

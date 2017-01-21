@@ -65,6 +65,7 @@ public enum MCFluxResources {
 		IX[][] ixStar = new IX[][]{{null, IX.A, null}, {IX.A, IX.B, IX.A}, {null, IX.A, null}};
 		IX[][] ixCross = new IX[][]{{IX.A, null, IX.A}, {null, IX.B, null}, {IX.A, null, IX.A}};
 		IX[][] ixTool = new IX[][]{{IX.A, null, IX.A}, {IX.B, IX.C, IX.B}, {IX.B, IX.B, IX.B}};
+		IX[][] ixSandwich = new IX[][]{{IX.A, IX.A, IX.A}, {IX.B, IX.C, IX.B}, {IX.A, IX.A, IX.A}};
 		RecipeBuilder.buildRecipeFor(MFTOOL, 1)
 				.shape(ixTool, 3, 3)
 				.with(IX.A, "nuggetGold")
@@ -101,7 +102,7 @@ public enum MCFluxResources {
 				.with(IX.B, iFlavorDist)
 				.deploy();
 		RecipeBuilder.buildRecipeFor(ECHARGER, 1)
-				.shape(new IX[][]{{IX.A, IX.A, IX.A}, {IX.B, IX.C, IX.B}, {IX.A, IX.A, IX.A}}, 3, 3)
+				.shape(ixSandwich, 3, 3)
 				.with(IX.A, "ingotIron")
 				.with(IX.B, new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage()))
 				.with(IX.C, new ItemStack(Blocks.GLOWSTONE))

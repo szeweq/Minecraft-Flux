@@ -22,6 +22,7 @@ mcflux.worldchunk=World Chunk
 mcflux.upchip.installed=Chip installed
 mcflux.upchip.lvlup=You reached energy level %s.
 mcflux.upchip.lvlmax=You reached the final level.
+mcflux.update.newversion=[{"text":"A new update for "},{"text":"Minecraft-Flux","color":"yellow"},{"text":" was released ("},{"text":"%s","color":"yellow"},{"text":")!"}]
 
 itemGroup.mcflux=Minecraft-Flux
 
