@@ -49,22 +49,12 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 	 */
 	public Battery getEnergyChunk(int bx, int by, int bz) {
 		ChunkPos cp = new ChunkPos(bx / 16, by / 16, bz / 16);
-		Battery eb = energyChunks.get(cp);
-		if (eb == null) {
-			eb = new Battery(MCFluxConfig.WORLDCHUNK_CAP);
-			energyChunks.put(cp, eb);
-		}
-		return eb;
+		return energyChunks.computeIfAbsent(cp, k -> new Battery(MCFluxConfig.WORLDCHUNK_CAP));
 	}
 
 	public FlavoredContainer getFlavorEnergyChunk(int bx, int by, int bz) {
 		ChunkPos cp = new ChunkPos(bx / 16, by / 16, bz / 16);
-		FlavoredContainer cf = flavorChunks.get(cp);
-		if (cf == null) {
-			cf = new FlavoredContainer(MCFluxConfig.WORLDCHUNK_CAP / 4);
-			flavorChunks.put(cp, cf);
-		}
-		return cf;
+		return flavorChunks.computeIfAbsent(cp, k -> new FlavoredContainer(MCFluxConfig.WORLDCHUNK_CAP / 4));
 	}
 
 	private static class ChunkPos {

@@ -5,8 +5,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import szewek.mcflux.U;
+import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.api.ex.Battery;
-import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 
 import javax.annotation.Nonnull;
@@ -54,9 +54,9 @@ public class TileEntityECharger extends TileEntityWCEAware implements ITickable 
 	private void checkSources() {
 		for (EnumFacing f : EnumFacing.VALUES) {
 			BlockPos bp = pos.offset(f, 1);
-			TileEntity e = world.getTileEntity(bp);
-			if (e != null) {
-				esrc = e.getCapability(EX.CAP_ENERGY, f.getOpposite());
+			TileEntity te = world.getTileEntity(bp);
+			if (te != null) {
+				esrc = MCFluxAPI.getEnergySafely(te, f.getOpposite());
 				if (esrc != null)
 					sides[f.getIndex()] = esrc;
 			}

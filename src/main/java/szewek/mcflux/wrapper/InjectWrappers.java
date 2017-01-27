@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import szewek.mcflux.L;
+import szewek.mcflux.U;
 
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -80,8 +81,8 @@ public enum InjectWrappers {
 
 	public static void wrapItem(AttachCapabilitiesEvent.Item ei, Iterable<IWrapperInject<ItemStack>> iwis) {
 		ItemStack is = ei.getItemStack();
-		if (is == null) {
-			L.warn("Cannot attach capabilities: ItemStack is null");
+		if (U.isItemEmpty(is)) {
+			L.warn("Cannot attach capabilities: ItemStack is null/empty");
 			return;
 		}
 		Registry reg = new Registry(ei);

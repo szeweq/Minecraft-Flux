@@ -129,18 +129,16 @@ public class MCFlux {
 		UPDATE_CHECK_FINISHED = false;
 		ComparableVersion ccv = new ComparableVersion(R.MF_VERSION);
 		try {
-			url = new URL("https", "api.github.com", "/repos/Szewek/Minecraft-Flux/releases/latest");
+			url = new URL("https", "api.github.com", 443, "/repos/Szewek/Minecraft-Flux/releases/latest", null);
 			HttpURLConnection huc = (HttpURLConnection) url.openConnection();
 			isr = new InputStreamReader(huc.getInputStream());
 			je = new JsonParser().parse(isr).getAsJsonObject();
-			if (je.isJsonObject()) {
-				jp = je.getAsJsonPrimitive("tag_name");
-				if (jp != null) {
-					String jv = jp.getAsString();
-					if (new ComparableVersion(jv).compareTo(ccv) > 0) {
-						NEWER_VERSION = jv;
-						L.info("A newer Minecraft-Flux version is available (" + NEWER_VERSION + ")");
-					}
+			jp = je.getAsJsonPrimitive("tag_name");
+			if (jp != null) {
+				String jv = jp.getAsString();
+				if (new ComparableVersion(jv).compareTo(ccv) > 0) {
+					NEWER_VERSION = jv;
+					L.info("A newer Minecraft-Flux version is available (" + NEWER_VERSION + ")");
 				}
 			}
 			UPDATE_CHECK_FINISHED = true;

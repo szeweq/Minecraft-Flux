@@ -74,12 +74,14 @@ bintray {
 
 repositories {
 	maven {url "http://dvs1.progwml6.com/files/maven"}
-	maven {url "http://mobiusstrip.eu/maven"}
+	//maven {url "http://mobiusstrip.eu/maven"}
 	maven {url "http://maven.ic2.player.to"}
 	maven {url "http://maven.epoxide.xyz"}
+	maven {url "http://maven.tterrag.com"}
 }
 
 dependencies {
+	deobfCompile "mcjty.theoneprobe:TheOneProbe:1.1x-1.4.0-50"
 	deobfCompile "mezz.jei:jei_1.11:4.0.1.193"
 	//deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
 	deobfCompile "net.industrial-craft:industrialcraft-2:2.6.54-ex110:api"

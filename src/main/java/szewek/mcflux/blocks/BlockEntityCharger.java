@@ -12,7 +12,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import szewek.mcflux.api.ex.EX;
+import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.tileentities.TileEntityECharger;
 
@@ -78,7 +78,7 @@ public class BlockEntityCharger extends BlockContainer {
 		boolean crossX = inX != pinX;
 		boolean crossZ = inZ != pinZ;
 		TileEntityECharger teec = (TileEntityECharger) w.getTileEntity(pos);
-		IEnergy ie = e.getCapability(EX.CAP_ENERGY, null);
+		IEnergy ie = MCFluxAPI.getEnergySafely(e, null);
 		if (teec == null || ie == null)
 			return;
 		if (inX && inZ) {

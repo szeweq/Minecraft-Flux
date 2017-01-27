@@ -12,8 +12,8 @@ import net.minecraft.world.World;
 import szewek.mcflux.MCFlux;
 import szewek.mcflux.MCFluxResources;
 import szewek.mcflux.U;
+import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.api.ex.Battery;
-import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.api.fe.FE;
 import szewek.mcflux.api.fe.Flavored;
@@ -176,7 +176,7 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 			if (te == null)
 				continue;
 			f = f.getOpposite();
-			IEnergy ea = te.getCapability(EX.CAP_ENERGY, f);
+			IEnergy ea = MCFluxAPI.getEnergySafely(te, f);
 			if (ea == null)
 				continue;
 			switch (tt) {

@@ -12,20 +12,20 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import szewek.mcflux.U;
+import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.api.ex.Battery;
-import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 public class ItemMFTool extends ItemMCFlux {
 	private final TextComponentTranslation
-		textBlock = new TextComponentTranslation("mcflux.blockcompat.start"),
-		textEntity = new TextComponentTranslation("mcflux.entitycompat.start"),
-		textIsCompat = new TextComponentTranslation("mcflux.iscompat"),
-		textNoCompat = new TextComponentTranslation("mcflux.nocompat"),
-		textEnergyUnknown = new TextComponentTranslation("mcflux.energystatunknown"),
-		textWorldChunk = new TextComponentTranslation("mcflux.worldchunk");
+			textBlock = new TextComponentTranslation("mcflux.blockcompat.start"),
+			textEntity = new TextComponentTranslation("mcflux.entitycompat.start"),
+			textIsCompat = new TextComponentTranslation("mcflux.iscompat"),
+			textNoCompat = new TextComponentTranslation("mcflux.nocompat"),
+			textEnergyUnknown = new TextComponentTranslation("mcflux.energystatunknown"),
+			textWorldChunk = new TextComponentTranslation("mcflux.worldchunk");
 
 	public ItemMFTool() {
 		setMaxStackSize(1);
@@ -44,7 +44,7 @@ public class ItemMFTool extends ItemMCFlux {
 						p.sendMessage(new TextComponentTranslation("mcflux.transfer", ((TileEntityEnergyMachine) te).getTransferSide(f)));
 					return EnumActionResult.SUCCESS;
 				}
-				IEnergy ie = te.getCapability(EX.CAP_ENERGY, f);
+				IEnergy ie = MCFluxAPI.getEnergySafely(te, f);
 				TextComponentTranslation tcb = textBlock.createCopy();
 				tcb.appendSibling(ie != null ? textIsCompat : textNoCompat).appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
 				p.sendMessage(tcb);
@@ -69,7 +69,7 @@ public class ItemMFTool extends ItemMCFlux {
 	@Override
 	public boolean itemInteractionForEntity(ItemStack is, EntityPlayer p, EntityLivingBase elb, EnumHand h) {
 		if (!elb.world.isRemote) {
-			IEnergy ie = elb.getCapability(EX.CAP_ENERGY, null);
+			IEnergy ie = MCFluxAPI.getEnergySafely(elb, null);
 			TextComponentTranslation tcb = textEntity.createCopy();
 			tcb.appendSibling(ie != null ? textIsCompat : textNoCompat);
 			tcb.appendSibling(new TextComponentTranslation("mcflux.entitycompat.end"));
