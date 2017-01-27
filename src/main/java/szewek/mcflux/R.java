@@ -14,8 +14,8 @@ public final class R {
 		MF_REPORT_URL = "@REPORT_URL@",
 		GUI_FACTORY = MF_PKG + ".client.MCFluxGuiFactory",
 		PROXY_SERVER = MF_PKG + ".proxy.ProxyCommon",
-		PROXY_CLIENT = MF_PKG + ".proxy.ProxyClient",
-		WAILA_REGISTER = MF_PKG + ".compat.waila.MCFluxWailaProvider.callbackRegister";
+		PROXY_CLIENT = MF_PKG + ".proxy.ProxyClient";
+		//WAILA_REGISTER = MF_PKG + ".compat.waila.MCFluxWailaProvider.callbackRegister";
 
 	private R() {}
 }
