@@ -23,7 +23,7 @@ public class ItemUpChip extends ItemMCFlux {
 			textInstalled = new TextComponentTranslation(PF + "installed"),
 			textLvlMax = new TextComponentTranslation(PF + "lvlmax");
 
-	@Override public EnumAction getItemUseAction(ItemStack stack) {
+	@Nonnull @Override public EnumAction getItemUseAction(ItemStack stack) {
 		return EnumAction.BOW;
 	}
 
@@ -31,13 +31,13 @@ public class ItemUpChip extends ItemMCFlux {
 		return 40;
 	}
 
-	@Override
+	@Nonnull @Override
 	public ActionResult<ItemStack> onItemRightClick(World w, EntityPlayer p, EnumHand h) {
 		p.setActiveHand(h);
 		return new ActionResult<>(EnumActionResult.SUCCESS, p.getHeldItem(h));
 	}
 
-	@Override
+	@Nonnull @Override
 	public ItemStack onItemUseFinish(@Nonnull ItemStack is, World w, EntityLivingBase elb) {
 		if (!w.isRemote && elb instanceof EntityPlayerMP) {
 			EntityPlayerMP mp = (EntityPlayerMP) elb;

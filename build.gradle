@@ -76,7 +76,7 @@ repositories {
 	maven {url "http://dvs1.progwml6.com/files/maven"}
 	//maven {url "http://mobiusstrip.eu/maven"}
 	maven {url "http://maven.ic2.player.to"}
-	maven {url "http://maven.epoxide.xyz"}
+	//maven {url "http://maven.epoxide.xyz"}
 	maven {url "http://maven.tterrag.com"}
 }
 
@@ -107,7 +107,7 @@ curseforge {
 	apiKey = cfkey ? cfkey : ""
 	project {
 		id = "248942"
-		releaseType = "beta"
+		releaseType = "release"
 		changelogType = "markdown"
 		changelog = file("CHANGELOG.md")
 		versionsMC.each {

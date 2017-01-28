@@ -18,6 +18,8 @@ import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
+import javax.annotation.Nonnull;
+
 public class ItemMFTool extends ItemMCFlux {
 	private final TextComponentTranslation
 			textBlock = new TextComponentTranslation("mcflux.blockcompat.start"),
@@ -33,7 +35,7 @@ public class ItemMFTool extends ItemMCFlux {
 		textNoCompat.getStyle().setColor(TextFormatting.RED).setBold(true);
 	}
 
-	@Override
+	@Nonnull @Override
 	public EnumActionResult onItemUse(EntityPlayer p, World w, BlockPos pos, EnumHand h, EnumFacing f, float x, float y, float z) {
 		if (!w.isRemote) {
 			TileEntity te = w.getTileEntity(pos);
