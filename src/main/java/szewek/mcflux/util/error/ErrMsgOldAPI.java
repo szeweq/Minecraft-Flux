@@ -16,7 +16,5 @@ public class ErrMsgOldAPI extends ErrMsg {
 		);
 	}
 
-	@Override protected void printShortError(int total, long delta) {
-		L.warn("Use of old API (" + name + ") on \"" + cl.getName() + "\" detected ×" + total + " in " + delta + " ms!");
-	}
+	@Override protected void printShortError(int total, long delta) {}
 }

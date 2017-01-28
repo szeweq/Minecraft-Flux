@@ -48,32 +48,19 @@ public class ForgeInjectRegistry implements IInjectRegistry {
 		return false;
 	}
 
-	private static void wrapMappedProvider(InjectWrappers.Registry reg) {
-		for (ICapabilityProvider icx : reg.capMap.values()) {
-			if (wrapGlobal(icx, reg))
-				break;
-		}
-	}
-
 	private static void wrapTile(TileEntity te, InjectWrappers.Registry reg) {
-		if (wrapGlobal(te, reg))
-			return;
-		wrapMappedProvider(reg);
+		wrapGlobal(te, reg);
 	}
 
 	private static void wrapEntity(Entity ent, InjectWrappers.Registry reg) {
-		if (wrapGlobal(ent, reg))
-			return;
-		wrapMappedProvider(reg);
+		wrapGlobal(ent, reg);
 	}
 
 	private static void wrapWorld(World w, InjectWrappers.Registry reg) {
-		if (wrapGlobal(w, reg))
-			return;
-		wrapMappedProvider(reg);
+		wrapGlobal(w, reg);
 	}
 
 	private static void wrapItem(ItemStack is, InjectWrappers.Registry reg) {
-		wrapMappedProvider(reg);
+		wrapGlobal(is, reg);
 	}
 }

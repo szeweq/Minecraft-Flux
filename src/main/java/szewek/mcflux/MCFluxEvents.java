@@ -1,6 +1,5 @@
 package szewek.mcflux;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
@@ -34,7 +33,7 @@ enum MCFluxEvents {
 
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent e) {
-		if (MCFlux.UPDATE_CHECK_FINISHED && !MCFlux.NEWER_VERSION.equals("") && Minecraft.getMinecraft().player != null && e.getEntity() instanceof EntityPlayerMP)
+		if (MCFlux.UPDATE_CHECK_FINISHED && !MCFlux.NEWER_VERSION.isEmpty() && e.getEntity() instanceof EntityPlayerMP)
 			e.getEntity().sendMessage(ITextComponent.Serializer.jsonToComponent(I18n.format("mcflux.update.newversion", MCFlux.NEWER_VERSION)));
 	}
 }

@@ -10,20 +10,20 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import szewek.mcflux.L;
 import szewek.mcflux.U;
 
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+@SuppressWarnings("unused")
 public enum InjectWrappers {
 	EVENTS;
 	private static Set<IWrapperInject<TileEntity>> tileInjects = new HashSet<>();
 	private static Set<IWrapperInject<ItemStack>> itemInjects = new HashSet<>();
 	private static Set<IWrapperInject<Entity>> entityInjects = new HashSet<>();
 	private static Set<IWrapperInject<World>> worldInjects = new HashSet<>();
+	private static List<MCFluxWrapper> wrappers = new ArrayList<>();
 
 	public static void addTileWrapperInject(IWrapperInject<TileEntity> iwi) {
 		tileInjects.add(iwi);
@@ -42,85 +42,113 @@ public enum InjectWrappers {
 	}
 
 	public static class Registry {
-		public final Map<ResourceLocation, ICapabilityProvider> capMap;
-		private final AttachCapabilitiesEvent event;
+		final Map<String, ICapabilityProvider> resultMap = new HashMap<>();
 		private final Map<EnergyType, ICapabilityProvider> energyCapMap;
 
-		private Registry(AttachCapabilitiesEvent<?> att) {
-			event = att;
-			capMap = att.getCapabilities();
+		private Registry() {
 			energyCapMap = new EnumMap<>(EnergyType.class);
 		}
 
 		public void add(EnergyType et, ICapabilityProvider icp) {
 			energyCapMap.put(et, icp);
 		}
+		void resolve(EnergyType[] ets) {
+			for (EnergyType et : ets) {
+				ICapabilityProvider icp = energyCapMap.get(et);
+				if (icp != null) {
+					resultMap.put(et.loc.toString(), icp);
+					return;
+				}
+			}
+		}
 
 		public void register(ResourceLocation rl, ICapabilityProvider icp) {
-			event.addCapability(rl, icp);
+			resultMap.put(rl.toString(), icp);
 		}
 	}
 
-	private static <T> void wrap(AttachCapabilitiesEvent<T> att, Iterable<IWrapperInject<T>> iwis) {
+	@SuppressWarnings("unchecked")
+	private static <T> void findWrappers(MCFluxWrapper w, Iterable<IWrapperInject<T>> iwis) {
+		T t = (T) w.mainObject;
+		if (t == null)
+			return;
+		Registry reg = new Registry();
+		for (IWrapperInject<T> iwi : iwis)
+			iwi.injectWrapper(t, reg);
+		reg.resolve(EnergyType.ALL);
+		w.addWrappers(reg.resultMap);
+	}
+
+	private static <T> void wrap(AttachCapabilitiesEvent<T> att) {
 		T t = att.getObject();
 		if (t == null) {
 			L.warn("Cannot attach capabilities: Object is null");
 			return;
 		}
-		Registry reg = new Registry(att);
-		for (IWrapperInject<T> iwi : iwis)
-			iwi.injectWrapper(t, reg);
-		for (EnergyType et : EnergyType.ALL) {
-			ICapabilityProvider icp = reg.energyCapMap.get(et);
-			if (icp != null) {
-				att.addCapability(et.loc, icp);
-				break;
-			}
-		}
-	}
+		MCFluxWrapper w = new MCFluxWrapper(t);
+		att.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
+		wrappers.add(w);
 
-	public static void wrapItem(AttachCapabilitiesEvent.Item ei, Iterable<IWrapperInject<ItemStack>> iwis) {
-		ItemStack is = ei.getItemStack();
-		if (U.isItemEmpty(is)) {
-			L.warn("Cannot attach capabilities: ItemStack is null/empty");
-			return;
-		}
-		Registry reg = new Registry(ei);
-		for (IWrapperInject<ItemStack> iwi : iwis)
-			iwi.injectWrapper(is, reg);
-		for (EnergyType et : EnergyType.ALL) {
-			ICapabilityProvider icp = reg.energyCapMap.get(et);
-			if (icp != null) {
-				ei.addCapability(et.loc, icp);
-				break;
-			}
-		}
 	}
 
 	@SubscribeEvent
 	public void wrapTile(AttachCapabilitiesEvent<TileEntity> att) {
-		wrap(att, tileInjects);
+		if (Loader.instance().hasReachedState(LoaderState.AVAILABLE))
+			wrap(att);
 	}
 
 	@SubscribeEvent
 	public void wrapStack(AttachCapabilitiesEvent<ItemStack> att) {
 		if (Loader.instance().hasReachedState(LoaderState.AVAILABLE))
-			wrap(att, itemInjects);
+			wrap(att);
 	}
 
 	@SubscribeEvent
 	public void wrapEntity(AttachCapabilitiesEvent<Entity> att) {
-		wrap(att, entityInjects);
+		wrap(att);
 	}
 
 	@SubscribeEvent
 	public void wrapWorld(AttachCapabilitiesEvent<World> att) {
-		wrap(att, worldInjects);
+		wrap(att);
 	}
 
 	@SubscribeEvent
 	public void wrapItem(AttachCapabilitiesEvent.Item ei) {
-		if (Loader.instance().hasReachedState(LoaderState.AVAILABLE))
-			wrapItem(ei, itemInjects);
+		if (Loader.instance().hasReachedState(LoaderState.AVAILABLE)) {
+			ItemStack is = ei.getItemStack();
+			if (U.isItemEmpty(is)) {
+				L.warn("Cannot attach capabilities: ItemStack is null/empty");
+				return;
+			}
+			MCFluxWrapper w = new MCFluxWrapper(is);
+			ei.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
+			wrappers.add(w);
+		}
+	}
+
+	@SubscribeEvent
+	public void updateWrappers(TickEvent.WorldTickEvent wte) {
+		if (wrappers.isEmpty())
+			return;
+		if (wte.phase == TickEvent.Phase.START) {
+			MCFluxWrapper[] ws = wrappers.toArray(new MCFluxWrapper[wrappers.size()]);
+			wrappers.clear();
+			for (MCFluxWrapper w : ws) {
+				if (w.mainObject == null) {
+					L.warn("Wrapper with null object!");
+					continue;
+				}
+				if (w.mainObject instanceof TileEntity) {
+					findWrappers(w, tileInjects);
+				} else if (w.mainObject instanceof ItemStack) {
+					findWrappers(w, itemInjects);
+				} else if (w.mainObject instanceof Entity) {
+					findWrappers(w, entityInjects);
+				} else if (w.mainObject instanceof World) {
+					findWrappers(w, worldInjects);
+				}
+			}
+		}
 	}
 }
