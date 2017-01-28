@@ -13,6 +13,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import szewek.mcflux.L;
 import szewek.mcflux.U;
+import szewek.mcflux.util.ErrorReport;
+import szewek.mcflux.util.error.ErrMsgNullWrapper;
+import szewek.mcflux.util.error.ErrMsgThrownException;
 
 import java.util.*;
 
@@ -52,6 +55,7 @@ public enum InjectWrappers {
 		public void add(EnergyType et, ICapabilityProvider icp) {
 			energyCapMap.put(et, icp);
 		}
+
 		void resolve(EnergyType[] ets) {
 			for (EnergyType et : ets) {
 				ICapabilityProvider icp = energyCapMap.get(et);
@@ -131,24 +135,31 @@ public enum InjectWrappers {
 	public void updateWrappers(TickEvent.WorldTickEvent wte) {
 		if (wrappers.isEmpty())
 			return;
-		if (wte.phase == TickEvent.Phase.START) {
-			MCFluxWrapper[] ws = wrappers.toArray(new MCFluxWrapper[wrappers.size()]);
-			wrappers.clear();
-			for (MCFluxWrapper w : ws) {
-				if (w.mainObject == null) {
-					L.warn("Wrapper with null object!");
-					continue;
+		if (wte.phase == TickEvent.Phase.START)
+			try {
+				MCFluxWrapper[] ws = wrappers.toArray(new MCFluxWrapper[wrappers.size()]);
+				wrappers.clear();
+				for (MCFluxWrapper w : ws) {
+					if (w == null) {
+						ErrorReport.addErrMsg(new ErrMsgNullWrapper());
+						continue;
+					}
+					if (w.mainObject == null) {
+						ErrorReport.addErrMsg(new ErrMsgNullWrapper());
+						continue;
+					}
+					if (w.mainObject instanceof TileEntity) {
+						findWrappers(w, tileInjects);
+					} else if (w.mainObject instanceof ItemStack) {
+						findWrappers(w, itemInjects);
+					} else if (w.mainObject instanceof Entity) {
+						findWrappers(w, entityInjects);
+					} else if (w.mainObject instanceof World) {
+						findWrappers(w, worldInjects);
+					}
 				}
-				if (w.mainObject instanceof TileEntity) {
-					findWrappers(w, tileInjects);
-				} else if (w.mainObject instanceof ItemStack) {
-					findWrappers(w, itemInjects);
-				} else if (w.mainObject instanceof Entity) {
-					findWrappers(w, entityInjects);
-				} else if (w.mainObject instanceof World) {
-					findWrappers(w, worldInjects);
-				}
+			} catch (Exception x) {
+				ErrorReport.addErrMsg(new ErrMsgThrownException(x));
 			}
-		}
 	}
 }

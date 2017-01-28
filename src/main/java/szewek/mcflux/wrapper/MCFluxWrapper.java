@@ -49,20 +49,27 @@ public final class MCFluxWrapper implements ICapabilityProvider, INBTSerializabl
 
 	@SuppressWarnings("unchecked")
 	public boolean addWrappers(Map<String, ICapabilityProvider> icps) {
-		providers = new ICapabilityProvider[icps.size()];
-		names = new String[providers.length];
-		List<INBTSerializable<NBTBase>> sl = new ArrayList<>(providers.length);
+		int size = icps.size();
+		if (size == 0) {
+			return false;
+		}
+		List<ICapabilityProvider> pl = new ArrayList<>(size);
+		List<String> n = new ArrayList<>(size);
+		List<INBTSerializable<NBTBase>> sl = new ArrayList<>(size);
 		int i = 0;
 		for (Map.Entry<String, ICapabilityProvider> e : icps.entrySet()) {
-			names[i] = e.getKey();
-			providers[i] = e.getValue();
-			if (providers[i] instanceof INBTSerializable)
-				sl.add(i, (INBTSerializable<NBTBase>) providers[i]);
+			ICapabilityProvider icp = e.getValue();
+			n.add(i, e.getKey());
+			pl.add(i, icp);
+			if (icp instanceof INBTSerializable)
+				sl.add(i, (INBTSerializable<NBTBase>) icp);
 			else
 				sl.add(i, null);
 			i++;
 		}
-		serializables = sl.toArray(new INBTSerializable[providers.length]);
+		providers = pl.toArray(new ICapabilityProvider[size]);
+		names = n.toArray(new String[size]);
+		serializables = sl.toArray(new INBTSerializable[size]);
 		return providers.length > 0;
 	}
 
