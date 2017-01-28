@@ -1,4 +1,4 @@
-## 2.0.0 (BETA) and 2.0.1 (RELEASE)
+## 2.0.0 (BETA) and 2.0.1
 - Changed recipes for Energy Distributor and Flavor Distributor (Ender Eye instead of End Crystal)
 - Added Entity Charger
 - Added item and block descriptions
