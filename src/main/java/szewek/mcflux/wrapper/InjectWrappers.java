@@ -11,9 +11,9 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import szewek.mcflux.L;
 import szewek.mcflux.U;
 import szewek.mcflux.util.ErrorReport;
+import szewek.mcflux.util.error.ErrMsgNullInject;
 import szewek.mcflux.util.error.ErrMsgNullWrapper;
 import szewek.mcflux.util.error.ErrMsgThrownException;
 
@@ -86,7 +86,7 @@ public enum InjectWrappers {
 	private static <T> void wrap(AttachCapabilitiesEvent<T> att) {
 		T t = att.getObject();
 		if (t == null) {
-			L.warn("Cannot attach capabilities: Object is null");
+			ErrorReport.addErrMsg(new ErrMsgNullInject((Class<?>) att.getGenericType()));
 			return;
 		}
 		MCFluxWrapper w = new MCFluxWrapper(t);
@@ -122,7 +122,7 @@ public enum InjectWrappers {
 		if (Loader.instance().hasReachedState(LoaderState.AVAILABLE)) {
 			ItemStack is = ei.getItemStack();
 			if (U.isItemEmpty(is)) {
-				L.warn("Cannot attach capabilities: ItemStack is null/empty");
+				ErrorReport.addErrMsg(new ErrMsgNullInject(ItemStack.class));
 				return;
 			}
 			MCFluxWrapper w = new MCFluxWrapper(is);
