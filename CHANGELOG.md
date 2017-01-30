@@ -1,3 +1,9 @@
+## 2.0.3
+- New Block: Wireless Energy Transferrer (WET)
+
+## 2.0.2
+- Fixed some warning spam
+
 ## 2.0.0 (BETA) and 2.0.1
 - Changed recipes for Energy Distributor and Flavor Distributor (Ender Eye instead of End Crystal)
 - Added Entity Charger

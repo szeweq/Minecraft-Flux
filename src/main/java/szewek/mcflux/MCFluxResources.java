@@ -72,7 +72,7 @@ public enum MCFluxResources {
 		IX[][] ixCross = new IX[][]{{IX.A, null, IX.A}, {null, IX.B, null}, {IX.A, null, IX.A}};
 		IX[][] ixTool = new IX[][]{{IX.A, null, IX.A}, {IX.B, IX.C, IX.B}, {IX.B, IX.B, IX.B}};
 		IX[][] ixSandwich = new IX[][]{{IX.A, IX.A, IX.A}, {IX.B, IX.C, IX.B}, {IX.A, IX.A, IX.A}};
-		IX[][] ixWet = new IX[][]{{IX.A, IX.B, IX.A}, {IX.B, IX.C, IX.B}, {IX.A, IX.D, IX.A}};
+		IX[][] ixWet = new IX[][]{{IX.A, IX.B, IX.A}, {IX.C, IX.D, IX.C}, {IX.A, IX.E, IX.A}};
 		RecipeBuilder.buildRecipeFor(MFTOOL, 1)
 				.shape(ixTool, 3, 3)
 				.with(IX.A, sNugGold)
@@ -117,9 +117,10 @@ public enum MCFluxResources {
 		RecipeBuilder.buildRecipeFor(WET, 1)
 				.shape(ixWet, 3, 3)
 				.with(IX.A, iRedstone)
-				.with(IX.B, sIngIron)
-				.with(IX.C, new ItemStack(Blocks.REDSTONE_BLOCK))
-				.with(IX.D, new ItemStack(Items.COMPARATOR))
+				.with(IX.B, "blockIron")
+				.with(IX.C, sIngIron)
+				.with(IX.D, new ItemStack(Blocks.REDSTONE_BLOCK))
+				.with(IX.E, new ItemStack(Items.COMPARATOR))
 				.deploy();
 	}
 	private static <T extends Item> T item(String name, T i) {
