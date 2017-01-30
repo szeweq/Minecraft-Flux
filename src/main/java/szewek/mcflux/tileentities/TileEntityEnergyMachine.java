@@ -32,7 +32,6 @@ import java.util.function.IntBinaryOperator;
 import static szewek.mcflux.config.MCFluxConfig.CHUNK_CHARGER_TRANS;
 
 public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITickable {
-	private Battery bat = null;
 	private FlavoredContainer cnt = null;
 	private boolean oddTick = true, clientUpdate = true, serverUpdate = false;
 	private TransferType[] sideTransfer = new TransferType[]{TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};
@@ -67,10 +66,7 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 	@Override
 	public void setPos(@Nonnull BlockPos bp) {
 		super.setPos(bp);
-		if (moduleId < 2)
-			bat = world != null && !world.isRemote ? wce.getEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
-		else
-			cnt = world != null && !world.isRemote ? wce.getFlavorEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
+
 	}
 
 	@Override public void onLoad() {
@@ -82,6 +78,7 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 
 	@Override
 	public void update() {
+		super.update();
 		if (world.isRemote && clientUpdate) {
 			MCFlux.SNW.sendToServer(new UpdateMessageClient(pos));
 			clientUpdate = false;
@@ -140,6 +137,13 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBT(pkt.getNbtCompound());
+	}
+
+	@Override protected boolean updateVariables() {
+		if ((updateMode & 3) != 0 && pos != null) {
+			cnt = world != null && !world.isRemote ? wce.getFlavorEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
+		}
+		return true;
 	}
 
 	public void switchSideTransfer(EnumFacing f) {

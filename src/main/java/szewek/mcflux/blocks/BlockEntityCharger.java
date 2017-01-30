@@ -1,12 +1,8 @@
 package szewek.mcflux.blocks;
 
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -18,13 +14,12 @@ import szewek.mcflux.tileentities.TileEntityECharger;
 
 import javax.annotation.Nullable;
 
-public class BlockEntityCharger extends BlockContainer {
+public class BlockEntityCharger extends BlockMCFluxContainer {
 	private static final AxisAlignedBB DEF_AABB = new AxisAlignedBB(0.125, 0, 0.125, 0.875, 0.1875, 0.875);
 
 	public BlockEntityCharger() {
-		super(Material.PISTON);
+		super();
 		setHardness(0.5F);
-		setSoundType(SoundType.METAL);
 	}
 
 	@Nullable @Override public TileEntity createNewTileEntity(World worldIn, int meta) {
@@ -54,10 +49,6 @@ public class BlockEntityCharger extends BlockContainer {
 
 	@Override public boolean isOpaqueCube(IBlockState state) {
 		return false;
-	}
-
-	@Override public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {

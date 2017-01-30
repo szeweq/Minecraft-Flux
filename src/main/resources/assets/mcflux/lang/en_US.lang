@@ -6,6 +6,7 @@ mcflux.config.chunkChargerTransfer.tooltip=Energy transferred per tick by Chunk 
 mcflux.config.furnaceCapacity.tooltip=Energy capacity for Furnace
 mcflux.config.mobSpawnerEnergyUse.tooltip=Energy use for Mob Spawner to speed up.\nIt requires N or more MF/t, otherwise Mob Spawner runs as normal.
 mcflux.config.shyCrashReport.tooltip=When something is not completely initialized and Minecraft-Flux causes a crash then it creates and sends a crash report online
+
 mcflux.blockcompat.start=This block is
 mcflux.blockcompat.end= with MF from %s.
 mcflux.blockcompat.feend= with Flavor Energy from %s.
@@ -23,6 +24,8 @@ mcflux.upchip.installed=Chip installed
 mcflux.upchip.lvlup=You reached energy level %s.
 mcflux.upchip.lvlmax=You reached the final level.
 mcflux.update.newversion=[{"text":"A new update for "},{"text":"Minecraft-Flux","color":"yellow"},{"text":" was released ("},{"text":"%s","color":"yellow"},{"text":")!"}]
+mcflux.wet.mode0=ONE TO ALL
+mcflux.wet.mode1=ALL TO ONE
 
 itemGroup.mcflux=Minecraft-Flux
 
@@ -54,3 +57,6 @@ tile.chunk_sprayer.jeidesc=Flavored version of Chunk Sprayer.
 tile.echarger.name=Entity Charger
 tile.echarger.desc=Takes energy from nearby blocks or World Chunk Energy
 tile.echarger.jeidesc=It doesn't contain any energy.\nConnect an Entity Charger to a nearby block or charge a chunk using Energy Distributor and Chunk Charger.
+tile.wet.name=Wireless Energy Transferrer (WET)
+tile.wet.desc=Reserve 3x3x3 block space on the front and a block on the back
+tile.wet.jeidesc=The front facing tells you where to use a 3x3x3 area.\nRight-click with EMPTY hand to change modes.

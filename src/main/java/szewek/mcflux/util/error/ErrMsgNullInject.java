@@ -13,6 +13,6 @@ public class ErrMsgNullInject extends ErrMsg {
 	}
 
 	@Override protected void printShortError(int total, long delta) {
-		L.warn('"' + cl.getName() + "\" null inject errors: " + total + " in " + delta + "ms");
+		L.warn('"' + cl.getName() + "\" null inject errors: " + total + " in " + delta + " ms");
 	}
 }

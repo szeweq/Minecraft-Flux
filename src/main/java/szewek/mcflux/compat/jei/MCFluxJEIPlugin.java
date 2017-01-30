@@ -19,7 +19,7 @@ public class MCFluxJEIPlugin extends BlankModPlugin {
 		reg.addRecipeHandlers(
 				new BuiltShapedRecipeHandler(reg.getJeiHelpers())
 		);
-		addItemDescriptions(reg, MFTOOL, UPCHIP, Item.getItemFromBlock(ECHARGER));
+		addItemDescriptions(reg, MFTOOL, UPCHIP, Item.getItemFromBlock(ECHARGER), Item.getItemFromBlock(WET));
 		for (int i = 0; i < 4; i++) {
 			Item it = Item.getItemFromBlock(ENERGY_MACHINE);
 			ItemStack is = new ItemStack(it, 1, i);

@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockEntityCharger;
 import szewek.mcflux.blocks.BlockSided;
+import szewek.mcflux.blocks.BlockWET;
 import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
 import szewek.mcflux.blocks.itemblocks.ItemMCFluxBlock;
 import szewek.mcflux.items.ItemFESniffer;
@@ -19,6 +20,7 @@ import szewek.mcflux.items.ItemMFTool;
 import szewek.mcflux.items.ItemUpChip;
 import szewek.mcflux.tileentities.TileEntityECharger;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
+import szewek.mcflux.tileentities.TileEntityWET;
 import szewek.mcflux.util.IX;
 import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.util.recipe.RecipeBuilder;
@@ -36,6 +38,7 @@ public enum MCFluxResources {
 	public static BlockSided SIDED;
 	public static BlockEnergyMachine ENERGY_MACHINE;
 	public static BlockEntityCharger ECHARGER;
+	public static BlockWET WET;
 
 	/** Current state (0 = untouched; 1 = after preInit; 2 = after init) */
 	private static byte state = 0;
@@ -50,13 +53,16 @@ public enum MCFluxResources {
 		SIDED = new BlockSided("sided");
 		ENERGY_MACHINE = block("energy_machine", new BlockEnergyMachine(), ItemBlockEnergyMachine::new);
 		ECHARGER = block("echarger", new BlockEntityCharger(), ItemMCFluxBlock::new);
+		WET = block("wet", new BlockWET(), ItemMCFluxBlock::new);
 		GameRegistry.registerTileEntity(TileEntityEnergyMachine.class, "mcflux.emachine");
 		GameRegistry.registerTileEntity(TileEntityECharger.class, "mcflux.echarger");
+		GameRegistry.registerTileEntity(TileEntityWET.class, "mcflux.wet");
 	}
 	static void init() {
 		if (state > 1)
 			return;
 		state++;
+		String sIngIron = "ingotIron", sIngGold = "ingotGold", sNugGold = "nuggetGold";
 		ItemStack iRedstone = new ItemStack(Items.REDSTONE);
 		ItemStack iEnderEye = new ItemStack(Items.ENDER_EYE);
 		ItemStack iLapis = new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage());
@@ -66,21 +72,22 @@ public enum MCFluxResources {
 		IX[][] ixCross = new IX[][]{{IX.A, null, IX.A}, {null, IX.B, null}, {IX.A, null, IX.A}};
 		IX[][] ixTool = new IX[][]{{IX.A, null, IX.A}, {IX.B, IX.C, IX.B}, {IX.B, IX.B, IX.B}};
 		IX[][] ixSandwich = new IX[][]{{IX.A, IX.A, IX.A}, {IX.B, IX.C, IX.B}, {IX.A, IX.A, IX.A}};
+		IX[][] ixWet = new IX[][]{{IX.A, IX.B, IX.A}, {IX.B, IX.C, IX.B}, {IX.A, IX.D, IX.A}};
 		RecipeBuilder.buildRecipeFor(MFTOOL, 1)
 				.shape(ixTool, 3, 3)
-				.with(IX.A, "nuggetGold")
+				.with(IX.A, sNugGold)
 				.with(IX.B, iRedstone)
-				.with(IX.C, "ingotIron")
+				.with(IX.C, sIngIron)
 				.deploy();
 		RecipeBuilder.buildRecipeFor(FESNIFFER, 1)
 				.shape(ixTool, 3, 3)
-				.with(IX.A, "nuggetGold")
+				.with(IX.A, sNugGold)
 				.with(IX.B, iLapis)
-				.with(IX.C, "ingotGold")
+				.with(IX.C, sIngGold)
 				.deploy();
 		RecipeBuilder.buildRecipeFor(ENERGY_MACHINE, 1)
 				.shape(ixStar, 3, 3)
-				.with(IX.A, "ingotIron")
+				.with(IX.A, sIngIron)
 				.with(IX.B, iEnderEye)
 				.deploy()
 				.resultMeta(1)
@@ -92,7 +99,7 @@ public enum MCFluxResources {
 				.resultMeta(2)
 				.clear(IX.A, IX.B)
 				.shape(ixStar, 3, 3)
-				.with(IX.A, "ingotGold")
+				.with(IX.A, sIngGold)
 				.with(IX.B, iEnderEye)
 				.deploy()
 				.resultMeta(3)
@@ -103,9 +110,16 @@ public enum MCFluxResources {
 				.deploy();
 		RecipeBuilder.buildRecipeFor(ECHARGER, 1)
 				.shape(ixSandwich, 3, 3)
-				.with(IX.A, "ingotIron")
+				.with(IX.A, sIngIron)
 				.with(IX.B, new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage()))
 				.with(IX.C, new ItemStack(Blocks.GLOWSTONE))
+				.deploy();
+		RecipeBuilder.buildRecipeFor(WET, 1)
+				.shape(ixWet, 3, 3)
+				.with(IX.A, iRedstone)
+				.with(IX.B, sIngIron)
+				.with(IX.C, new ItemStack(Blocks.REDSTONE_BLOCK))
+				.with(IX.D, new ItemStack(Items.COMPARATOR))
 				.deploy();
 	}
 	private static <T extends Item> T item(String name, T i) {

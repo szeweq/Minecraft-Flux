@@ -14,6 +14,7 @@ import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.blocks.BlockEnergyMachine;
+import szewek.mcflux.blocks.BlockWET;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 
 public class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEntityProvider {
@@ -37,7 +38,10 @@ public class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEntityPr
 	@Override
 	public void addProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer p, World w, IBlockState ibs, IProbeHitData data) {
 		BlockPos bp = data.getPos();
-		if (ibs.getBlock() == MCFluxResources.ENERGY_MACHINE) {
+		if (ibs.getBlock() == MCFluxResources.WET) {
+			int m = ibs.getValue(BlockWET.MODE);
+			info.text(I18n.format("mcflux.wet.mode" + m));
+		} else if (ibs.getBlock() == MCFluxResources.ENERGY_MACHINE) {
 			BlockEnergyMachine.Variant var = ibs.getValue(BlockEnergyMachine.VARIANT);
 			if (var == BlockEnergyMachine.Variant.ENERGY_DIST || var == BlockEnergyMachine.Variant.CHUNK_CHARGER) {
 				WorldChunkEnergy wce = w.getCapability(WorldChunkEnergy.CAP_WCE, null);

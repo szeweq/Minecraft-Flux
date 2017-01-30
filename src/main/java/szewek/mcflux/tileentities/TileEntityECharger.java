@@ -6,27 +6,21 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
-import szewek.mcflux.api.ex.Battery;
 import szewek.mcflux.api.ex.IEnergy;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TileEntityECharger extends TileEntityWCEAware implements ITickable {
-	private Battery bat = null;
 	private int sideIndex = -1;
 	private IEnergy[] sides = new IEnergy[6];
 	private IEnergy esrc = null;
 	private List<IEnergy> chargeables = new ArrayList<>();
 
-	@Override
-	public void setPos(@Nonnull BlockPos bp) {
-		super.setPos(bp);
-		bat = world != null && !world.isRemote ? wce.getEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
-	}
-
 	@Override public void update() {
+		if (world.isRemote)
+			return;
+		super.update();
 		checkSources();
 		nextSource();
 		if (sideIndex == -1)

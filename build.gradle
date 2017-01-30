@@ -18,6 +18,8 @@ apply plugin: "maven-publish"
 
 sourceCompatibility = targetCompatibility = 1.8
 
+idea { module { inheritOutputDirs = true } }
+
 String[] versionsMC = ["1.11", "1.11.2"]
 String versionForge = "13.19.1.2189"
 
