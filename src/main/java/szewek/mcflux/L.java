@@ -15,6 +15,10 @@ public enum L {
 		l.log(Level.INFO, msg);
 	}
 
+	public static void error(String msg, Exception e) {
+		l.log(Level.ERROR, msg, e);
+	}
+
 	public static void warn(String msg) {
 		l.log(Level.WARN, msg);
 	}

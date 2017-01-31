@@ -9,7 +9,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import szewek.mcflux.MCFlux;
 import szewek.mcflux.MCFluxResources;
 import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
@@ -22,8 +21,9 @@ import szewek.mcflux.api.fe.IFlavorEnergy;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockSided;
 import szewek.mcflux.config.MCFluxConfig;
-import szewek.mcflux.network.UpdateMessageClient;
-import szewek.mcflux.network.UpdateMessageServer;
+import szewek.mcflux.network.MCFluxNetwork;
+import szewek.mcflux.network.msg.MsgUpdateClient;
+import szewek.mcflux.network.msg.MsgUpdateServer;
 import szewek.mcflux.util.TransferType;
 
 import javax.annotation.Nonnull;
@@ -71,7 +71,7 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 
 	@Override public void onLoad() {
 		if (world.isRemote) {
-			MCFlux.SNW.sendToServer(new UpdateMessageClient(pos));
+			MCFluxNetwork.toServer(MsgUpdateClient.with(pos));
 			clientUpdate = false;
 		}
 	}
@@ -80,10 +80,10 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 	public void update() {
 		super.update();
 		if (world.isRemote && clientUpdate) {
-			MCFlux.SNW.sendToServer(new UpdateMessageClient(pos));
+			MCFluxNetwork.toServer(MsgUpdateClient.with(pos));
 			clientUpdate = false;
 		} else if (!world.isRemote && serverUpdate) {
-			MCFlux.SNW.sendToDimension(new UpdateMessageServer(pos, sideTransfer), world.provider.getDimension());
+			MCFluxNetwork.toDimension(MsgUpdateServer.with(pos, sideTransfer), world.provider.getDimension());
 			serverUpdate = false;
 		}
 		if (!world.isRemote && wce != null && ((moduleId < 2 && bat != null) || cnt != null)) {
@@ -151,7 +151,7 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 		int v = (sideTransfer[s].ord + 1) % 3;
 		sideTransfer[s] = TransferType.values()[v];
 		cachedState = cachedState.withProperty(BlockSided.sideFromId(s), v);
-		MCFlux.SNW.sendToDimension(new UpdateMessageServer(pos, sideTransfer), world.provider.getDimension());
+		MCFluxNetwork.toDimension(MsgUpdateServer.with(pos, sideTransfer), world.provider.getDimension());
 		markDirty();
 	}
 

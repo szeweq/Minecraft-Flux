@@ -8,9 +8,7 @@ public class ErrMsgOldAPI extends ErrMsg {
 	}
 
 	@Override protected void printError() {
-		L.warn("\n+----= Warning: Use of old API =----"
-				+ "\n| Minecraft-Flux has detected use of API: " + name
-				+ "\n| This API may be not supported in the future"
+		L.warn("\n+----= Warning: Use of old API (" + name + ") =----"
 				+ "\n| Object class: " + cl.getName()
 				+ "\n+----"
 		);

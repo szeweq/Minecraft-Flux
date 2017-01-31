@@ -1,9 +1,7 @@
 package szewek.mcflux;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
@@ -13,6 +11,8 @@ import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import szewek.mcflux.network.MCFluxNetwork;
+import szewek.mcflux.network.msg.MsgNewVersion;
 
 enum MCFluxEvents {
 	INSTANCE;
@@ -34,6 +34,6 @@ enum MCFluxEvents {
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent e) {
 		if (MCFlux.UPDATE_CHECK_FINISHED && !MCFlux.NEWER_VERSION.isEmpty() && e.getEntity() instanceof EntityPlayerMP)
-			e.getEntity().sendMessage(ITextComponent.Serializer.jsonToComponent(I18n.format("mcflux.update.newversion", MCFlux.NEWER_VERSION)));
+			MCFluxNetwork.to(MsgNewVersion.with(MCFlux.NEWER_VERSION), (EntityPlayerMP) e.getEntity());
 	}
 }

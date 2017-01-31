@@ -10,10 +10,7 @@ import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.RecipeSorter;
 import szewek.mcflux.api.ex.Battery;
 import szewek.mcflux.api.ex.EnergyNBTStorage;
@@ -25,10 +22,7 @@ import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.InjectFluxable;
 import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
-import szewek.mcflux.network.MessageHandlerDummy;
-import szewek.mcflux.network.MessageHandlerServer;
-import szewek.mcflux.network.UpdateMessageClient;
-import szewek.mcflux.network.UpdateMessageServer;
+import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.util.MCFluxCreativeTab;
@@ -48,11 +42,6 @@ import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 public class MCFlux {
 	static String NEWER_VERSION = "";
 	static boolean UPDATE_CHECK_FINISHED = false;
-	public static SimpleNetworkWrapper SNW;
-	private static final int UPDATE_CLI = 67;
-	public static final int UPDATE_SRV = 69;
-	private static final MessageHandlerServer MSG_SRV = new MessageHandlerServer();
-	private static final MessageHandlerDummy MSG_DMM = new MessageHandlerDummy();
 	static final MCFluxCreativeTab MCFLUX_TAB = new MCFluxCreativeTab();
 	@SidedProxy(modId = R.MF_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
 	static szewek.mcflux.proxy.ProxyCommon PROXY = null;
@@ -67,6 +56,7 @@ public class MCFlux {
 			L.info("Minecraft-Flux version " + R.MF_VERSION);
 		if (MCFluxConfig.UPDATE_CHECK)
 			new Thread(MCFlux::updateCheck, "MCFlux Update Check").start();
+		MCFluxNetwork.registerAll();
 		CapabilityManager cm = CapabilityManager.INSTANCE;
 		cm.register(IEnergy.class, new EnergyNBTStorage(), Battery::new);
 		cm.register(IFlavorEnergy.class, new FlavorNBTStorage(), FlavoredStorage::new);
@@ -75,9 +65,6 @@ public class MCFlux {
 		EVENT_BUS.register(MCFluxEvents.INSTANCE);
 		MCFluxResources.preInit();
 		MCFLUX_TAB.init();
-		SNW = NetworkRegistry.INSTANCE.newSimpleChannel(R.MF_NAME);
-		SNW.registerMessage(MSG_SRV, UpdateMessageClient.class, UPDATE_CLI, Side.SERVER);
-		SNW.registerMessage(MSG_DMM, UpdateMessageServer.class, UPDATE_SRV, Side.SERVER);
 		InjectFluxable.registerWrappers();
 		PROXY.preInit();
 		registerAllInjects(e.getAsmData());
