@@ -6,7 +6,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.wrapper.EnergyCapabilityProvider;
 
 public class TeslaCapabilityProvider extends EnergyCapabilityProvider {
-	ICapabilityProvider capProvider;
+	private ICapabilityProvider capProvider;
 
 	TeslaCapabilityProvider(ICapabilityProvider icp) {
 		capProvider = icp;

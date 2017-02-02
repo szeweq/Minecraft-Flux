@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
 import net.minecraftforge.oredict.RecipeSorter;
@@ -53,7 +53,7 @@ public class MCFlux {
 		if (R.MF_VERSION.charAt(0) == '@')
 			L.warn("You are running Minecraft-Flux with an unknown version (development maybe?)");
 		else
-			L.info("Minecraft-Flux version " + R.MF_VERSION);
+			L.info("Minecraft-Flux " + R.MF_VERSION);
 		if (MCFluxConfig.UPDATE_CHECK)
 			new Thread(MCFlux::updateCheck, "MCFlux Update Check").start();
 		MCFluxNetwork.registerAll();
@@ -80,7 +80,7 @@ public class MCFlux {
 	}
 
 	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent e) {
+	public void loadComplete(FMLLoadCompleteEvent e) {
 		EVENT_BUS.register(InjectWrappers.EVENTS);
 	}
 

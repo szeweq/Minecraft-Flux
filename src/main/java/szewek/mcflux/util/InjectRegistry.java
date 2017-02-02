@@ -8,8 +8,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(TYPE)
 @Retention(RUNTIME)
+@SuppressWarnings("unused")
 public @interface InjectRegistry {
 	InjectCond requires();
 	String[] args();
-
 }

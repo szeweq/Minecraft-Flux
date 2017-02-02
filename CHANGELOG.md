@@ -1,3 +1,10 @@
+## 2.0.5
+- Brought back TESLA compatibility
+- Added Roots Compatibility (new Flavor)
+
+## 2.0.4
+- Fixed a crash when a player joins a dedicated server
+
 ## 2.0.3
 - New Block: Wireless Energy Transferrer (WET)
 
