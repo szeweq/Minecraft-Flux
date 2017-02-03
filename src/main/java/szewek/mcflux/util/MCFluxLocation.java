@@ -1,6 +1,9 @@
 package szewek.mcflux.util;
 
 import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nonnull;
+
 import static szewek.mcflux.R.MF_NAME;
 
 public class MCFluxLocation extends ResourceLocation {
@@ -10,12 +13,12 @@ public class MCFluxLocation extends ResourceLocation {
 		super(0, MF_NAME, name);
 	}
 
-	@Override
+	@Nonnull @Override
 	public String getResourceDomain() {
 		return MF_NAME;
 	}
 
-	@Override
+	@Nonnull @Override
 	public String toString() {
 		return MF_NAME + ':' + resourcePath;
 	}

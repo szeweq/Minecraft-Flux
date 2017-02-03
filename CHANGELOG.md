@@ -1,4 +1,8 @@
-## 1.4.0 (BETA 5)
+## 1.5.0
+- Added all things from 2.0.5 (except Update Checking)
+- Mekanism compatibility (Joules can be configured via config)
+
+## 1.4.0 (BETA 5) and 1.4.1
 - Botania compatibility
 - ProjectE compatibility
 - Added Flavor Distributor and Chunk Sprayer

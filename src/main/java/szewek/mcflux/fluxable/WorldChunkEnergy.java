@@ -13,6 +13,7 @@ import szewek.mcflux.api.ex.Battery;
 import szewek.mcflux.api.fe.FlavoredContainer;
 import szewek.mcflux.config.MCFluxConfig;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -29,13 +30,13 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 	private Map<ChunkPos, FlavoredContainer> flavorChunks = new HashMap<>();
 
 	@Override
-	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
+	public boolean hasCapability(@Nonnull Capability<?> cap, EnumFacing f) {
 		return cap == CAP_WCE;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
+	public <T> T getCapability(@Nonnull Capability<T> cap, EnumFacing f) {
 		return cap == CAP_WCE ? (T) this : null;
 	}
 
@@ -49,22 +50,12 @@ public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<N
 	 */
 	public Battery getEnergyChunk(int bx, int by, int bz) {
 		ChunkPos cp = new ChunkPos(bx / 16, by / 16, bz / 16);
-		Battery eb = energyChunks.get(cp);
-		if (eb == null) {
-			eb = new Battery(MCFluxConfig.WORLDCHUNK_CAP);
-			energyChunks.put(cp, eb);
-		}
-		return eb;
+		return energyChunks.computeIfAbsent(cp, k -> new Battery(MCFluxConfig.WORLDCHUNK_CAP));
 	}
 
 	public FlavoredContainer getFlavorEnergyChunk(int bx, int by, int bz) {
 		ChunkPos cp = new ChunkPos(bx / 16, by / 16, bz / 16);
-		FlavoredContainer cf = flavorChunks.get(cp);
-		if (cf == null) {
-			cf = new FlavoredContainer(MCFluxConfig.WORLDCHUNK_CAP / 4);
-			flavorChunks.put(cp, cf);
-		}
-		return cf;
+		return flavorChunks.computeIfAbsent(cp, k -> new FlavoredContainer(MCFluxConfig.WORLDCHUNK_CAP / 4));
 	}
 
 	private static class ChunkPos {

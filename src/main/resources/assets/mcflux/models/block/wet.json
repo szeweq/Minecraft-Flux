@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "mcflux:blocks/wet",
+    "down": "#b",
+    "up": "#f",
+    "north": "mcflux:blocks/wet",
+    "east": "mcflux:blocks/wet",
+    "south": "mcflux:blocks/wet",
+    "west": "mcflux:blocks/wet"
+  }
+}

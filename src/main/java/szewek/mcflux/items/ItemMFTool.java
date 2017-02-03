@@ -2,7 +2,6 @@ package szewek.mcflux.items;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
@@ -13,28 +12,30 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import szewek.mcflux.U;
+import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.api.ex.Battery;
-import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
-public class ItemMFTool extends Item {
+import javax.annotation.Nonnull;
+
+public class ItemMFTool extends ItemMCFlux {
 	private final TextComponentTranslation
-		textBlock = new TextComponentTranslation("mcflux.blockcompat.start"),
-		textEntity = new TextComponentTranslation("mcflux.entitycompat.start"),
-		textIsCompat = new TextComponentTranslation("mcflux.iscompat"),
-		textNoCompat = new TextComponentTranslation("mcflux.nocompat"),
-		textEnergyUnknown = new TextComponentTranslation("mcflux.energystatunknown"),
-		textWorldChunk = new TextComponentTranslation("mcflux.worldchunk");
+			textBlock = new TextComponentTranslation("mcflux.blockcompat.start"),
+			textEntity = new TextComponentTranslation("mcflux.entitycompat.start"),
+			textIsCompat = new TextComponentTranslation("mcflux.iscompat"),
+			textNoCompat = new TextComponentTranslation("mcflux.nocompat"),
+			textEnergyUnknown = new TextComponentTranslation("mcflux.energystatunknown"),
+			textWorldChunk = new TextComponentTranslation("mcflux.worldchunk");
 
 	public ItemMFTool() {
 		setMaxStackSize(1);
 		textIsCompat.getStyle().setColor(TextFormatting.GREEN).setBold(true);
 		textNoCompat.getStyle().setColor(TextFormatting.RED).setBold(true);
 	}
-	
-	@Override
+
+	@Nonnull @Override
 	public EnumActionResult onItemUse(ItemStack is, EntityPlayer p, World w, BlockPos pos, EnumHand h, EnumFacing f, float x, float y, float z) {
 		if (!w.isRemote) {
 			TileEntity te = w.getTileEntity(pos);
@@ -45,7 +46,7 @@ public class ItemMFTool extends Item {
 						p.addChatComponentMessage(new TextComponentTranslation("mcflux.transfer", ((TileEntityEnergyMachine) te).getTransferSide(f)));
 					return EnumActionResult.SUCCESS;
 				}
-				IEnergy ie = te.getCapability(EX.CAP_ENERGY, f);
+				IEnergy ie = MCFluxAPI.getEnergySafely(te, f);
 				TextComponentTranslation tcb = textBlock.createCopy();
 				tcb.appendSibling(ie != null ? textIsCompat : textNoCompat).appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
 				p.addChatComponentMessage(tcb);
@@ -53,10 +54,14 @@ public class ItemMFTool extends Item {
 					p.addChatComponentMessage(new TextComponentTranslation("mcflux.energystat", U.formatMF(ie.getEnergy(), ie.getEnergyCapacity())));
 			} else {
 				WorldChunkEnergy wce = w.getCapability(WorldChunkEnergy.CAP_WCE, null);
-				Battery bat = wce.getEnergyChunk((int) p.posX, (int) (p.posY + 0.5), (int) p.posZ);
-				TextComponentTranslation tcb = textWorldChunk.createCopy();
-				tcb.appendSibling(new TextComponentTranslation("mcflux.energystat", U.formatMF(bat.getEnergy(), bat.getEnergyCapacity())));
-				p.addChatComponentMessage(tcb);
+				if (wce != null) {
+					Battery bat = wce.getEnergyChunk((int) p.posX, (int) (p.posY + 0.5), (int) p.posZ);
+					TextComponentTranslation tcb = textWorldChunk.createCopy();
+					tcb.appendSibling(new TextComponentTranslation("mcflux.energystat", U.formatMF(bat.getEnergy(), bat.getEnergyCapacity())));
+					p.addChatComponentMessage(tcb);
+				} else {
+					return EnumActionResult.PASS;
+				}
 			}
 			return EnumActionResult.SUCCESS;
 		}
@@ -66,7 +71,7 @@ public class ItemMFTool extends Item {
 	@Override
 	public boolean itemInteractionForEntity(ItemStack is, EntityPlayer p, EntityLivingBase elb, EnumHand h) {
 		if (!elb.worldObj.isRemote) {
-			IEnergy ie = elb.getCapability(EX.CAP_ENERGY, null);
+			IEnergy ie = MCFluxAPI.getEnergySafely(elb, null);
 			TextComponentTranslation tcb = textEntity.createCopy();
 			tcb.appendSibling(ie != null ? textIsCompat : textNoCompat);
 			tcb.appendSibling(new TextComponentTranslation("mcflux.entitycompat.end"));

@@ -6,6 +6,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class EnergyCapabilityProvider implements ICapabilityProvider {
@@ -14,12 +15,12 @@ public abstract class EnergyCapabilityProvider implements ICapabilityProvider {
 
 	protected abstract boolean canConnect(EnumFacing f);
 
-	@Override public boolean hasCapability(Capability<?> cap, @Nullable EnumFacing f) {
+	@Override public boolean hasCapability(@Nonnull Capability<?> cap, @Nullable EnumFacing f) {
 		return canConnect(f) && cap == EX.CAP_ENERGY && !broken;
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override public <T> T getCapability(Capability<T> cap, @Nullable EnumFacing f) {
+	@Override public <T> T getCapability(@Nonnull Capability<T> cap, @Nullable EnumFacing f) {
 		return canConnect(f) && cap == EX.CAP_ENERGY && !broken ? (T) sides[f == null ? 6 : f.getIndex()]: null;
 	}
 }

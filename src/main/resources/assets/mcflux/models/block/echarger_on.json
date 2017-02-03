@@ -1,0 +1,4 @@
+{
+  "parent": "mcflux:block/echarger",
+  "textures": {"1": "mcflux:blocks/echarger_on"}
+}

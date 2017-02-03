@@ -9,10 +9,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import szewek.mcflux.MCFlux;
+import szewek.mcflux.MCFluxResources;
 import szewek.mcflux.U;
+import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.api.ex.Battery;
-import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.api.fe.FE;
 import szewek.mcflux.api.fe.Flavored;
@@ -21,9 +21,9 @@ import szewek.mcflux.api.fe.IFlavorEnergy;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockSided;
 import szewek.mcflux.config.MCFluxConfig;
-import szewek.mcflux.fluxable.WorldChunkEnergy;
-import szewek.mcflux.network.UpdateMessageClient;
-import szewek.mcflux.network.UpdateMessageServer;
+import szewek.mcflux.network.MCFluxNetwork;
+import szewek.mcflux.network.msg.MsgUpdateClient;
+import szewek.mcflux.network.msg.MsgUpdateServer;
 import szewek.mcflux.util.TransferType;
 
 import javax.annotation.Nonnull;
@@ -31,14 +31,12 @@ import java.util.function.IntBinaryOperator;
 
 import static szewek.mcflux.config.MCFluxConfig.CHUNK_CHARGER_TRANS;
 
-public class TileEntityEnergyMachine extends TileEntity implements ITickable {
-	private WorldChunkEnergy wce = null;
-	private Battery bat = null;
+public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITickable {
 	private FlavoredContainer cnt = null;
 	private boolean oddTick = true, clientUpdate = true, serverUpdate = false;
 	private TransferType[] sideTransfer = new TransferType[]{TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};
 	private long[] sideValues = new long[]{0, 0, 0, 0, 0, 0};
-	private IBlockState cachedState = MCFlux.SIDED.getDefaultState();
+	private IBlockState cachedState = MCFluxResources.SIDED.getDefaultState();
 	private IntBinaryOperator module;
 	private int moduleId;
 
@@ -66,34 +64,26 @@ public class TileEntityEnergyMachine extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public void setWorldObj(@Nonnull World w) {
-		super.setWorldObj(w);
-		wce = worldObj != null && !worldObj.isRemote ? worldObj.getCapability(WorldChunkEnergy.CAP_WCE, null) : null;
-	}
-
-	@Override
 	public void setPos(@Nonnull BlockPos bp) {
 		super.setPos(bp);
-		if (moduleId < 2)
-			bat = worldObj != null && !worldObj.isRemote ? wce.getEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
-		else
-			cnt = worldObj != null && !worldObj.isRemote ? wce.getFlavorEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
+
 	}
 
 	@Override public void onLoad() {
 		if (worldObj.isRemote) {
-			MCFlux.SNW.sendToServer(new UpdateMessageClient(pos));
+			MCFluxNetwork.toServer(MsgUpdateClient.with(pos));
 			clientUpdate = false;
 		}
 	}
 
 	@Override
 	public void update() {
+		super.update();
 		if (worldObj.isRemote && clientUpdate) {
-			MCFlux.SNW.sendToServer(new UpdateMessageClient(pos));
+			MCFluxNetwork.toServer(MsgUpdateClient.with(pos));
 			clientUpdate = false;
 		} else if (!worldObj.isRemote && serverUpdate) {
-			MCFlux.SNW.sendToDimension(new UpdateMessageServer(pos, sideTransfer), worldObj.provider.getDimension());
+			MCFluxNetwork.toDimension(MsgUpdateServer.with(pos, sideTransfer), worldObj.provider.getDimension());
 			serverUpdate = false;
 		}
 		if (!worldObj.isRemote && wce != null && ((moduleId < 2 && bat != null) || cnt != null)) {
@@ -149,12 +139,19 @@ public class TileEntityEnergyMachine extends TileEntity implements ITickable {
 		readFromNBT(pkt.getNbtCompound());
 	}
 
+	@Override protected boolean updateVariables() {
+		if ((updateMode & 3) != 0 && pos != null) {
+			cnt = worldObj != null && !worldObj.isRemote ? wce.getFlavorEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
+		}
+		return true;
+	}
+
 	public void switchSideTransfer(EnumFacing f) {
 		int s = f.getIndex();
 		int v = (sideTransfer[s].ord + 1) % 3;
 		sideTransfer[s] = TransferType.values()[v];
 		cachedState = cachedState.withProperty(BlockSided.sideFromId(s), v);
-		MCFlux.SNW.sendToDimension(new UpdateMessageServer(pos, sideTransfer), worldObj.provider.getDimension());
+		MCFluxNetwork.toDimension(MsgUpdateServer.with(pos, sideTransfer), worldObj.provider.getDimension());
 		markDirty();
 	}
 
@@ -183,7 +180,7 @@ public class TileEntityEnergyMachine extends TileEntity implements ITickable {
 			if (te == null)
 				continue;
 			f = f.getOpposite();
-			IEnergy ea = te.getCapability(EX.CAP_ENERGY, f);
+			IEnergy ea = MCFluxAPI.getEnergySafely(te, f);
 			if (ea == null)
 				continue;
 			switch (tt) {

@@ -1,19 +1,18 @@
 package szewek.mcflux.compat.jei.crafting;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import szewek.mcflux.util.recipe.BuiltShapedRecipe;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import szewek.mcflux.util.RecipeBuilder;
-
 public class BuiltShapedRecipeWrapper extends mezz.jei.api.recipe.BlankRecipeWrapper implements mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper {
-	private RecipeBuilder.BuiltShapedRecipe recipe;
-	public BuiltShapedRecipeWrapper(RecipeBuilder.BuiltShapedRecipe bsr) {
+	private BuiltShapedRecipe recipe;
+	public BuiltShapedRecipeWrapper(BuiltShapedRecipe bsr) {
 		recipe = bsr;
 	}
 	@Override public int getWidth() {

@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.api.ex.IEnergy;
@@ -19,6 +18,10 @@ public class U {
 
 	public static String formatMF(long n, long nc) {
 		return n + " / " + nc + " MF";
+	}
+
+	public static boolean isItemEmpty(ItemStack is) {
+		return is == null;
 	}
 	
 	public static long transferEnergy(IEnergy from, IEnergy to, final long amount) {
@@ -57,7 +60,7 @@ public class U {
 	
 	@SideOnly(Side.CLIENT)
 	public static void registerItemMultiModels(Item item, int m) {
-		ResourceLocation rl = item.getRegistryName();
+		net.minecraft.util.ResourceLocation rl = item.getRegistryName();
 		final String dom = rl.getResourceDomain();
 		for (int i = 0; i < m; i++) {
 			ItemStack is = new ItemStack(item, 1, i);

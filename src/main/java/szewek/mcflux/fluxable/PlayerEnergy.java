@@ -12,6 +12,8 @@ import net.minecraftforge.common.util.INBTSerializable;
 import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 
+import javax.annotation.Nonnull;
+
 public class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializable<NBTBase> {
 	@CapabilityInject(PlayerEnergy.class)
 	public static Capability<PlayerEnergy> SELF_CAP;
@@ -37,13 +39,13 @@ public class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializa
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
+	public boolean hasCapability(@Nonnull Capability<?> cap, EnumFacing f) {
 		return cap == SELF_CAP || (maxEnergy > 0 && cap == EX.CAP_ENERGY);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
+	public <T> T getCapability(@Nonnull Capability<T> cap, EnumFacing f) {
 		return cap == SELF_CAP || (maxEnergy > 0 && cap == EX.CAP_ENERGY) ? (T) this : null;
 	}
 

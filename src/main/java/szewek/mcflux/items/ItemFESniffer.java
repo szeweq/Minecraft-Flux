@@ -2,7 +2,6 @@ package szewek.mcflux.items;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
@@ -16,7 +15,9 @@ import szewek.mcflux.api.fe.FE;
 import szewek.mcflux.api.fe.IFlavorEnergy;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
-public class ItemFESniffer extends Item {
+import javax.annotation.Nonnull;
+
+public class ItemFESniffer extends ItemMCFlux {
 	private final TextComponentTranslation
 			textBlock = new TextComponentTranslation("mcflux.blockcompat.start"),
 			textEntity = new TextComponentTranslation("mcflux.entitycompat.start"),
@@ -29,7 +30,7 @@ public class ItemFESniffer extends Item {
 		textNoCompat.getStyle().setColor(TextFormatting.RED).setBold(true);
 	}
 
-	@Override
+	@Nonnull @Override
 	public EnumActionResult onItemUse(ItemStack is, EntityPlayer p, World w, BlockPos pos, EnumHand h, EnumFacing f, float x, float y, float z) {
 		if (!w.isRemote) {
 			TileEntity te = w.getTileEntity(pos);

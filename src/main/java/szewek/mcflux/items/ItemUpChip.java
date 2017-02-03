@@ -4,9 +4,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketTitle;
+import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -15,15 +15,15 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import szewek.mcflux.fluxable.PlayerEnergy;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
-public class ItemUpChip extends Item {
+public class ItemUpChip extends ItemMCFlux {
 	private static final String PF = "mcflux.upchip.";
 	private static final TextComponentTranslation
 			textInstalled = new TextComponentTranslation(PF + "installed"),
 			textLvlMax = new TextComponentTranslation(PF + "lvlmax");
 
-	@Override public EnumAction getItemUseAction(ItemStack stack) {
+	@Nonnull @Override public EnumAction getItemUseAction(ItemStack stack) {
 		return EnumAction.BOW;
 	}
 
@@ -31,14 +31,14 @@ public class ItemUpChip extends Item {
 		return 40;
 	}
 
-	@Override
+	@Nonnull @Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack is, World w, EntityPlayer p, EnumHand h) {
 		p.setActiveHand(h);
-		return new ActionResult<>(EnumActionResult.SUCCESS, is);
+		return new ActionResult<>(EnumActionResult.SUCCESS, p.getHeldItem(h));
 	}
 
-	@Nullable @Override
-	public ItemStack onItemUseFinish(ItemStack is, World w, EntityLivingBase elb) {
+	@Override
+	public ItemStack onItemUseFinish(@Nonnull ItemStack is, World w, EntityLivingBase elb) {
 		if (!w.isRemote && elb instanceof EntityPlayerMP) {
 			EntityPlayerMP mp = (EntityPlayerMP) elb;
 			PlayerEnergy pe = mp.getCapability(PlayerEnergy.SELF_CAP, null);
@@ -47,10 +47,13 @@ public class ItemUpChip extends Item {
 			byte lvl = pe.updateLevel();
 			if (lvl == -1)
 				return is;
-			--is.stackSize;
+			is.stackSize--;
+			if (is.stackSize <= 0)
+				is = null;
 			mp.connection.sendPacket(new SPacketTitle(SPacketTitle.Type.TITLE, textInstalled, 50, 500, 50));
 			mp.connection.sendPacket(new SPacketTitle(SPacketTitle.Type.SUBTITLE, lvl == 30 ? textLvlMax : new TextComponentTranslation(PF + "lvlup", lvl)));
-			mp.addStat(StatList.getObjectUseStats(this));
+			StatBase stat = StatList.getObjectUseStats(this);
+			if (stat != null) mp.addStat(stat);
 		}
 		return is;
 	}

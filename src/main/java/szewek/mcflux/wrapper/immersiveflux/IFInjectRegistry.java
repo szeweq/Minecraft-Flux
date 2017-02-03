@@ -15,8 +15,8 @@ import szewek.mcflux.wrapper.InjectWrappers;
 public class IFInjectRegistry implements IInjectRegistry {
 	@Override
 	public void registerInjects() {
-		InjectWrappers.registerTileWrapperInject(IFInjectRegistry::wrapIFTile);
-		InjectWrappers.registerItemWrapperInject(IFInjectRegistry::wrapIFItem);
+		InjectWrappers.addTileWrapperInject(IFInjectRegistry::wrapIFTile);
+		InjectWrappers.addItemWrapperInject(IFInjectRegistry::wrapIFItem);
 	}
 	
 	private static void wrapIFTile(TileEntity te, InjectWrappers.Registry reg) {

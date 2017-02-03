@@ -1,28 +1,24 @@
 package szewek.mcflux.util;
 
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.L;
+import szewek.mcflux.util.error.ErrMsg;
 
 import java.util.HashSet;
-import java.util.Set;
 
 public enum ErrorReport {
 	;
+	private static HashSet<ErrMsg> errMsgs = new HashSet<>();
 
-	private static Set<Class<?>> badClasses = new HashSet<>();
-
-	public static void badImplementation(String name, EnumFacing face, ICapabilityProvider icp, Throwable th) {
-		Class<?> cl = icp.getClass();
-		if (badClasses.add(cl)) {
-			L.warn("+----= An error occured when trying to attach a capability =----");
-			L.warn("| Bad " + name + " implementation (checked " + (face != null ? "WITH SIDE " + face : "SIDELESS") + ")");
-			L.warn("| Capability provider class: " + cl.getName());
-			L.warn("| Tell authors of this implementation about it!");
-			L.warn("| This is not a Minecraft-Flux problem, it's theirs.");
-			L.warn("+----");
-			L.warn(th);
-		} else
-			L.warn("Bad " + name + " implementation error for \"" + cl.getName() + "\" happened again (checked " + (face != null ? "WITH SIDE " + face : "SIDELESS") + ")!");
+	public static void addErrMsg(ErrMsg em) {
+		if (errMsgs.add(em)) {
+			em.addUp();
+		} else {
+			int hc = em.hashCode();
+			for (ErrMsg xem : errMsgs) {
+				if (hc == xem.hashCode()) {
+					xem.addUp();
+					return;
+				}
+			}
+		}
 	}
 }

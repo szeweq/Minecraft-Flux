@@ -13,7 +13,7 @@ public class BotaniaInjectRegistry implements IInjectRegistry {
 	static final String BOTANIA_MANA = "botania:mana";
 	private static final MCFluxLocation MANA_RL = new MCFluxLocation("mana");
 	@Override public void registerInjects() {
-		InjectWrappers.registerTileWrapperInject(BotaniaInjectRegistry::wrapBotaniaTile);
+		InjectWrappers.addTileWrapperInject(BotaniaInjectRegistry::wrapBotaniaTile);
 	}
 
 	private static void wrapBotaniaTile(TileEntity te, InjectWrappers.Registry reg) {
