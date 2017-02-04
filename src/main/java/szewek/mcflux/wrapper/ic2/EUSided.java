@@ -4,13 +4,13 @@ import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.util.EnumFacing;
-import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.wrapper.ForgeEnergyCapable;
 
 import java.util.function.DoubleSupplier;
 
 import static szewek.mcflux.config.MCFluxConfig.CFG_EU_VALUE;
 
-class EUSided implements IEnergy {
+class EUSided extends ForgeEnergyCapable {
 	private final EnumFacing face;
 	private final DoubleSupplier capMethod, energyMethod;
 	private final IEnergySink sink;

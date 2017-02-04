@@ -27,6 +27,7 @@ import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.util.MCFluxCreativeTab;
 import szewek.mcflux.util.NBTSerializableCapabilityStorage;
+import szewek.mcflux.util.awareness.ConflictingModDetection;
 import szewek.mcflux.util.recipe.BuiltShapedRecipe;
 import szewek.mcflux.wrapper.InjectWrappers;
 
@@ -67,6 +68,7 @@ public class MCFlux {
 		MCFLUX_TAB.init();
 		InjectFluxable.registerWrappers();
 		PROXY.preInit();
+		ConflictingModDetection.listAllConflictingMods();
 		registerAllInjects(e.getAsmData());
 	}
 

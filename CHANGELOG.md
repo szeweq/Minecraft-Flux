@@ -1,3 +1,8 @@
+## 2.0.6
+- Made IC2 compatible with Forge Energy
+- Made RF compatible with Forge Energy
+- Made TESLA compatible with Forge Energy
+
 ## 2.0.5
 - Brought back TESLA compatibility
 - Added Roots Compatibility (new Flavor)

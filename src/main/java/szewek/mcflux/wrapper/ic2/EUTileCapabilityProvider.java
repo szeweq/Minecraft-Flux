@@ -9,6 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.energy.CapabilityEnergy;
 import szewek.mcflux.api.ex.EX;
 
 import java.lang.reflect.Method;
@@ -68,7 +69,7 @@ class EUTileCapabilityProvider implements ICapabilityProvider {
 
 	@Override
 	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == SELF_CAP || (cap == EX.CAP_ENERGY && complete);
+		return cap == SELF_CAP || ((cap == EX.CAP_ENERGY || cap == CapabilityEnergy.ENERGY) && complete);
 	}
 
 	@SuppressWarnings("unchecked")
