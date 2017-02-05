@@ -63,12 +63,6 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 		return null;
 	}
 
-	@Override
-	public void setPos(@Nonnull BlockPos bp) {
-		super.setPos(bp);
-
-	}
-
 	@Override public void onLoad() {
 		if (world.isRemote) {
 			MCFluxNetwork.toServer(MsgUpdateClient.with(pos));
@@ -181,8 +175,7 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 				continue;
 			f = f.getOpposite();
 			IEnergy ea = MCFluxAPI.getEnergySafely(te, f);
-			if (ea == null)
-				continue;
+			if (ea == null) continue;
 			switch (tt) {
 				case INPUT:
 					sideValues[i] = U.transferEnergy(ea, bat, MCFluxConfig.ENERGY_DIST_TRANS * 2) / 2;

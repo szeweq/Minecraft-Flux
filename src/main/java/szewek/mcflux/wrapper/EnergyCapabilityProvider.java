@@ -17,7 +17,7 @@ public abstract class EnergyCapabilityProvider implements ICapabilityProvider {
 	protected abstract boolean canConnect(EnumFacing f);
 
 	@Override public boolean hasCapability(@Nonnull Capability<?> cap, @Nullable EnumFacing f) {
-		return canConnect(f) && (cap == EX.CAP_ENERGY || (forgeCompatible && cap == CapabilityEnergy.ENERGY)) && !broken;
+		return (cap == EX.CAP_ENERGY || (forgeCompatible && cap == CapabilityEnergy.ENERGY)) && !broken && canConnect(f);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -12,6 +12,7 @@ import szewek.mcflux.api.fe.Flavored;
 import szewek.mcflux.api.fe.FlavoredMutable;
 import szewek.mcflux.api.fe.IFlavorEnergy;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 
 public class U {
@@ -24,7 +25,7 @@ public class U {
 		return is == null || is.isEmpty();
 	}
 	
-	public static long transferEnergy(IEnergy from, IEnergy to, final long amount) {
+	public static long transferEnergy(@Nonnull IEnergy from, @Nonnull IEnergy to, final long amount) {
 		if (from.canOutputEnergy() && to.canInputEnergy()) {
 			long r = to.inputEnergy(from.outputEnergy(amount, true), true);
 			if (r > 0)
