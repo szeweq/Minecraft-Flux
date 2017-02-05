@@ -63,12 +63,6 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 		return null;
 	}
 
-	@Override
-	public void setPos(@Nonnull BlockPos bp) {
-		super.setPos(bp);
-
-	}
-
 	@Override public void onLoad() {
 		if (worldObj.isRemote) {
 			MCFluxNetwork.toServer(MsgUpdateClient.with(pos));
@@ -77,8 +71,7 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 	}
 
 	@Override
-	public void update() {
-		super.update();
+	public void updateTile() {
 		if (worldObj.isRemote && clientUpdate) {
 			MCFluxNetwork.toServer(MsgUpdateClient.with(pos));
 			clientUpdate = false;
@@ -86,8 +79,8 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 			MCFluxNetwork.toDimension(MsgUpdateServer.with(pos, sideTransfer), worldObj.provider.getDimension());
 			serverUpdate = false;
 		}
-		if (!worldObj.isRemote && wce != null && ((moduleId < 2 && bat != null) || cnt != null)) {
-			int i = oddTick ? 0 : 3, m = oddTick ? 3 : 6;
+		if (!worldObj.isRemote && ((moduleId < 2 && bat != null) || cnt != null)) {
+			int i = oddTick ? 0 : 3, m = i + 3;
 			for (int j = i; j < m; j++)
 				sideValues[j] = 0;
 			if (module != null)

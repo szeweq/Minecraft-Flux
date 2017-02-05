@@ -6,9 +6,9 @@ import net.darkhax.tesla.api.ITeslaProducer;
 import net.darkhax.tesla.lib.TeslaUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.wrapper.ForgeEnergyCapable;
 
-public class TeslaSided implements IEnergy {
+public class TeslaSided extends ForgeEnergyCapable {
 	private final EnumFacing face;
 	private final ITeslaHolder holder;
 	private final ITeslaConsumer consumer;

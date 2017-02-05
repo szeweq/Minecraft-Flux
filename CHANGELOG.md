@@ -1,3 +1,6 @@
+## 1.5.1
+- All fixes an features from 2.0.6
+
 ## 1.5.0
 - Added all things from 2.0.5 (except Update Checking)
 - Mekanism compatibility (Joules can be configured via config)

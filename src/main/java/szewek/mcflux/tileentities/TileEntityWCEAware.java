@@ -30,9 +30,13 @@ public class TileEntityWCEAware extends TileEntity implements ITickable {
 	}
 
 	@Override public void update() {
+		if (wce == null)
+			updateMode |= 1;
+		if (bat == null)
+			updateMode |= 2;
 		if (updateMode != 0) {
-			if (wce == null || (updateMode & 1) != 0)
-			wce = worldObj.getCapability(WorldChunkEnergy.CAP_WCE, null);
+			if ((updateMode & 1) != 0)
+				wce = worldObj.getCapability(WorldChunkEnergy.CAP_WCE, null);
 			if (wce == null)
 				return;
 			if ((updateMode & 2) != 0)
@@ -40,9 +44,12 @@ public class TileEntityWCEAware extends TileEntity implements ITickable {
 			if (updateVariables())
 				updateMode = 0;
 		}
+		updateTile();
 	}
 
 	protected boolean updateVariables() {
 		return true;
 	}
+
+	protected void updateTile() {}
 }

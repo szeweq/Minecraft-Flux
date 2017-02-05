@@ -15,6 +15,7 @@ public class TeslaCapabilityProvider extends EnergyCapabilityProvider {
 			sides[i] = new TeslaSided(capProvider, EnumFacing.VALUES[i]);
 		}
 		sides[6] = new TeslaSided(capProvider, null);
+		forgeCompatible = true;
 	}
 
 	@Override protected boolean canConnect(EnumFacing f) {
