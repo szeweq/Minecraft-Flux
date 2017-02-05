@@ -71,8 +71,7 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 	}
 
 	@Override
-	public void update() {
-		super.update();
+	public void updateTile() {
 		if (world.isRemote && clientUpdate) {
 			MCFluxNetwork.toServer(MsgUpdateClient.with(pos));
 			clientUpdate = false;
@@ -80,8 +79,8 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 			MCFluxNetwork.toDimension(MsgUpdateServer.with(pos, sideTransfer), world.provider.getDimension());
 			serverUpdate = false;
 		}
-		if (!world.isRemote && wce != null && ((moduleId < 2 && bat != null) || cnt != null)) {
-			int i = oddTick ? 0 : 3, m = oddTick ? 3 : 6;
+		if (!world.isRemote && ((moduleId < 2 && bat != null) || cnt != null)) {
+			int i = oddTick ? 0 : 3, m = i + 3;
 			for (int j = i; j < m; j++)
 				sideValues[j] = 0;
 			if (module != null)
@@ -175,7 +174,8 @@ public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITick
 				continue;
 			f = f.getOpposite();
 			IEnergy ea = MCFluxAPI.getEnergySafely(te, f);
-			if (ea == null) continue;
+			if (ea == null)
+				continue;
 			switch (tt) {
 				case INPUT:
 					sideValues[i] = U.transferEnergy(ea, bat, MCFluxConfig.ENERGY_DIST_TRANS * 2) / 2;

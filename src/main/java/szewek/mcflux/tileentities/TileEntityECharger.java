@@ -17,10 +17,9 @@ public class TileEntityECharger extends TileEntityWCEAware implements ITickable 
 	private IEnergy esrc = null;
 	private List<IEnergy> chargeables = new ArrayList<>();
 
-	@Override public void update() {
+	@Override public void updateTile() {
 		if (world.isRemote)
 			return;
-		super.update();
 		checkSources();
 		nextSource();
 		if (sideIndex == -1)

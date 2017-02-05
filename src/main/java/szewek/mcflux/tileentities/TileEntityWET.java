@@ -19,10 +19,9 @@ public class TileEntityWET extends TileEntityWCEAware implements ITickable {
 	private Iterable<BlockPos> poss;
 	private Set<IEnergy> eset = new HashSet<>(27);
 
-	@Override public void update() {
+	@Override public void updateTile() {
 		if (world.isRemote)
 			return;
-		super.update();
 		eset.clear();
 		IEnergy se = null;
 		TileEntity te;
