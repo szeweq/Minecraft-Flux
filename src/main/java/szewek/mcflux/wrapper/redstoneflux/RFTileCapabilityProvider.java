@@ -18,6 +18,7 @@ class RFTileCapabilityProvider extends EnergyCapabilityProvider {
 			sides[i] = new RFSided(handler, provider, receiver, EnumFacing.VALUES[i]);
 		}
 		sides[6] = new RFSided(handler, provider, receiver, null);
+		forgeCompatible = true;
 	}
 
 	@Override protected boolean canConnect(EnumFacing f) {
