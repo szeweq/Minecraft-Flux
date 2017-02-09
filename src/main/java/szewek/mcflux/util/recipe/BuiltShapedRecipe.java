@@ -5,12 +5,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
-import szewek.mcflux.U;
 import szewek.mcflux.util.IX;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
+
+import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
 public class BuiltShapedRecipe implements IRecipe {
 	private final IX[][] shapeCode;
@@ -64,59 +65,61 @@ public class BuiltShapedRecipe implements IRecipe {
 	public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World w) {
 		for (int x = 0; x < 4 - width; x++)
 			for (int y = 0; y < 4 - height; y++) {
-				if (matchOffset(inv, x, y, false, false) == size) {
+				if (matchOffset(inv, x, y, false, false)) {
 					return true;
 				}
 				if (mirror == 0) continue;
-				if ((mirror & 2) != 0 && matchOffset(inv, x, y, true, false) == size)
+				if ((mirror & 2) != 0 && matchOffset(inv, x, y, true, false))
 					return true;
-				if ((mirror & 1) != 0 && matchOffset(inv, x, y, false, true) == size)
+				if ((mirror & 1) != 0 && matchOffset(inv, x, y, false, true))
 					return true;
-				if ((mirror & 3) != 0 && matchOffset(inv, x, y, false, true) == size)
+				if ((mirror & 3) != 0 && matchOffset(inv, x, y, false, true))
 					return true;
 			}
 		return false;
 	}
 
-	private int matchOffset(InventoryCrafting inv, int ox, int oy, boolean mirrorX, boolean mirrorY) {
-		int m = 0;
+	private boolean matchOffset(InventoryCrafting inv, int ox, int oy, boolean mirrorX, boolean mirrorY) {
+		int x, y = 0;
 		LOOP_XY:
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				int zx = x + ox;
+		for (x = 0; x < width; x++) {
+			int zx = x + ox;
+			int mx = mirrorX ? width - x - 1 : x;
+			for (y = 0; y < height; y++) {
 				int zy = y + oy;
+				int my = mirrorY ? height - y - 1 : y;
 				ItemStack slot = inv.getStackInRowAndColumn(zx, zy);
-				IX id = shapeCode[mirrorY ? height - y - 1 : y][mirrorX ? width - x - 1 : x];
-				if (id == null) {
-					if (!U.isItemEmpty(slot))
+				boolean slotEmpty = slot == null;
+				IX id = shapeCode[my][mx];
+				boolean matchEmpty = id == null;
+				if (matchEmpty) {
+					if (!slotEmpty)
 						break LOOP_XY;
-					else {
-						m++;
+					else
 						continue;
-					}
 				}
+				boolean stackEmpty = stacks[id.ord] == null;
 				List<ItemStack> oreDictItems = oreDicts[id.ord] != null ? OreDictionary.getOres(oreDicts[id.ord]) : null;
-				boolean emptyList = oreDictItems == null || oreDictItems.isEmpty();
-				if ((stacks[id.ord] == null && emptyList) != U.isItemEmpty(slot))
+				boolean oredictEmpty = oreDictItems == null || oreDictItems.isEmpty();
+				if ((stackEmpty && oredictEmpty) == slotEmpty) {
+					if (!slotEmpty) {
+						boolean notStack = stackEmpty || !stacksMatch(slot, stacks[id.ord], false);
+						boolean notOredict = oredictEmpty || !allMatch(slot, oreDictItems, false);
+						if (notStack && notOredict)
+							break LOOP_XY;
+					}
+				} else
 					break LOOP_XY;
-				if (!U.isItemEmpty(slot)) {
-					if (stacks[id.ord] == null || !OreDictionary.itemMatches(stacks[id.ord], slot, false))
-						break LOOP_XY;
-					if (emptyList || !OreDictionary.containsMatch(false, oreDictItems, slot))
-						break LOOP_XY;
-				}
-				m++;
 			}
 		}
-		return m;
-
+		return x == width && y == height;
 	}
 
 	public Object[] getCached() {
 		return cached;
 	}
 
-	@Nonnull @Override
+	@Override
 	public ItemStack getCraftingResult(@Nonnull InventoryCrafting inv) {
 		return result.copy();
 	}
@@ -134,5 +137,18 @@ public class BuiltShapedRecipe implements IRecipe {
 	@Nonnull @Override
 	public ItemStack[] getRemainingItems(@Nonnull InventoryCrafting inv) {
 		return net.minecraftforge.common.ForgeHooks.defaultRecipeGetRemainingItems(inv);
+	}
+
+	private static boolean stacksMatch(ItemStack target, ItemStack input, boolean strict) {
+		if (target == null || input == null)
+			return target == input;
+		return target.getItem() == input.getItem() && (target.getItemDamage() == WILDCARD_VALUE && !strict || target.getItemDamage() == input.getItemDamage());
+	}
+
+	private static boolean allMatch(ItemStack target, List<ItemStack> inputs, boolean strict) {
+		for (ItemStack is : inputs)
+			if (stacksMatch(target, is, strict))
+				return true;
+		return false;
 	}
 }
