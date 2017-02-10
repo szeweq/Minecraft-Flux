@@ -1,3 +1,12 @@
+## 2.0.8
+- Reworked Error Messages
+- Fixed World Chunk Energy
+- New Update Checking
+
+## 2.0.7
+- Fixed broken recipes
+- Fixed language file not loading properly
+
 ## 2.0.6
 - Made IC2 compatible with Forge Energy
 - Made RF compatible with Forge Energy

@@ -11,6 +11,8 @@ import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.api.fe.Flavored;
 import szewek.mcflux.api.fe.FlavoredMutable;
 import szewek.mcflux.api.fe.IFlavorEnergy;
+import szewek.mcflux.util.ErrorReport;
+import szewek.mcflux.util.error.ErrMsgThrownException;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
@@ -75,7 +77,7 @@ public class U {
 		try {
 			c = Class.forName(name);
 		} catch (ClassNotFoundException e) {
-			L.warn(e);
+			ErrorReport.addErrMsg(new ErrMsgThrownException(e));
 		}
 		return c;
 	}
@@ -84,7 +86,7 @@ public class U {
 		try {
 			m = cl.getDeclaredMethod(name, cargs);
 		} catch (Exception e) {
-			L.warn(e);
+			ErrorReport.addErrMsg(new ErrMsgThrownException(e));
 		}
 		return m;
 	}

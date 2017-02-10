@@ -8,10 +8,7 @@ public class ErrMsgOldAPI extends ErrMsg {
 	}
 
 	@Override protected void printError() {
-		L.warn("\n+----= Warning: Use of old API (" + name + ") =----"
-				+ "\n| Object class: " + cl.getName()
-				+ "\n+----"
-		);
+		L.warn("Warning: Use of old API (" + name + ") on class: " + cl.getName());
 	}
 
 	@Override protected void printShortError(int total, long delta) {}

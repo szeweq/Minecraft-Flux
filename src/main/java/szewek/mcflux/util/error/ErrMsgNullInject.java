@@ -8,8 +8,7 @@ public class ErrMsgNullInject extends ErrMsg {
 	}
 
 	@Override protected void printError() {
-		L.warn("An object with type \"" + cl.getName() + "\" is null!");
-		L.warn("Minecraft-Flux can't inject any capability into an empty object");
+		L.warn("An object with type \"" + cl.getName() + "\" is null! Minecraft-Flux can't inject any capability into an empty object");
 		L.warn(msgThrown);
 	}
 
