@@ -16,7 +16,7 @@ public class InjectFluxable {
 	private static final MCFluxLocation
 			MF_PLAYER = new MCFluxLocation("PlayerEnergy"),
 			MF_ACTION = new MCFluxLocation("ActionEnergy"),
-			MF_WORLD_CHUNK = new MCFluxLocation("WorldChunkEnergy"),
+			MF_WORLD_CHUNK = new MCFluxLocation("wce"),
 			MF_FURNACE = new MCFluxLocation("FurnaceEnergy"),
 			MF_MOB_SPAWNER = new MCFluxLocation("MobSpawnerEnergy");
 

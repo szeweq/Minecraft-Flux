@@ -59,4 +59,4 @@ tile.echarger.desc=Takes energy from nearby blocks or World Chunk Energy
 tile.echarger.jeidesc=It doesn't contain any energy.\nConnect an Entity Charger to a nearby block or charge a chunk using Energy Distributor and Chunk Charger.
 tile.wet.name=Wireless Energy Transferrer (WET)
 tile.wet.desc=Reserve 3x3x3 block space on the front and a block on the back
-tile.wet.jeidesc=The front facing tells you where to use a 3x3x3 area.\nRight-click with EMPTY hand to change modes.
+tile.wet.jeidesc=The front facing tells you where to use a 3x3x3 area.\nRight-click with EMPTY hand to change modes.\nThis block transfers energy from/to World Chunk Energy when no block was found on the opposite side.

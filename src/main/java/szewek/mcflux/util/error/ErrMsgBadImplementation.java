@@ -14,13 +14,12 @@ public class ErrMsgBadImplementation extends ErrMsg {
 	}
 
 	@Override protected void printError() {
-		L.warn("\n+----= Warning: Bad/incomplete " + name + " implementation =----"
+		L.warn("\n+--= Warning: Bad/incomplete " + name + " implementation =--"
 				+ "\n| Checked " + (face != null ? "WITH SIDE " + face : "SIDELESS")
 				+ "\n| Capability provider class: " + cl.getName()
 				+ "\n| Possibly this is not meant to be an error."
 				+ "\n| Tell authors of this implementation about it!"
-				+ "\n| This is not a Minecraft-Flux problem."
-				+ "\n+----"
+				+ "\n+--"
 		);
 		L.warn(msgThrown);
 	}

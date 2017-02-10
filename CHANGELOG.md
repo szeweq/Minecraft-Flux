@@ -1,5 +1,12 @@
+## 1.6.0
+- New Update Checking System (like 2.0.8)
+- Other fixes from 2.0.8 (World Chunk Energy, Error Reporting, etc.)
+
+## 1.5.2
+- Fixes and features from 2.0.7
+
 ## 1.5.1
-- All fixes an features from 2.0.6
+- All fixes and features from 2.0.6
 
 ## 1.5.0
 - Added all things from 2.0.5 (except Update Checking)

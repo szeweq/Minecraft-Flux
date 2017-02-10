@@ -83,8 +83,8 @@ public enum InjectWrappers {
 		w.addWrappers(reg.resultMap);
 	}
 
-	private static <T> void wrap(AttachCapabilitiesEvent<T> att) {
-		T t = att.getObject();
+	private static void wrap(AttachCapabilitiesEvent<?> att) {
+		Object t = att.getObject();
 		if (t == null) {
 			ErrorReport.addErrMsg(new ErrMsgNullInject((Class<?>) att.getGenericType()));
 			return;
@@ -141,11 +141,11 @@ public enum InjectWrappers {
 				wrappers.clear();
 				for (MCFluxWrapper w : ws) {
 					if (w == null) {
-						ErrorReport.addErrMsg(new ErrMsgNullWrapper());
+						ErrorReport.addErrMsg(new ErrMsgNullWrapper(false));
 						continue;
 					}
 					if (w.mainObject == null) {
-						ErrorReport.addErrMsg(new ErrMsgNullWrapper());
+						ErrorReport.addErrMsg(new ErrMsgNullWrapper(true));
 						continue;
 					}
 					if (w.mainObject instanceof TileEntity) {

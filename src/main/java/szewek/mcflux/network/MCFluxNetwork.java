@@ -35,6 +35,7 @@ public enum MCFluxNetwork {
 		chan.register(NET);
 		ids.add(0, MsgUpdateClient.class);
 		ids.add(1, MsgUpdateServer.class);
+		ids.add(2, MsgNewVersion.class);
 	}
 
 	public static void to(FragileMsg msg, EntityPlayerMP mp) {

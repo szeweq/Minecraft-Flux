@@ -4,15 +4,19 @@ import szewek.mcflux.L;
 import szewek.mcflux.wrapper.MCFluxWrapper;
 
 public class ErrMsgNullWrapper extends ErrMsg {
-	public ErrMsgNullWrapper() {
+	private final boolean objectNull;
+	public ErrMsgNullWrapper(boolean obj) {
 		super("wrapper", MCFluxWrapper.class, null);
+		objectNull = obj;
+		if (obj)
+			cachedHash++;
 	}
 
 	@Override protected void printError() {
-		L.warn("A wrapper is null or a wrapped object is null!");
+		L.warn("A wrapp" + (objectNull ? "ed object" : "er") + " is null!");
 	}
 
 	@Override protected void printShortError(int total, long delta) {
-		L.warn("Null wrapper errors: " + total + " in " + delta + " ms");
+		L.warn("Null wrapp" + (objectNull ? "ed object" : "er") + " errors: " + total + " in " + delta + " ms");
 	}
 }
