@@ -1,0 +1,32 @@
+mcflux.config.title=Konfiguracja Minecraft-Flux
+mcflux.config.EUValue.tooltip=Ilość MF przeznaczona do konwersji z/na 1 EU (IC2)
+mcflux.config.energyDistTransfer.tooltip=Transfer energii na tik przez Dystrybutora Energii
+mcflux.config.furnaceCapacity.tooltip=Pojemność energii dla Pieca
+
+mcflux.blockcompat.start=Ten blok
+mcflux.blockcompat.end= z MF po stronie %s.
+mcflux.blockcompat.feend= z Zapachową Energią po stronie %s.
+mcflux.entitycompat.start=Ta istota
+mcflux.entitycompat.end= z MF.
+mcflux.entitycompat.feend= z Zapachową Energią.
+mcflux.iscompat= ma kompatybilność
+mcflux.nocompat= nie ma kompatybilności
+mcflux.energystat=Energia: %s
+mcflux.energystatunknown=Energia: nieznana
+mcflux.mfcompatible=Kompatybilny z MF
+mcflux.upchip.installed=Chip zainstalowany
+mcflux.upchip.lvlup=Osiągnąłeś poziom energii %s.
+mcflux.upchip.lvlmax=Osiągnąłeś ostatni poziom energii.
+mcflux.update.newversion=[{"text":"Nowa aktualizacja"},{"text":"Minecraft-Flux","color":"yellow"},{"text":" została wydana ("},{"text":"%s","color":"yellow"},{"text":")!"}]
+mcflux.sleep.tooBright=Zgaś to światło!
+
+item.mftool.name=Narzędzie MF
+item.fesniffer.name=Czujnik Zapachowej Energii
+item.upchip.name=Chip Aktualizacji MF
+item.upchip.desc=Mniam!
+item.fluxassistant.name=Asystent Flux [WIP]
+
+tile.energy_dist.name=Dystrybutor Energii
+tile.flavor_dist.name=Dystrybutor Zapachowej Energii
+tile.echarger.name=Ładowarka Istot
+tile.wet.name=Bezprzewodowy Przenośnik Energii

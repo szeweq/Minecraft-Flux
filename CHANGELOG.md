@@ -1,5 +1,6 @@
 ## 2.1.0
 - Huge performance increase
+- New language (pl_PL)
 
 ## 2.0.8
 - Reworked Error Messages
