@@ -3,7 +3,6 @@ package szewek.mcflux.util.recipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import szewek.mcflux.util.IX;
 
@@ -114,12 +113,9 @@ public final class RecipeBuilder {
 		return this;
 	}
 
-	public IRecipe build() {
-		return result == null? null : new BuiltShapedRecipe(recipeShape.clone(), width, height, new ItemStack(result, resultSize, meta, tags), items.clone(), oreDicts.clone(), mirror);
-	}
-
 	public RecipeBuilder deploy() {
-		net.minecraftforge.fml.common.registry.GameRegistry.addRecipe(build());
+		if (result != null)
+			net.minecraftforge.fml.common.registry.GameRegistry.addRecipe(new BuiltShapedRecipe(recipeShape.clone(), width, height, new ItemStack(result, resultSize, meta, tags), items.clone(), oreDicts.clone(), mirror));
 		return this;
 	}
 
