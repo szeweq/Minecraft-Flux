@@ -8,8 +8,8 @@ import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.api.ex.IEnergy;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class TileEntityWET extends TileEntityWCEAware implements ITickable {
 	private EnumFacing face = null, faceOpposite = null;
@@ -17,12 +17,12 @@ public final class TileEntityWET extends TileEntityWCEAware implements ITickable
 	private int ix = -1, iy = -1, iz = -1, nx = 1, ny = 1, nz = 1;
 	private BlockPos upos;
 	private Iterable<BlockPos> poss;
-	private Set<IEnergy> eset = new HashSet<>(27);
+	private List<IEnergy> elist = new ArrayList<>(27);
 
 	@Override public void updateTile() {
 		if (world.isRemote)
 			return;
-		eset.clear();
+		elist.clear();
 		IEnergy se = null;
 		TileEntity te;
 		for (BlockPos cbp : poss) {
@@ -31,9 +31,9 @@ public final class TileEntityWET extends TileEntityWCEAware implements ITickable
 				continue;
 			IEnergy ie = MCFluxAPI.getEnergySafely(te, faceOpposite);
 			if (ie != null)
-				eset.add(ie);
+				elist.add(ie);
 		}
-		if (eset.isEmpty())
+		if (elist.isEmpty())
 			return;
 		te = world.getTileEntity(upos);
 		if (te != null)
@@ -44,7 +44,7 @@ public final class TileEntityWET extends TileEntityWCEAware implements ITickable
 			else
 				return;
 		}
-		for (IEnergy ue : eset) {
+		for (IEnergy ue : elist) {
 			if (out) {
 				U.transferEnergy(ue, se, 4000);
 				if (se.getEnergy() == se.getEnergyCapacity())
