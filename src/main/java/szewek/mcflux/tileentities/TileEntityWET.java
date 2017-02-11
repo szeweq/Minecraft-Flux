@@ -11,7 +11,7 @@ import szewek.mcflux.api.ex.IEnergy;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TileEntityWET extends TileEntityWCEAware implements ITickable {
+public final class TileEntityWET extends TileEntityWCEAware implements ITickable {
 	private EnumFacing face = null, faceOpposite = null;
 	private boolean out = false;
 	private int ix = -1, iy = -1, iz = -1, nx = 1, ny = 1, nz = 1;

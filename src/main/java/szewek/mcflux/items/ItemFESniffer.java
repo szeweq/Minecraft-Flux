@@ -17,7 +17,7 @@ import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 import javax.annotation.Nonnull;
 
-public class ItemFESniffer extends ItemMCFlux {
+public final class ItemFESniffer extends ItemMCFlux {
 	private final TextComponentTranslation
 			textBlock = new TextComponentTranslation("mcflux.blockcompat.start"),
 			textEntity = new TextComponentTranslation("mcflux.entitycompat.start"),

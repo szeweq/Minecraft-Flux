@@ -9,7 +9,7 @@ import szewek.mcflux.util.recipe.BuiltShapedRecipe;
 
 import javax.annotation.Nonnull;
 
-public class BuiltShapedRecipeHandler implements IRecipeHandler<BuiltShapedRecipe> {
+public final class BuiltShapedRecipeHandler implements IRecipeHandler<BuiltShapedRecipe> {
 	private final IJeiHelpers jeiHelpers;
 
 	public BuiltShapedRecipeHandler(IJeiHelpers helpers) {jeiHelpers = helpers;}

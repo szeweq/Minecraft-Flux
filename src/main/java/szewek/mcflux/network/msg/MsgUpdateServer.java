@@ -12,7 +12,7 @@ import szewek.mcflux.util.TransferType;
 
 import java.io.IOException;
 
-public class MsgUpdateServer extends FragileMsg {
+public final class MsgUpdateServer extends FragileMsg {
 	private BlockPos pos = null;
 	private TransferType[] sides = null;
 

@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import szewek.mcflux.util.MCFluxLocation;
+import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 public class InjectFluxable {
@@ -21,9 +22,12 @@ public class InjectFluxable {
 			MF_MOB_SPAWNER = new MCFluxLocation("MobSpawnerEnergy");
 
 	public static void registerWrappers() {
-		InjectWrappers.addTileWrapperInject(InjectFluxable::tileWrappers);
-		InjectWrappers.addEntityWrapperInject(InjectFluxable::entityWrappers);
-		InjectWrappers.addWorldWrapperInject(InjectFluxable::worldWrappers);
+		InjectCollector ic = InjectWrappers.getCollector();
+		if (ic == null)
+			return;
+		ic.addTileWrapperInject(InjectFluxable::tileWrappers);
+		ic.addEntityWrapperInject(InjectFluxable::entityWrappers);
+		ic.addWorldWrapperInject(InjectFluxable::worldWrappers);
 	}
 
 	private static void tileWrappers(TileEntity te, InjectWrappers.Registry reg) {

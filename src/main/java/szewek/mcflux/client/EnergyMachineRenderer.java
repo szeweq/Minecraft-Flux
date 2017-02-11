@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
-public class EnergyMachineRenderer extends TileEntitySpecialRenderer<TileEntityEnergyMachine> {
+public final class EnergyMachineRenderer extends TileEntitySpecialRenderer<TileEntityEnergyMachine> {
 	private BlockRendererDispatcher blockRenderer;
 	
 	@Override

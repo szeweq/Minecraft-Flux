@@ -12,7 +12,7 @@ import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 import java.io.IOException;
 
-public class MsgUpdateClient extends FragileMsg {
+public final class MsgUpdateClient extends FragileMsg {
 	private BlockPos pos;
 
 	public static MsgUpdateClient with(BlockPos bp) {

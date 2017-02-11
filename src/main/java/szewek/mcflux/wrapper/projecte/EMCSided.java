@@ -10,7 +10,7 @@ import szewek.mcflux.api.fe.IFlavorEnergy;
 
 import static szewek.mcflux.wrapper.projecte.ProjectEInjectRegistry.EMC;
 
-public class EMCSided implements IFlavorEnergy {
+public final class EMCSided implements IFlavorEnergy {
 	private final EnumFacing face;
 	private final IEmcStorage storage;
 

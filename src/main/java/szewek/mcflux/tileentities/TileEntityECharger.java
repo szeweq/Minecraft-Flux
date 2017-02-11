@@ -11,7 +11,7 @@ import szewek.mcflux.api.ex.IEnergy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityECharger extends TileEntityWCEAware implements ITickable {
+public final class TileEntityECharger extends TileEntityWCEAware implements ITickable {
 	private int sideIndex = -1;
 	private IEnergy[] sides = new IEnergy[6];
 	private IEnergy esrc = null;

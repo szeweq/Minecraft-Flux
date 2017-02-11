@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.api.ex.IEnergy;
@@ -17,7 +18,10 @@ import szewek.mcflux.util.error.ErrMsgThrownException;
 import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 
-public class U {
+import static net.minecraft.util.EnumFacing.*;
+
+public final class U {
+	public static final EnumFacing[] FANCY_FACING = new EnumFacing[] {DOWN, UP, NORTH, SOUTH, WEST, EAST, null};
 
 	public static String formatMF(long n, long nc) {
 		return n + " / " + nc + " MF";

@@ -20,7 +20,7 @@ import szewek.mcflux.tileentities.TileEntityWET;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockWET extends BlockMCFluxContainer {
+public final class BlockWET extends BlockMCFluxContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("f");
 	public static final PropertyInteger MODE = PropertyInteger.create("m", 0, 1);
 

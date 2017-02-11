@@ -6,7 +6,7 @@ import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.util.EnumFacing;
 import szewek.mcflux.api.ex.IEnergy;
 
-class RFSided implements IEnergy, net.minecraftforge.energy.IEnergyStorage {
+final class RFSided implements IEnergy, net.minecraftforge.energy.IEnergyStorage {
 	private final EnumFacing face;
 	private final IEnergyHandler handler;
 	private final IEnergyProvider provider;

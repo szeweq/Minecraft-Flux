@@ -12,7 +12,7 @@ import szewek.mcflux.util.MCFluxLocation;
 
 import javax.annotation.Nonnull;
 
-public class BlockSided extends Block {
+public final class BlockSided extends Block {
 	private static final PropertyInteger
 			UP = PropertyInteger.create("up", 0, 2),
 			DOWN = PropertyInteger.create("down", 0, 2),

@@ -6,7 +6,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import szewek.mcflux.api.ex.IEnergy;
 
-public class ForgeEnergySided implements IEnergy {
+public final class ForgeEnergySided implements IEnergy {
 	private final IEnergyStorage storage;
 	private final boolean notEmpty;
 

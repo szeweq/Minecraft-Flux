@@ -9,7 +9,7 @@ import szewek.mcflux.api.ex.EnergyCapable;
 
 import javax.annotation.Nullable;
 
-class RFItemContainerWrapper extends EnergyCapable implements net.minecraftforge.energy.IEnergyStorage {
+final class RFItemContainerWrapper extends EnergyCapable implements net.minecraftforge.energy.IEnergyStorage {
 	private final IEnergyContainerItem item;
 	private final ItemStack stack;
 

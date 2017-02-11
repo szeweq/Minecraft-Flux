@@ -5,7 +5,8 @@ import net.minecraftforge.common.config.Property;
 
 import java.io.File;
 
-public class MCFluxConfig {
+public enum MCFluxConfig {
+	;
 	public static int CFG_EU_VALUE = 4, WORLDCHUNK_CAP = 20000000, ENERGY_DIST_TRANS = 1000000, CHUNK_CHARGER_TRANS = 2000000, FURNACE_CAP = 50000, MOB_SPAWNER_USE = 500;
 	public static boolean ONLINE_ERROR_REPORT = true, UPDATE_CHECK = true;
 	private static Configuration config;

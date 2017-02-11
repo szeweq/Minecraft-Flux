@@ -17,7 +17,7 @@ import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockWET;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 
-public class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEntityProvider {
+public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEntityProvider {
 	public static final String ID = R.MF_NAME + ":top_info";
 	@Override
 	public void addProbeEntityInfo(ProbeMode mode, IProbeInfo info, EntityPlayer p, World w, Entity e, IProbeHitEntityData data) {

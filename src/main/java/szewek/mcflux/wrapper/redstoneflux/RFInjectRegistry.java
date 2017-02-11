@@ -11,15 +11,19 @@ import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.util.error.ErrMsgOldAPI;
 import szewek.mcflux.wrapper.EnergyType;
+import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 @InjectRegistry(requires = InjectCond.CLASS, args = {"cofh.api.energy.IEnergyHandler"})
-public class RFInjectRegistry implements IInjectRegistry {
+public final class RFInjectRegistry implements IInjectRegistry {
 	private static final String RF_API_NAME = "CoFHAPI|energy";
 	@Override
 	public void registerInjects() {
-		InjectWrappers.addTileWrapperInject(RFInjectRegistry::wrapRFTile);
-		InjectWrappers.addItemWrapperInject(RFInjectRegistry::wrapRFItem);
+		InjectCollector ic = InjectWrappers.getCollector();
+		if (ic == null)
+			return;
+		ic.addTileWrapperInject(RFInjectRegistry::wrapRFTile);
+		ic.addItemWrapperInject(RFInjectRegistry::wrapRFItem);
 	}
 	private static void wrapRFTile(TileEntity te, InjectWrappers.Registry reg) {
 		if (te instanceof IEnergyHandler) {

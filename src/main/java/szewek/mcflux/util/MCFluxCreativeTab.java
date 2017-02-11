@@ -7,7 +7,7 @@ import szewek.mcflux.R;
 
 import javax.annotation.Nonnull;
 
-public class MCFluxCreativeTab extends CreativeTabs {
+public final class MCFluxCreativeTab extends CreativeTabs {
 	private ItemStack iconStack;
 	public MCFluxCreativeTab() {
 		super(R.MF_NAME);

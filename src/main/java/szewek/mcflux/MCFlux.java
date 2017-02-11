@@ -40,7 +40,7 @@ import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
 @SuppressWarnings("unused")
 @Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true, guiFactory = R.GUI_FACTORY, dependencies = R.MF_DEPENDENCIES)
-public class MCFlux {
+public final class MCFlux {
 	private static File MC_DIR;
 	static String NEWER_VERSION = "";
 	static boolean UPDATE_CHECK_FINISHED = false;
@@ -72,6 +72,7 @@ public class MCFlux {
 		PROXY.preInit();
 		ConflictingModDetection.listAllConflictingMods();
 		registerAllInjects(e.getAsmData());
+		InjectWrappers.init();
 	}
 
 	@Mod.EventHandler

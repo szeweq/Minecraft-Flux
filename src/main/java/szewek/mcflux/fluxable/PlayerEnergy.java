@@ -14,7 +14,7 @@ import szewek.mcflux.api.ex.IEnergy;
 
 import javax.annotation.Nonnull;
 
-public class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializable<NBTBase> {
+public final class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSerializable<NBTBase> {
 	@CapabilityInject(PlayerEnergy.class)
 	public static Capability<PlayerEnergy> SELF_CAP;
 

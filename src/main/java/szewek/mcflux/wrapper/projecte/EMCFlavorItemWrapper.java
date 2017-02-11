@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 
 import static szewek.mcflux.wrapper.projecte.ProjectEInjectRegistry.EMC;
 
-public class EMCFlavorItemWrapper implements IFlavorEnergy, ICapabilityProvider {
+public final class EMCFlavorItemWrapper implements IFlavorEnergy, ICapabilityProvider {
 	private final IItemEmc emcItem;
 	private final ItemStack stack;
 

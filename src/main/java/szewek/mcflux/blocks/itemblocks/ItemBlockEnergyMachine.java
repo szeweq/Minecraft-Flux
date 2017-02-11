@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class ItemBlockEnergyMachine extends ItemBlock {
+public final class ItemBlockEnergyMachine extends ItemBlock {
 
 	public ItemBlockEnergyMachine(Block block) {
 		super(block);

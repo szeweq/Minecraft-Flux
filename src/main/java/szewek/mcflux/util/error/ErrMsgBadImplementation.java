@@ -3,7 +3,7 @@ package szewek.mcflux.util.error;
 import net.minecraft.util.EnumFacing;
 import szewek.mcflux.L;
 
-public class ErrMsgBadImplementation extends ErrMsg {
+public final class ErrMsgBadImplementation extends ErrMsg {
 	private final EnumFacing face;
 
 	public ErrMsgBadImplementation(String name, Class<?> cl, Throwable thrown, EnumFacing face) {

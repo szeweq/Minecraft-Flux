@@ -9,14 +9,18 @@ import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.wrapper.EnergyType;
+import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 @InjectRegistry(requires = InjectCond.MOD, args = {"immersiveengineering", "Immersive Engineering"})
-public class IFInjectRegistry implements IInjectRegistry {
+public final class IFInjectRegistry implements IInjectRegistry {
 	@Override
 	public void registerInjects() {
-		InjectWrappers.addTileWrapperInject(IFInjectRegistry::wrapIFTile);
-		InjectWrappers.addItemWrapperInject(IFInjectRegistry::wrapIFItem);
+		InjectCollector ic = InjectWrappers.getCollector();
+		if (ic == null)
+			return;
+		ic.addTileWrapperInject(IFInjectRegistry::wrapIFTile);
+		ic.addItemWrapperInject(IFInjectRegistry::wrapIFItem);
 	}
 	
 	private static void wrapIFTile(TileEntity te, InjectWrappers.Registry reg) {

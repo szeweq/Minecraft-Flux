@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import static szewek.mcflux.MCFluxResources.*;
 
 @JEIPlugin
-public class MCFluxJEIPlugin extends BlankModPlugin {
+public final class MCFluxJEIPlugin extends BlankModPlugin {
 
 	@Override
 	public void register(@Nonnull IModRegistry reg) {

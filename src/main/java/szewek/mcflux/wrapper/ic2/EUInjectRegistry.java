@@ -9,15 +9,19 @@ import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.wrapper.EnergyType;
+import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 @InjectRegistry(requires = InjectCond.MOD, args = {"IC2", "IndustrialCraft 2"})
-public class EUInjectRegistry implements IInjectRegistry {
+public final class EUInjectRegistry implements IInjectRegistry {
 	@Override
 	public void registerInjects() {
+		InjectCollector ic = InjectWrappers.getCollector();
+		if (ic == null)
+			return;
 		MinecraftForge.EVENT_BUS.register(EUEnergyEvents.INSTANCE);
 		CapabilityManager.INSTANCE.register(EUTileCapabilityProvider.class, new EmptyCapabilityStorage<>(), EUTileCapabilityProvider::new);
-		InjectWrappers.addTileWrapperInject(EUInjectRegistry::wrapEUTile);
+		ic.addTileWrapperInject(EUInjectRegistry::wrapEUTile);
 	}
 
 	private static void wrapEUTile(TileEntity te, InjectWrappers.Registry reg) {
