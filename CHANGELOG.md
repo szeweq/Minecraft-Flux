@@ -1,3 +1,6 @@
+## 2.1.0
+- Huge performance increase
+
 ## 2.0.8
 - Reworked Error Messages
 - Fixed World Chunk Energy
