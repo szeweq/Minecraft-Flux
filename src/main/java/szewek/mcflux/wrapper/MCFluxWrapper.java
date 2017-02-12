@@ -11,15 +11,16 @@ import szewek.mcflux.util.MCFluxLocation;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public final class MCFluxWrapper implements ICapabilityProvider, INBTSerializable<NBTBase> {
-	public static final MCFluxLocation MCFLUX_WRAPPER = new MCFluxLocation("wrapper");
-	final Object mainObject;
+	static final MCFluxLocation MCFLUX_WRAPPER = new MCFluxLocation("wrapper");
+	Object mainObject = null;
+	private boolean checked = false;
 	private ICapabilityProvider[] providers = new ICapabilityProvider[0];
-	private Map<String, INBTSerializable<NBTBase>> nbts = new HashMap<>();
+	private String[] names = null;
+	private INBTSerializable<NBTBase>[] writers = null;
 	private NBTBase cachedNBT = null;
 
 	MCFluxWrapper(Object o) {
@@ -27,8 +28,6 @@ public final class MCFluxWrapper implements ICapabilityProvider, INBTSerializabl
 	}
 
 	@Override public boolean hasCapability(@Nonnull Capability<?> cap, @Nullable EnumFacing f) {
-		if (providers == null)
-			return false;
 		for (ICapabilityProvider icp : providers) {
 			if (icp.hasCapability(cap, f))
 				return true;
@@ -38,11 +37,8 @@ public final class MCFluxWrapper implements ICapabilityProvider, INBTSerializabl
 
 	@SuppressWarnings("unchecked")
 	@Nullable @Override public <T> T getCapability(@Nonnull Capability<T> cap, @Nullable EnumFacing f) {
-		if (providers.length == 0)
-			return null;
-		T t;
 		for (ICapabilityProvider icp : providers) {
-			t = icp.getCapability(cap, f);
+			T t = icp.getCapability(cap, f);
 			if (t != null)
 				return t;
 		}
@@ -52,18 +48,26 @@ public final class MCFluxWrapper implements ICapabilityProvider, INBTSerializabl
 	@SuppressWarnings("unchecked")
 	boolean addWrappers(Map<String, ICapabilityProvider> icps) {
 		int size = icps.size();
-		if (size == 0) {
-			return false;
+		if (size > 0) {
+			List<ICapabilityProvider> pl = new ArrayList<>(size);
+			List<INBTSerializable<NBTBase>> nb = new ArrayList<>(size);
+			List<String> ns = new ArrayList<>(size);
+			for (Map.Entry<String, ICapabilityProvider> e : icps.entrySet()) {
+				String s = e.getKey().toLowerCase();
+				ICapabilityProvider icp = e.getValue();
+				if (icp instanceof INBTSerializable) {
+					nb.add((INBTSerializable<NBTBase>) icp);
+					ns.add(s);
+				}
+				pl.add(icp);
+			}
+			providers = pl.toArray(new ICapabilityProvider[size]);
+			writers = nb.toArray(new INBTSerializable[nb.size()]);
+			names = ns.toArray(new String[ns.size()]);
+		} else {
+			cachedNBT = null;
 		}
-		List<ICapabilityProvider> pl = new ArrayList<>(size);
-		for (Map.Entry<String, ICapabilityProvider> e : icps.entrySet()) {
-			String s = e.getKey().toLowerCase();
-			ICapabilityProvider icp = e.getValue();
-			if (icp instanceof INBTSerializable)
-				nbts.put(s, (INBTSerializable<NBTBase>) icp);
-			pl.add(icp);
-		}
-		providers = pl.toArray(new ICapabilityProvider[size]);
+		checked = true;
 		if (cachedNBT != null) {
 			deserializeNBT(cachedNBT);
 			cachedNBT = null;
@@ -72,26 +76,28 @@ public final class MCFluxWrapper implements ICapabilityProvider, INBTSerializabl
 	}
 
 	@Override public NBTBase serializeNBT() {
-		NBTTagCompound nbttc = new NBTTagCompound();
-		if (nbts.isEmpty())
-			return nbttc;
-		for (Map.Entry<String, INBTSerializable<NBTBase>> e : nbts.entrySet()) {
-			String s = e.getKey();
-			INBTSerializable<NBTBase> nbtz = e.getValue();
-			nbttc.setTag(s, nbtz.serializeNBT());
-		}
-		return nbttc;
+		NBTTagCompound nbt = new NBTTagCompound();
+		if (writers == null)
+			return nbt;
+		for (int i = 0; i < writers.length; i++)
+			nbt.setTag(names[i], writers[i].serializeNBT());
+		return nbt;
 	}
 
 	@Override public void deserializeNBT(NBTBase nbt) {
-		if (providers.length == 0) {
+		if (nbt == null)
+			return;
+		if (!checked) {
 			cachedNBT = nbt;
 			return;
 		}
-		if (nbt == null || !(nbt instanceof NBTTagCompound))
+		if (writers == null)
 			return;
-		NBTTagCompound nbttc = (NBTTagCompound) nbt;
-		for (Map.Entry<String, INBTSerializable<NBTBase>> e : nbts.entrySet())
-			e.getValue().deserializeNBT(nbttc.getTag(e.getKey()));
+		if (nbt instanceof NBTTagCompound) {
+			NBTTagCompound tc = (NBTTagCompound) nbt;
+			for (int i = 0; i < writers.length; i++)
+				if (tc.hasKey(names[i]))
+					writers[i].deserializeNBT(tc.getTag(names[i]));
+		}
 	}
 }

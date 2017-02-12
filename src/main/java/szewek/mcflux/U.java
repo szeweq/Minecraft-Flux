@@ -5,16 +5,24 @@ import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.api.fe.Flavored;
 import szewek.mcflux.api.fe.FlavoredMutable;
 import szewek.mcflux.api.fe.IFlavorEnergy;
+import szewek.mcflux.util.ErrorReport;
+import szewek.mcflux.util.error.ErrMsgThrownException;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 
-public class U {
+import static net.minecraft.util.EnumFacing.*;
+
+public enum U {
+	;
+	public static final EnumFacing[] FANCY_FACING = new EnumFacing[] {DOWN, UP, NORTH, SOUTH, WEST, EAST, null};
 
 	public static String formatMF(long n, long nc) {
 		return n + " / " + nc + " MF";
@@ -24,7 +32,7 @@ public class U {
 		return is == null;
 	}
 	
-	public static long transferEnergy(IEnergy from, IEnergy to, final long amount) {
+	public static long transferEnergy(@Nonnull IEnergy from, @Nonnull IEnergy to, final long amount) {
 		if (from.canOutputEnergy() && to.canInputEnergy()) {
 			long r = to.inputEnergy(from.outputEnergy(amount, true), true);
 			if (r > 0)
@@ -74,7 +82,7 @@ public class U {
 		try {
 			c = Class.forName(name);
 		} catch (ClassNotFoundException e) {
-			L.warn(e);
+			ErrorReport.addErrMsg(new ErrMsgThrownException(e));
 		}
 		return c;
 	}
@@ -83,11 +91,8 @@ public class U {
 		try {
 			m = cl.getDeclaredMethod(name, cargs);
 		} catch (Exception e) {
-			L.warn(e);
+			ErrorReport.addErrMsg(new ErrMsgThrownException(e));
 		}
 		return m;
-	}
-
-	private U() {
 	}
 }

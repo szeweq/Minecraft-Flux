@@ -3,7 +3,7 @@ package szewek.mcflux.util.error;
 import szewek.mcflux.L;
 import szewek.mcflux.wrapper.MCFluxWrapper;
 
-public class ErrMsgNullWrapper extends ErrMsg {
+public final class ErrMsgNullWrapper extends ErrMsg {
 	private final boolean objectNull;
 	public ErrMsgNullWrapper(boolean obj) {
 		super("wrapper", MCFluxWrapper.class, null);

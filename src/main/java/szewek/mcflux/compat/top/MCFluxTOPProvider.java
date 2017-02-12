@@ -1,6 +1,7 @@
 package szewek.mcflux.compat.top;
 
 import mcjty.theoneprobe.api.*;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -38,10 +39,11 @@ public class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEntityPr
 	@Override
 	public void addProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer p, World w, IBlockState ibs, IProbeHitData data) {
 		BlockPos bp = data.getPos();
-		if (ibs.getBlock() == MCFluxResources.WET) {
+		Block b = ibs.getBlock();
+		if (b == MCFluxResources.WET) {
 			int m = ibs.getValue(BlockWET.MODE);
 			info.text(I18n.format("mcflux.wet.mode" + m));
-		} else if (ibs.getBlock() == MCFluxResources.ENERGY_MACHINE) {
+		} else if (b == MCFluxResources.ENERGY_MACHINE) {
 			BlockEnergyMachine.Variant var = ibs.getValue(BlockEnergyMachine.VARIANT);
 			if (var == BlockEnergyMachine.Variant.ENERGY_DIST || var == BlockEnergyMachine.Variant.CHUNK_CHARGER) {
 				WorldChunkEnergy wce = w.getCapability(WorldChunkEnergy.CAP_WCE, null);

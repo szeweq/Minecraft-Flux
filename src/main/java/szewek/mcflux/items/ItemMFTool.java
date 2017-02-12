@@ -20,7 +20,7 @@ import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 import javax.annotation.Nonnull;
 
-public class ItemMFTool extends ItemMCFlux {
+public final class ItemMFTool extends ItemMCFlux {
 	private final TextComponentTranslation
 			textBlock = new TextComponentTranslation("mcflux.blockcompat.start"),
 			textEntity = new TextComponentTranslation("mcflux.entitycompat.start"),

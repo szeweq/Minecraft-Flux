@@ -6,7 +6,7 @@ import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.util.EnumFacing;
 import szewek.mcflux.wrapper.EnergyCapabilityProvider;
 
-class RFTileCapabilityProvider extends EnergyCapabilityProvider {
+final class RFTileCapabilityProvider extends EnergyCapabilityProvider {
 	private final IEnergyHandler handler;
 
 	RFTileCapabilityProvider(IEnergyHandler ieh) {

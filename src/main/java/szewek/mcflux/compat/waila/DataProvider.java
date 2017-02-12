@@ -19,7 +19,7 @@ import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 import java.util.List;
 
-class DataProvider implements IWailaDataProvider {
+final class DataProvider implements IWailaDataProvider {
 	@Override
 	public ItemStack getWailaStack(IWailaDataAccessor da, IWailaConfigHandler cfg) {
 		return null;

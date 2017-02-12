@@ -2,7 +2,7 @@ package szewek.mcflux.util.error;
 
 import szewek.mcflux.L;
 
-public class ErrMsgNullInject extends ErrMsg {
+public final class ErrMsgNullInject extends ErrMsg {
 	public ErrMsgNullInject(Class<?> cl) {
 		super("nullinject", cl, new Throwable());
 	}

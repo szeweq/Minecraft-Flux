@@ -22,7 +22,7 @@ import java.util.Set;
 /**
  * World Chunk Energy implementation.
  */
-public class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<NBTBase> {
+public final class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<NBTBase> {
 	@CapabilityInject(WorldChunkEnergy.class)
 	public static Capability<WorldChunkEnergy> CAP_WCE = null;
 

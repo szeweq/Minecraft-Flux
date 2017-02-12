@@ -4,7 +4,7 @@ import mekanism.api.energy.IStrictEnergyAcceptor;
 import net.minecraft.util.EnumFacing;
 import szewek.mcflux.wrapper.EnergyCapabilityProvider;
 
-public class MKJTileCapabilityProvider extends EnergyCapabilityProvider {
+final class MKJTileCapabilityProvider extends EnergyCapabilityProvider {
 	private final IStrictEnergyAcceptor acceptor;
 	MKJTileCapabilityProvider(IStrictEnergyAcceptor isea) {
 		acceptor = isea;

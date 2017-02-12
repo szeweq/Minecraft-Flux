@@ -15,7 +15,7 @@ import szewek.mcflux.api.ex.EX;
 import java.lang.reflect.Method;
 import java.util.function.DoubleSupplier;
 
-class EUTileCapabilityProvider implements ICapabilityProvider {
+final class EUTileCapabilityProvider implements ICapabilityProvider {
 	@CapabilityInject(EUTileCapabilityProvider.class)
 	static Capability<EUTileCapabilityProvider> SELF_CAP = null;
 

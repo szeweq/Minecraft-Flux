@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockEnergyMachine extends BlockMCFluxContainer {
+public final class BlockEnergyMachine extends BlockMCFluxContainer {
 	private static final AxisAlignedBB DEF_AABB = new AxisAlignedBB(0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
 	public static final PropertyEnum<Variant> VARIANT = PropertyEnum.create("variant", Variant.class);
 

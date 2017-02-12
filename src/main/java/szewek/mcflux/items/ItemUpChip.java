@@ -17,7 +17,7 @@ import szewek.mcflux.fluxable.PlayerEnergy;
 
 import javax.annotation.Nonnull;
 
-public class ItemUpChip extends ItemMCFlux {
+public final class ItemUpChip extends ItemMCFlux {
 	private static final String PF = "mcflux.upchip.";
 	private static final TextComponentTranslation
 			textInstalled = new TextComponentTranslation(PF + "installed"),

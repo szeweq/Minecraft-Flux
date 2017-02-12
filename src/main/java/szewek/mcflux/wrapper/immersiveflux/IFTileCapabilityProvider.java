@@ -6,7 +6,7 @@ import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxReceiver;
 import net.minecraft.util.EnumFacing;
 import szewek.mcflux.wrapper.EnergyCapabilityProvider;
 
-class IFTileCapabilityProvider extends EnergyCapabilityProvider {
+final class IFTileCapabilityProvider extends EnergyCapabilityProvider {
 	private final IFluxConnection conn;
 
 	IFTileCapabilityProvider(IFluxConnection ifc) {

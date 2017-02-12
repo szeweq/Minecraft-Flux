@@ -4,7 +4,7 @@ import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxContainerIt
 import net.minecraft.item.ItemStack;
 import szewek.mcflux.api.ex.EnergyCapable;
 
-class IFItemContainerWrapper extends EnergyCapable {
+final class IFItemContainerWrapper extends EnergyCapable {
 	private final IFluxContainerItem item;
 	private final ItemStack stack;
 

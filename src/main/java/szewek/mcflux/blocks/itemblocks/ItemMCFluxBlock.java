@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class ItemMCFluxBlock extends ItemBlock {
+public final class ItemMCFluxBlock extends ItemBlock {
 	public ItemMCFluxBlock(Block block) {
 		super(block);
 	}

@@ -22,26 +22,24 @@ import java.util.*;
 @SuppressWarnings("unused")
 public enum InjectWrappers {
 	EVENTS;
-	private static Set<IWrapperInject<TileEntity>> tileInjects = new HashSet<>();
-	private static Set<IWrapperInject<ItemStack>> itemInjects = new HashSet<>();
-	private static Set<IWrapperInject<Entity>> entityInjects = new HashSet<>();
-	private static Set<IWrapperInject<World>> worldInjects = new HashSet<>();
+	private static InjectCollector collect = new InjectCollector();
+	private static IWrapperInject<TileEntity>[] injTile = null;
+	private static IWrapperInject<ItemStack>[] injItem = null;
+	private static IWrapperInject<Entity>[] injEntity = null;
+	private static IWrapperInject<World>[] injWorld = null;
 	private static List<MCFluxWrapper> wrappers = new ArrayList<>();
 
-	public static void addTileWrapperInject(IWrapperInject<TileEntity> iwi) {
-		tileInjects.add(iwi);
+	public static InjectCollector getCollector() {
+		return collect;
 	}
 
-	public static void addItemWrapperInject(IWrapperInject<ItemStack> iwi) {
-		itemInjects.add(iwi);
-	}
-
-	public static void addEntityWrapperInject(IWrapperInject<Entity> iwi) {
-		entityInjects.add(iwi);
-	}
-
-	public static void addWorldWrapperInject(IWrapperInject<World> iwi) {
-		worldInjects.add(iwi);
+	@SuppressWarnings("unchecked")
+	public static void init() {
+		injTile = collect.tileInjects.toArray(new IWrapperInject[collect.tileInjects.size()]);
+		injItem = collect.itemInjects.toArray(new IWrapperInject[collect.itemInjects.size()]);
+		injEntity = collect.entityInjects.toArray(new IWrapperInject[collect.entityInjects.size()]);
+		injWorld = collect.worldInjects.toArray(new IWrapperInject[collect.worldInjects.size()]);
+		collect = null;
 	}
 
 	public static class Registry {
@@ -72,7 +70,7 @@ public enum InjectWrappers {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> void findWrappers(MCFluxWrapper w, Iterable<IWrapperInject<T>> iwis) {
+	private static <T> void findWrappers(MCFluxWrapper w, IWrapperInject<T>[] iwis) {
 		T t = (T) w.mainObject;
 		if (t == null)
 			return;
@@ -140,23 +138,18 @@ public enum InjectWrappers {
 				MCFluxWrapper[] ws = wrappers.toArray(new MCFluxWrapper[wrappers.size()]);
 				wrappers.clear();
 				for (MCFluxWrapper w : ws) {
-					if (w == null) {
+					if (w == null)
 						ErrorReport.addErrMsg(new ErrMsgNullWrapper(false));
-						continue;
-					}
-					if (w.mainObject == null) {
+					else if (w.mainObject == null)
 						ErrorReport.addErrMsg(new ErrMsgNullWrapper(true));
-						continue;
-					}
-					if (w.mainObject instanceof TileEntity) {
-						findWrappers(w, tileInjects);
-					} else if (w.mainObject instanceof ItemStack) {
-						findWrappers(w, itemInjects);
-					} else if (w.mainObject instanceof Entity) {
-						findWrappers(w, entityInjects);
-					} else if (w.mainObject instanceof World) {
-						findWrappers(w, worldInjects);
-					}
+					else if (w.mainObject instanceof TileEntity)
+						findWrappers(w, injTile);
+					else if (w.mainObject instanceof ItemStack)
+						findWrappers(w, injItem);
+					else if (w.mainObject instanceof Entity)
+						findWrappers(w, injEntity);
+					else if (w.mainObject instanceof World)
+						findWrappers(w, injWorld);
 				}
 			} catch (Exception x) {
 				ErrorReport.addErrMsg(new ErrMsgThrownException(x));

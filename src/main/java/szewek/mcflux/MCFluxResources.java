@@ -6,7 +6,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockEntityCharger;
@@ -23,6 +22,7 @@ import szewek.mcflux.tileentities.TileEntityWET;
 import szewek.mcflux.util.IX;
 import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.util.recipe.RecipeBuilder;
+import szewek.mcflux.util.recipe.RecipeItem;
 
 import java.util.function.Function;
 
@@ -55,16 +55,17 @@ public enum MCFluxResources {
 		GameRegistry.registerTileEntity(TileEntityECharger.class, "mcflux.echarger");
 		GameRegistry.registerTileEntity(TileEntityWET.class, "mcflux.wet");
 	}
+
 	static void init() {
 		if (state > 1)
 			return;
 		state++;
 		String sIngIron = "ingotIron", sIngGold = "ingotGold", sNugGold = "nuggetGold";
-		ItemStack iRedstone = new ItemStack(Items.REDSTONE);
-		ItemStack iEnderEye = new ItemStack(Items.ENDER_EYE);
-		ItemStack iLapis = new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage());
-		ItemStack iEnergyDist = new ItemStack(ENERGY_MACHINE, 1, 0);
-		ItemStack iFlavorDist = new ItemStack(ENERGY_MACHINE, 1, 2);
+		RecipeItem rRedstone = new RecipeItem(Items.REDSTONE);
+		RecipeItem rEnderEye = new RecipeItem(Items.ENDER_EYE);
+		RecipeItem rLapis = new RecipeItem(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage(), null);
+		RecipeItem rEnergyDist = new RecipeItem(ENERGY_MACHINE, 1, 0, null);
+		RecipeItem rFlavorDist = new RecipeItem(ENERGY_MACHINE, 1, 2, null);
 		IX[][] ixStar = new IX[][]{{null, IX.A, null}, {IX.A, IX.B, IX.A}, {null, IX.A, null}};
 		IX[][] ixCross = new IX[][]{{IX.A, null, IX.A}, {null, IX.B, null}, {IX.A, null, IX.A}};
 		IX[][] ixTool = new IX[][]{{IX.A, null, IX.A}, {IX.B, IX.C, IX.B}, {IX.B, IX.B, IX.B}};
@@ -73,53 +74,54 @@ public enum MCFluxResources {
 		RecipeBuilder.buildRecipeFor(MFTOOL, 1)
 				.shape(ixTool, 3, 3)
 				.with(IX.A, sNugGold)
-				.with(IX.B, iRedstone)
+				.with(IX.B, rRedstone)
 				.with(IX.C, sIngIron)
 				.deploy();
 		RecipeBuilder.buildRecipeFor(FESNIFFER, 1)
 				.shape(ixTool, 3, 3)
 				.with(IX.A, sNugGold)
-				.with(IX.B, iLapis)
+				.with(IX.B, rLapis)
 				.with(IX.C, sIngGold)
 				.deploy();
 		RecipeBuilder.buildRecipeFor(ENERGY_MACHINE, 1)
 				.shape(ixStar, 3, 3)
 				.with(IX.A, sIngIron)
-				.with(IX.B, iEnderEye)
+				.with(IX.B, rEnderEye)
 				.deploy()
 				.resultMeta(1)
 				.clear(IX.A, IX.B)
 				.shape(ixCross, 3, 3)
-				.with(IX.A, iRedstone)
-				.with(IX.B, iEnergyDist)
+				.with(IX.A, rRedstone)
+				.with(IX.B, rEnergyDist)
 				.deploy()
 				.resultMeta(2)
 				.clear(IX.A, IX.B)
 				.shape(ixStar, 3, 3)
 				.with(IX.A, sIngGold)
-				.with(IX.B, iEnderEye)
+				.with(IX.B, rEnderEye)
 				.deploy()
 				.resultMeta(3)
 				.clear(IX.A, IX.B)
 				.shape(ixCross, 3, 3)
-				.with(IX.A, iRedstone)
-				.with(IX.B, iFlavorDist)
+				.with(IX.A, rRedstone)
+				.with(IX.B, rFlavorDist)
 				.deploy();
 		RecipeBuilder.buildRecipeFor(ECHARGER, 1)
 				.shape(ixSandwich, 3, 3)
 				.with(IX.A, sIngIron)
-				.with(IX.B, new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage()))
-				.with(IX.C, new ItemStack(Blocks.GLOWSTONE))
+				.with(IX.B, rLapis)
+				.with(IX.C, new RecipeItem(Blocks.GLOWSTONE))
 				.deploy();
 		RecipeBuilder.buildRecipeFor(WET, 1)
 				.shape(ixWet, 3, 3)
-				.with(IX.A, iRedstone)
+				.with(IX.A, rRedstone)
 				.with(IX.B, "blockIron")
 				.with(IX.C, sIngIron)
-				.with(IX.D, new ItemStack(Blocks.REDSTONE_BLOCK))
-				.with(IX.E, new ItemStack(Items.COMPARATOR))
+				.with(IX.D, new RecipeItem(Blocks.REDSTONE_BLOCK))
+				.with(IX.E, new RecipeItem(Items.COMPARATOR))
 				.deploy();
 	}
+
 	private static <T extends Item> T item(String name, T i) {
 		i.setUnlocalizedName(name).setCreativeTab(MCFlux.MCFLUX_TAB);
 		return GameRegistry.register(i, new MCFluxLocation(name));

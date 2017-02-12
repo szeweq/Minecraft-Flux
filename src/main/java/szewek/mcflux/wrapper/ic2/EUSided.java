@@ -10,7 +10,7 @@ import java.util.function.DoubleSupplier;
 
 import static szewek.mcflux.config.MCFluxConfig.CFG_EU_VALUE;
 
-class EUSided extends ForgeEnergyCapable {
+final class EUSided extends ForgeEnergyCapable {
 	private final EnumFacing face;
 	private final DoubleSupplier capMethod, energyMethod;
 	private final IEnergySink sink;

@@ -6,7 +6,7 @@ import szewek.mcflux.api.ex.IEnergy;
 
 import static szewek.mcflux.config.MCFluxConfig.CFG_MKJ_VALUE;
 
-public class MKJSided implements IEnergy {
+final class MKJSided implements IEnergy {
 	private final EnumFacing face;
 	private final IStrictEnergyAcceptor acceptor;
 

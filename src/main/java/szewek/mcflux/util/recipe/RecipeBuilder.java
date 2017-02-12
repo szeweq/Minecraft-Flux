@@ -3,21 +3,20 @@ package szewek.mcflux.util.recipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import szewek.mcflux.util.IX;
 
 /**
  * Simple Recipe Builder class. Builds and automatically registers recipes without wasting resources.
  */
-public class RecipeBuilder {
+public final class RecipeBuilder {
 	private static RecipeBuilder builder = new RecipeBuilder();
 	private IX[][] recipeShape;
 	private int width, height, meta = 0, resultSize = 1;
 	private byte mirror = 0;
 	private Item result;
 	private NBTTagCompound tags = null;
-	private ItemStack[] stacks = new ItemStack[9];
+	private RecipeItem[] items = new RecipeItem[9];
 	private String[] oreDicts = new String[9];
 
 	public static RecipeBuilder buildRecipeFor(Item it, int size) {
@@ -42,7 +41,7 @@ public class RecipeBuilder {
 		height = 0;
 		tags = null;
 		for (int i = 0; i < 9; i++) {
-			stacks[i] = null;
+			items[i] = null;
 			oreDicts[i] = null;
 		}
 	}
@@ -64,7 +63,7 @@ public class RecipeBuilder {
 		for (IX id : ix) {
 			if (id == null)
 				continue;
-			stacks[id.ord] = null;
+			items[id.ord] = null;
 			oreDicts[id.ord] = null;
 		}
 		return this;
@@ -102,9 +101,9 @@ public class RecipeBuilder {
 		return this;
 	}
 
-	public RecipeBuilder with(IX id, ItemStack is) {
+	public RecipeBuilder with(IX id, RecipeItem ri) {
 		if (id != null)
-			stacks[id.ord] = is;
+			items[id.ord] = ri;
 		return this;
 	}
 
@@ -114,13 +113,9 @@ public class RecipeBuilder {
 		return this;
 	}
 
-	public IRecipe build() {
-		return result == null? null : new BuiltShapedRecipe(recipeShape.clone(), width, height, new ItemStack(result, resultSize, meta, tags), stacks.clone(), oreDicts.clone(), mirror);
-	}
-
 	public RecipeBuilder deploy() {
-		net.minecraftforge.fml.common.registry.GameRegistry.addRecipe(build());
+		if (result != null)
+			net.minecraftforge.fml.common.registry.GameRegistry.addRecipe(new BuiltShapedRecipe(recipeShape.clone(), width, height, new ItemStack(result, resultSize, meta, tags), items.clone(), oreDicts.clone(), mirror));
 		return this;
 	}
-
 }

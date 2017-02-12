@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import szewek.mcflux.R;
 
 @SuppressWarnings("unused")
-public class ConfigEvents {
+public final class ConfigEvents {
 	@SubscribeEvent
 	public void cfgChanged(ConfigChangedEvent.OnConfigChangedEvent e) {
 		if (R.MF_NAME.equals(e.getModID()) && !e.isWorldRunning())

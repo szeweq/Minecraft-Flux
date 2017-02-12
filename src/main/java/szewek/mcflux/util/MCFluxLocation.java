@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
 
 import static szewek.mcflux.R.MF_NAME;
 
-public class MCFluxLocation extends ResourceLocation {
+public final class MCFluxLocation extends ResourceLocation {
 	private static final int MF_HASH = MF_NAME.hashCode() * 31;
 
 	public MCFluxLocation(String name) {

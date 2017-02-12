@@ -5,7 +5,7 @@ import szewek.mcflux.api.ex.EnergyCapable;
 
 import static szewek.mcflux.config.MCFluxConfig.MOB_SPAWNER_USE;
 
-class MobSpawnerEnergy extends EnergyCapable {
+final class MobSpawnerEnergy extends EnergyCapable {
 	private final TileEntityMobSpawner spawner;
 
 	MobSpawnerEnergy(TileEntityMobSpawner tems) {

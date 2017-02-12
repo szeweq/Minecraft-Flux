@@ -14,7 +14,7 @@ import szewek.mcflux.tileentities.TileEntityECharger;
 
 import javax.annotation.Nullable;
 
-public class BlockEntityCharger extends BlockMCFluxContainer {
+public final class BlockEntityCharger extends BlockMCFluxContainer {
 	private static final AxisAlignedBB DEF_AABB = new AxisAlignedBB(0.125, 0, 0.125, 0.875, 0.1875, 0.875);
 
 	public BlockEntityCharger() {

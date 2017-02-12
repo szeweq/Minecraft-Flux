@@ -9,7 +9,7 @@ import szewek.mcflux.L;
 
 import java.io.IOException;
 
-public class MsgNewVersion extends FragileMsg {
+public final class MsgNewVersion extends FragileMsg {
 	private String version = null;
 
 	public static MsgNewVersion with(String v) {

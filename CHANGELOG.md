@@ -1,3 +1,6 @@
+## 1.6.1
+- 2.1.0 fixes and features
+
 ## 1.6.0
 - New Update Checking System (like 2.0.8)
 - Other fixes from 2.0.8 (World Chunk Energy, Error Reporting, etc.)

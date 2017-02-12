@@ -9,10 +9,11 @@ import szewek.mcflux.api.fe.Flavored;
 import szewek.mcflux.api.fe.FlavoredImmutable;
 import szewek.mcflux.util.*;
 import szewek.mcflux.util.error.ErrMsgBadImplementation;
+import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 @InjectRegistry(requires = InjectCond.MOD, args = "roots")
-public class RootsInjectRegistry implements IInjectRegistry {
+public final class RootsInjectRegistry implements IInjectRegistry {
 	@CapabilityInject(IManaCapability.class)
 	static Capability<IManaCapability> MANA_CAP = null;
 	static final String MANA = "roots:mana";
@@ -20,7 +21,10 @@ public class RootsInjectRegistry implements IInjectRegistry {
 	private static final MCFluxLocation MANA_RL = new MCFluxLocation("rootsmana");
 
 	@Override public void registerInjects() {
-		InjectWrappers.addEntityWrapperInject(RootsInjectRegistry::wrapGlobal);
+		InjectCollector ic = InjectWrappers.getCollector();
+		if (ic == null)
+			return;
+		ic.addEntityWrapperInject(RootsInjectRegistry::wrapGlobal);
 	}
 
 	private static <T extends ICapabilityProvider> void wrapGlobal(T icp, InjectWrappers.Registry reg) {

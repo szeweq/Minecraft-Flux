@@ -2,7 +2,7 @@ package szewek.mcflux.util.error;
 
 import szewek.mcflux.L;
 
-public class ErrMsgOldAPI extends ErrMsg {
+public final class ErrMsgOldAPI extends ErrMsg {
 	public ErrMsgOldAPI(String name, Class<?> cl) {
 		super(name, cl, null);
 	}

@@ -6,7 +6,7 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-public class MCFluxWailaProvider {
+public final class MCFluxWailaProvider {
 	@SuppressWarnings("unused")
 	public static void callbackRegister(IWailaRegistrar reg) {
 		DataProvider dp = new DataProvider();

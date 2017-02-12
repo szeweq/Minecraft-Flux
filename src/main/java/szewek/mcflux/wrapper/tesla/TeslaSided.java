@@ -8,12 +8,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.wrapper.ForgeEnergyCapable;
 
-public class TeslaSided extends ForgeEnergyCapable {
+final class TeslaSided extends ForgeEnergyCapable {
 	private final EnumFacing face;
 	private final ITeslaHolder holder;
 	private final ITeslaConsumer consumer;
 	private final ITeslaProducer producer;
-	public TeslaSided(ICapabilityProvider provider, EnumFacing f) {
+	TeslaSided(ICapabilityProvider provider, EnumFacing f) {
 		face = f;
 		holder = TeslaUtils.getTeslaHolder(provider, f);
 		consumer = TeslaUtils.getTeslaConsumer(provider, f);

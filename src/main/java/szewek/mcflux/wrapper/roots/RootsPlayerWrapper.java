@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 
 import static szewek.mcflux.wrapper.roots.RootsInjectRegistry.*;
 
-public class RootsPlayerWrapper implements IFlavorEnergy, ICapabilityProvider {
+final class RootsPlayerWrapper implements IFlavorEnergy, ICapabilityProvider {
 	private final EntityPlayer player;
 	private final IManaCapability manaCap;
 	RootsPlayerWrapper(EntityPlayer p) {

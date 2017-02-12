@@ -4,7 +4,7 @@ import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.item.ItemStack;
 import szewek.mcflux.api.ex.EnergyCapable;
 
-class RFItemContainerWrapper extends EnergyCapable implements net.minecraftforge.energy.IEnergyStorage {
+final class RFItemContainerWrapper extends EnergyCapable implements net.minecraftforge.energy.IEnergyStorage {
 	private final IEnergyContainerItem item;
 	private final ItemStack stack;
 

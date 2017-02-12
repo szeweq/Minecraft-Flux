@@ -31,7 +31,7 @@ import java.util.function.IntBinaryOperator;
 
 import static szewek.mcflux.config.MCFluxConfig.CHUNK_CHARGER_TRANS;
 
-public class TileEntityEnergyMachine extends TileEntityWCEAware implements ITickable {
+public final class TileEntityEnergyMachine extends TileEntityWCEAware implements ITickable {
 	private FlavoredContainer cnt = null;
 	private boolean oddTick = true, clientUpdate = true, serverUpdate = false;
 	private TransferType[] sideTransfer = new TransferType[]{TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};

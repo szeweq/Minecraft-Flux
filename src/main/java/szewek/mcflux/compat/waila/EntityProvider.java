@@ -16,7 +16,7 @@ import szewek.mcflux.api.ex.IEnergy;
 
 import java.util.List;
 
-class EntityProvider implements IWailaEntityProvider {
+final class EntityProvider implements IWailaEntityProvider {
 	@Override
 	public Entity getWailaOverride(IWailaEntityAccessor ea, IWailaConfigHandler cfg) {
 		return null;

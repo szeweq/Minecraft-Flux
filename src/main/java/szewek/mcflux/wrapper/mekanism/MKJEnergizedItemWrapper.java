@@ -6,7 +6,7 @@ import szewek.mcflux.api.ex.EnergyCapable;
 
 import static szewek.mcflux.config.MCFluxConfig.CFG_MKJ_VALUE;
 
-public class MKJEnergizedItemWrapper extends EnergyCapable {
+final class MKJEnergizedItemWrapper extends EnergyCapable {
 	private final IEnergizedItem item;
 	private final ItemStack stack;
 

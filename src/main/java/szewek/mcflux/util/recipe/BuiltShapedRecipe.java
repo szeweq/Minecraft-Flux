@@ -1,10 +1,12 @@
 package szewek.mcflux.util.recipe;
 
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import szewek.mcflux.U;
 import szewek.mcflux.util.IX;
 
 import javax.annotation.Nonnull;
@@ -13,24 +15,28 @@ import java.util.List;
 
 import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
-public class BuiltShapedRecipe implements IRecipe {
+public final class BuiltShapedRecipe implements IRecipe {
 	private final IX[][] shapeCode;
 	private final int width, height, size;
 	private final ItemStack result;
-	private final ItemStack[] stacks;
+	private final RecipeItem[] items;
 	private final String[] oreDicts;
 	private final byte mirror;
 	private final Object[] cached;
 
-	BuiltShapedRecipe(IX[][] shape, int w, int h, ItemStack result, ItemStack[] stacks, String[] oreDicts, byte m) {
+	BuiltShapedRecipe(IX[][] shape, int w, int h, ItemStack result, RecipeItem[] ris, String[] oreDicts, byte m) {
 		shapeCode = shape;
 		width = w;
 		height = h;
 		size = w * h;
 		this.result = result;
-		this.stacks = stacks;
+		items = ris;
 		this.oreDicts = oreDicts;
 		this.mirror = m;
+		ItemStack[] stacks = new ItemStack[ris.length];
+		for (int i = 0; i < ris.length; i++) {
+			stacks[i] = ris[i] == null ? null : ris[i].makeItemStack();
+		}
 		cached = new Object[size];
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
@@ -41,7 +47,7 @@ public class BuiltShapedRecipe implements IRecipe {
 				}
 				Object r = null;
 				String odict = this.oreDicts[id.ord];
-				ItemStack is = this.stacks[id.ord];
+				ItemStack is = stacks[id.ord];
 				if (is != null && odict != null)
 					r = Arrays.asList(is, odict);
 				else if (is != null)
@@ -89,7 +95,7 @@ public class BuiltShapedRecipe implements IRecipe {
 				int zy = y + oy;
 				int my = mirrorY ? height - y - 1 : y;
 				ItemStack slot = inv.getStackInRowAndColumn(zx, zy);
-				boolean slotEmpty = slot == null;
+				boolean slotEmpty = U.isItemEmpty(slot);
 				IX id = shapeCode[my][mx];
 				boolean matchEmpty = id == null;
 				if (matchEmpty) {
@@ -98,12 +104,12 @@ public class BuiltShapedRecipe implements IRecipe {
 					else
 						continue;
 				}
-				boolean stackEmpty = stacks[id.ord] == null;
+				boolean stackEmpty = items[id.ord] == null;
 				List<ItemStack> oreDictItems = oreDicts[id.ord] != null ? OreDictionary.getOres(oreDicts[id.ord]) : null;
 				boolean oredictEmpty = oreDictItems == null || oreDictItems.isEmpty();
 				if ((stackEmpty && oredictEmpty) == slotEmpty) {
 					if (!slotEmpty) {
-						boolean notStack = stackEmpty || !stacksMatch(slot, stacks[id.ord], false);
+						boolean notStack = stackEmpty || !items[id.ord].matchesStack(slot, false);
 						boolean notOredict = oredictEmpty || !allMatch(slot, oreDictItems, false);
 						if (notStack && notOredict)
 							break LOOP_XY;
@@ -119,7 +125,7 @@ public class BuiltShapedRecipe implements IRecipe {
 		return cached;
 	}
 
-	@Override
+	@Nonnull @Override
 	public ItemStack getCraftingResult(@Nonnull InventoryCrafting inv) {
 		return result.copy();
 	}
@@ -129,7 +135,7 @@ public class BuiltShapedRecipe implements IRecipe {
 		return size;
 	}
 
-	@Override
+	@Nonnull @Override
 	public ItemStack getRecipeOutput() {
 		return result;
 	}
@@ -139,15 +145,13 @@ public class BuiltShapedRecipe implements IRecipe {
 		return net.minecraftforge.common.ForgeHooks.defaultRecipeGetRemainingItems(inv);
 	}
 
-	private static boolean stacksMatch(ItemStack target, ItemStack input, boolean strict) {
-		if (target == null || input == null)
-			return target == input;
-		return target.getItem() == input.getItem() && (target.getItemDamage() == WILDCARD_VALUE && !strict || target.getItemDamage() == input.getItemDamage());
-	}
-
 	private static boolean allMatch(ItemStack target, List<ItemStack> inputs, boolean strict) {
+		if (target == null)
+			return false;
+		Item it = target.getItem();
+		int m = target.getItemDamage();
 		for (ItemStack is : inputs)
-			if (stacksMatch(target, is, strict))
+			if (is != null && it == is.getItem() && ((is.getItemDamage() == WILDCARD_VALUE && !strict) || is.getItemDamage() == m))
 				return true;
 		return false;
 	}

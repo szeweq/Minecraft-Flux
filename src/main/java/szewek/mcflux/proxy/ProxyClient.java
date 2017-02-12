@@ -11,7 +11,7 @@ import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 import static szewek.mcflux.MCFluxResources.*;
 
-public class ProxyClient extends ProxyCommon {
+public final class ProxyClient extends ProxyCommon {
 	@Override
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(new ConfigEvents());

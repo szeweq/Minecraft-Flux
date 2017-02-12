@@ -2,7 +2,7 @@ package szewek.mcflux.util.error;
 
 import szewek.mcflux.L;
 
-public class ErrMsgThrownException extends ErrMsg {
+public final class ErrMsgThrownException extends ErrMsg {
 	public ErrMsgThrownException(Exception x) {
 		super("exception", x.getClass(), x);
 	}

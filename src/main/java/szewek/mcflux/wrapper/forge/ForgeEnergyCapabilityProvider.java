@@ -5,7 +5,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.wrapper.EnergyCapabilityProvider;
 
-public class ForgeEnergyCapabilityProvider extends EnergyCapabilityProvider {
+final class ForgeEnergyCapabilityProvider extends EnergyCapabilityProvider {
 
 	ForgeEnergyCapabilityProvider(ICapabilityProvider icp) {
 		broken = false;
