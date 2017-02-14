@@ -5,7 +5,7 @@ import cofh.api.energy.IEnergyHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import szewek.mcflux.util.ErrorReport;
+import szewek.mcflux.util.MCFluxReport;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
@@ -27,7 +27,7 @@ public final class RFInjectRegistry implements IInjectRegistry {
 	}
 	private static void wrapRFTile(TileEntity te, InjectWrappers.Registry reg) {
 		if (te instanceof IEnergyHandler) {
-			ErrorReport.addErrMsg(new ErrMsgOldAPI(RF_API_NAME, te.getClass()));
+			MCFluxReport.addErrMsg(new ErrMsgOldAPI(RF_API_NAME, te.getClass()));
 			reg.add(EnergyType.RF, new RFTileCapabilityProvider((IEnergyHandler) te));
 		}
 
@@ -36,7 +36,7 @@ public final class RFInjectRegistry implements IInjectRegistry {
 	private static void wrapRFItem(ItemStack is, InjectWrappers.Registry reg) {
 		Item it = is.getItem();
 		if (it instanceof IEnergyContainerItem) {
-			ErrorReport.addErrMsg(new ErrMsgOldAPI(RF_API_NAME, it.getClass()));
+			MCFluxReport.addErrMsg(new ErrMsgOldAPI(RF_API_NAME, it.getClass()));
 			reg.add(EnergyType.RF, new RFItemContainerWrapper((IEnergyContainerItem) it, is));
 		}
 	}

@@ -9,7 +9,7 @@ import szewek.mcflux.api.fe.FE;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class EMCFlavorWrapper implements ICapabilityProvider {
+final class EMCFlavorWrapper implements ICapabilityProvider {
 	private final EMCSided[] sides = new EMCSided[7];
 
 	EMCFlavorWrapper(IEmcStorage storage) {

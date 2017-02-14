@@ -33,7 +33,7 @@ public final class RootsInjectRegistry implements IInjectRegistry {
 				reg.register(MANA_RL, new RootsPlayerWrapper((EntityPlayer) icp));
 			}
 		} catch (Exception e) {
-			ErrorReport.addErrMsg(new ErrMsgBadImplementation("Roots Mana", icp.getClass(), e, null));
+			MCFluxReport.addErrMsg(new ErrMsgBadImplementation("Roots Mana", icp.getClass(), e, null));
 		}
 	}
 }

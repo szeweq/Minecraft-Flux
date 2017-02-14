@@ -1,13 +1,12 @@
 package szewek.mcflux.util.error;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public abstract class ErrMsg {
 	private static final long ERRORS_TIME = 15000;
 	protected final String name;
 	protected final Class<?> cl;
+	protected final List<Throwable> thrownList;
 	protected final Set<Throwable> setOfThrown;
 	public final Throwable msgThrown;
 	protected int cachedHash;
@@ -17,6 +16,7 @@ public abstract class ErrMsg {
 	protected ErrMsg(String name, Class<?> cl, Throwable thrown) {
 		this.name = name;
 		this.cl = cl;
+		thrownList = new ArrayList<>();
 		setOfThrown = new HashSet<>();
 		msgThrown = thrown;
 		count = 0;
@@ -34,11 +34,11 @@ public abstract class ErrMsg {
 
 	public void addThrowable(Throwable th) {
 		if (th != null)
-			setOfThrown.add(th);
+			thrownList.add(th);
 	}
 
-	public Set<Throwable> getThrowables() {
-		return Collections.unmodifiableSet(setOfThrown);
+	public List<Throwable> getThrowables() {
+		return Collections.unmodifiableList(thrownList);
 	}
 
 	public void addUp() {

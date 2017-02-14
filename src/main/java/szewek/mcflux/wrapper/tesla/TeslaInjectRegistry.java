@@ -4,7 +4,7 @@ import net.darkhax.tesla.lib.TeslaUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.U;
-import szewek.mcflux.util.ErrorReport;
+import szewek.mcflux.util.MCFluxReport;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
@@ -21,7 +21,6 @@ public final class TeslaInjectRegistry implements IInjectRegistry {
 			return;
 		ic.addTileWrapperInject(TeslaInjectRegistry::wrapGlobal);
 		ic.addEntityWrapperInject(TeslaInjectRegistry::wrapGlobal);
-		ic.addWorldWrapperInject(TeslaInjectRegistry::wrapGlobal);
 		ic.addItemWrapperInject(TeslaInjectRegistry::wrapGlobal);
 	}
 
@@ -36,7 +35,7 @@ public final class TeslaInjectRegistry implements IInjectRegistry {
 				}
 			}
 		} catch (Exception e) {
-			ErrorReport.addErrMsg(new ErrMsgBadImplementation("TESLA", icp.getClass(), e, f));
+			MCFluxReport.addErrMsg(new ErrMsgBadImplementation("TESLA", icp.getClass(), e, f));
 		}
 	}
 }

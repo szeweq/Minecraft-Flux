@@ -4,7 +4,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import szewek.mcflux.U;
-import szewek.mcflux.util.ErrorReport;
+import szewek.mcflux.util.MCFluxReport;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
@@ -21,7 +21,6 @@ public final class ForgeInjectRegistry implements IInjectRegistry {
 			return;
 		ic.addTileWrapperInject(ForgeInjectRegistry::wrapGlobal);
 		ic.addEntityWrapperInject(ForgeInjectRegistry::wrapGlobal);
-		ic.addWorldWrapperInject(ForgeInjectRegistry::wrapGlobal);
 		ic.addItemWrapperInject(ForgeInjectRegistry::wrapGlobal);
 	}
 
@@ -36,7 +35,7 @@ public final class ForgeInjectRegistry implements IInjectRegistry {
 				}
 			}
 		} catch (Exception e) {
-			ErrorReport.addErrMsg(new ErrMsgBadImplementation("Forge Energy", icp.getClass(), e, f));
+			MCFluxReport.addErrMsg(new ErrMsgBadImplementation("Forge Energy", icp.getClass(), e, f));
 		}
 	}
 }

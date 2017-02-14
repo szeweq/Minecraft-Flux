@@ -118,5 +118,4 @@ public final class RecipeBuilder {
 			net.minecraftforge.fml.common.registry.GameRegistry.addRecipe(new BuiltShapedRecipe(recipeShape.clone(), width, height, new ItemStack(result, resultSize, meta, tags), items.clone(), oreDicts.clone(), mirror));
 		return this;
 	}
-
 }

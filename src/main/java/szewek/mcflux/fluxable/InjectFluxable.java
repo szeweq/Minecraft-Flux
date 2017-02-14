@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.world.World;
 import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
@@ -17,7 +16,6 @@ public class InjectFluxable {
 	private static final MCFluxLocation
 			MF_PLAYER = new MCFluxLocation("PlayerEnergy"),
 			MF_ACTION = new MCFluxLocation("ActionEnergy"),
-			MF_WORLD_CHUNK = new MCFluxLocation("wce"),
 			MF_FURNACE = new MCFluxLocation("FurnaceEnergy"),
 			MF_MOB_SPAWNER = new MCFluxLocation("MobSpawnerEnergy");
 
@@ -27,7 +25,6 @@ public class InjectFluxable {
 			return;
 		ic.addTileWrapperInject(InjectFluxable::tileWrappers);
 		ic.addEntityWrapperInject(InjectFluxable::entityWrappers);
-		ic.addWorldWrapperInject(InjectFluxable::worldWrappers);
 	}
 
 	private static void tileWrappers(TileEntity te, InjectWrappers.Registry reg) {
@@ -41,8 +38,5 @@ public class InjectFluxable {
 			reg.register(MF_PLAYER, new PlayerEnergy((EntityPlayer) ntt));
 		else if (ntt instanceof EntityPig || ntt instanceof EntityCreeper)
 			reg.register(MF_ACTION, new EntityActionEnergy((EntityCreature) ntt));
-	}
-	private static void worldWrappers(World w, InjectWrappers.Registry reg) {
-		reg.register(MF_WORLD_CHUNK, new WorldChunkEnergy());
 	}
 }

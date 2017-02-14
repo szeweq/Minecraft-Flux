@@ -58,6 +58,7 @@ public enum MCFluxResources {
 		GameRegistry.registerTileEntity(TileEntityECharger.class, "mcflux.echarger");
 		GameRegistry.registerTileEntity(TileEntityWET.class, "mcflux.wet");
 	}
+
 	static void init() {
 		if (state > 1)
 			return;
@@ -123,6 +124,7 @@ public enum MCFluxResources {
 				.with(IX.E, new RecipeItem(Items.COMPARATOR))
 				.deploy();
 	}
+
 	private static <T extends Item> T item(String name, T i) {
 		i.setUnlocalizedName(name).setCreativeTab(MCFlux.MCFLUX_TAB);
 		return GameRegistry.register(i, new MCFluxLocation(name));

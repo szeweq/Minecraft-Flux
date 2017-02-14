@@ -12,7 +12,7 @@ import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.api.fe.Flavored;
 import szewek.mcflux.api.fe.FlavoredMutable;
 import szewek.mcflux.api.fe.IFlavorEnergy;
-import szewek.mcflux.util.ErrorReport;
+import szewek.mcflux.util.MCFluxReport;
 import szewek.mcflux.util.error.ErrMsgThrownException;
 
 import javax.annotation.Nonnull;
@@ -20,7 +20,8 @@ import java.lang.reflect.Method;
 
 import static net.minecraft.util.EnumFacing.*;
 
-public final class U {
+public enum U {
+	;
 	public static final EnumFacing[] FANCY_FACING = new EnumFacing[] {DOWN, UP, NORTH, SOUTH, WEST, EAST, null};
 
 	public static String formatMF(long n, long nc) {
@@ -81,7 +82,7 @@ public final class U {
 		try {
 			c = Class.forName(name);
 		} catch (ClassNotFoundException e) {
-			ErrorReport.addErrMsg(new ErrMsgThrownException(e));
+			MCFluxReport.addErrMsg(new ErrMsgThrownException(e));
 		}
 		return c;
 	}
@@ -90,11 +91,8 @@ public final class U {
 		try {
 			m = cl.getDeclaredMethod(name, cargs);
 		} catch (Exception e) {
-			ErrorReport.addErrMsg(new ErrMsgThrownException(e));
+			MCFluxReport.addErrMsg(new ErrMsgThrownException(e));
 		}
 		return m;
-	}
-
-	private U() {
 	}
 }

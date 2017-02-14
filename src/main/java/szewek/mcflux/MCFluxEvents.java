@@ -4,21 +4,27 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.network.msg.MsgNewVersion;
+import szewek.mcflux.util.MCFluxLocation;
 
 enum MCFluxEvents {
 	INSTANCE;
+
+	private static final MCFluxLocation MF_WORLD_CHUNK = new MCFluxLocation("wce");
 
 	@SubscribeEvent
 	public void onLootTableLoad(LootTableLoadEvent e) {
@@ -48,5 +54,10 @@ enum MCFluxEvents {
 			e.setResult(EntityPlayer.SleepResult.OTHER_PROBLEM);
 			p.sendStatusMessage(new TextComponentTranslation("mcflux.sleep.tooBright"), true);
 		}
+	}
+
+	@SubscribeEvent
+	public void wrapWCE(AttachCapabilitiesEvent<World> e) {
+		e.addCapability(MF_WORLD_CHUNK, new WorldChunkEnergy());
 	}
 }

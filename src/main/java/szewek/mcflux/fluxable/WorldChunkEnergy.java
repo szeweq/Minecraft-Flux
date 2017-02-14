@@ -1,5 +1,9 @@
 package szewek.mcflux.fluxable;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArraySet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -14,10 +18,6 @@ import szewek.mcflux.api.fe.FlavoredContainer;
 import szewek.mcflux.config.MCFluxConfig;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * World Chunk Energy implementation.
@@ -25,9 +25,15 @@ import java.util.Set;
 public final class WorldChunkEnergy implements ICapabilityProvider, INBTSerializable<NBTBase> {
 	@CapabilityInject(WorldChunkEnergy.class)
 	public static Capability<WorldChunkEnergy> CAP_WCE = null;
+	private static final int X_BITS = 22, Z_BITS = 22, Y_BITS = 4, Y_SHIFT = Z_BITS, X_SHIFT = Y_SHIFT + Y_BITS;
+	private static final long X_MASK = (1L << X_BITS) - 1L, Y_MASK = (1L << Y_BITS) - 1L, Z_MASK = (1L << Z_BITS) - 1L;
 
-	private Map<ChunkPos, Battery> energyChunks = new HashMap<>();
-	private Map<ChunkPos, FlavoredContainer> flavorChunks = new HashMap<>();
+	private Long2ObjectMap<Battery> eChunks = new Long2ObjectOpenHashMap<>();
+	private Long2ObjectMap<FlavoredContainer> fChunks = new Long2ObjectOpenHashMap<>();
+
+	private static long packLong(int x, int y, int z) {
+		return ((long) x & X_MASK) << X_SHIFT | ((long) y & Y_MASK) << Y_SHIFT | ((long) z & Z_MASK);
+	}
 
 	@Override
 	public boolean hasCapability(@Nonnull Capability<?> cap, EnumFacing f) {
@@ -49,57 +55,40 @@ public final class WorldChunkEnergy implements ICapabilityProvider, INBTSerializ
 	 * @return Chunk battery
 	 */
 	public Battery getEnergyChunk(int bx, int by, int bz) {
-		ChunkPos cp = new ChunkPos(bx / 16, by / 16, bz / 16);
-		return energyChunks.computeIfAbsent(cp, k -> new Battery(MCFluxConfig.WORLDCHUNK_CAP));
+		long l = packLong(bx / 16, by / 16, bz / 16);
+		if (eChunks.containsKey(l)) {
+			return eChunks.get(l);
+		} else {
+			Battery bat = new Battery(MCFluxConfig.WORLDCHUNK_CAP);
+			eChunks.put(l, bat);
+			return bat;
+		}
 	}
 
 	public FlavoredContainer getFlavorEnergyChunk(int bx, int by, int bz) {
-		ChunkPos cp = new ChunkPos(bx / 16, by / 16, bz / 16);
-		return flavorChunks.computeIfAbsent(cp, k -> new FlavoredContainer(MCFluxConfig.WORLDCHUNK_CAP / 4));
-	}
-
-	private static class ChunkPos {
-		final int cx, cy, cz;
-
-		ChunkPos(int x, int y, int z) {
-			cx = x;
-			cy = y;
-			cz = z;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == null || !(obj instanceof ChunkPos))
-				return false;
-			ChunkPos cp = (ChunkPos) obj;
-			return cx == cp.cx && cy == cp.cy && cz == cp.cz;
-		}
-		
-		@Override
-		public int hashCode() {
-			return (cy + cz * 31) * 31 + cx;
-		}
-
-		@Override public String toString() {
-			return "WorldChunkEnergy$ChunkPos[" + cx + '/' + cy + '/' + cz + ']';
+		long l = packLong(bx / 16, by / 16, bz / 16);
+		if (fChunks.containsKey(l)) {
+			return fChunks.get(l);
+		} else {
+			FlavoredContainer fc = new FlavoredContainer(MCFluxConfig.WORLDCHUNK_CAP / 4);
+			fChunks.put(l, fc);
+			return fc;
 		}
 	}
 
 	@Override
 	public NBTBase serializeNBT() {
 		NBTTagList nbtl = new NBTTagList();
-		Set<ChunkPos> poss = new HashSet<>();
-		poss.addAll(energyChunks.keySet());
-		poss.addAll(flavorChunks.keySet());
-		for (ChunkPos cp : poss) {
+		LongSet poss = new LongArraySet();
+		poss.addAll(eChunks.keySet());
+		poss.addAll(fChunks.keySet());
+		for (long l : poss) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setInteger("x", cp.cx);
-			nbt.setInteger("y", cp.cy);
-			nbt.setInteger("z", cp.cz);
-			Battery e = energyChunks.get(cp);
+			nbt.setLong("cp", l);
+			Battery e = eChunks.get(l);
 			if (e != null)
 				nbt.setTag("e", e.serializeNBT());
-			FlavoredContainer cf = flavorChunks.get(cp);
+			FlavoredContainer cf = fChunks.get(l);
 			if (cf != null)
 				nbt.setTag("fe", cf.serializeNBT());
 			nbtl.appendTag(nbt);
@@ -113,17 +102,25 @@ public final class WorldChunkEnergy implements ICapabilityProvider, INBTSerializ
 			NBTTagList nbtl = (NBTTagList) nbtb;
 			for (int i = 0; i < nbtl.tagCount(); i++) {
 				NBTTagCompound nbt = nbtl.getCompoundTagAt(i);
+				boolean hasPos = false;
+				long l = 0;
 				if (nbt.hasKey("x", NBT.TAG_INT) && nbt.hasKey("y", NBT.TAG_INT) && nbt.hasKey("z", NBT.TAG_INT)) {
-					ChunkPos cp = new ChunkPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
+					l = packLong(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
+					hasPos = true;
+				} else if (nbt.hasKey("cp", NBT.TAG_LONG)) {
+					l = nbt.getLong("cp");
+					hasPos = true;
+				}
+				if (hasPos) {
 					if (nbt.hasKey("e")) {
 						Battery eb = new Battery(MCFluxConfig.WORLDCHUNK_CAP);
 						eb.deserializeNBT(nbt.getTag("e"));
-						energyChunks.put(cp, eb);
+						eChunks.put(l, eb);
 					}
 					if (nbt.hasKey("fe")) {
 						FlavoredContainer cf = new FlavoredContainer(MCFluxConfig.WORLDCHUNK_CAP / 4);
 						cf.deserializeNBT(nbt.getTag("fe"));
-						flavorChunks.put(cp, cf);
+						fChunks.put(l, cf);
 					}
 				}
 			}

@@ -95,7 +95,7 @@ public final class MCFlux {
 			return;
 		}
 		try {
-			ErrorReport.saveAllErrors(MC_DIR);
+			MCFluxReport.makeReportFile(MC_DIR);
 		} catch (Exception x) {
 			L.warn(x);
 		}

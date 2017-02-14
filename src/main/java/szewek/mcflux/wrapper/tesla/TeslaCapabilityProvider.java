@@ -5,7 +5,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.wrapper.EnergyCapabilityProvider;
 
-public final class TeslaCapabilityProvider extends EnergyCapabilityProvider {
+final class TeslaCapabilityProvider extends EnergyCapabilityProvider {
 	private ICapabilityProvider capProvider;
 
 	TeslaCapabilityProvider(ICapabilityProvider icp) {
