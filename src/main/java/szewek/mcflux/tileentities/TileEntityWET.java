@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.config.MCFluxConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +47,12 @@ public final class TileEntityWET extends TileEntityWCEAware implements ITickable
 		}
 		for (IEnergy ue : elist) {
 			if (out) {
-				U.transferEnergy(ue, se, 4000);
-				if (se.getEnergy() == se.getEnergyCapacity())
+				U.transferEnergy(ue, se, MCFluxConfig.WET_TRANS);
+				if (se.hasFullEnergy())
 					break;
 			} else {
-				U.transferEnergy(se, ue, 4000);
-				if (se.getEnergy() == 0)
+				U.transferEnergy(se, ue, MCFluxConfig.WET_TRANS);
+				if (se.hasNoEnergy())
 					break;
 			}
 		}

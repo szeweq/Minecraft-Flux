@@ -65,6 +65,14 @@ public class Battery implements IEnergy, INBTSerializable<NBTBase> {
 		energy = amount > maxEnergy ? maxEnergy : amount;
 	}
 
+	@Override public boolean hasNoEnergy() {
+		return energy == 0;
+	}
+
+	@Override public boolean hasFullEnergy() {
+		return energy == maxEnergy;
+	}
+
 	@Override public NBTBase serializeNBT() {
 		return new NBTTagLong(energy);
 	}

@@ -81,4 +81,12 @@ final class EUSided extends ForgeEnergyCapable {
 		}
 		return 0;
 	}
+
+	@Override public boolean hasNoEnergy() {
+		return energyMethod != null && energyMethod.getAsDouble() == 0;
+	}
+
+	@Override public boolean hasFullEnergy() {
+		return energyMethod != null && capMethod != null && energyMethod.getAsDouble() == capMethod.getAsDouble();
+	}
 }

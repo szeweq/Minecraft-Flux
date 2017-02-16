@@ -12,6 +12,7 @@ import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.util.MCFluxLocation;
 import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
+import szewek.mcflux.wrapper.WrapperRegistry;
 
 @InjectRegistry(requires = InjectCond.MOD, args = "ProjectE")
 public final class ProjectEInjectRegistry implements IInjectRegistry {
@@ -26,13 +27,13 @@ public final class ProjectEInjectRegistry implements IInjectRegistry {
 		ic.addItemWrapperInject(ProjectEInjectRegistry::wrapEMCItem);
 	}
 
-	private static void wrapEMCTile(TileEntity te, InjectWrappers.Registry reg) {
+	private static void wrapEMCTile(TileEntity te, WrapperRegistry reg) {
 		if (te instanceof IEmcStorage) {
 			reg.register(EMC_RL, new EMCFlavorWrapper((IEmcStorage) te));
 		}
 	}
 
-	private static void wrapEMCItem(ItemStack is, InjectWrappers.Registry reg) {
+	private static void wrapEMCItem(ItemStack is, WrapperRegistry reg) {
 		if (is.getItem() instanceof IItemEmc) {
 			reg.register(EMC_RL, new EMCFlavorItemWrapper(is));
 		}

@@ -38,4 +38,12 @@ final class ForgeEnergySided implements IEnergy {
 	@Override public long getEnergyCapacity() {
 		return storage.getMaxEnergyStored();
 	}
+
+	@Override public boolean hasNoEnergy() {
+		return notEmpty && storage.getEnergyStored() == 0;
+	}
+
+	@Override public boolean hasFullEnergy() {
+		return notEmpty && storage.getEnergyStored() == storage.getMaxEnergyStored();
+	}
 }

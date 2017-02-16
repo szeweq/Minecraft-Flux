@@ -43,4 +43,12 @@ final class IFSided implements IEnergy {
 	public long outputEnergy(long amount, boolean sim) {
 		return provider != null ? provider.extractEnergy(face, amount > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) amount, sim) : 0;
 	}
+
+	@Override public boolean hasNoEnergy() {
+		return (provider != null && provider.getEnergyStored(face) == 0) || (receiver != null && receiver.getEnergyStored(face) == 0);
+	}
+
+	@Override public boolean hasFullEnergy() {
+		return (provider != null && provider.getEnergyStored(face) == provider.getMaxEnergyStored(face)) || (receiver != null && receiver.getEnergyStored(face) == receiver.getMaxEnergyStored(face));
+	}
 }

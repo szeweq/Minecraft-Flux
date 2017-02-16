@@ -4,9 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
@@ -43,33 +41,6 @@ public enum InjectWrappers {
 		collect = null;
 		wth.start();
 		L.info("Tile[" + injTile.length + "]; Item[" + injItem.length + "]; Entity[" + injEntity.length + "]");
-	}
-
-	public static class Registry {
-		final Map<String, ICapabilityProvider> resultMap = new HashMap<>();
-		private final Map<EnergyType, ICapabilityProvider> energyCapMap;
-
-		private Registry() {
-			energyCapMap = new EnumMap<>(EnergyType.class);
-		}
-
-		public void add(EnergyType et, ICapabilityProvider icp) {
-			energyCapMap.put(et, icp);
-		}
-
-		void resolve(EnergyType[] ets) {
-			for (EnergyType et : ets) {
-				ICapabilityProvider icp = energyCapMap.get(et);
-				if (icp != null) {
-					resultMap.put(et.loc.toString(), icp);
-					return;
-				}
-			}
-		}
-
-		public void register(ResourceLocation rl, ICapabilityProvider icp) {
-			resultMap.put(rl.toString(), icp);
-		}
 	}
 
 	private static final class WrapperThread extends Thread {
@@ -113,7 +84,7 @@ public enum InjectWrappers {
 		if (t == null)
 			return;
 		long tc = MCFluxReport.measureTime("findWrappers(" + t.getClass().getName() + ")");
-		Registry reg = new Registry();
+		WrapperRegistry reg = new WrapperRegistry();
 		for (IWrapperInject<T> iwi : iwis)
 			iwi.injectWrapper(t, reg);
 		reg.resolve(EnergyType.ALL);
@@ -143,7 +114,7 @@ public enum InjectWrappers {
 
 	@SubscribeEvent
 	public void wrapStack(AttachCapabilitiesEvent<ItemStack> att) {
-		if (Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START))
+		if (!U.isItemEmpty(att.getObject()) && Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START))
 			wrap(att);
 	}
 
@@ -160,13 +131,11 @@ public enum InjectWrappers {
 		if (Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START)) {
 			long tc = MCFluxReport.measureTime("wrapItem");
 			ItemStack is = ei.getItemStack();
-			if (U.isItemEmpty(is)) {
-				MCFluxReport.addErrMsg(new ErrMsgNullInject(ItemStack.class));
-				return;
+			if (!U.isItemEmpty(is)) {
+				MCFluxWrapper w = new MCFluxWrapper(is);
+				ei.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
+				wrappers.add(w);
 			}
-			MCFluxWrapper w = new MCFluxWrapper(is);
-			ei.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
-			wrappers.add(w);
 			MCFluxReport.stopTimer(tc);
 		}
 	}

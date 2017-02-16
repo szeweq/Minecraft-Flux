@@ -11,6 +11,7 @@ import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
+import szewek.mcflux.wrapper.WrapperRegistry;
 
 @InjectRegistry(requires = InjectCond.MOD, args = {"immersiveengineering", "Immersive Engineering"})
 public final class IFInjectRegistry implements IInjectRegistry {
@@ -23,12 +24,12 @@ public final class IFInjectRegistry implements IInjectRegistry {
 		ic.addItemWrapperInject(IFInjectRegistry::wrapIFItem);
 	}
 	
-	private static void wrapIFTile(TileEntity te, InjectWrappers.Registry reg) {
+	private static void wrapIFTile(TileEntity te, WrapperRegistry reg) {
 		if (te instanceof IFluxConnection)
 			reg.add(EnergyType.IF, new IFTileCapabilityProvider((IFluxConnection) te));
 	}
 	
-	private static void wrapIFItem(ItemStack is, InjectWrappers.Registry reg) {
+	private static void wrapIFItem(ItemStack is, WrapperRegistry reg) {
 		Item it = is.getItem();
 		if (it instanceof IFluxContainerItem)
 			reg.add(EnergyType.IF, new IFItemContainerWrapper((IFluxContainerItem) it, is));

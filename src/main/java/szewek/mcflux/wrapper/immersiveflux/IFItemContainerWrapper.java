@@ -40,4 +40,12 @@ final class IFItemContainerWrapper extends EnergyCapable {
 	public long outputEnergy(long amount, boolean sim) {
 		return item.extractEnergy(stack, amount > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) amount, sim);
 	}
+
+	@Override public boolean hasNoEnergy() {
+		return item.getEnergyStored(stack) == 0;
+	}
+
+	@Override public boolean hasFullEnergy() {
+		return item.getEnergyStored(stack) == item.getMaxEnergyStored(stack);
+	}
 }

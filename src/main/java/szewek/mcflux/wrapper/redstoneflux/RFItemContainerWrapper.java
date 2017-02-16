@@ -79,4 +79,12 @@ final class RFItemContainerWrapper extends EnergyCapable implements net.minecraf
 	@Override public boolean canReceive() {
 		return canInputEnergy();
 	}
+
+	@Override public boolean hasNoEnergy() {
+		return item.getEnergyStored(stack) == 0;
+	}
+
+	@Override public boolean hasFullEnergy() {
+		return item.getEnergyStored(stack) == item.getMaxEnergyStored(stack);
+	}
 }

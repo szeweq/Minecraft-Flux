@@ -1,3 +1,10 @@
+## 2.3.0
+- Added Special Events
+- Improved overall performance
+
+## 2.2.0
+- Better capability wrapping (less lag produced)
+
 ## 2.1.0
 - Huge performance increase
 - New language (pl_PL)

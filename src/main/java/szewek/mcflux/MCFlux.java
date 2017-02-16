@@ -1,17 +1,12 @@
 package szewek.mcflux;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
 import net.minecraftforge.oredict.RecipeSorter;
 import szewek.mcflux.api.ex.Battery;
@@ -24,16 +19,17 @@ import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.InjectFluxable;
 import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
+import szewek.mcflux.network.MCFluxNetUtil;
 import szewek.mcflux.network.MCFluxNetwork;
+import szewek.mcflux.special.CommandSpecialGive;
+import szewek.mcflux.special.SpecialEventHandler;
+import szewek.mcflux.special.SpecialEventReceiver;
 import szewek.mcflux.util.*;
 import szewek.mcflux.util.awareness.ConflictingModDetection;
 import szewek.mcflux.util.recipe.BuiltShapedRecipe;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 import java.io.File;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Set;
 
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
@@ -50,6 +46,7 @@ public final class MCFlux {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
+		long tc = MCFluxReport.measureTime("PreInit");
 		L.prepare(e.getModLog());
 		MC_DIR = e.getModConfigurationDirectory().getParentFile();
 		MCFluxConfig.makeConfig(e.getSuggestedConfigurationFile());
@@ -59,12 +56,14 @@ public final class MCFlux {
 			L.info("Minecraft-Flux " + R.MF_VERSION);
 		if (MCFluxConfig.UPDATE_CHECK)
 			new Thread(MCFlux::updateCheck, "MCFlux Update Check").start();
+		SpecialEventHandler.getEvents();
 		MCFluxNetwork.registerAll();
 		CapabilityManager cm = CapabilityManager.INSTANCE;
 		cm.register(IEnergy.class, new EnergyNBTStorage(), Battery::new);
 		cm.register(IFlavorEnergy.class, new FlavorNBTStorage(), FlavoredStorage::new);
 		cm.register(WorldChunkEnergy.class, new NBTCapabilityStorage<>(), WorldChunkEnergy::new);
 		cm.register(PlayerEnergy.class, new NBTCapabilityStorage<>(), PlayerEnergy::new);
+		cm.register(SpecialEventReceiver.class, new NBTCapabilityStorage<>(), SpecialEventReceiver::new);
 		EVENT_BUS.register(MCFluxEvents.INSTANCE);
 		MCFluxResources.preInit();
 		MCFLUX_TAB.init();
@@ -73,19 +72,27 @@ public final class MCFlux {
 		ConflictingModDetection.listAllConflictingMods();
 		registerAllInjects(e.getAsmData());
 		InjectWrappers.init();
+		MCFluxReport.stopTimer(tc);
 	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
+		long tc = MCFluxReport.measureTime("Init");
 		RecipeSorter.register("mcflux:builtRecipe", BuiltShapedRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 		MCFluxResources.init();
 		// Waila not available // FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
 		PROXY.init();
+		MCFluxReport.stopTimer(tc);
 	}
 
 	@Mod.EventHandler
 	public void loadComplete(FMLLoadCompleteEvent e) {
 		EVENT_BUS.register(InjectWrappers.EVENTS);
+	}
+
+	@Mod.EventHandler
+	public void serverStarting(FMLServerStartingEvent e) {
+		e.registerServerCommand(new CommandSpecialGive());
 	}
 
 	@Mod.EventHandler
@@ -126,19 +133,11 @@ public final class MCFlux {
 	}
 
 	private static void updateCheck() {
+		long tc = MCFluxReport.measureTime("Update Check");
 		ComparableVersion ccv = new ComparableVersion(R.MF_VERSION);
 		try {
-			URL url = new URL("https", "gist.githubusercontent.com", 443, "/Szewek/97a48d6a61b29171938abf2f6bf9f985/raw/versions.json", null);
-			HttpURLConnection huc = (HttpURLConnection) url.openConnection();
-			InputStreamReader isr = new InputStreamReader(huc.getInputStream());
-			JsonObject je = new JsonParser().parse(isr).getAsJsonObject();
-			JsonObject jmc = je.getAsJsonObject("mc");
-			if (jmc == null)
-				return;
-			JsonPrimitive jv = jmc.getAsJsonPrimitive(Loader.MC_VERSION);
-			if (jv == null)
-				return;
-			String v = jv.getAsString();
+			JsonObject je = MCFluxNetUtil.downloadGistJSON("97a48d6a61b29171938abf2f6bf9f985", "versions.json");
+			String v = je.getAsJsonObject("mc").getAsJsonPrimitive(Loader.MC_VERSION).getAsString();
 			if (new ComparableVersion(v).compareTo(ccv) > 0) {
 				L.info("A newer Minecraft-Flux version is available (" + v + ")");
 				NEWER_VERSION = v;
@@ -147,5 +146,6 @@ public final class MCFlux {
 		} catch (Throwable t) {
 			L.warn(t);
 		}
+		MCFluxReport.stopTimer(tc);
 	}
 }

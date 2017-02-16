@@ -11,6 +11,7 @@ import szewek.mcflux.util.*;
 import szewek.mcflux.util.error.ErrMsgBadImplementation;
 import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
+import szewek.mcflux.wrapper.WrapperRegistry;
 
 @InjectRegistry(requires = InjectCond.MOD, args = "roots")
 public final class RootsInjectRegistry implements IInjectRegistry {
@@ -27,7 +28,7 @@ public final class RootsInjectRegistry implements IInjectRegistry {
 		ic.addEntityWrapperInject(RootsInjectRegistry::wrapGlobal);
 	}
 
-	private static <T extends ICapabilityProvider> void wrapGlobal(T icp, InjectWrappers.Registry reg) {
+	private static <T extends ICapabilityProvider> void wrapGlobal(T icp, WrapperRegistry reg) {
 		try {
 			if (icp instanceof EntityPlayer && icp.hasCapability(MANA_CAP, null)) {
 				reg.register(MANA_RL, new RootsPlayerWrapper((EntityPlayer) icp));

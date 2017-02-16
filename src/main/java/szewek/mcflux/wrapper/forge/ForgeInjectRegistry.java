@@ -12,6 +12,7 @@ import szewek.mcflux.util.error.ErrMsgBadImplementation;
 import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
+import szewek.mcflux.wrapper.WrapperRegistry;
 
 @InjectRegistry(requires = InjectCond.CLASS, args = "net.minecraftforge.energy.IEnergyStorage")
 public final class ForgeInjectRegistry implements IInjectRegistry {
@@ -24,7 +25,7 @@ public final class ForgeInjectRegistry implements IInjectRegistry {
 		ic.addItemWrapperInject(ForgeInjectRegistry::wrapGlobal);
 	}
 
-	private static <T extends ICapabilityProvider> void wrapGlobal(T icp, InjectWrappers.Registry reg) {
+	private static <T extends ICapabilityProvider> void wrapGlobal(T icp, WrapperRegistry reg) {
 		EnumFacing f = null;
 		try {
 			for (int i = 0; i < U.FANCY_FACING.length; i++) {

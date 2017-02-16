@@ -3,9 +3,13 @@ package szewek.mcflux;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.api.ex.IEnergy;
@@ -17,6 +21,7 @@ import szewek.mcflux.util.error.ErrMsgThrownException;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
+import java.util.Random;
 
 import static net.minecraft.util.EnumFacing.*;
 
@@ -30,6 +35,23 @@ public enum U {
 
 	public static boolean isItemEmpty(ItemStack is) {
 		return is == null || is.isEmpty();
+	}
+
+	public static void giveItemToPlayer(final ItemStack is, EntityPlayer p) {
+		boolean f = p.inventory.addItemStackToInventory(is);
+		EntityItem ei;
+		if (f) {
+			Random r = p.getRNG();
+			p.world.playSound(null, p.posX, p.posY, p.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((r.nextFloat() - r.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+			p.inventoryContainer.detectAndSendChanges();
+		}
+		if (!f || !is.isEmpty()) {
+			ei = p.dropItem(is, false);
+			if (ei != null) {
+				ei.setNoPickupDelay();
+				ei.setOwner(p.getName());
+			}
+		}
 	}
 	
 	public static long transferEnergy(@Nonnull IEnergy from, @Nonnull IEnergy to, final long amount) {

@@ -43,4 +43,12 @@ final class TeslaSided extends ForgeEnergyCapable {
 	@Override public long getEnergyCapacity() {
 		return holder != null ? holder.getCapacity() : 0;
 	}
+
+	@Override public boolean hasNoEnergy() {
+		return holder != null && holder.getStoredPower() == 0;
+	}
+
+	@Override public boolean hasFullEnergy() {
+		return holder != null && holder.getStoredPower() == holder.getCapacity();
+	}
 }

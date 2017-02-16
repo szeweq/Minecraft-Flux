@@ -70,4 +70,12 @@ final class RFSided implements IEnergy, net.minecraftforge.energy.IEnergyStorage
 	@Override public boolean canReceive() {
 		return receiver != null;
 	}
+
+	@Override public boolean hasNoEnergy() {
+		return handler.getEnergyStored(face) == 0;
+	}
+
+	@Override public boolean hasFullEnergy() {
+		return handler.getEnergyStored(face) == handler.getMaxEnergyStored(face);
+	}
 }

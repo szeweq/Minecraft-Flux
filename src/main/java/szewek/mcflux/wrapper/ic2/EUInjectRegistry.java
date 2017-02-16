@@ -11,6 +11,7 @@ import szewek.mcflux.util.InjectRegistry;
 import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
+import szewek.mcflux.wrapper.WrapperRegistry;
 
 @InjectRegistry(requires = InjectCond.MOD, args = {"IC2", "IndustrialCraft 2"})
 public final class EUInjectRegistry implements IInjectRegistry {
@@ -24,7 +25,7 @@ public final class EUInjectRegistry implements IInjectRegistry {
 		ic.addTileWrapperInject(EUInjectRegistry::wrapEUTile);
 	}
 
-	private static void wrapEUTile(TileEntity te, InjectWrappers.Registry reg) {
+	private static void wrapEUTile(TileEntity te, WrapperRegistry reg) {
 		String xn = te.getClass().getName();
 		if (xn == null) {
 			L.warn("A tile entity doesn't have a class name: " + te);

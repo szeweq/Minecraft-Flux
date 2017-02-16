@@ -28,7 +28,7 @@ public final class TileEntityECharger extends TileEntityWCEAware implements ITic
 			long t;
 			do {
 				t = U.transferEnergy(esrc, ie, 4000);
-				if (esrc == null || esrc.getEnergy() == 0)
+				if (esrc == null || esrc.hasNoEnergy())
 					nextSource();
 			} while (t == 0 && sideIndex != -1);
 			if (sideIndex == -1)

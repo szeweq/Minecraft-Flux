@@ -59,11 +59,11 @@ public enum MCFluxReport {
 		PrintStream ps = new PrintStream(new GZIPOutputStream(new FileOutputStream(f)));
 		ps.println("== TIMER MEASURES ==");
 		for (Timer tt : timers.values()) {
-			ps.println("+-- Timer: " + tt.name + " [" + tt.thName + "]");
+			ps.print("+-- " + tt.name + " [" + tt.thName + "]; ");
 			long lmin, lmax, ltot = 0;
 			double lavg;
 			long[] l = tt.getMeasures();
-			ps.println("| Count: " + l.length);
+			ps.println(l.length + " × ");
 			lmin = lmax = l[0];
 			for (int i = 0; i < l.length; i++) {
 				if (i > 0) {
@@ -75,8 +75,7 @@ public enum MCFluxReport {
 				ltot += l[i];
 			}
 			lavg = (double) ltot / l.length;
-			ps.println("| Total: " + ltot + " ns\n| Average: " + lavg + " ns\n| Min: " + lmin + " ns\n| Max: " + lmax + " ns");
-			ps.println("+--");
+			ps.println(ltot + " ns (avg. " + lavg + " ns)\n| Min/Max: " + lmin + '/' + lmax + " ns");
 		}
 		ps.println("== END OF TIMER MEASURES ==");
 		timers.clear();
