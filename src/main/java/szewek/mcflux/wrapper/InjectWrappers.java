@@ -1,6 +1,7 @@
 package szewek.mcflux.wrapper;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -17,7 +18,9 @@ import szewek.mcflux.util.error.ErrMsgNullInject;
 import szewek.mcflux.util.error.ErrMsgNullWrapper;
 import szewek.mcflux.util.error.ErrMsgThrownException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public enum InjectWrappers {
@@ -99,6 +102,9 @@ public enum InjectWrappers {
 			MCFluxReport.addErrMsg(new ErrMsgNullInject((Class<?>) att.getGenericType()));
 			return;
 		}
+		String cn = t.getClass().getName();
+		if (cn.startsWith("szewek.") || cn.startsWith("net.minecraft."))
+			return;
 		long tc = MCFluxReport.measureTime("wrap(" + t.getClass().getName() + ")");
 		MCFluxWrapper w = new MCFluxWrapper(t);
 		att.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
@@ -121,6 +127,8 @@ public enum InjectWrappers {
 	@SubscribeEvent
 	public void wrapEntity(AttachCapabilitiesEvent<Entity> att) {
 		Entity ent = att.getObject();
+		if (ent instanceof EntityItem)
+			return;
 		if (ent.world.getDifficulty() == EnumDifficulty.PEACEFUL && ent instanceof EntityMob)
 			return;
 		wrap(att);

@@ -4,6 +4,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import szewek.mcflux.U;
+import szewek.mcflux.tileentities.TileEntityFluxGen;
 import szewek.mcflux.util.MCFluxReport;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
@@ -26,6 +27,8 @@ public final class ForgeInjectRegistry implements IInjectRegistry {
 	}
 
 	private static <T extends ICapabilityProvider> void wrapGlobal(T icp, WrapperRegistry reg) {
+		if (icp instanceof TileEntityFluxGen)
+			return;
 		EnumFacing f = null;
 		try {
 			for (int i = 0; i < U.FANCY_FACING.length; i++) {

@@ -8,10 +8,10 @@ import szewek.mcflux.api.ex.EnergyCapable;
 
 import static szewek.mcflux.config.MCFluxConfig.FURNACE_CAP;
 
-final class FurnaceEnergy extends EnergyCapable {
+public final class FurnaceEnergy extends EnergyCapable {
 	private final TileEntityFurnace furnace;
 
-	FurnaceEnergy(TileEntityFurnace tef) {
+	public FurnaceEnergy(TileEntityFurnace tef) {
 		furnace = tef;
 	}
 

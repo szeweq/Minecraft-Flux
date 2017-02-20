@@ -132,6 +132,10 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 		readFromNBT(pkt.getNbtCompound());
 	}
 
+	@Override public boolean hasFastRenderer() {
+		return true;
+	}
+
 	@Override protected boolean updateVariables() {
 		if ((updateMode & 3) != 0 && pos != null) {
 			cnt = world != null && !world.isRemote ? wce.getFlavorEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;

@@ -15,15 +15,13 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import szewek.mcflux.fluxable.PlayerEnergy;
 
-import javax.annotation.Nonnull;
-
 public final class ItemUpChip extends ItemMCFlux {
 	private static final String PF = "mcflux.upchip.";
 	private static final TextComponentTranslation
 			textInstalled = new TextComponentTranslation(PF + "installed"),
 			textLvlMax = new TextComponentTranslation(PF + "lvlmax");
 
-	@Nonnull @Override public EnumAction getItemUseAction(ItemStack stack) {
+	@Override public EnumAction getItemUseAction(ItemStack stack) {
 		return EnumAction.BOW;
 	}
 
@@ -31,14 +29,14 @@ public final class ItemUpChip extends ItemMCFlux {
 		return 40;
 	}
 
-	@Nonnull @Override
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(World w, EntityPlayer p, EnumHand h) {
 		p.setActiveHand(h);
 		return new ActionResult<>(EnumActionResult.SUCCESS, p.getHeldItem(h));
 	}
 
-	@Nonnull @Override
-	public ItemStack onItemUseFinish(@Nonnull ItemStack is, World w, EntityLivingBase elb) {
+	@Override
+	public ItemStack onItemUseFinish(ItemStack is, World w, EntityLivingBase elb) {
 		if (!w.isRemote && elb instanceof EntityPlayerMP) {
 			EntityPlayerMP mp = (EntityPlayerMP) elb;
 			PlayerEnergy pe = mp.getCapability(PlayerEnergy.SELF_CAP, null);

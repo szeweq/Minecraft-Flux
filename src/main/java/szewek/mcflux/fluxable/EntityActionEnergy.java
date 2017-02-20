@@ -9,11 +9,11 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import szewek.mcflux.api.ex.EnergyCapable;
 
-final class EntityActionEnergy extends EnergyCapable {
+public final class EntityActionEnergy extends EnergyCapable {
 	private boolean charged = false;
 	private final EntityCreature creature;
 
-	EntityActionEnergy(EntityCreature ec) {
+	public EntityActionEnergy(EntityCreature ec) {
 		creature = ec;
 	}
 

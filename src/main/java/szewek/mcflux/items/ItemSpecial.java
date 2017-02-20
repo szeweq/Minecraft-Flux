@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 public final class ItemSpecial extends ItemMCFlux {
 
-	@Nonnull @Override public EnumAction getItemUseAction(ItemStack stack) {
+	@Override public EnumAction getItemUseAction(ItemStack stack) {
 		return EnumAction.EAT;
 	}
 
@@ -27,12 +27,12 @@ public final class ItemSpecial extends ItemMCFlux {
 		return 30;
 	}
 
-	@Nonnull @Override public ActionResult<ItemStack> onItemRightClick(World w, EntityPlayer p, @Nonnull EnumHand h) {
+	@Override public ActionResult<ItemStack> onItemRightClick(World w, EntityPlayer p, EnumHand h) {
 		p.setActiveHand(h);
 		return new ActionResult<>(EnumActionResult.SUCCESS, p.getHeldItem(h));
 	}
 
-	@Nonnull @Override public ItemStack onItemUseFinish(@Nonnull ItemStack is, World w, EntityLivingBase elb) {
+	@Override public ItemStack onItemUseFinish(@Nonnull ItemStack is, World w, EntityLivingBase elb) {
 		if (!w.isRemote && elb instanceof EntityPlayerMP && is.getItem() == this && is.hasTagCompound()) {
 			EntityPlayerMP mp = (EntityPlayerMP) elb;
 			NBTTagCompound nbt = is.getTagCompound();

@@ -5,40 +5,52 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class RecipeItem {
 	private final Item item;
-	private final int amount, meta;
+	private final int meta, cachedHash;
 	private final NBTTagCompound tags;
 
 	public RecipeItem(Block b) {
-		this(b, 1, 32767, null);
+		this(b, 32767, null);
 	}
 
 	public RecipeItem(Item it) {
-		this(it, 1, 32767, null);
+		this(it, 32767, null);
 	}
 
-	public RecipeItem(Block b, int c, int m, NBTTagCompound nbt) {
-		this(Item.getItemFromBlock(b), c, m, nbt);
+	public RecipeItem(Block b, int m, @Nullable NBTTagCompound nbt) {
+		this(Item.getItemFromBlock(b), m, nbt);
 	}
 
-	public RecipeItem(Item it, int c, int m, NBTTagCompound nbt) {
+	public RecipeItem(Item it, int m, @Nullable NBTTagCompound nbt) {
 		item = it;
-		amount = c;
 		meta = m;
 		tags = nbt;
+		int h = (31 + item.hashCode()) * 31 + meta;
+		if (tags != null)
+			h = 31 * h + tags.hashCode();
+		cachedHash = h;
 	}
 
-	ItemStack makeItemStack() {
-		ItemStack is = new ItemStack(item, amount, meta, null);
+	public ItemStack makeItemStack() {
+		ItemStack is = new ItemStack(item, 1, meta, null);
 		if (tags != null)
 			is.setTagCompound(tags.copy());
 		return is;
 	}
 
-	boolean matchesStack(@Nonnull ItemStack is, boolean strict) {
+	public boolean matchesStack(ItemStack is, boolean strict) {
 		return !is.isEmpty() && is.getItem() == item && ((meta == 32767 && !strict) || is.getItemDamage() == meta);
+	}
+
+	@Override public int hashCode() {
+		return cachedHash;
+	}
+
+	@Override public boolean equals(Object obj) {
+		return obj != null && obj instanceof RecipeItem && obj.hashCode() == cachedHash;
+
 	}
 }

@@ -21,7 +21,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.U;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public final class BlockEnergyMachine extends BlockMCFluxContainer {
 		setHardness(0.5F);
 	}
 
-	@Nonnull @Override
+	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> list = new ArrayList<>();
 		list.add(new ItemStack(this, 1, state.getValue(VARIANT).ordinal()));
@@ -55,7 +54,7 @@ public final class BlockEnergyMachine extends BlockMCFluxContainer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(@Nonnull Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < Variant.ALL_VARIANTS.length; i++)
 			list.add(new ItemStack(item, 1, i));
 	}
@@ -70,7 +69,7 @@ public final class BlockEnergyMachine extends BlockMCFluxContainer {
 		return state.getValue(VARIANT).ordinal();
 	}
 
-	@Nonnull @Override
+	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, VARIANT);
 	}
@@ -111,7 +110,7 @@ public final class BlockEnergyMachine extends BlockMCFluxContainer {
 			name = n;
 		}
 
-		@Nonnull @Override
+		@Override
 		public String getName() {
 			return name;
 		}

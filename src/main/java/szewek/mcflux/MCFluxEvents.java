@@ -1,10 +1,16 @@
 package szewek.mcflux;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -19,7 +25,7 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import szewek.mcflux.fluxable.WorldChunkEnergy;
+import szewek.mcflux.fluxable.*;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.network.msg.MsgNewVersion;
 import szewek.mcflux.special.SpecialEventHandler;
@@ -30,7 +36,13 @@ import szewek.mcflux.util.MCFluxLocation;
 enum MCFluxEvents {
 	INSTANCE;
 
-	private static final MCFluxLocation MF_WORLD_CHUNK = new MCFluxLocation("wce"), MF_SER = new MCFluxLocation("ser");
+	private static final MCFluxLocation
+			MF_WORLD_CHUNK = new MCFluxLocation("wce"),
+			MF_SER = new MCFluxLocation("ser"),
+			MF_PLAYER = new MCFluxLocation("PlayerEnergy"),
+			MF_ACTION = new MCFluxLocation("ActionEnergy"),
+			MF_FURNACE = new MCFluxLocation("FurnaceEnergy"),
+			MF_MOB_SPAWNER = new MCFluxLocation("MobSpawnerEnergy");
 
 	@SubscribeEvent
 	public void onLootTableLoad(LootTableLoadEvent e) {
@@ -70,6 +82,7 @@ enum MCFluxEvents {
 	public void whyCantPlayerSleep(PlayerSleepInBedEvent e) {
 		EntityPlayer p = e.getEntityPlayer();
 		int l = p.world.getLight(e.getPos());
+		L.info("LIGHT " + l);
 		if (l > 9) {
 			e.setResult(EntityPlayer.SleepResult.OTHER_PROBLEM);
 			p.sendStatusMessage(new TextComponentTranslation("mcflux.sleep.tooBright"), true);
@@ -82,9 +95,22 @@ enum MCFluxEvents {
 	}
 
 	@SubscribeEvent
-	public void wrapSER(AttachCapabilitiesEvent<Entity> e) {
-		if (e.getObject() instanceof EntityPlayer) {
+	public void wrapEntity(AttachCapabilitiesEvent<Entity> e) {
+		Entity ent = e.getObject();
+		if (ent instanceof EntityPlayer) {
 			e.addCapability(MF_SER, new SpecialEventReceiver());
+			e.addCapability(MF_PLAYER, new PlayerEnergy());
+		} else if (ent instanceof EntityPig || ent instanceof EntityCreeper) {
+			e.addCapability(MF_ACTION, new EntityActionEnergy((EntityCreature) ent));
 		}
+	}
+
+	@SubscribeEvent
+	public void wrapTile(AttachCapabilitiesEvent<TileEntity> e) {
+		TileEntity te = e.getObject();
+		if (te instanceof TileEntityFurnace)
+			e.addCapability(MF_FURNACE, new FurnaceEnergy((TileEntityFurnace) te));
+		else if (te instanceof TileEntityMobSpawner)
+			e.addCapability(MF_MOB_SPAWNER, new MobSpawnerEnergy((TileEntityMobSpawner) te));
 	}
 }

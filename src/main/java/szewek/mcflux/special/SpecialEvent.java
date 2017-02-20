@@ -24,7 +24,7 @@ public final class SpecialEvent {
 		endTime = et;
 	}
 
-	static SpecialEvent jromJSON(JsonObject jo) {
+	static SpecialEvent fromJSON(JsonObject jo) {
 		SpecialEvent ev = null;
 		try {
 			String d = jo.get("desc").getAsString();

@@ -68,7 +68,7 @@ public final class BuiltShapedRecipe implements IRecipe {
 	}
 
 	@Override
-	public boolean matches(@Nonnull InventoryCrafting inv, @Nonnull World w) {
+	public boolean matches(InventoryCrafting inv, World w) {
 		for (int x = 0; x < 4 - width; x++)
 			for (int y = 0; y < 4 - height; y++) {
 				if (matchOffset(inv, x, y, false, false)) {
@@ -126,7 +126,7 @@ public final class BuiltShapedRecipe implements IRecipe {
 	}
 
 	@Nonnull @Override
-	public ItemStack getCraftingResult(@Nonnull InventoryCrafting inv) {
+	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		return result.copy();
 	}
 
@@ -141,11 +141,11 @@ public final class BuiltShapedRecipe implements IRecipe {
 	}
 
 	@Nonnull @Override
-	public NonNullList<ItemStack> getRemainingItems(@Nonnull InventoryCrafting inv) {
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
 		return net.minecraftforge.common.ForgeHooks.defaultRecipeGetRemainingItems(inv);
 	}
 
-	private static boolean allMatch(@Nonnull ItemStack target, NonNullList<ItemStack> inputs, boolean strict) {
+	private static boolean allMatch(ItemStack target, NonNullList<ItemStack> inputs, boolean strict) {
 		boolean empty = target.isEmpty();
 		Item it = target.getItem();
 		int m = target.getItemDamage();

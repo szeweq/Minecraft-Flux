@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
 import net.minecraftforge.oredict.RecipeSorter;
 import szewek.mcflux.api.ex.Battery;
@@ -16,9 +17,9 @@ import szewek.mcflux.api.fe.FlavorNBTStorage;
 import szewek.mcflux.api.fe.FlavoredStorage;
 import szewek.mcflux.api.fe.IFlavorEnergy;
 import szewek.mcflux.config.MCFluxConfig;
-import szewek.mcflux.fluxable.InjectFluxable;
 import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
+import szewek.mcflux.gui.MCFluxGuiHandler;
 import szewek.mcflux.network.MCFluxNetUtil;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.special.CommandSpecialGive;
@@ -44,6 +45,9 @@ public final class MCFlux {
 	@SidedProxy(modId = R.MF_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
 	static szewek.mcflux.proxy.ProxyCommon PROXY = null;
 
+	@Mod.Instance
+	public static MCFlux MF = null;
+
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
 		long tc = MCFluxReport.measureTime("PreInit");
@@ -58,6 +62,7 @@ public final class MCFlux {
 			new Thread(MCFlux::updateCheck, "MCFlux Update Check").start();
 		SpecialEventHandler.getEvents();
 		MCFluxNetwork.registerAll();
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new MCFluxGuiHandler());
 		CapabilityManager cm = CapabilityManager.INSTANCE;
 		cm.register(IEnergy.class, new EnergyNBTStorage(), Battery::new);
 		cm.register(IFlavorEnergy.class, new FlavorNBTStorage(), FlavoredStorage::new);
@@ -67,7 +72,6 @@ public final class MCFlux {
 		EVENT_BUS.register(MCFluxEvents.INSTANCE);
 		MCFluxResources.preInit();
 		MCFLUX_TAB.init();
-		InjectFluxable.registerWrappers();
 		PROXY.preInit();
 		ConflictingModDetection.listAllConflictingMods();
 		registerAllInjects(e.getAsmData());

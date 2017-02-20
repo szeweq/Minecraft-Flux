@@ -1,0 +1,1 @@
+{"parent": "minecraft:block/cube_column", "textures": {"end": "mcflux:blocks/fluxgen_1", "side": "mcflux:blocks/fluxgen_2"}}

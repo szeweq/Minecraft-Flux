@@ -7,6 +7,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 
+import javax.annotation.Nonnull;
+
 /**
  * TileEntity working cycle template.
  */
@@ -65,7 +67,7 @@ public abstract class TileEntityFluxWork extends TileEntity implements IEnergy, 
 	protected abstract void tick();
 
 	/**
-	 * Tick update hapenning on client side.
+	 * Tick update hapenning on gui side.
 	 */
 	protected abstract void tickClient();
 
@@ -109,13 +111,13 @@ public abstract class TileEntityFluxWork extends TileEntity implements IEnergy, 
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
+	public boolean hasCapability(@Nonnull Capability<?> cap, EnumFacing f) {
 		return cap == EX.CAP_ENERGY || super.hasCapability(cap, f);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
+	public <T> T getCapability(@Nonnull Capability<T> cap, EnumFacing f) {
 		return cap == EX.CAP_ENERGY? (T) this : super.getCapability(cap, f);
 	}
 }

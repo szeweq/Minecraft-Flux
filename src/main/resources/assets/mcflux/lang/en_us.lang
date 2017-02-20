@@ -13,6 +13,12 @@ mcflux.cmd.sgive.noEvent=There is no Special Event with ID %s.
 mcflux.special.desc=[§cMCFlux Event§r] %s
 mcflux.special.ended=[§cMCFlux Event§r] This event has ended!
 
+mcflux.container.gluxgen=Flux Generator
+
+mcflux.fluxgen.speed=Speed
+mcflux.fluxgen.time=Time
+mcflux.fluxgen.length=Length
+
 mcflux.blockcompat.start=This block is
 mcflux.blockcompat.end= with MF from %s.
 mcflux.blockcompat.feend= with Flavor Energy from %s.
@@ -32,6 +38,7 @@ mcflux.upchip.lvlmax=You reached the final level.
 mcflux.update.newversion=[{"text":"A new update for "},{"text":"Minecraft-Flux","color":"yellow"},{"text":" was released ("},{"text":"%s","color":"yellow"},{"text":")!"}]
 mcflux.wet.mode0=ONE TO ALL
 mcflux.wet.mode1=ALL TO ONE
+mcflux.gen=Generating %s MF/t
 mcflux.sleep.tooBright=You may not rest now, there is too bright light
 
 itemGroup.mcflux=Minecraft-Flux
@@ -70,3 +77,6 @@ tile.echarger.jeidesc=It doesn't contain any energy.\nConnect an Entity Charger 
 tile.wet.name=Wireless Energy Transferrer (WET)
 tile.wet.desc=Reserve 3x3x3 block space on the front and a block on the back
 tile.wet.jeidesc=The front facing tells you where to use a 3x3x3 area.\nRight-click with EMPTY hand to change modes.\nThis block transfers energy from/to World Chunk Energy when no block was found on the opposite side.
+tile.fluxgen.name=Flux Generator
+tile.fluxgen.desc=Generates energy.
+tile.fluxgen.jeidesc=This machine uses fuel, catalyst, hot fluid and clean fluid. Only fuel is mandatory.

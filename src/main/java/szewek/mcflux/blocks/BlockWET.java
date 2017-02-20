@@ -17,11 +17,10 @@ import net.minecraft.world.World;
 import szewek.mcflux.U;
 import szewek.mcflux.tileentities.TileEntityWET;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class BlockWET extends BlockMCFluxContainer {
-	public static final PropertyDirection FACING = PropertyDirection.create("f");
+	private static final PropertyDirection FACING = PropertyDirection.create("f");
 	public static final PropertyInteger MODE = PropertyInteger.create("m", 0, 1);
 
 	public BlockWET() {
@@ -33,8 +32,8 @@ public final class BlockWET extends BlockMCFluxContainer {
 		return new TileEntityWET();
 	}
 
-	@Nonnull @Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+	@Override
+	public IBlockState getStateForPlacement(World w, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		return getDefaultState().withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer)).withProperty(MODE, 0);
 	}
 
@@ -59,15 +58,15 @@ public final class BlockWET extends BlockMCFluxContainer {
 		return state.getValue(MODE) + (2 * state.getValue(FACING).getIndex());
 	}
 
-	@Nonnull @Override public IBlockState withRotation(@Nonnull IBlockState state, Rotation rot) {
+	@Override public IBlockState withRotation(IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
 	}
 
-	@Nonnull @Override public IBlockState withMirror(@Nonnull IBlockState state, Mirror mir) {
+	@Override public IBlockState withMirror(IBlockState state, Mirror mir) {
 		return state.withRotation(mir.toRotation(state.getValue(FACING)));
 	}
 
-	@Nonnull @Override protected BlockStateContainer createBlockState() {
+	@Override protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING, MODE);
 	}
 }

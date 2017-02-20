@@ -18,8 +18,6 @@ import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
-import javax.annotation.Nonnull;
-
 public final class ItemMFTool extends ItemMCFlux {
 	private final TextComponentTranslation
 			textBlock = new TextComponentTranslation("mcflux.blockcompat.start"),
@@ -35,7 +33,7 @@ public final class ItemMFTool extends ItemMCFlux {
 		textNoCompat.getStyle().setColor(TextFormatting.RED).setBold(true);
 	}
 
-	@Nonnull @Override
+	@Override
 	public EnumActionResult onItemUse(EntityPlayer p, World w, BlockPos pos, EnumHand h, EnumFacing f, float x, float y, float z) {
 		if (!w.isRemote) {
 			TileEntity te = w.getTileEntity(pos);
@@ -51,13 +49,13 @@ public final class ItemMFTool extends ItemMCFlux {
 				tcb.appendSibling(ie != null ? textIsCompat : textNoCompat).appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
 				p.sendMessage(tcb);
 				if (ie != null)
-					p.sendMessage(new TextComponentTranslation("mcflux.energystat", U.formatMF(ie.getEnergy(), ie.getEnergyCapacity())));
+					p.sendMessage(new TextComponentTranslation("mcflux.energystat", U.formatMF(ie)));
 			} else {
 				WorldChunkEnergy wce = w.getCapability(WorldChunkEnergy.CAP_WCE, null);
 				if (wce != null) {
 					Battery bat = wce.getEnergyChunk((int) p.posX, (int) (p.posY + 0.5), (int) p.posZ);
 					TextComponentTranslation tcb = textWorldChunk.createCopy();
-					tcb.appendSibling(new TextComponentTranslation("mcflux.energystat", U.formatMF(bat.getEnergy(), bat.getEnergyCapacity())));
+					tcb.appendSibling(new TextComponentTranslation("mcflux.energystat", U.formatMF(bat)));
 					p.sendMessage(tcb);
 				} else {
 					return EnumActionResult.PASS;
@@ -77,8 +75,8 @@ public final class ItemMFTool extends ItemMCFlux {
 			tcb.appendSibling(new TextComponentTranslation("mcflux.entitycompat.end"));
 			p.sendMessage(tcb);
 			if (ie != null) {
-				long n = ie.getEnergy(), nc = ie.getEnergyCapacity();
-				p.sendMessage(nc == 1 ? textEnergyUnknown : new TextComponentTranslation("mcflux.energystat", U.formatMF(n, nc)));
+				long nc = ie.getEnergyCapacity();
+				p.sendMessage(nc == 1 ? textEnergyUnknown : new TextComponentTranslation("mcflux.energystat", U.formatMF(ie)));
 			}
 			return true;
 		}

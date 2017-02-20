@@ -10,8 +10,6 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import szewek.mcflux.util.MCFluxLocation;
 
-import javax.annotation.Nonnull;
-
 public final class BlockSided extends Block {
 	private static final PropertyInteger
 			UP = PropertyInteger.create("up", 0, 2),
@@ -45,11 +43,11 @@ public final class BlockSided extends Block {
 		return 0;
 	}
 
-	@Nonnull @Override protected BlockStateContainer createBlockState() {
+	@Override protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, DOWN, UP, NORTH, SOUTH, WEST, EAST);
 	}
 
-	@Nonnull @Override public EnumBlockRenderType getRenderType(IBlockState state) {
+	@Override public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
 }

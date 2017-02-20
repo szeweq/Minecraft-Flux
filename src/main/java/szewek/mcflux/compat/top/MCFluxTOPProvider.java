@@ -28,7 +28,7 @@ public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEn
 			if (ec == 1)
 				info.text(I18n.format("mcflux.mfcompatible"));
 			else
-				info.text(U.formatMF(en, ec)).progress(en, ec);
+				info.text(U.formatMF(ie)).progress(en, ec);
 		}
 	}
 
@@ -61,6 +61,6 @@ public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEn
 		if (ie == null)
 			return;
 		long en = ie.getEnergy(), ec = ie.getEnergyCapacity();
-		info.text(U.formatMF(en, ec)).progress(en, ec);
+		info.text(U.formatMF(ie)).progress(en, ec);
 	}
 }

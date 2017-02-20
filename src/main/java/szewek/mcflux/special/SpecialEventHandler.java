@@ -8,7 +8,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import szewek.mcflux.L;
-import szewek.mcflux.MCFluxResources;
 import szewek.mcflux.network.MCFluxNetUtil;
 import szewek.mcflux.util.MCFluxReport;
 import szewek.mcflux.util.error.ErrMsgThrownException;
@@ -17,6 +16,7 @@ import java.util.Map;
 
 public enum SpecialEventHandler {
 	;
+	private static final long TIME = 300000;
 	private static final Long2ObjectMap<SpecialEvent> events = Long2ObjectMaps.synchronize(new Long2ObjectArrayMap<>());
 	private static final Object eventLock = new Object();
 	private static EventStatus EVENT_STATUS = EventStatus.READY2DOWNLOAD;
@@ -30,7 +30,7 @@ public enum SpecialEventHandler {
 
 	public static void getEvents() {
 		synchronized (eventLock) {
-			if (System.currentTimeMillis() / 300000 > lastUpdate)
+			if (System.currentTimeMillis() / TIME > lastUpdate)
 				new Thread(SpecialEventHandler::downloadEvents, "MCFlux Download Events").start();
 		}
 	}
@@ -48,7 +48,7 @@ public enum SpecialEventHandler {
 				for (Map.Entry<String, JsonElement> jee : jev.entrySet()) {
 					String id = jee.getKey();
 					JsonElement je = jee.getValue();
-					SpecialEvent se = SpecialEvent.jromJSON(je.getAsJsonObject());
+					SpecialEvent se = SpecialEvent.fromJSON(je.getAsJsonObject());
 					if (se != null) {
 						events.put(Long.valueOf(id).longValue(), se);
 					}
@@ -61,20 +61,17 @@ public enum SpecialEventHandler {
 		}
 		synchronized (eventLock) {
 			EVENT_STATUS = es;
-			lastUpdate = System.currentTimeMillis() / 300000;
+			lastUpdate = System.currentTimeMillis() / TIME;
 		}
 	}
 
 	public static int getColors(ItemStack is, int tint) {
-		if (!is.isEmpty() && is.getItem() == MCFluxResources.SPECIAL) {
+		if (!is.isEmpty()) {
 			NBTTagCompound nbt = is.getTagCompound();
 			if (nbt == null)
 				return 0x808080;
-			long l = nbt.getLong("seid");
-			SpecialEvent se = events.get(l);
-			if (se == null)
-				return 0x404040;
-			return tint == 0 ? se.colorBox : se.colorRibbon;
+			SpecialEvent se = events.get(nbt.getLong("seid"));
+			return se == null ? 0x404040 : tint == 0 ? se.colorBox : se.colorRibbon;
 		}
 		return 0x202020;
 	}

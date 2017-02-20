@@ -1,3 +1,11 @@
+## 2.4.0
+- Updated Forge
+- Added Flux Generator
+- Fixed Null Exceptions from Refined Storage
+- Optimized Wrapper Injecting (not required on Vanilla)
+- Added Flux Generator JEI Recipe List
+- Removed Old API Error Messages
+
 ## 2.3.0
 - Added Special Events
 - Improved overall performance

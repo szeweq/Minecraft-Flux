@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.IThreadListener;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
@@ -36,6 +35,7 @@ public enum MCFluxNetwork {
 		ids.add(0, MsgUpdateClient.class);
 		ids.add(1, MsgUpdateServer.class);
 		ids.add(2, MsgNewVersion.class);
+		ids.add(3, MsgFluidAmount.class);
 	}
 
 	public static void to(FragileMsg msg, EntityPlayerMP mp) {
@@ -88,11 +88,7 @@ public enum MCFluxNetwork {
 			byte id = pb.readByte();
 			final FragileMsg fmsg = ids.get(id).newInstance();
 			if (!mc.isCallingFromMinecraftThread()) {
-				DecodeMsg dm = new DecodeMsg(fmsg, pb, p, s);
-				if (s == Side.SERVER)
-					((MinecraftServer) mc).callFromMainThread(dm);
-				else if (s == Side.CLIENT)
-					((Minecraft) mc).addScheduledTask(dm);
+				mc.addScheduledTask(new DecodeMsg(fmsg, pb, p, s));
 			}
 		} catch (Exception x) {
 			L.error("MCFluxNetwork error (" + s + ")", x);
@@ -102,7 +98,7 @@ public enum MCFluxNetwork {
 
 	@SubscribeEvent
 	public void serverPacket(FMLNetworkEvent.ServerCustomPacketEvent e) {
-		EntityPlayer p = ((NetHandlerPlayServer) e.getHandler()).playerEntity;
+		EntityPlayer p = ((NetHandlerPlayServer) e.getHandler()).player;
 		processMsg(e.getPacket(), p, p.getServer(), Side.SERVER);
 	}
 
@@ -113,7 +109,7 @@ public enum MCFluxNetwork {
 		processMsg(e.getPacket(), mc.player, mc, Side.CLIENT);
 	}
 
-	static final class DecodeMsg implements java.util.concurrent.Callable<Void> {
+	static final class DecodeMsg implements java.lang.Runnable {
 		private final FragileMsg msg;
 		private final PacketBuffer pbuf;
 		private final EntityPlayer player;
@@ -126,13 +122,12 @@ public enum MCFluxNetwork {
 			side = s;
 		}
 
-		public Void call() {
+		public void run() {
 			try {
 				msg.processMsg(pbuf, player, side);
 			} catch (IOException e) {
 				L.error("Msg processing error", e);
 			}
-			return null;
 		}
 	}
 }

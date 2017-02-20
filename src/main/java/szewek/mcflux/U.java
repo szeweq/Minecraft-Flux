@@ -29,8 +29,12 @@ public enum U {
 	;
 	public static final EnumFacing[] FANCY_FACING = new EnumFacing[] {DOWN, UP, NORTH, SOUTH, WEST, EAST, null};
 
-	public static String formatMF(long n, long nc) {
-		return n + " / " + nc + " MF";
+	public static String formatMF(IEnergy ie) {
+		return ie.getEnergy() + " / " + ie.getEnergyCapacity() + " MF";
+	}
+
+	public static String formatMB(int n, int c) {
+		return n + " / " + c + " mB";
 	}
 
 	public static boolean isItemEmpty(ItemStack is) {
@@ -99,6 +103,13 @@ public enum U {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T[] makeFilledArray(T[] t, @Nonnull T fill) {
+		for (int i = 0; i < t.length; i++)
+			t[i] = fill;
+		return t;
+	}
+
 	public static Class<?> getClassSafely(String name) {
 		Class<?> c = null;
 		try {
@@ -108,6 +119,7 @@ public enum U {
 		}
 		return c;
 	}
+
 	public static Method getMethodSafely(Class<?> cl, String name, Class<?>... cargs) {
 		Method m = null;
 		try {

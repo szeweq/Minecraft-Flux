@@ -34,7 +34,7 @@ public final class MsgUpdateClient extends FragileMsg {
 			if (mp != null) {
 				TileEntity te = mp.world.getTileEntity(pos);
 				if (te != null && te instanceof TileEntityEnergyMachine)
-					MCFluxNetwork.NET.to(MsgUpdateServer.with(pos, ((TileEntityEnergyMachine) te).getAllTransferSides()), mp);
+					MCFluxNetwork.to(MsgUpdateServer.with(pos, ((TileEntityEnergyMachine) te).getAllTransferSides()), mp);
 			}
 		}
 	}

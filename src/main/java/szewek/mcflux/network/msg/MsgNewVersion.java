@@ -23,10 +23,10 @@ public final class MsgNewVersion extends FragileMsg {
 		if (pb.readableBytes() < 2) {
 			L.warn("Incompatible length");
 		}
-		version = pb.readString(16);
+		version = pb.readString(32);
 		broken = false;
 		if (s == Side.CLIENT)
-			p.sendMessage(ITextComponent.Serializer.jsonToComponent(I18n.format("mcflux.update.newversion", version)));
+			p.sendMessage(ITextComponent.Serializer.fromJsonLenient(I18n.format("mcflux.update.newversion", version)));
 	}
 
 	@Override public void saveBuffer(PacketBuffer pb) throws IOException {

@@ -7,15 +7,14 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import szewek.mcflux.blocks.BlockEnergyMachine;
-import szewek.mcflux.blocks.BlockEntityCharger;
-import szewek.mcflux.blocks.BlockSided;
-import szewek.mcflux.blocks.BlockWET;
+import szewek.mcflux.blocks.*;
 import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
 import szewek.mcflux.blocks.itemblocks.ItemMCFluxBlock;
 import szewek.mcflux.items.*;
+import szewek.mcflux.recipes.FluxGenRecipes;
 import szewek.mcflux.tileentities.TileEntityECharger;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
+import szewek.mcflux.tileentities.TileEntityFluxGen;
 import szewek.mcflux.tileentities.TileEntityWET;
 import szewek.mcflux.util.IX;
 import szewek.mcflux.util.MCFluxLocation;
@@ -23,6 +22,8 @@ import szewek.mcflux.util.recipe.RecipeBuilder;
 import szewek.mcflux.util.recipe.RecipeItem;
 
 import java.util.function.Function;
+
+import static szewek.mcflux.util.IX.*;
 
 public enum MCFluxResources {
 	;
@@ -37,6 +38,7 @@ public enum MCFluxResources {
 	public static BlockEnergyMachine ENERGY_MACHINE;
 	public static BlockEntityCharger ECHARGER;
 	public static BlockWET WET;
+	public static BlockFluxGen FLUXGEN;
 
 	/** Current state (0 = untouched; 1 = after preInit; 2 = after init) */
 	private static byte state = 0;
@@ -53,74 +55,85 @@ public enum MCFluxResources {
 		ENERGY_MACHINE = block("energy_machine", new BlockEnergyMachine(), ItemBlockEnergyMachine::new);
 		ECHARGER = block("echarger", new BlockEntityCharger(), ItemMCFluxBlock::new);
 		WET = block("wet", new BlockWET(), ItemMCFluxBlock::new);
-		GameRegistry.registerTileEntity(TileEntityEnergyMachine.class, "mcflux.emachine");
-		GameRegistry.registerTileEntity(TileEntityECharger.class, "mcflux.echarger");
-		GameRegistry.registerTileEntity(TileEntityWET.class, "mcflux.wet");
+		FLUXGEN = block("fluxgen", new BlockFluxGen(), ItemMCFluxBlock::new);
+		GameRegistry.registerTileEntity(TileEntityEnergyMachine.class, "mcflux:emachine");
+		GameRegistry.registerTileEntity(TileEntityECharger.class, "mcflux:echarger");
+		GameRegistry.registerTileEntity(TileEntityWET.class, "mcflux:wet");
+		GameRegistry.registerTileEntity(TileEntityFluxGen.class, "mcflux:fluxgen");
 	}
 
 	static void init() {
 		if (state > 1)
 			return;
 		state++;
+		FluxGenRecipes.addCatalyst(new RecipeItem(UPCHIP, 0, null), 2, 0);
 		String sIngIron = "ingotIron", sIngGold = "ingotGold", sNugGold = "nuggetGold";
 		RecipeItem rRedstone = new RecipeItem(Items.REDSTONE);
+		RecipeItem rbRedstone = new RecipeItem(Blocks.REDSTONE_BLOCK);
 		RecipeItem rEnderEye = new RecipeItem(Items.ENDER_EYE);
-		RecipeItem rLapis = new RecipeItem(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage(), null);
-		RecipeItem rEnergyDist = new RecipeItem(ENERGY_MACHINE, 1, 0, null);
-		RecipeItem rFlavorDist = new RecipeItem(ENERGY_MACHINE, 1, 2, null);
-		IX[][] ixStar = new IX[][]{{null, IX.A, null}, {IX.A, IX.B, IX.A}, {null, IX.A, null}};
-		IX[][] ixCross = new IX[][]{{IX.A, null, IX.A}, {null, IX.B, null}, {IX.A, null, IX.A}};
-		IX[][] ixTool = new IX[][]{{IX.A, null, IX.A}, {IX.B, IX.C, IX.B}, {IX.B, IX.B, IX.B}};
-		IX[][] ixSandwich = new IX[][]{{IX.A, IX.A, IX.A}, {IX.B, IX.C, IX.B}, {IX.A, IX.A, IX.A}};
-		IX[][] ixWet = new IX[][]{{IX.A, IX.B, IX.A}, {IX.C, IX.D, IX.C}, {IX.A, IX.E, IX.A}};
+		RecipeItem rLapis = new RecipeItem(Items.DYE, EnumDyeColor.BLUE.getDyeDamage(), null);
+		RecipeItem rEnergyDist = new RecipeItem(ENERGY_MACHINE, 0, null);
+		RecipeItem rFlavorDist = new RecipeItem(ENERGY_MACHINE, 2, null);
+		IX[][] ixStar = new IX[][]{{null, A, null}, {A, B, A}, {null, A, null}};
+		IX[][] ixCross = new IX[][]{{A, null, A}, {null, B, null}, {A, null, A}};
+		IX[][] ixTool = new IX[][]{{A, null, A}, {B, C, B}, {B, B, B}};
+		IX[][] ixSandwich = new IX[][]{{A, A, A}, {B, C, B}, {A, A, A}};
+		IX[][] ixWet = new IX[][]{{A, B, A}, {C, D, C}, {A, E, A}};
 		RecipeBuilder.buildRecipeFor(MFTOOL, 1)
 				.shape(ixTool, 3, 3)
-				.with(IX.A, sNugGold)
-				.with(IX.B, rRedstone)
-				.with(IX.C, sIngIron)
+				.with(A, sNugGold)
+				.with(B, rRedstone)
+				.with(C, sIngIron)
 				.deploy();
 		RecipeBuilder.buildRecipeFor(FESNIFFER, 1)
 				.shape(ixTool, 3, 3)
-				.with(IX.A, sNugGold)
-				.with(IX.B, rLapis)
-				.with(IX.C, sIngGold)
+				.with(A, sNugGold)
+				.with(B, rLapis)
+				.with(C, sIngGold)
 				.deploy();
 		RecipeBuilder.buildRecipeFor(ENERGY_MACHINE, 1)
 				.shape(ixStar, 3, 3)
-				.with(IX.A, sIngIron)
-				.with(IX.B, rEnderEye)
+				.with(A, sIngIron)
+				.with(B, rEnderEye)
 				.deploy()
 				.resultMeta(1)
-				.clear(IX.A, IX.B)
+				.clear(A, B)
 				.shape(ixCross, 3, 3)
-				.with(IX.A, rRedstone)
-				.with(IX.B, rEnergyDist)
+				.with(A, rRedstone)
+				.with(B, rEnergyDist)
 				.deploy()
 				.resultMeta(2)
-				.clear(IX.A, IX.B)
+				.clear(A, B)
 				.shape(ixStar, 3, 3)
-				.with(IX.A, sIngGold)
-				.with(IX.B, rEnderEye)
+				.with(A, sIngGold)
+				.with(B, rEnderEye)
 				.deploy()
 				.resultMeta(3)
-				.clear(IX.A, IX.B)
+				.clear(A, B)
 				.shape(ixCross, 3, 3)
-				.with(IX.A, rRedstone)
-				.with(IX.B, rFlavorDist)
+				.with(A, rRedstone)
+				.with(B, rFlavorDist)
 				.deploy();
 		RecipeBuilder.buildRecipeFor(ECHARGER, 1)
 				.shape(ixSandwich, 3, 3)
-				.with(IX.A, sIngIron)
-				.with(IX.B, rLapis)
-				.with(IX.C, new RecipeItem(Blocks.GLOWSTONE))
+				.with(A, sIngIron)
+				.with(B, rLapis)
+				.with(C, new RecipeItem(Blocks.GLOWSTONE))
 				.deploy();
 		RecipeBuilder.buildRecipeFor(WET, 1)
 				.shape(ixWet, 3, 3)
-				.with(IX.A, rRedstone)
-				.with(IX.B, "blockIron")
-				.with(IX.C, sIngIron)
-				.with(IX.D, new RecipeItem(Blocks.REDSTONE_BLOCK))
-				.with(IX.E, new RecipeItem(Items.COMPARATOR))
+				.with(A, rRedstone)
+				.with(B, "blockIron")
+				.with(C, sIngIron)
+				.with(D, rbRedstone)
+				.with(E, new RecipeItem(Items.COMPARATOR))
+				.deploy();
+		RecipeBuilder.buildRecipeFor(FLUXGEN, 1)
+				.shape(new IX[][]{{A, B, C}}, 3, 1)
+				.mirror(true, false)
+				.with(A, "blockIron")
+				.with(B, new RecipeItem(Blocks.FURNACE))
+				.with(C, rbRedstone)
 				.deploy();
 	}
 

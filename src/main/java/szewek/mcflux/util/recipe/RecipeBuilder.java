@@ -102,14 +102,12 @@ public final class RecipeBuilder {
 	}
 
 	public RecipeBuilder with(IX id, RecipeItem ri) {
-		if (id != null)
-			items[id.ord] = ri;
+		items[id.ord] = ri;
 		return this;
 	}
 
 	public RecipeBuilder with(IX id, String s) {
-		if (id != null)
-			oreDicts[id.ord] = s;
+		oreDicts[id.ord] = s;
 		return this;
 	}
 

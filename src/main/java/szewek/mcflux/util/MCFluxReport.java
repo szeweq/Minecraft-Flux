@@ -63,7 +63,7 @@ public enum MCFluxReport {
 			long lmin, lmax, ltot = 0;
 			double lavg;
 			long[] l = tt.getMeasures();
-			ps.println(l.length + " × ");
+			ps.print(l.length + " × ");
 			lmin = lmax = l[0];
 			for (int i = 0; i < l.length; i++) {
 				if (i > 0) {
@@ -75,7 +75,7 @@ public enum MCFluxReport {
 				ltot += l[i];
 			}
 			lavg = (double) ltot / l.length;
-			ps.println(ltot + " ns (avg. " + lavg + " ns)\n| Min/Max: " + lmin + '/' + lmax + " ns");
+			ps.println(ltot + " ns (avg. " + lavg + " ns; min/max " + lmin + '/' + lmax + " ns)");
 		}
 		ps.println("== END OF TIMER MEASURES ==");
 		timers.clear();

@@ -7,7 +7,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
@@ -23,13 +22,13 @@ public final class ItemBlockEnergyMachine extends ItemBlock {
 		return damage % BlockEnergyMachine.Variant.ALL_VARIANTS.length;
 	}
 	
-	@Nonnull @Override
+	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		return "tile." + BlockEnergyMachine.Variant.nameFromStack(stack);
 	}
 	
 	@Override
-	public void addInformation(@Nonnull ItemStack stack, @Nonnull EntityPlayer player, @Nonnull List<String> tooltip, boolean advanced) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
 		tooltip.add(I18n.format(getUnlocalizedName(stack) + ".desc"));
 		super.addInformation(stack, player, tooltip, advanced);
 	}

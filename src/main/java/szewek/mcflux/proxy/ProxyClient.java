@@ -4,15 +4,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.U;
 import szewek.mcflux.blocks.BlockEnergyMachine;
-import szewek.mcflux.client.EnergyMachineRenderer;
+import szewek.mcflux.render.EnergyMachineRenderer;
 import szewek.mcflux.config.ConfigEvents;
 import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 import static szewek.mcflux.MCFluxResources.*;
 
+@SideOnly(Side.CLIENT)
 public final class ProxyClient extends ProxyCommon {
 	@Override
 	public void preInit() {
@@ -31,7 +34,8 @@ public final class ProxyClient extends ProxyCommon {
 				SPECIAL,
 				Item.getItemFromBlock(ECHARGER),
 				Item.getItemFromBlock(SIDED),
-				Item.getItemFromBlock(WET));
+				Item.getItemFromBlock(WET),
+				Item.getItemFromBlock(FLUXGEN));
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(SpecialEventHandler::getColors, SPECIAL);
 	}
 }
