@@ -1,3 +1,6 @@
+## 2.4.1
+- Updated Error Reporting
+
 ## 2.4.0
 - Updated Forge
 - Added Flux Generator
