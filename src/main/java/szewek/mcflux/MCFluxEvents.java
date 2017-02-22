@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
@@ -81,7 +82,7 @@ enum MCFluxEvents {
 	@SubscribeEvent
 	public void whyCantPlayerSleep(PlayerSleepInBedEvent e) {
 		EntityPlayer p = e.getEntityPlayer();
-		int l = p.world.getLight(e.getPos());
+		int l = p.world.getLightFor(EnumSkyBlock.BLOCK, e.getPos());
 		L.info("LIGHT " + l);
 		if (l > 9) {
 			e.setResult(EntityPlayer.SleepResult.OTHER_PROBLEM);

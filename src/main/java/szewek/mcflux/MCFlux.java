@@ -50,6 +50,7 @@ public final class MCFlux {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
+		MCFluxReport.init();
 		long tc = MCFluxReport.measureTime("PreInit");
 		L.prepare(e.getModLog());
 		MC_DIR = e.getModConfigurationDirectory().getParentFile();
@@ -108,7 +109,7 @@ public final class MCFlux {
 		try {
 			MCFluxReport.makeReportFile(MC_DIR);
 		} catch (Exception x) {
-			L.warn(x);
+			MCFluxReport.sendException(x);
 		}
 	}
 
@@ -130,7 +131,7 @@ public final class MCFlux {
 				iir.registerInjects();
 				cnt++;
 			} catch (Exception e) {
-				L.warn(e);
+				MCFluxReport.sendException(e);
 			}
 		}
 		L.info("Registered " + cnt + " inject registries");
@@ -148,7 +149,7 @@ public final class MCFlux {
 			}
 			UPDATE_CHECK_FINISHED = true;
 		} catch (Throwable t) {
-			L.warn(t);
+			MCFluxReport.sendException(t);
 		}
 		MCFluxReport.stopTimer(tc);
 	}

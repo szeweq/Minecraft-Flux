@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import szewek.mcflux.L;
 import szewek.mcflux.U;
+import szewek.mcflux.util.MCFluxReport;
 
 import java.lang.reflect.Method;
 
@@ -45,7 +46,7 @@ enum EUEnergyEvents {
 				try {
 					o = COMPONENT.invoke(te, IC2_ENERGY);
 				} catch (Exception e1) {
-					L.warn(e1);
+					MCFluxReport.sendException(e1);
 				}
 				if (o == null)
 					return;

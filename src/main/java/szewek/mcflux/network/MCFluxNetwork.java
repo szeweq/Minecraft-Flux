@@ -14,9 +14,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import szewek.mcflux.L;
 import szewek.mcflux.R;
 import szewek.mcflux.network.msg.*;
+import szewek.mcflux.util.MCFluxReport;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public enum MCFluxNetwork {
 		try {
 			fmsg.saveBuffer(pb);
 		} catch (Exception e) {
-			L.error("Packet creation error", e);
+			MCFluxReport.sendException(e);
 			return null;
 		}
 		return new FMLProxyPacket(pb, R.MF_NAME);
@@ -91,7 +91,7 @@ public enum MCFluxNetwork {
 				mc.addScheduledTask(new DecodeMsg(fmsg, pb, p, s));
 			}
 		} catch (Exception x) {
-			L.error("MCFluxNetwork error (" + s + ")", x);
+			MCFluxReport.sendException(x);
 		}
 	}
 
@@ -126,7 +126,7 @@ public enum MCFluxNetwork {
 			try {
 				msg.processMsg(pbuf, player, side);
 			} catch (IOException e) {
-				L.error("Msg processing error", e);
+				MCFluxReport.sendException(e);
 			}
 		}
 	}

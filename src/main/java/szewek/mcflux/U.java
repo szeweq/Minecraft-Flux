@@ -17,7 +17,6 @@ import szewek.mcflux.api.fe.Flavored;
 import szewek.mcflux.api.fe.FlavoredMutable;
 import szewek.mcflux.api.fe.IFlavorEnergy;
 import szewek.mcflux.util.MCFluxReport;
-import szewek.mcflux.util.error.ErrMsgThrownException;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
@@ -115,7 +114,7 @@ public enum U {
 		try {
 			c = Class.forName(name);
 		} catch (ClassNotFoundException e) {
-			MCFluxReport.addErrMsg(new ErrMsgThrownException(e));
+			MCFluxReport.sendException(e);
 		}
 		return c;
 	}
@@ -125,7 +124,7 @@ public enum U {
 		try {
 			m = cl.getDeclaredMethod(name, cargs);
 		} catch (Exception e) {
-			MCFluxReport.addErrMsg(new ErrMsgThrownException(e));
+			MCFluxReport.sendException(e);
 		}
 		return m;
 	}

@@ -8,7 +8,6 @@ import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import szewek.mcflux.util.MCFluxReport;
-import szewek.mcflux.util.error.ErrMsgThrownException;
 
 public final class SpecialEvent {
 	public final String description;
@@ -45,7 +44,7 @@ public final class SpecialEvent {
 			}
 			ev = new SpecialEvent(d, cb, cr, sis, et);
 		} catch (Exception e) {
-			MCFluxReport.addErrMsg(new ErrMsgThrownException(e));
+			MCFluxReport.sendException(e);
 		}
 		return ev;
 	}
@@ -79,7 +78,7 @@ public final class SpecialEvent {
 				try {
 					nbt = JsonToNBT.getTagFromJson(t);
 				} catch (NBTException e) {
-					MCFluxReport.addErrMsg(new ErrMsgThrownException(e));
+					MCFluxReport.sendException(e);
 					nbt = null;
 				}
 				tag = nbt;

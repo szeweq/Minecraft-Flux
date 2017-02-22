@@ -16,7 +16,6 @@ import szewek.mcflux.U;
 import szewek.mcflux.util.MCFluxReport;
 import szewek.mcflux.util.error.ErrMsgNullInject;
 import szewek.mcflux.util.error.ErrMsgNullWrapper;
-import szewek.mcflux.util.error.ErrMsgThrownException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,7 +74,7 @@ public enum InjectWrappers {
 						MCFluxReport.stopTimer(tc);
 					}
 				} catch (Exception e) {
-					MCFluxReport.addErrMsg(new ErrMsgThrownException(e));
+					MCFluxReport.sendException(e);
 				}
 			}
 		}

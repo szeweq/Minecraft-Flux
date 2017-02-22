@@ -1,10 +1,16 @@
 package szewek.mcflux.util;
 
+import com.getsentry.raven.Raven;
+import com.getsentry.raven.RavenFactory;
+import com.getsentry.raven.event.Event;
+import com.getsentry.raven.event.EventBuilder;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minecraftforge.fml.common.Loader;
 import szewek.mcflux.L;
+import szewek.mcflux.R;
 import szewek.mcflux.util.error.ErrMsg;
 
 import java.io.File;
@@ -15,16 +21,35 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
 public enum MCFluxReport {
 	;
+	private static Raven raven;
+	private static Set<String> loadedMods;
 	private static Int2ObjectMap<ErrMsg> errMsgs = new Int2ObjectOpenHashMap<>();
 	private static Long2ObjectMap<Timer> timers = new Long2ObjectOpenHashMap<>();
 	private static final DateFormat fileDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 
+	public static void init() {
+		raven = RavenFactory.ravenInstance(R.MF_REPORT_DSN);
+		loadedMods = Loader.instance().getIndexedModList().keySet();
+		raven.addBuilderHelper(MCFluxReport::addMCFluxInfo);
+		raven.sendEvent(new EventBuilder().withLevel(Event.Level.INFO).withMessage("Running"));
+	}
+
+	private static void addMCFluxInfo(EventBuilder eb) {
+		eb.withRelease(R.MF_VERSION).withExtra("Mods", loadedMods);
+	}
+
+	public static void sendException(Throwable th) {
+		raven.sendException(th);
+	}
+
 	public static void addErrMsg(ErrMsg em) {
 		int hc = em.hashCode();
+		raven.sendException(em.msgThrown);
 		if (errMsgs.containsKey(hc)) {
 			ErrMsg xem = errMsgs.get(hc);
 			xem.addThrowable(em.msgThrown);

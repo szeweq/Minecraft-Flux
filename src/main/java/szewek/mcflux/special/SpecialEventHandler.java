@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import szewek.mcflux.L;
 import szewek.mcflux.network.MCFluxNetUtil;
 import szewek.mcflux.util.MCFluxReport;
-import szewek.mcflux.util.error.ErrMsgThrownException;
 
 import java.util.Map;
 
@@ -57,7 +56,7 @@ public enum SpecialEventHandler {
 			es = EventStatus.DOWNLOADED;
 			L.info("Downloaded events: " + events.size());
 		} catch (Exception e) {
-			MCFluxReport.addErrMsg(new ErrMsgThrownException(e));
+			MCFluxReport.sendException(e);
 		}
 		synchronized (eventLock) {
 			EVENT_STATUS = es;
