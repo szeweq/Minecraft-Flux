@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.zip.GZIPOutputStream;
 
 public enum MCFluxReport {
@@ -31,12 +32,13 @@ public enum MCFluxReport {
 	private static Int2ObjectMap<ErrMsg> errMsgs = new Int2ObjectOpenHashMap<>();
 	private static Long2ObjectMap<Timer> timers = new Long2ObjectOpenHashMap<>();
 	private static final DateFormat fileDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+	private static final UUID uuid = UUID.nameUUIDFromBytes(R.MF_FULL_NAME.getBytes());
 
 	public static void init() {
 		raven = RavenFactory.ravenInstance(R.MF_REPORT_DSN);
 		loadedMods = Loader.instance().getIndexedModList().keySet();
 		raven.addBuilderHelper(MCFluxReport::addMCFluxInfo);
-		raven.sendEvent(new EventBuilder().withLevel(Event.Level.INFO).withMessage("Running"));
+		raven.sendEvent(new EventBuilder(uuid).withLevel(Event.Level.INFO).withMessage("Running"));
 	}
 
 	private static void addMCFluxInfo(EventBuilder eb) {
