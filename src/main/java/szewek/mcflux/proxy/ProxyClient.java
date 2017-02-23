@@ -12,6 +12,7 @@ import szewek.mcflux.render.EnergyMachineRenderer;
 import szewek.mcflux.config.ConfigEvents;
 import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
+import szewek.mcflux.util.MCFluxReport;
 
 import static szewek.mcflux.MCFluxResources.*;
 
@@ -19,6 +20,7 @@ import static szewek.mcflux.MCFluxResources.*;
 public final class ProxyClient extends ProxyCommon {
 	@Override
 	public void preInit() {
+		MCFluxReport.handleErrors();
 		MinecraftForge.EVENT_BUS.register(new ConfigEvents());
 		U.registerItemMultiModels(Item.getItemFromBlock(ENERGY_MACHINE), BlockEnergyMachine.Variant.ALL_VARIANTS.length);
 	}

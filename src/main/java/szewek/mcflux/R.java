@@ -11,7 +11,8 @@ public final class R {
 		MF_API_FE = MF_API + "|fe",
 		MF_API_ASSISTANT = MF_API + "|assistant",
 		MF_PKG = "szewek.mcflux",
-		MF_REPORT_DSN = "https://21320e901b5c4314baae477ed00ecdca:7d0393945e1440cb94ee33217b6ad72b@sentry.io/141749",
+		MF_ACCESS_TOKEN = "65a919ed8de14b019f9f51200635c4d6",
+		MF_ENVIRONMENT = "production",
 		GUI_FACTORY = MF_PKG + ".gui.MCFluxGuiFactory",
 		PROXY_SERVER = MF_PKG + ".proxy.ProxyCommon",
 		PROXY_CLIENT = MF_PKG + ".proxy.ProxyClient";

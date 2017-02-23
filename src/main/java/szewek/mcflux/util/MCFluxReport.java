@@ -1,9 +1,6 @@
 package szewek.mcflux.util;
 
-import com.getsentry.raven.Raven;
-import com.getsentry.raven.RavenFactory;
-import com.getsentry.raven.event.Event;
-import com.getsentry.raven.event.EventBuilder;
+import com.rollbar.Rollbar;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -19,39 +16,46 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 public enum MCFluxReport {
 	;
-	private static Raven raven;
-	private static Set<String> loadedMods;
+	private static Rollbar rollbar = new Rollbar(R.MF_ACCESS_TOKEN, R.MF_ENVIRONMENT, null, R.MF_VERSION, null, null, null, null, null, null, null, null, null, null, null, null);
+	private static Thread.UncaughtExceptionHandler ueh = null, nueh = MCFluxReport::uncaught;
+	private static Map<String, Object> extraData = null;
 	private static Int2ObjectMap<ErrMsg> errMsgs = new Int2ObjectOpenHashMap<>();
 	private static Long2ObjectMap<Timer> timers = new Long2ObjectOpenHashMap<>();
 	private static final DateFormat fileDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-	private static final UUID uuid = UUID.nameUUIDFromBytes(R.MF_FULL_NAME.getBytes());
 
 	public static void init() {
-		raven = RavenFactory.ravenInstance(R.MF_REPORT_DSN);
-		loadedMods = Loader.instance().getIndexedModList().keySet();
-		raven.addBuilderHelper(MCFluxReport::addMCFluxInfo);
-		raven.sendEvent(new EventBuilder(uuid).withLevel(Event.Level.INFO).withMessage("Running"));
+		if (extraData == null)
+			extraData = Collections.singletonMap("Mods", Loader.instance().getIndexedModList().keySet());
+		rollbar.info("Running", extraData);
 	}
 
-	private static void addMCFluxInfo(EventBuilder eb) {
-		eb.withRelease(R.MF_VERSION).withExtra("Mods", loadedMods);
+	public static void handleErrors() {
+		Thread t = Thread.currentThread();
+		ueh = t.getUncaughtExceptionHandler();
+		t.setUncaughtExceptionHandler(nueh);
+	}
+
+	private static void uncaught(Thread t, Throwable e) {
+		rollbar.error(e, extraData, "Uncaught Exception from [" + t.getName() + "]");
+		if (ueh != null && !ueh.equals(nueh))
+			ueh.uncaughtException(t, e);
 	}
 
 	public static void sendException(Throwable th) {
-		raven.sendException(th);
+		rollbar.warning(th, extraData);
 	}
 
 	public static void addErrMsg(ErrMsg em) {
 		int hc = em.hashCode();
-		raven.sendException(em.msgThrown);
+		rollbar.warning(em.msgThrown, extraData);
 		if (errMsgs.containsKey(hc)) {
 			ErrMsg xem = errMsgs.get(hc);
 			xem.addThrowable(em.msgThrown);

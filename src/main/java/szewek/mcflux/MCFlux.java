@@ -51,6 +51,7 @@ public final class MCFlux {
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
 		MCFluxReport.init();
+		MCFluxReport.handleErrors();
 		long tc = MCFluxReport.measureTime("PreInit");
 		L.prepare(e.getModLog());
 		MC_DIR = e.getModConfigurationDirectory().getParentFile();
