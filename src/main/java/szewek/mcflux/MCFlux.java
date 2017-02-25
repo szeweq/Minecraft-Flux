@@ -110,7 +110,7 @@ public final class MCFlux {
 		try {
 			MCFluxReport.makeReportFile(MC_DIR);
 		} catch (Exception x) {
-			MCFluxReport.sendException(x);
+			MCFluxReport.sendException(x, "Creating a report");
 		}
 	}
 
@@ -132,7 +132,7 @@ public final class MCFlux {
 				iir.registerInjects();
 				cnt++;
 			} catch (Exception e) {
-				MCFluxReport.sendException(e);
+				MCFluxReport.sendException(e, "Registering Injects");
 			}
 		}
 		L.info("Registered " + cnt + " inject registries");
@@ -150,7 +150,7 @@ public final class MCFlux {
 			}
 			UPDATE_CHECK_FINISHED = true;
 		} catch (Throwable t) {
-			MCFluxReport.sendException(t);
+			MCFluxReport.sendException(t, "Update Check");
 		}
 		MCFluxReport.stopTimer(tc);
 	}

@@ -74,7 +74,7 @@ public enum MCFluxNetwork {
 		try {
 			fmsg.saveBuffer(pb);
 		} catch (Exception e) {
-			MCFluxReport.sendException(e);
+			MCFluxReport.sendException(e, "Creating a packet");
 			return null;
 		}
 		return new FMLProxyPacket(pb, R.MF_NAME);
@@ -91,7 +91,7 @@ public enum MCFluxNetwork {
 				mc.addScheduledTask(new DecodeMsg(fmsg, pb, p, s));
 			}
 		} catch (Exception x) {
-			MCFluxReport.sendException(x);
+			MCFluxReport.sendException(x, "Processing message (" + s + "-side)");
 		}
 	}
 
@@ -126,7 +126,7 @@ public enum MCFluxNetwork {
 			try {
 				msg.processMsg(pbuf, player, side);
 			} catch (IOException e) {
-				MCFluxReport.sendException(e);
+				MCFluxReport.sendException(e, "Decoding message (" + side + "-side)");
 			}
 		}
 	}

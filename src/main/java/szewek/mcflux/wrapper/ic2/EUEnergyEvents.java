@@ -46,7 +46,7 @@ enum EUEnergyEvents {
 				try {
 					o = COMPONENT.invoke(te, IC2_ENERGY);
 				} catch (Exception e1) {
-					MCFluxReport.sendException(e1);
+					MCFluxReport.sendException(e1, "[IC2] Getting Energy");
 				}
 				if (o == null)
 					return;

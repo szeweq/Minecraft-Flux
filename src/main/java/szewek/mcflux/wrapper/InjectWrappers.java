@@ -60,21 +60,25 @@ public enum InjectWrappers {
 					synchronized (wrappers) {
 						long tc = MCFluxReport.measureTime("WrapperThread: " + wrappers.size());
 						for (MCFluxWrapper w : wrappers)
-							if (w == null)
-								MCFluxReport.addErrMsg(new ErrMsgNullWrapper(false));
-							else if (w.mainObject == null)
-								MCFluxReport.addErrMsg(new ErrMsgNullWrapper(true));
-							else if (w.mainObject instanceof TileEntity)
-								findWrappers(w, injTile);
-							else if (w.mainObject instanceof ItemStack)
-								findWrappers(w, injItem);
-							else if (w.mainObject instanceof Entity)
-								findWrappers(w, injEntity);
+							try {
+								if (w == null)
+									MCFluxReport.addErrMsg(new ErrMsgNullWrapper(false));
+								else if (w.mainObject == null)
+									MCFluxReport.addErrMsg(new ErrMsgNullWrapper(true));
+								else if (w.mainObject instanceof TileEntity)
+									findWrappers(w, injTile);
+								else if (w.mainObject instanceof ItemStack)
+									findWrappers(w, injItem);
+								else if (w.mainObject instanceof Entity)
+									findWrappers(w, injEntity);
+							} catch (Exception e) {
+								MCFluxReport.sendException(e, "Wrapping an object");
+							}
 						wrappers.clear();
 						MCFluxReport.stopTimer(tc);
 					}
 				} catch (Exception e) {
-					MCFluxReport.sendException(e);
+					MCFluxReport.sendException(e, "WrapperThread loop");
 				}
 			}
 		}

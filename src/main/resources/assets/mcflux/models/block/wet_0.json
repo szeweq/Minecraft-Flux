@@ -1,4 +1,1 @@
-{
-  "parent": "mcflux:block/wet",
-  "textures": {"f": "mcflux:blocks/wet_f0", "b": "mcflux:blocks/wet_b0"}
-}
+{"parent": "mcflux:block/wet", "textures": {"f": "mcflux:blocks/wet_f0", "b": "mcflux:blocks/wet_b0"}}

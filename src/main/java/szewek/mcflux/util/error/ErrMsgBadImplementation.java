@@ -3,6 +3,8 @@ package szewek.mcflux.util.error;
 import net.minecraft.util.EnumFacing;
 import szewek.mcflux.L;
 
+import java.util.Map;
+
 public final class ErrMsgBadImplementation extends ErrMsg {
 	private final EnumFacing face;
 
@@ -28,5 +30,13 @@ public final class ErrMsgBadImplementation extends ErrMsg {
 		L.warn("Bad/incomplete " + name + " implementation: \"" + cl.getName() + "\" ("
 				+ (face != null ? "SIDE " + face : "SIDELESS")
 				+ ") ×" + total + " in " + delta + " ms!");
+	}
+
+	@Override protected void addInfo(Map<String, Object> m) {
+		m.put("EM.Side", face);
+	}
+
+	@Override public String makeInfo() {
+		return super.makeInfo() + "\n| Side: " + (face != null ? face : "none");
 	}
 }

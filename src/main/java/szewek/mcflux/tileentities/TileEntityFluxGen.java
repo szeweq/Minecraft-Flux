@@ -106,7 +106,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 			}
 		}
 		tickCount++;
-		if (tickCount > 5 && energy > 0) {
+		if (tickCount > 3 && energy > 0) {
 			tickCount = 0;
 			for (EnumFacing f : EnumFacing.VALUES) {
 				BlockPos bp = pos.offset(f, 1);

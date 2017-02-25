@@ -114,7 +114,7 @@ public enum U {
 		try {
 			c = Class.forName(name);
 		} catch (ClassNotFoundException e) {
-			MCFluxReport.sendException(e);
+			MCFluxReport.sendException(e, "Getting class");
 		}
 		return c;
 	}
@@ -124,7 +124,7 @@ public enum U {
 		try {
 			m = cl.getDeclaredMethod(name, cargs);
 		} catch (Exception e) {
-			MCFluxReport.sendException(e);
+			MCFluxReport.sendException(e, "Getting method");
 		}
 		return m;
 	}

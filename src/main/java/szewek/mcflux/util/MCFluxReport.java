@@ -16,17 +16,14 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.GZIPOutputStream;
 
 public enum MCFluxReport {
 	;
-	private static Rollbar rollbar = new Rollbar(R.MF_ACCESS_TOKEN, R.MF_ENVIRONMENT, null, R.MF_VERSION, null, null, null, null, null, null, null, null, null, null, null, null);
-	private static Thread.UncaughtExceptionHandler ueh = null, nueh = MCFluxReport::uncaught;
 	private static Map<String, Object> extraData = null;
+	private static Rollbar rollbar = null;
+	private static Thread.UncaughtExceptionHandler ueh = null, nueh = MCFluxReport::uncaught;
 	private static Int2ObjectMap<ErrMsg> errMsgs = new Int2ObjectOpenHashMap<>();
 	private static Long2ObjectMap<Timer> timers = new Long2ObjectOpenHashMap<>();
 	private static final DateFormat fileDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
@@ -34,7 +31,7 @@ public enum MCFluxReport {
 	public static void init() {
 		if (extraData == null)
 			extraData = Collections.singletonMap("Mods", Loader.instance().getIndexedModList().keySet());
-		rollbar.info("Running", extraData);
+		rollbar = new Rollbar(R.MF_ACCESS_TOKEN, R.MF_ENVIRONMENT, null, R.MF_VERSION, null, null, null, null, null, null, null, extraData, null, null, null, null);
 	}
 
 	public static void handleErrors() {
@@ -44,18 +41,18 @@ public enum MCFluxReport {
 	}
 
 	private static void uncaught(Thread t, Throwable e) {
-		rollbar.error(e, extraData, "Uncaught Exception from [" + t.getName() + "]");
+		rollbar.error(e, "Uncaught Exception from [" + t.getName() + "]: " + e.getMessage());
 		if (ueh != null && !ueh.equals(nueh))
 			ueh.uncaughtException(t, e);
 	}
 
-	public static void sendException(Throwable th) {
-		rollbar.warning(th, extraData);
+	public static void sendException(Throwable th, String n) {
+		rollbar.warning(th, n + ": " + th.getMessage());
 	}
 
 	public static void addErrMsg(ErrMsg em) {
 		int hc = em.hashCode();
-		rollbar.warning(em.msgThrown, extraData);
+		em.sendInfo(rollbar);
 		if (errMsgs.containsKey(hc)) {
 			ErrMsg xem = errMsgs.get(hc);
 			xem.addThrowable(em.msgThrown);
@@ -90,7 +87,7 @@ public enum MCFluxReport {
 		PrintStream ps = new PrintStream(new GZIPOutputStream(new FileOutputStream(f)));
 		ps.println("== TIMER MEASURES ==");
 		for (Timer tt : timers.values()) {
-			ps.print("+-- " + tt.name + " [" + tt.thName + "]; ");
+			ps.print("! " + tt.name + " [" + tt.thName + "]; ");
 			long lmin, lmax, ltot = 0;
 			double lavg;
 			long[] l = tt.getMeasures();
@@ -133,9 +130,8 @@ public enum MCFluxReport {
 			}
 			ps.println("== END OF ERROR MESSAGES ==");
 			errMsgs.clear();
-		} else {
+		} else
 			L.info("No errors found!");
-		}
 		ps.close();
 	}
 }

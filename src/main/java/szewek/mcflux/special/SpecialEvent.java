@@ -44,7 +44,7 @@ public final class SpecialEvent {
 			}
 			ev = new SpecialEvent(d, cb, cr, sis, et);
 		} catch (Exception e) {
-			MCFluxReport.sendException(e);
+			MCFluxReport.sendException(e, "JSON decoding");
 		}
 		return ev;
 	}
@@ -78,7 +78,7 @@ public final class SpecialEvent {
 				try {
 					nbt = JsonToNBT.getTagFromJson(t);
 				} catch (NBTException e) {
-					MCFluxReport.sendException(e);
+					MCFluxReport.sendException(e, "NBT Decoding");
 					nbt = null;
 				}
 				tag = nbt;

@@ -1,5 +1,7 @@
 package szewek.mcflux.util.error;
 
+import com.rollbar.Rollbar;
+
 import java.util.*;
 
 public abstract class ErrMsg {
@@ -59,6 +61,18 @@ public abstract class ErrMsg {
 
 	public String makeInfo() {
 		return "| Name: " + name + "\n| Class: " + cl.getName() + "\n| Count: " + count;
+	}
+
+	public void sendInfo(Rollbar rb) {
+		Map<String, Object> m = new LinkedHashMap<>();
+		m.put("EM.Name", name);
+		m.put("EM.Class", cl.getName());
+		addInfo(m);
+		rb.warning(msgThrown, m, getClass().getName() + ": " + msgThrown.getMessage());
+	}
+
+	protected void addInfo(Map<String, Object> m) {
+
 	}
 
 	protected abstract void printError();

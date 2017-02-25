@@ -56,7 +56,7 @@ public enum SpecialEventHandler {
 			es = EventStatus.DOWNLOADED;
 			L.info("Downloaded events: " + events.size());
 		} catch (Exception e) {
-			MCFluxReport.sendException(e);
+			MCFluxReport.sendException(e, "Downloading events");
 		}
 		synchronized (eventLock) {
 			EVENT_STATUS = es;
