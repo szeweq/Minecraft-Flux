@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package szewek.mcflux.util.recipe;
+package szewek.mcflux.recipes;
 
 import mcp.MethodsReturnNonnullByDefault;
 

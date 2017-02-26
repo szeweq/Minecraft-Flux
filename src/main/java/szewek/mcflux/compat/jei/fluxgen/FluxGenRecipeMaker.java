@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import szewek.mcflux.recipes.FluxGenRecipes;
 import szewek.mcflux.recipes.RecipeFluxGen;
-import szewek.mcflux.util.recipe.RecipeItem;
+import szewek.mcflux.recipes.RecipeItem;
 
 import java.util.ArrayList;
 import java.util.List;

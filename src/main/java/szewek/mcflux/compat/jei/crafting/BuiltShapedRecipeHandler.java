@@ -5,7 +5,7 @@ import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import szewek.mcflux.U;
-import szewek.mcflux.util.recipe.BuiltShapedRecipe;
+import szewek.mcflux.recipes.BuiltShapedRecipe;
 
 import javax.annotation.Nonnull;
 

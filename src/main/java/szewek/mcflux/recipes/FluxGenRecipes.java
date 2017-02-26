@@ -8,9 +8,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-import szewek.mcflux.util.recipe.RecipeItem;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public enum FluxGenRecipes {
 		cleanFluids.put(new FluidStack(FluidRegistry.WATER, 0), new RecipeFluxGen(50, 100));
 	}
 
-	public static void addCatalyst(@Nonnull RecipeItem ri, int factor, int usage) {
+	public static void addCatalyst(RecipeItem ri, int factor, int usage) {
 		INSTANCE.catalysts.put(ri, new RecipeFluxGen(factor, usage));
 	}
 
@@ -61,7 +61,7 @@ public enum FluxGenRecipes {
 		cleanFluids.put(fs, new RecipeFluxGen(factor, usage));
 	}
 
-	public static boolean isCatalyst(@Nonnull ItemStack is) {
+	public static boolean isCatalyst(ItemStack is) {
 		if (is.isEmpty())
 			return false;
 		RecipeItem ri = new RecipeItem(is.getItem(), is.getItemDamage(), null);
@@ -74,8 +74,7 @@ public enum FluxGenRecipes {
 		return false;
 	}
 
-	@Nonnull
-	public static RecipeFluxGen getCatalyst(@Nonnull ItemStack is) {
+	public static RecipeFluxGen getCatalyst(ItemStack is) {
 		if (is.isEmpty())
 			return DEFAULT;
 		RecipeItem ri = new RecipeItem(is.getItem(), is.getItemDamage(), null);
@@ -96,17 +95,15 @@ public enum FluxGenRecipes {
 		return isFluid(fs, INSTANCE.cleanFluids);
 	}
 
-	@Nonnull
 	public static RecipeFluxGen getHotFluid(FluidStack fs) {
 		return getFluid(fs, INSTANCE.hotFluids);
 	}
 
-	@Nonnull
 	public static RecipeFluxGen getCleanFluid(FluidStack fs) {
 		return getFluid(fs, INSTANCE.cleanFluids);
 	}
 
-	private static boolean isFluid(FluidStack fs, final Map<FluidStack, RecipeFluxGen> m) {
+	private static boolean isFluid(@Nullable FluidStack fs, final Map<FluidStack, RecipeFluxGen> m) {
 		if (fs == null)
 			return false;
 		if (m.containsKey(fs))
@@ -120,7 +117,7 @@ public enum FluxGenRecipes {
 	}
 
 	@Nonnull
-	private static RecipeFluxGen getFluid(FluidStack fs, final Map<FluidStack, RecipeFluxGen> m) {
+	private static RecipeFluxGen getFluid(@Nullable FluidStack fs, final Map<FluidStack, RecipeFluxGen> m) {
 		if (fs == null)
 			return DEFAULT;
 		if (m.containsKey(fs))

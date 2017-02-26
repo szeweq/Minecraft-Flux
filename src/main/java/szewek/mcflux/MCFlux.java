@@ -26,8 +26,7 @@ import szewek.mcflux.special.CommandSpecialGive;
 import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.special.SpecialEventReceiver;
 import szewek.mcflux.util.*;
-import szewek.mcflux.util.awareness.ConflictingModDetection;
-import szewek.mcflux.util.recipe.BuiltShapedRecipe;
+import szewek.mcflux.recipes.BuiltShapedRecipe;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 import java.io.File;
@@ -43,7 +42,7 @@ public final class MCFlux {
 	static boolean UPDATE_CHECK_FINISHED = false;
 	static final MCFluxCreativeTab MCFLUX_TAB = new MCFluxCreativeTab();
 	@SidedProxy(modId = R.MF_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
-	static szewek.mcflux.proxy.ProxyCommon PROXY = null;
+	public static szewek.mcflux.proxy.ProxyCommon PROXY = null;
 
 	@Mod.Instance
 	public static MCFlux MF = null;
@@ -68,14 +67,14 @@ public final class MCFlux {
 		CapabilityManager cm = CapabilityManager.INSTANCE;
 		cm.register(IEnergy.class, new EnergyNBTStorage(), Battery::new);
 		cm.register(IFlavorEnergy.class, new FlavorNBTStorage(), FlavoredStorage::new);
-		cm.register(WorldChunkEnergy.class, new NBTCapabilityStorage<>(), WorldChunkEnergy::new);
-		cm.register(PlayerEnergy.class, new NBTCapabilityStorage<>(), PlayerEnergy::new);
-		cm.register(SpecialEventReceiver.class, new NBTCapabilityStorage<>(), SpecialEventReceiver::new);
+		cm.register(WorldChunkEnergy.class, CapStorage.getNBTStorage(), WorldChunkEnergy::new);
+		cm.register(PlayerEnergy.class, CapStorage.getNBTStorage(), PlayerEnergy::new);
+		cm.register(SpecialEventReceiver.class, CapStorage.getNBTStorage(), SpecialEventReceiver::new);
 		EVENT_BUS.register(MCFluxEvents.INSTANCE);
 		MCFluxResources.preInit();
 		MCFLUX_TAB.init();
 		PROXY.preInit();
-		ConflictingModDetection.listAllConflictingMods();
+		MCFluxReport.listAllConflictingMods();
 		registerAllInjects(e.getAsmData());
 		InjectWrappers.init();
 		MCFluxReport.stopTimer(tc);

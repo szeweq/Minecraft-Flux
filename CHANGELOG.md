@@ -1,3 +1,11 @@
+## 2.4.4
+- Minor performance improvements
+- Improved Error Reporting
+
+## 2.4.2-2.4.3
+- Fixed mod crash
+- Changed Error Reporting
+
 ## 2.4.1
 - Updated Error Reporting
 

@@ -16,14 +16,14 @@ import szewek.mcflux.tileentities.TileEntityECharger;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 import szewek.mcflux.tileentities.TileEntityFluxGen;
 import szewek.mcflux.tileentities.TileEntityWET;
-import szewek.mcflux.util.IX;
+import szewek.mcflux.recipes.IX;
 import szewek.mcflux.util.MCFluxLocation;
-import szewek.mcflux.util.recipe.RecipeBuilder;
-import szewek.mcflux.util.recipe.RecipeItem;
+import szewek.mcflux.recipes.RecipeBuilder;
+import szewek.mcflux.recipes.RecipeItem;
 
 import java.util.function.Function;
 
-import static szewek.mcflux.util.IX.*;
+import static szewek.mcflux.recipes.IX.*;
 
 public enum MCFluxResources {
 	;
@@ -67,7 +67,7 @@ public enum MCFluxResources {
 			return;
 		state++;
 		FluxGenRecipes.addCatalyst(new RecipeItem(UPCHIP, 0, null), 2, 0);
-		String sIngIron = "ingotIron", sIngGold = "ingotGold", sNugGold = "nuggetGold";
+		String sIngIron = "ingotIron", sIngGold = "ingotGold", sNugGold = "nuggetGold", sBlIron = "blockIron";
 		RecipeItem rRedstone = new RecipeItem(Items.REDSTONE);
 		RecipeItem rbRedstone = new RecipeItem(Blocks.REDSTONE_BLOCK);
 		RecipeItem rEnderEye = new RecipeItem(Items.ENDER_EYE);
@@ -123,7 +123,7 @@ public enum MCFluxResources {
 		RecipeBuilder.buildRecipeFor(WET, 1)
 				.shape(ixWet, 3, 3)
 				.with(A, rRedstone)
-				.with(B, "blockIron")
+				.with(B, sBlIron)
 				.with(C, sIngIron)
 				.with(D, rbRedstone)
 				.with(E, new RecipeItem(Items.COMPARATOR))
@@ -131,7 +131,7 @@ public enum MCFluxResources {
 		RecipeBuilder.buildRecipeFor(FLUXGEN, 1)
 				.shape(new IX[][]{{A, B, C}}, 3, 1)
 				.mirror(true, false)
-				.with(A, "blockIron")
+				.with(A, sBlIron)
 				.with(B, new RecipeItem(Blocks.FURNACE))
 				.with(C, rbRedstone)
 				.deploy();

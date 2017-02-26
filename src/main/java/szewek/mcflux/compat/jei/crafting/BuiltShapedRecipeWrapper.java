@@ -5,7 +5,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IStackHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import szewek.mcflux.util.recipe.BuiltShapedRecipe;
+import szewek.mcflux.recipes.BuiltShapedRecipe;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;

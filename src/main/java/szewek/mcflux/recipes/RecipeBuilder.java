@@ -1,10 +1,9 @@
-package szewek.mcflux.util.recipe;
+package szewek.mcflux.recipes;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import szewek.mcflux.util.IX;
 
 /**
  * Simple Recipe Builder class. Builds and automatically registers recipes without wasting resources.

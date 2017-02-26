@@ -5,7 +5,7 @@ import szewek.mcflux.api.ex.IEnergy;
 
 import static java.lang.Integer.MAX_VALUE;
 
-public class ForgeEnergyCompat implements IEnergyStorage {
+public final class ForgeEnergyCompat implements IEnergyStorage {
 	private final IEnergy iEnergy;
 
 	public ForgeEnergyCompat(IEnergy ie) {

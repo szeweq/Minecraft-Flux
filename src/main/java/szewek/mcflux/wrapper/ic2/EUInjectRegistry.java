@@ -4,10 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import szewek.mcflux.L;
-import szewek.mcflux.util.EmptyCapabilityStorage;
-import szewek.mcflux.util.IInjectRegistry;
-import szewek.mcflux.util.InjectCond;
-import szewek.mcflux.util.InjectRegistry;
+import szewek.mcflux.util.*;
 import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
@@ -21,7 +18,7 @@ public final class EUInjectRegistry implements IInjectRegistry {
 		if (ic == null)
 			return;
 		MinecraftForge.EVENT_BUS.register(EUEnergyEvents.INSTANCE);
-		CapabilityManager.INSTANCE.register(EUTileCapabilityProvider.class, new EmptyCapabilityStorage<>(), EUTileCapabilityProvider::new);
+		CapabilityManager.INSTANCE.register(EUTileCapabilityProvider.class, CapStorage.getEmpty(), EUTileCapabilityProvider::new);
 		ic.addTileWrapperInject(EUInjectRegistry::wrapEUTile);
 	}
 

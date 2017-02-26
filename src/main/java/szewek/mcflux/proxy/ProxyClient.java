@@ -1,6 +1,7 @@
 package szewek.mcflux.proxy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -39,5 +40,9 @@ public final class ProxyClient extends ProxyCommon {
 				Item.getItemFromBlock(WET),
 				Item.getItemFromBlock(FLUXGEN));
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(SpecialEventHandler::getColors, SPECIAL);
+	}
+
+	@Override public EntityPlayer getSidedPlayer(EntityPlayer p) {
+		return p == null ? Minecraft.getMinecraft().player : p;
 	}
 }

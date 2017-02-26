@@ -14,11 +14,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import szewek.mcflux.MCFlux;
 import szewek.mcflux.R;
 import szewek.mcflux.network.msg.*;
 import szewek.mcflux.util.MCFluxReport;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +49,7 @@ public enum MCFluxNetwork {
 		if (pp != null)
 			chan.sendToAll(pp);
 	}
+
 	public static void toAllAround(FragileMsg msg, NetworkRegistry.TargetPoint tp) {
 		FMLProxyPacket pp = makePacket(msg);
 		if (pp != null)
@@ -80,7 +81,7 @@ public enum MCFluxNetwork {
 		return new FMLProxyPacket(pb, R.MF_NAME);
 	}
 
-	private static void processMsg(FMLProxyPacket pp, EntityPlayer p, IThreadListener mc, Side s) {
+	private static void processMsg(FMLProxyPacket pp, final EntityPlayer p, IThreadListener mc, final Side s) {
 		PacketBuffer pb = (PacketBuffer) pp.payload();
 		if (pb == null)
 			pb = new PacketBuffer(pp.payload());
@@ -94,7 +95,6 @@ public enum MCFluxNetwork {
 			MCFluxReport.sendException(x, "Processing message (" + s + "-side)");
 		}
 	}
-
 
 	@SubscribeEvent
 	public void serverPacket(FMLNetworkEvent.ServerCustomPacketEvent e) {
@@ -124,8 +124,8 @@ public enum MCFluxNetwork {
 
 		public void run() {
 			try {
-				msg.processMsg(pbuf, player, side);
-			} catch (IOException e) {
+				msg.processMsg(pbuf, MCFlux.PROXY.getSidedPlayer(player), side);
+			} catch (Exception e) {
 				MCFluxReport.sendException(e, "Decoding message (" + side + "-side)");
 			}
 		}

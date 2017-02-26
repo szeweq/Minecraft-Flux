@@ -6,9 +6,9 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import szewek.mcflux.L;
 import szewek.mcflux.R;
-import szewek.mcflux.util.error.ErrMsg;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,29 +21,20 @@ import java.util.zip.GZIPOutputStream;
 
 public enum MCFluxReport {
 	;
-	private static Map<String, Object> extraData = null;
-	private static Rollbar rollbar = null;
-	private static Thread.UncaughtExceptionHandler ueh = null, nueh = MCFluxReport::uncaught;
-	private static Int2ObjectMap<ErrMsg> errMsgs = new Int2ObjectOpenHashMap<>();
-	private static Long2ObjectMap<Timer> timers = new Long2ObjectOpenHashMap<>();
+	private static Rollbar rollbar = new Rollbar(R.MF_ACCESS_TOKEN, R.MF_ENVIRONMENT, null, R.MF_VERSION, null, null, null, null, null, null, null, new HashMap<>(), null, null, null, null);
+	private static final Int2ObjectMap<ErrMsg> errMsgs = new Int2ObjectOpenHashMap<>();
+	private static final Long2ObjectMap<Timer> timers = new Long2ObjectOpenHashMap<>();
 	private static final DateFormat fileDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 
 	public static void init() {
-		if (extraData == null)
-			extraData = Collections.singletonMap("Mods", Loader.instance().getIndexedModList().keySet());
-		rollbar = new Rollbar(R.MF_ACCESS_TOKEN, R.MF_ENVIRONMENT, null, R.MF_VERSION, null, null, null, null, null, null, null, extraData, null, null, null, null);
+		rollbar.getCustom().putAll(Collections.singletonMap("Mods", Loader.instance().getIndexedModList().keySet()));
+		rollbar.info("Rollbar started");
 	}
 
 	public static void handleErrors() {
 		Thread t = Thread.currentThread();
-		ueh = t.getUncaughtExceptionHandler();
-		t.setUncaughtExceptionHandler(nueh);
-	}
-
-	private static void uncaught(Thread t, Throwable e) {
-		rollbar.error(e, "Uncaught Exception from [" + t.getName() + "]: " + e.getMessage());
-		if (ueh != null && !ueh.equals(nueh))
-			ueh.uncaughtException(t, e);
+		Thread.UncaughtExceptionHandler ueh = t.getUncaughtExceptionHandler();
+		t.setUncaughtExceptionHandler(new Uncaught(ueh));
 	}
 
 	public static void sendException(Throwable th, String n) {
@@ -85,7 +76,7 @@ public enum MCFluxReport {
 	public static void makeReportFile(File dirf) throws IOException {
 		File f = new File(dirf, "mcflux-" + fileDate.format(new Date()) + ".log.gz");
 		PrintStream ps = new PrintStream(new GZIPOutputStream(new FileOutputStream(f)));
-		ps.println("== TIMER MEASURES ==");
+		ps.println("== TIMER MEASURES");
 		for (Timer tt : timers.values()) {
 			ps.print("! " + tt.name + " [" + tt.thName + "]; ");
 			long lmin, lmax, ltot = 0;
@@ -105,10 +96,10 @@ public enum MCFluxReport {
 			lavg = (double) ltot / l.length;
 			ps.println(ltot + " ns (avg. " + lavg + " ns; min/max " + lmin + '/' + lmax + " ns)");
 		}
-		ps.println("== END OF TIMER MEASURES ==");
+		ps.println("== END OF TIMER MEASURES");
 		timers.clear();
 		if (!errMsgs.isEmpty()) {
-			ps.println("== START OF ERROR MESSAGES ==");
+			ps.println("== START OF ERROR MESSAGES");
 			for (ErrMsg em : errMsgs.values()) {
 				ps.println("+-- ErrMsg: " + em);
 				ps.println(em.makeInfo());
@@ -128,10 +119,51 @@ public enum MCFluxReport {
 				}
 				ps.println("+--");
 			}
-			ps.println("== END OF ERROR MESSAGES ==");
+			ps.println("== END OF ERROR MESSAGES");
 			errMsgs.clear();
 		} else
 			L.info("No errors found!");
 		ps.close();
+	}
+
+	public static void listAllConflictingMods() {
+		String[] mods = new String[] {
+				"energysynergy",
+				"commoncapabilities"
+		};
+		Map<String, ModContainer> modmap = Loader.instance().getIndexedModList();
+		List<String> sl = new ArrayList<>();
+		for (String m : mods) {
+			if (modmap.containsKey(m)) {
+				sl.add(modmap.get(m).getName());
+			}
+		}
+		if (!sl.isEmpty()) {
+			StringBuilder sb = new StringBuilder("There are mods that can cause a conflict with Minecraft-Flux: ");
+			boolean comma = false;
+			for (String s : sl) {
+				sb.append(s);
+				if (comma)
+					sb.append(", ");
+				comma = true;
+			}
+			L.warn(sb.toString());
+		}
+	}
+
+	static final class Uncaught implements Thread.UncaughtExceptionHandler {
+		private final Thread.UncaughtExceptionHandler ueh;
+
+		Uncaught(Thread.UncaughtExceptionHandler ueh) {
+			this.ueh = ueh;
+		}
+
+		@Override public void uncaughtException(Thread t, Throwable e) {
+			rollbar.error(e, "Uncaught Exception from [" + t.getName() + "]: " + e.getMessage());
+			if (ueh != null && !ueh.equals(this))
+				ueh.uncaughtException(t, e);
+			else
+				t.getThreadGroup().uncaughtException(t, e);
+		}
 	}
 }

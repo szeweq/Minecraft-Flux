@@ -9,11 +9,8 @@ import szewek.mcflux.util.MCFluxReport;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.InjectRegistry;
-import szewek.mcflux.util.error.ErrMsgBadImplementation;
-import szewek.mcflux.wrapper.EnergyType;
-import szewek.mcflux.wrapper.InjectCollector;
-import szewek.mcflux.wrapper.InjectWrappers;
-import szewek.mcflux.wrapper.WrapperRegistry;
+import szewek.mcflux.util.ErrMsg;
+import szewek.mcflux.wrapper.*;
 
 @InjectRegistry(requires = InjectCond.CLASS, args = "net.minecraftforge.energy.IEnergyStorage")
 public final class ForgeInjectRegistry implements IInjectRegistry {
@@ -34,12 +31,12 @@ public final class ForgeInjectRegistry implements IInjectRegistry {
 			for (int i = 0; i < U.FANCY_FACING.length; i++) {
 				f = U.FANCY_FACING[i];
 				if (icp.hasCapability(CapabilityEnergy.ENERGY, f)) {
-					reg.add(EnergyType.FORGE_ENERGY, new ForgeEnergyCapabilityProvider(icp));
+					reg.add(EnergyType.FORGE_ENERGY, new EnergyCapabilityProvider(icp, ForgeEnergySided::new, null));
 					return;
 				}
 			}
 		} catch (Exception e) {
-			MCFluxReport.addErrMsg(new ErrMsgBadImplementation("Forge Energy", icp.getClass(), e, f));
+			MCFluxReport.addErrMsg(new ErrMsg.BadImplementation("Forge Energy", icp.getClass(), e, f));
 		}
 	}
 }

@@ -1,9 +1,8 @@
 package szewek.mcflux.network.msg;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import szewek.mcflux.L;
 
@@ -26,7 +25,7 @@ public final class MsgNewVersion extends FragileMsg {
 		version = pb.readString(32);
 		broken = false;
 		if (s == Side.CLIENT)
-			p.sendMessage(ITextComponent.Serializer.fromJsonLenient(I18n.format("mcflux.update.newversion", version)));
+			p.sendMessage(new TextComponentTranslation("mcflux.update.newversion", version));
 	}
 
 	@Override public void saveBuffer(PacketBuffer pb) throws IOException {

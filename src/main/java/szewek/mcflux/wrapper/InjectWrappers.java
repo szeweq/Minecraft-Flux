@@ -14,8 +14,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import szewek.mcflux.L;
 import szewek.mcflux.U;
 import szewek.mcflux.util.MCFluxReport;
-import szewek.mcflux.util.error.ErrMsgNullInject;
-import szewek.mcflux.util.error.ErrMsgNullWrapper;
+import szewek.mcflux.util.ErrMsg;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,9 +61,9 @@ public enum InjectWrappers {
 						for (MCFluxWrapper w : wrappers)
 							try {
 								if (w == null)
-									MCFluxReport.addErrMsg(new ErrMsgNullWrapper(false));
+									MCFluxReport.addErrMsg(new ErrMsg.NullWrapper(false));
 								else if (w.mainObject == null)
-									MCFluxReport.addErrMsg(new ErrMsgNullWrapper(true));
+									MCFluxReport.addErrMsg(new ErrMsg.NullWrapper(true));
 								else if (w.mainObject instanceof TileEntity)
 									findWrappers(w, injTile);
 								else if (w.mainObject instanceof ItemStack)
@@ -102,7 +101,7 @@ public enum InjectWrappers {
 		long d = System.nanoTime();
 		Object t = att.getObject();
 		if (t == null) {
-			MCFluxReport.addErrMsg(new ErrMsgNullInject((Class<?>) att.getGenericType()));
+			MCFluxReport.addErrMsg(new ErrMsg.NullInject((Class<?>) att.getGenericType()));
 			return;
 		}
 		String cn = t.getClass().getName();

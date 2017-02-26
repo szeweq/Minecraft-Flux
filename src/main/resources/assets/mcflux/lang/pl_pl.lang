@@ -23,7 +23,7 @@ mcflux.mfcompatible=Kompatybilny z MF
 mcflux.upchip.installed=Chip zainstalowany
 mcflux.upchip.lvlup=Osiągnąłeś poziom energii %s.
 mcflux.upchip.lvlmax=Osiągnąłeś ostatni poziom energii.
-mcflux.update.newversion=[{"text":"Nowa aktualizacja "},{"text":"Minecraft-Flux","color":"yellow"},{"text":" została wydana ("},{"text":"%s","color":"yellow"},{"text":")!"}]
+mcflux.update.newversion=Nowa aktualizacja §eMinecraft-Flux§r została wydana (§e%s§r)!
 mcflux.gen=Generowanie %s MF/t
 mcflux.sleep.tooBright=Zgaś to światło!
 

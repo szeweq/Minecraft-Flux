@@ -1,4 +1,4 @@
-package szewek.mcflux.util.recipe;
+package szewek.mcflux.recipes;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

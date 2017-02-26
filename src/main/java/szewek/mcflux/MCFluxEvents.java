@@ -33,8 +33,7 @@ import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.special.SpecialEventReceiver;
 import szewek.mcflux.util.MCFluxLocation;
 
-@SuppressWarnings("unused")
-enum MCFluxEvents {
+@SuppressWarnings("unused") enum MCFluxEvents {
 	INSTANCE;
 
 	private static final MCFluxLocation
@@ -83,7 +82,6 @@ enum MCFluxEvents {
 	public void whyCantPlayerSleep(PlayerSleepInBedEvent e) {
 		EntityPlayer p = e.getEntityPlayer();
 		int l = p.world.getLightFor(EnumSkyBlock.BLOCK, e.getPos());
-		L.info("LIGHT " + l);
 		if (l > 9) {
 			e.setResult(EntityPlayer.SleepResult.OTHER_PROBLEM);
 			p.sendStatusMessage(new TextComponentTranslation("mcflux.sleep.tooBright"), true);

@@ -1,4 +1,4 @@
-package szewek.mcflux.util.recipe;
+package szewek.mcflux.recipes;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -8,7 +8,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import szewek.mcflux.U;
-import szewek.mcflux.util.IX;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
