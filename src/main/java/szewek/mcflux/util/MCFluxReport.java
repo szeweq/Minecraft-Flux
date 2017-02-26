@@ -28,7 +28,6 @@ public enum MCFluxReport {
 
 	public static void init() {
 		rollbar.getCustom().putAll(Collections.singletonMap("Mods", Loader.instance().getIndexedModList().keySet()));
-		rollbar.info("Rollbar started");
 	}
 
 	public static void handleErrors() {
