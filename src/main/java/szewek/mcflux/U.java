@@ -19,6 +19,7 @@ import szewek.mcflux.api.fe.IFlavorEnergy;
 import szewek.mcflux.util.MCFluxReport;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.Random;
 
@@ -57,8 +58,8 @@ public enum U {
 		}
 	}
 	
-	public static long transferEnergy(@Nonnull IEnergy from, @Nonnull IEnergy to, final long amount) {
-		if (from.canOutputEnergy() && to.canInputEnergy()) {
+	public static long transferEnergy(IEnergy from, IEnergy to, final long amount) {
+		if (from != null && to != null && from.canOutputEnergy() && to.canInputEnergy()) {
 			long r = to.inputEnergy(from.outputEnergy(amount, true), true);
 			if (r > 0)
 				return to.inputEnergy(from.outputEnergy(r, false), false);
@@ -67,7 +68,7 @@ public enum U {
 	}
 
 	public static long transferFlavorEnergy(IFlavorEnergy from, IFlavorEnergy to, Flavored fl, final long amount) {
-		if (from.canOutputFlavorEnergy(fl) && to.canInputFlavorEnergy(fl)) {
+		if (from != null && to != null && from.canOutputFlavorEnergy(fl) && to.canInputFlavorEnergy(fl)) {
 			FlavoredMutable fli = new FlavoredMutable(fl, amount);
 			long r = from.outputFlavorEnergy(fli.toImmutable(), true);
 			fli.setAmount(r);
@@ -104,11 +105,12 @@ public enum U {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T[] makeFilledArray(T[] t, @Nonnull T fill) {
-		for (int i = 0; i < t.length; i++)
+		for (int i = 0, l = t.length; i < l; i++)
 			t[i] = fill;
 		return t;
 	}
 
+	@Nullable
 	public static Class<?> getClassSafely(String name) {
 		Class<?> c = null;
 		try {
@@ -119,6 +121,7 @@ public enum U {
 		return c;
 	}
 
+	@Nullable
 	public static Method getMethodSafely(Class<?> cl, String name, Class<?>... cargs) {
 		Method m = null;
 		try {

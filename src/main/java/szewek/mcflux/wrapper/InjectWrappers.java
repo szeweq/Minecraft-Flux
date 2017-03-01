@@ -1,8 +1,10 @@
 package szewek.mcflux.wrapper;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.EnumDifficulty;
@@ -13,8 +15,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import szewek.mcflux.L;
 import szewek.mcflux.U;
-import szewek.mcflux.util.MCFluxReport;
 import szewek.mcflux.util.ErrMsg;
+import szewek.mcflux.util.MCFluxReport;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +46,88 @@ public enum InjectWrappers {
 		L.info("Tile[" + injTile.length + "]; Item[" + injItem.length + "]; Entity[" + injEntity.length + "]");
 	}
 
+	private static boolean blacklisted(Class<?> cl) {
+		String cn = cl.getName();
+		return cn.startsWith("szewek.") || cn.startsWith("net.minecraft.");
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> void findWrappers(MCFluxWrapper w, IWrapperInject<T>[] iwis) {
+		T t = (T) w.mainObject;
+		if (t == null)
+			return;
+		long tc = MCFluxReport.measureTime("findWrappers", t.getClass().getName());
+		WrapperRegistry reg = new WrapperRegistry();
+		for (IWrapperInject<T> iwi : iwis)
+			iwi.injectWrapper(t, reg);
+		reg.resolve(EnergyType.ALL);
+		w.addWrappers(reg.resultMap);
+		MCFluxReport.stopTimer(tc);
+	}
+
+	private static void wrap(AttachCapabilitiesEvent<?> att) {
+		Object t = att.getObject();
+		if (t == null) {
+			MCFluxReport.addErrMsg(new ErrMsg.NullInject((Class<?>) att.getGenericType()));
+			return;
+		}
+		Class<?> tcl = t.getClass();
+		if (blacklisted(tcl))
+			return;
+		long tc = MCFluxReport.measureTime("wrap", tcl.getName());
+		MCFluxWrapper w = new MCFluxWrapper(t);
+		att.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
+		wrappers.add(w);
+		MCFluxReport.stopTimer(tc);
+	}
+
+	private static void wrapItemStack(AttachCapabilitiesEvent<?> att, ItemStack is) {
+		if (!U.isItemEmpty(is)) {
+			Class<?> ic = is.getItem().getClass();
+			if (blacklisted(ic) || ItemBlock.class.isAssignableFrom(ic))
+				return;
+			long tc = MCFluxReport.measureTime("wrapItem", ic.getName());
+			MCFluxWrapper w = new MCFluxWrapper(is);
+			att.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
+			wrappers.add(w);
+			MCFluxReport.stopTimer(tc);
+		}
+	}
+
+	@SubscribeEvent
+	public void wrapTile(AttachCapabilitiesEvent<TileEntity> att) {
+		if (Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START))
+			wrap(att);
+	}
+
+	@SubscribeEvent
+	public void wrapStack(AttachCapabilitiesEvent<ItemStack> att) {
+		if (Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START))
+			wrapItemStack(att, att.getObject());
+	}
+
+	@SubscribeEvent
+	public void wrapEntity(AttachCapabilitiesEvent<Entity> att) {
+		Entity ent = att.getObject();
+		if (ent instanceof EntityItem || ent instanceof IProjectile || (ent.world.getDifficulty() == EnumDifficulty.PEACEFUL && ent instanceof EntityMob))
+			return;
+		wrap(att);
+	}
+
+	@SubscribeEvent
+	public void wrapItem(AttachCapabilitiesEvent.Item ei) {
+		if (Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START))
+			wrapItemStack(ei, ei.getItemStack());
+	}
+
+	@SubscribeEvent
+	public void updateWrappers(TickEvent.WorldTickEvent wte) {
+		if (wte.phase == TickEvent.Phase.START && wrappers.size() > 0)
+			synchronized (wth) {
+				wth.notify();
+			}
+	}
+
 	private static final class WrapperThread extends Thread {
 
 		WrapperThread() {
@@ -57,7 +141,7 @@ public enum InjectWrappers {
 						wait(0);
 					}
 					synchronized (wrappers) {
-						long tc = MCFluxReport.measureTime("WrapperThread: " + wrappers.size());
+						long tc = MCFluxReport.measureTime("WrapperThread", wrappers.size());
 						for (MCFluxWrapper w : wrappers)
 							try {
 								if (w == null)
@@ -81,82 +165,5 @@ public enum InjectWrappers {
 				}
 			}
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <T> void findWrappers(MCFluxWrapper w, IWrapperInject<T>[] iwis) {
-		T t = (T) w.mainObject;
-		if (t == null)
-			return;
-		long tc = MCFluxReport.measureTime("findWrappers(" + t.getClass().getName() + ")");
-		WrapperRegistry reg = new WrapperRegistry();
-		for (IWrapperInject<T> iwi : iwis)
-			iwi.injectWrapper(t, reg);
-		reg.resolve(EnergyType.ALL);
-		w.addWrappers(reg.resultMap);
-		MCFluxReport.stopTimer(tc);
-	}
-
-	private static void wrap(AttachCapabilitiesEvent<?> att) {
-		long d = System.nanoTime();
-		Object t = att.getObject();
-		if (t == null) {
-			MCFluxReport.addErrMsg(new ErrMsg.NullInject((Class<?>) att.getGenericType()));
-			return;
-		}
-		String cn = t.getClass().getName();
-		if (cn.startsWith("szewek.") || cn.startsWith("net.minecraft."))
-			return;
-		long tc = MCFluxReport.measureTime("wrap(" + t.getClass().getName() + ")");
-		MCFluxWrapper w = new MCFluxWrapper(t);
-		att.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
-		wrappers.add(w);
-		MCFluxReport.stopTimer(tc);
-	}
-
-	@SubscribeEvent
-	public void wrapTile(AttachCapabilitiesEvent<TileEntity> att) {
-		if (Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START))
-			wrap(att);
-	}
-
-	@SubscribeEvent
-	public void wrapStack(AttachCapabilitiesEvent<ItemStack> att) {
-		if (!U.isItemEmpty(att.getObject()) && Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START))
-			wrap(att);
-	}
-
-	@SubscribeEvent
-	public void wrapEntity(AttachCapabilitiesEvent<Entity> att) {
-		Entity ent = att.getObject();
-		if (ent instanceof EntityItem)
-			return;
-		if (ent.world.getDifficulty() == EnumDifficulty.PEACEFUL && ent instanceof EntityMob)
-			return;
-		wrap(att);
-	}
-
-	@SubscribeEvent
-	public void wrapItem(AttachCapabilitiesEvent.Item ei) {
-		if (Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START)) {
-			long tc = MCFluxReport.measureTime("wrapItem");
-			ItemStack is = ei.getItemStack();
-			if (!U.isItemEmpty(is)) {
-				MCFluxWrapper w = new MCFluxWrapper(is);
-				ei.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
-				wrappers.add(w);
-			}
-			MCFluxReport.stopTimer(tc);
-		}
-	}
-
-	@SubscribeEvent
-	public void updateWrappers(TickEvent.WorldTickEvent wte) {
-		if (wrappers.isEmpty())
-			return;
-		if (wte.phase == TickEvent.Phase.START && wrappers.size() > 0)
-			synchronized (wth) {
-				wth.notify();
-			}
 	}
 }

@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.ModContainer;
 import szewek.mcflux.L;
 import szewek.mcflux.R;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,7 +28,7 @@ public enum MCFluxReport {
 	private static final DateFormat fileDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 
 	public static void init() {
-		rollbar.getCustom().putAll(Collections.singletonMap("Mods", Loader.instance().getIndexedModList().keySet()));
+		rollbar.getCustom().putAll(Collections.singletonMap("Mods", Loader.instance().getIndexedModList().keySet().toArray()));
 	}
 
 	public static void handleErrors() {
@@ -53,13 +54,13 @@ public enum MCFluxReport {
 		}
 	}
 
-	public static long measureTime(String s) {
-		long hc = ((long) s.hashCode() << 32) + Thread.currentThread().hashCode();
+	public static long measureTime(String s, @Nullable Object o) {
+		long hc = ((long) (s.hashCode() ^ (o == null ? 0 : o.hashCode())) << 32) + Thread.currentThread().hashCode();
 		Timer tt;
 		if (timers.containsKey(hc)) {
 			tt = timers.get(hc);
 		} else {
-			tt = new Timer(s);
+			tt = new Timer(s, o);
 			timers.put(hc, tt);
 		}
 		tt.start();
@@ -72,28 +73,13 @@ public enum MCFluxReport {
 			tt.stop();
 	}
 
-	public static void makeReportFile(File dirf) throws IOException {
+	public static void reportAll(File dirf) throws IOException {
 		File f = new File(dirf, "mcflux-" + fileDate.format(new Date()) + ".log.gz");
 		PrintStream ps = new PrintStream(new GZIPOutputStream(new FileOutputStream(f)));
 		ps.println("== TIMER MEASURES");
 		for (Timer tt : timers.values()) {
-			ps.print("! " + tt.name + " [" + tt.thName + "]; ");
-			long lmin, lmax, ltot = 0;
-			double lavg;
-			long[] l = tt.getMeasures();
-			ps.print(l.length + " × ");
-			lmin = lmax = l[0];
-			for (int i = 0; i < l.length; i++) {
-				if (i > 0) {
-					if (l[i] < lmin)
-						lmin = l[i];
-					if (l[i] > lmax)
-						lmax = l[i];
-				}
-				ltot += l[i];
-			}
-			lavg = (double) ltot / l.length;
-			ps.println(ltot + " ns (avg. " + lavg + " ns; min/max " + lmin + '/' + lmax + " ns)");
+			tt.report(rollbar);
+			ps.println("! " + tt.name + " [" + tt.thName + "]; " + tt.getCount() + " × " + tt.nanoTotal + " ns (avg. " + tt.nanoAvg + " ns; min/max " + tt.nanoMin + '/' + tt.nanoMax + " ns)");
 		}
 		ps.println("== END OF TIMER MEASURES");
 		timers.clear();

@@ -3,16 +3,35 @@ package szewek.mcflux.fluxable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import szewek.mcflux.U;
+import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.EnergyCapable;
+import szewek.mcflux.util.ForgeEnergyCompat;
+
+import javax.annotation.Nullable;
 
 import static szewek.mcflux.config.MCFluxConfig.FURNACE_CAP;
 
 public final class FurnaceEnergy extends EnergyCapable {
 	private final TileEntityFurnace furnace;
+	private final ForgeEnergyCompat fec = new ForgeEnergyCompat(this);
 
 	public FurnaceEnergy(TileEntityFurnace tef) {
 		furnace = tef;
+	}
+
+	@Override public boolean hasCapability(Capability<?> cap, @Nullable EnumFacing f) {
+		return cap == EX.CAP_ENERGY || cap == CapabilityEnergy.ENERGY;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override public <T> T getCapability(Capability<T> cap, @Nullable EnumFacing f) {
+		if (cap == CapabilityEnergy.ENERGY)
+			return (T) fec;
+		return super.getCapability(cap, f);
 	}
 
 	@Override

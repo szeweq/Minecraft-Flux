@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootEntryItem;
@@ -99,7 +100,7 @@ import szewek.mcflux.util.MCFluxLocation;
 		if (ent instanceof EntityPlayer) {
 			e.addCapability(MF_SER, new SpecialEventReceiver());
 			e.addCapability(MF_PLAYER, new PlayerEnergy());
-		} else if (ent instanceof EntityPig || ent instanceof EntityCreeper) {
+		} else if (ent instanceof EntityPig || (ent.world.getDifficulty() != EnumDifficulty.PEACEFUL && ent instanceof EntityCreeper)) {
 			e.addCapability(MF_ACTION, new EntityActionEnergy((EntityCreature) ent));
 		}
 	}

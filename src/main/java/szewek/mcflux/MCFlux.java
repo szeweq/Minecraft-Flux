@@ -51,7 +51,6 @@ public final class MCFlux {
 	public void preInit(FMLPreInitializationEvent e) {
 		MCFluxReport.init();
 		MCFluxReport.handleErrors();
-		long tc = MCFluxReport.measureTime("PreInit");
 		L.prepare(e.getModLog());
 		MC_DIR = e.getModConfigurationDirectory().getParentFile();
 		MCFluxConfig.makeConfig(e.getSuggestedConfigurationFile());
@@ -77,17 +76,14 @@ public final class MCFlux {
 		MCFluxReport.listAllConflictingMods();
 		registerAllInjects(e.getAsmData());
 		InjectWrappers.init();
-		MCFluxReport.stopTimer(tc);
 	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
-		long tc = MCFluxReport.measureTime("Init");
 		RecipeSorter.register("mcflux:builtRecipe", BuiltShapedRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 		MCFluxResources.init();
 		// Waila not available // FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
 		PROXY.init();
-		MCFluxReport.stopTimer(tc);
 	}
 
 	@Mod.EventHandler
@@ -107,7 +103,7 @@ public final class MCFlux {
 			return;
 		}
 		try {
-			MCFluxReport.makeReportFile(MC_DIR);
+			MCFluxReport.reportAll(MC_DIR);
 		} catch (Exception x) {
 			MCFluxReport.sendException(x, "Creating a report");
 		}
@@ -138,7 +134,6 @@ public final class MCFlux {
 	}
 
 	private static void updateCheck() {
-		long tc = MCFluxReport.measureTime("Update Check");
 		ComparableVersion ccv = new ComparableVersion(R.MF_VERSION);
 		try {
 			JsonObject je = MCFluxNetUtil.downloadGistJSON("97a48d6a61b29171938abf2f6bf9f985", "versions.json");
@@ -151,6 +146,5 @@ public final class MCFlux {
 		} catch (Throwable t) {
 			MCFluxReport.sendException(t, "Update Check");
 		}
-		MCFluxReport.stopTimer(tc);
 	}
 }
