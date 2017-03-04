@@ -137,9 +137,9 @@ public abstract class ErrMsg {
 		}
 	}
 
-	public static final class NoEntityWorld extends ErrMsg {
-		public NoEntityWorld(Class<?> cl) {
-			super("noentityworld", cl, new Throwable("Generated throwable"), "No entity world (" + cl.getName() + ')');
+	public static final class NullEntityWorld extends ErrMsg {
+		public NullEntityWorld(Class<?> cl) {
+			super("noentityworld", cl, new Throwable("Generated throwable"), "Null entity world (" + cl.getName() + ')');
 		}
 
 		@Override protected void printError() {

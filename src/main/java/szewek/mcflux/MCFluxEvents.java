@@ -103,7 +103,7 @@ import szewek.mcflux.util.MCFluxReport;
 			e.addCapability(MF_SER, new SpecialEventReceiver());
 			e.addCapability(MF_PLAYER, new PlayerEnergy());
 		} else if (ent.world == null) {
-			MCFluxReport.addErrMsg(new ErrMsg.NoEntityWorld(ent.getClass()));
+			MCFluxReport.addErrMsg(new ErrMsg.NullEntityWorld(ent.getClass()));
 		} else if (ent instanceof EntityPig || (ent.world.getDifficulty() != EnumDifficulty.PEACEFUL && ent instanceof EntityCreeper)) {
 			e.addCapability(MF_ACTION, new EntityActionEnergy((EntityCreature) ent));
 		}
