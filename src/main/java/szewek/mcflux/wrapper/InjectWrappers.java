@@ -15,21 +15,23 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import szewek.mcflux.L;
 import szewek.mcflux.U;
+import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.util.ErrMsg;
 import szewek.mcflux.util.MCFluxReport;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 @SuppressWarnings("unused")
 public enum InjectWrappers {
 	EVENTS;
 	private static final WrapperThread wth = new WrapperThread();
 	private static InjectCollector collect = new InjectCollector();
-	private static IWrapperInject<TileEntity>[] injTile = null;
-	private static IWrapperInject<ItemStack>[] injItem = null;
-	private static IWrapperInject<Entity>[] injEntity = null;
+	private static BiConsumer<TileEntity, WrapperRegistry>[] injTile = null;
+	private static BiConsumer<ItemStack, WrapperRegistry>[] injItem = null;
+	private static BiConsumer<Entity, WrapperRegistry>[] injEntity = null;
 	private static final List<MCFluxWrapper> wrappers = Collections.synchronizedList(new ArrayList<>());
 
 	public static InjectCollector getCollector() {
@@ -38,9 +40,9 @@ public enum InjectWrappers {
 
 	@SuppressWarnings("unchecked")
 	public static void init() {
-		injTile = collect.tileInjects.toArray(new IWrapperInject[collect.tileInjects.size()]);
-		injItem = collect.itemInjects.toArray(new IWrapperInject[collect.itemInjects.size()]);
-		injEntity = collect.entityInjects.toArray(new IWrapperInject[collect.entityInjects.size()]);
+		injTile = collect.tileInjects.toArray(new BiConsumer[collect.tileInjects.size()]);
+		injItem = collect.itemInjects.toArray(new BiConsumer[collect.itemInjects.size()]);
+		injEntity = collect.entityInjects.toArray(new BiConsumer[collect.entityInjects.size()]);
 		collect = null;
 		wth.start();
 		L.info("Tile[" + injTile.length + "]; Item[" + injItem.length + "]; Entity[" + injEntity.length + "]");
@@ -52,17 +54,15 @@ public enum InjectWrappers {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> void findWrappers(MCFluxWrapper w, IWrapperInject<T>[] iwis) {
+	private static <T> void findWrappers(MCFluxWrapper w, BiConsumer<T, WrapperRegistry>[] iwis) {
 		T t = (T) w.mainObject;
 		if (t == null)
 			return;
-		long tc = MCFluxReport.measureTime("findWrappers", t.getClass().getName());
 		WrapperRegistry reg = new WrapperRegistry();
-		for (IWrapperInject<T> iwi : iwis)
-			iwi.injectWrapper(t, reg);
+		for (BiConsumer<T, WrapperRegistry> iwi : iwis)
+			iwi.accept(t, reg);
 		reg.resolve(EnergyType.ALL);
 		w.addWrappers(reg.resultMap);
-		MCFluxReport.stopTimer(tc);
 	}
 
 	private static void wrap(AttachCapabilitiesEvent<?> att) {
@@ -74,23 +74,19 @@ public enum InjectWrappers {
 		Class<?> tcl = t.getClass();
 		if (blacklisted(tcl))
 			return;
-		long tc = MCFluxReport.measureTime("wrap", tcl.getName());
 		MCFluxWrapper w = new MCFluxWrapper(t);
 		att.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
 		wrappers.add(w);
-		MCFluxReport.stopTimer(tc);
 	}
 
 	private static void wrapItemStack(AttachCapabilitiesEvent<?> att, ItemStack is) {
-		if (!U.isItemEmpty(is)) {
+		if (MCFluxConfig.WRAP_ITEM_STACKS && !U.isItemEmpty(is)) {
 			Class<?> ic = is.getItem().getClass();
 			if (blacklisted(ic) || ItemBlock.class.isAssignableFrom(ic))
 				return;
-			long tc = MCFluxReport.measureTime("wrapItem", ic.getName());
 			MCFluxWrapper w = new MCFluxWrapper(is);
 			att.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
 			wrappers.add(w);
-			MCFluxReport.stopTimer(tc);
 		}
 	}
 
@@ -141,7 +137,6 @@ public enum InjectWrappers {
 						wait(0);
 					}
 					synchronized (wrappers) {
-						long tc = MCFluxReport.measureTime("WrapperThread", wrappers.size());
 						for (MCFluxWrapper w : wrappers)
 							try {
 								if (w == null)
@@ -158,7 +153,6 @@ public enum InjectWrappers {
 								MCFluxReport.sendException(e, "Wrapping an object");
 							}
 						wrappers.clear();
-						MCFluxReport.stopTimer(tc);
 					}
 				} catch (Exception e) {
 					MCFluxReport.sendException(e, "WrapperThread loop");

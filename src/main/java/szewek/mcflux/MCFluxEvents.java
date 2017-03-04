@@ -29,10 +29,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import szewek.mcflux.fluxable.*;
 import szewek.mcflux.network.MCFluxNetwork;
-import szewek.mcflux.network.msg.MsgNewVersion;
+import szewek.mcflux.network.Msg;
 import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.special.SpecialEventReceiver;
+import szewek.mcflux.util.ErrMsg;
 import szewek.mcflux.util.MCFluxLocation;
+import szewek.mcflux.util.MCFluxReport;
 
 @SuppressWarnings("unused") enum MCFluxEvents {
 	INSTANCE;
@@ -62,7 +64,7 @@ import szewek.mcflux.util.MCFluxLocation;
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent e) {
 		if (MCFlux.UPDATE_CHECK_FINISHED && !MCFlux.NEWER_VERSION.isEmpty() && e.player instanceof EntityPlayerMP)
-			MCFluxNetwork.to(MsgNewVersion.with(MCFlux.NEWER_VERSION), (EntityPlayerMP) e.player);
+			MCFluxNetwork.to(Msg.newVersion(MCFlux.NEWER_VERSION), (EntityPlayerMP) e.player);
 		if (SpecialEventHandler.getEventStatus() == SpecialEventHandler.EventStatus.DOWNLOADED) {
 			SpecialEventReceiver ser = e.player.getCapability(SpecialEventReceiver.SELF_CAP, null);
 			if (ser != null) {
@@ -100,6 +102,8 @@ import szewek.mcflux.util.MCFluxLocation;
 		if (ent instanceof EntityPlayer) {
 			e.addCapability(MF_SER, new SpecialEventReceiver());
 			e.addCapability(MF_PLAYER, new PlayerEnergy());
+		} else if (ent.world == null) {
+			MCFluxReport.addErrMsg(new ErrMsg.NoEntityWorld(ent.getClass()));
 		} else if (ent instanceof EntityPig || (ent.world.getDifficulty() != EnumDifficulty.PEACEFUL && ent instanceof EntityCreeper)) {
 			e.addCapability(MF_ACTION, new EntityActionEnergy((EntityCreature) ent));
 		}

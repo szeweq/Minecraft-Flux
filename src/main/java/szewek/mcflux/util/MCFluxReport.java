@@ -3,14 +3,11 @@ package szewek.mcflux.util;
 import com.rollbar.Rollbar;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import szewek.mcflux.L;
 import szewek.mcflux.R;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,7 +21,6 @@ public enum MCFluxReport {
 	;
 	private static Rollbar rollbar = new Rollbar(R.MF_ACCESS_TOKEN, R.MF_ENVIRONMENT, null, R.MF_VERSION, null, null, null, null, null, null, null, new HashMap<>(), null, null, null, null);
 	private static final Int2ObjectMap<ErrMsg> errMsgs = new Int2ObjectOpenHashMap<>();
-	private static final Long2ObjectMap<Timer> timers = new Long2ObjectOpenHashMap<>();
 	private static final DateFormat fileDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 
 	public static void init() {
@@ -54,35 +50,9 @@ public enum MCFluxReport {
 		}
 	}
 
-	public static long measureTime(String s, @Nullable Object o) {
-		long hc = ((long) (s.hashCode() ^ (o == null ? 0 : o.hashCode())) << 32) + Thread.currentThread().hashCode();
-		Timer tt;
-		if (timers.containsKey(hc)) {
-			tt = timers.get(hc);
-		} else {
-			tt = new Timer(s, o);
-			timers.put(hc, tt);
-		}
-		tt.start();
-		return hc;
-	}
-
-	public static void stopTimer(long hc) {
-		Timer tt = timers.get(hc);
-		if (tt != null)
-			tt.stop();
-	}
-
 	public static void reportAll(File dirf) throws IOException {
 		File f = new File(dirf, "mcflux-" + fileDate.format(new Date()) + ".log.gz");
 		PrintStream ps = new PrintStream(new GZIPOutputStream(new FileOutputStream(f)));
-		ps.println("== TIMER MEASURES");
-		for (Timer tt : timers.values()) {
-			tt.report(rollbar);
-			ps.println("! " + tt.name + " [" + tt.thName + "]; " + tt.getCount() + " × " + tt.nanoTotal + " ns (avg. " + tt.nanoAvg + " ns; min/max " + tt.nanoMin + '/' + tt.nanoMax + " ns)");
-		}
-		ps.println("== END OF TIMER MEASURES");
-		timers.clear();
 		if (!errMsgs.isEmpty()) {
 			ps.println("== START OF ERROR MESSAGES");
 			for (ErrMsg em : errMsgs.values()) {

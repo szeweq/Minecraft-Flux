@@ -9,6 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.U;
 import szewek.mcflux.blocks.BlockEnergyMachine;
+import szewek.mcflux.network.Msg;
 import szewek.mcflux.render.EnergyMachineRenderer;
 import szewek.mcflux.config.ConfigEvents;
 import szewek.mcflux.special.SpecialEventHandler;
@@ -42,7 +43,7 @@ public final class ProxyClient extends ProxyCommon {
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(SpecialEventHandler::getColors, SPECIAL);
 	}
 
-	@Override public EntityPlayer getSidedPlayer(EntityPlayer p) {
-		return p == null ? Minecraft.getMinecraft().player : p;
+	@Override public void processMsg(Msg msg, EntityPlayer p) {
+		msg.msgClient(p == null ? Minecraft.getMinecraft().player : p);
 	}
 }

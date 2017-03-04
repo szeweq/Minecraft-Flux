@@ -8,7 +8,7 @@ import java.io.File;
 public enum MCFluxConfig {
 	;
 	public static int CFG_EU_VALUE = 4, WORLDCHUNK_CAP = 20000000, ENERGY_DIST_TRANS = 1000000, CHUNK_CHARGER_TRANS = 2000000, WET_TRANS = 4096, FURNACE_CAP = 50000, MOB_SPAWNER_USE = 500;
-	public static boolean ONLINE_ERROR_REPORT = true, UPDATE_CHECK = true;
+	public static boolean ONLINE_ERROR_REPORT = true, UPDATE_CHECK = true, WRAP_ITEM_STACKS = false;
 	private static Configuration config;
 
 	public static void makeConfig(File file) {
@@ -32,6 +32,7 @@ public enum MCFluxConfig {
 		MOB_SPAWNER_USE = cfgInt("mobSpawnerEnergyUse", 500, 100, Integer.MAX_VALUE, "Energy needed for Vanilla Monster Spawner to speed up");
 		ONLINE_ERROR_REPORT = cfgBool("onlineErrorReport", true, "Reports all capability-related crashes made by Minedraft-Flux online");
 		UPDATE_CHECK = cfgBool("updateCheck", true, "Checks if a newer Minecraft-Flux version is available");
+		WRAP_ITEM_STACKS = cfgBool("wrapItemStacks", false, "Wraps Item Stacks so they can provide MF or Flavor Energy");
 		if (config.hasChanged())
 			config.save();
 	}
@@ -44,7 +45,7 @@ public enum MCFluxConfig {
 	}
 
 	private static boolean cfgBool(String name, boolean def, String comment) {
-		Property p = config.get(Configuration.CATEGORY_GENERAL, name, def, comment + "[default: " + def + "]");
+		Property p = config.get(Configuration.CATEGORY_GENERAL, name, def, comment + " [default: " + def + "]");
 		p.setLanguageKey("mcflux.config." + name);
 		return p.getBoolean(def);
 	}

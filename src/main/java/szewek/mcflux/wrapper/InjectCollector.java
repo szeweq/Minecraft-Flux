@@ -6,23 +6,24 @@ import net.minecraft.tileentity.TileEntity;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 public final class InjectCollector {
-	Set<IWrapperInject<TileEntity>> tileInjects = new HashSet<>();
-	Set<IWrapperInject<ItemStack>> itemInjects = new HashSet<>();
-	Set<IWrapperInject<Entity>> entityInjects = new HashSet<>();
+	Set<BiConsumer<TileEntity, WrapperRegistry>> tileInjects = new HashSet<>();
+	Set<BiConsumer<ItemStack, WrapperRegistry>> itemInjects = new HashSet<>();
+	Set<BiConsumer<Entity, WrapperRegistry>> entityInjects = new HashSet<>();
 
 	InjectCollector() {}
 
-	public void addTileWrapperInject(IWrapperInject<TileEntity> iwi) {
-		tileInjects.add(iwi);
+	public void addTileWrapperInject(BiConsumer<TileEntity, WrapperRegistry> bc) {
+		tileInjects.add(bc);
 	}
 
-	public void addItemWrapperInject(IWrapperInject<ItemStack> iwi) {
-		itemInjects.add(iwi);
+	public void addItemWrapperInject(BiConsumer<ItemStack, WrapperRegistry> bc) {
+		itemInjects.add(bc);
 	}
 
-	public void addEntityWrapperInject(IWrapperInject<Entity> iwi) {
-		entityInjects.add(iwi);
+	public void addEntityWrapperInject(BiConsumer<Entity, WrapperRegistry> bc) {
+		entityInjects.add(bc);
 	}
 }

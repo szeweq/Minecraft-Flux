@@ -22,8 +22,7 @@ import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockSided;
 import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.network.MCFluxNetwork;
-import szewek.mcflux.network.msg.MsgUpdateClient;
-import szewek.mcflux.network.msg.MsgUpdateServer;
+import szewek.mcflux.network.Msg;
 import szewek.mcflux.util.TransferType;
 
 import javax.annotation.Nonnull;
@@ -65,7 +64,7 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 
 	@Override public void onLoad() {
 		if (world.isRemote) {
-			MCFluxNetwork.toServer(MsgUpdateClient.with(pos));
+			MCFluxNetwork.toServer(Msg.update(pos, null));
 			clientUpdate = false;
 		}
 	}
@@ -73,10 +72,10 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 	@Override
 	public void updateTile() {
 		if (world.isRemote && clientUpdate) {
-			MCFluxNetwork.toServer(MsgUpdateClient.with(pos));
+			MCFluxNetwork.toServer(Msg.update(pos, null));
 			clientUpdate = false;
 		} else if (!world.isRemote && serverUpdate) {
-			MCFluxNetwork.toDimension(MsgUpdateServer.with(pos, sideTransfer), world.provider.getDimension());
+			MCFluxNetwork.toDimension(Msg.update(pos, sideTransfer), world.provider.getDimension());
 			serverUpdate = false;
 		}
 		if (!world.isRemote && ((moduleId < 2 && bat != null) || cnt != null)) {
@@ -148,7 +147,7 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 		int v = (sideTransfer[s].ord + 1) % 3;
 		sideTransfer[s] = TransferType.values()[v];
 		cachedState = cachedState.withProperty(BlockSided.sideFromId(s), v);
-		MCFluxNetwork.toDimension(MsgUpdateServer.with(pos, sideTransfer), world.provider.getDimension());
+		MCFluxNetwork.toDimension(Msg.update(pos, sideTransfer), world.provider.getDimension());
 		markDirty();
 	}
 

@@ -10,19 +10,19 @@ import java.util.*;
 public abstract class ErrMsg {
 	private static final long ERRORS_TIME = 15000;
 	protected final String name;
-	protected final Class<?> cl;
-	protected final List<Throwable> thrownList;
-	protected final Set<Throwable> setOfThrown;
-	public final Throwable msgThrown;
-	protected int cachedHash;
+	private final String title;
+	final Class<?> cl;
+	private final List<Throwable> thrownList;
+	final Throwable msgThrown;
+	int cachedHash;
 	private int count, lastCount;
 	private long nextShow;
 
-	ErrMsg(String name, Class<?> cl, Throwable thrown) {
+	ErrMsg(String name, Class<?> cl, Throwable thrown, String title) {
 		this.name = name;
+		this.title = title + " errors: ";
 		this.cl = cl;
 		thrownList = new ArrayList<>();
-		setOfThrown = new HashSet<>();
 		msgThrown = thrown;
 		count = 0;
 		cachedHash = (this.getClass().hashCode() << 24) + (cl.hashCode() << 16) + name.hashCode();
@@ -37,16 +37,16 @@ public abstract class ErrMsg {
 		return obj == this || obj instanceof ErrMsg && obj.hashCode() == cachedHash;
 	}
 
-	public void addThrowable(Throwable th) {
+	void addThrowable(Throwable th) {
 		if (th != null)
 			thrownList.add(th);
 	}
 
-	public List<Throwable> getThrowables() {
+	List<Throwable> getThrowables() {
 		return Collections.unmodifiableList(thrownList);
 	}
 
-	public void addUp() {
+	void addUp() {
 		long now = System.currentTimeMillis();
 		count++;
 		if (count == 1) {
@@ -56,7 +56,7 @@ public abstract class ErrMsg {
 			return;
 		}
 		if (nextShow < now) {
-			printShortError(count - lastCount, now - nextShow + ERRORS_TIME);
+			L.warn(title + (count - lastCount) + " in " + (now - nextShow + ERRORS_TIME) + " ms");
 			nextShow = now + ERRORS_TIME;
 			lastCount = count;
 		}
@@ -66,7 +66,7 @@ public abstract class ErrMsg {
 		return "| Name: " + name + "\n| Class: " + cl.getName() + "\n| Count: " + count;
 	}
 
-	public void sendInfo(Rollbar rb) {
+	final void sendInfo(Rollbar rb) {
 		Map<String, Object> m = new LinkedHashMap<>();
 		m.put("EM.Name", name);
 		m.put("EM.Class", cl.getName());
@@ -74,18 +74,15 @@ public abstract class ErrMsg {
 		rb.warning(msgThrown, m, getClass().getName() + ": " + msgThrown.getMessage());
 	}
 
-	protected void addInfo(Map<String, Object> m) {
-
-	}
+	protected void addInfo(Map<String, Object> m) {}
 
 	protected abstract void printError();
-	protected abstract void printShortError(int total, long delta);
 
 	public static final class BadImplementation extends ErrMsg {
 		private final EnumFacing face;
 
 		public BadImplementation(String name, Class<?> cl, Throwable thrown, EnumFacing face) {
-			super(name, cl, thrown);
+			super(name, cl, thrown, "Bad " + name + " implemenation (" + cl.getName() + "; " + face + ')');
 			this.face = face;
 			if (face != null)
 				cachedHash += 1 + (face.getIndex() << 28);
@@ -102,12 +99,6 @@ public abstract class ErrMsg {
 			L.warn(msgThrown);
 		}
 
-		@Override protected void printShortError(int total, long delta) {
-			L.warn("Bad/incomplete " + name + " implementation: \"" + cl.getName() + "\" ("
-					+ (face != null ? "SIDE " + face : "SIDELESS")
-					+ ") ×" + total + " in " + delta + " ms!");
-		}
-
 		@Override protected void addInfo(Map<String, Object> m) {
 			m.put("EM.Side", face);
 		}
@@ -119,23 +110,19 @@ public abstract class ErrMsg {
 
 	public static final class NullInject extends ErrMsg {
 		public NullInject(Class<?> cl) {
-			super("nullinject", cl, new Throwable());
+			super("nullinject", cl, new Throwable("Generated throwable"), "Null inject (" + cl.getName() + ')');
 		}
 
 		@Override protected void printError() {
 			L.warn("An object with type \"" + cl.getName() + "\" is null! Minecraft-Flux can't inject any capability into an empty object");
 			L.warn(msgThrown);
 		}
-
-		@Override protected void printShortError(int total, long delta) {
-			L.warn('"' + cl.getName() + "\" null inject errors: " + total + " in " + delta + " ms");
-		}
 	}
 
 	public static final class NullWrapper extends ErrMsg {
 		private final boolean objectNull;
 		public NullWrapper(boolean obj) {
-			super("wrapper", MCFluxWrapper.class, null);
+			super("wrapper", MCFluxWrapper.class, null, "Null wrapp" + (obj ? "ed object" : "er"));
 			objectNull = obj;
 			if (obj)
 				cachedHash++;
@@ -145,12 +132,18 @@ public abstract class ErrMsg {
 			L.warn("A wrapp" + (objectNull ? "ed object" : "er") + " is null!");
 		}
 
-		@Override protected void printShortError(int total, long delta) {
-			L.warn("Null wrapp" + (objectNull ? "ed object" : "er") + " errors: " + total + " in " + delta + " ms");
-		}
-
 		@Override protected void addInfo(Map<String, Object> m) {
 			m.put("EM.NullObject", objectNull);
+		}
+	}
+
+	public static final class NoEntityWorld extends ErrMsg {
+		public NoEntityWorld(Class<?> cl) {
+			super("noentityworld", cl, new Throwable("Generated throwable"), "No entity world (" + cl.getName() + ')');
+		}
+
+		@Override protected void printError() {
+			L.warn("An entity (" + cl.getName() + ") has no world set!");
 		}
 	}
 }

@@ -16,7 +16,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.MCFlux;
 import szewek.mcflux.R;
-import szewek.mcflux.network.msg.*;
 import szewek.mcflux.util.MCFluxReport;
 
 import java.util.ArrayList;
@@ -27,53 +26,52 @@ public enum MCFluxNetwork {
 	NET;
 
 	private static FMLEventChannel chan;
-	private static List<Class<? extends FragileMsg>> ids = new ArrayList<>();
+	private static List<Class<? extends Msg>> ids = new ArrayList<>();
 
 	public static void registerAll() {
 		chan = NetworkRegistry.INSTANCE.newEventDrivenChannel(R.MF_NAME);
 		chan.register(NET);
-		ids.add(0, MsgUpdateClient.class);
-		ids.add(1, MsgUpdateServer.class);
-		ids.add(2, MsgNewVersion.class);
-		ids.add(3, MsgFluidAmount.class);
+		ids.add(0, Msg.Update.class);
+		ids.add(1, Msg.NewVersion.class);
+		ids.add(2, Msg.FluidAmount.class);
 	}
 
-	public static void to(FragileMsg msg, EntityPlayerMP mp) {
+	public static void to(Msg msg, EntityPlayerMP mp) {
 		FMLProxyPacket pp = makePacket(msg);
 		if (pp != null)
 			chan.sendTo(pp, mp);
 	}
 
-	public static void toAll(FragileMsg msg) {
+	public static void toAll(Msg msg) {
 		FMLProxyPacket pp = makePacket(msg);
 		if (pp != null)
 			chan.sendToAll(pp);
 	}
 
-	public static void toAllAround(FragileMsg msg, NetworkRegistry.TargetPoint tp) {
+	public static void toAllAround(Msg msg, NetworkRegistry.TargetPoint tp) {
 		FMLProxyPacket pp = makePacket(msg);
 		if (pp != null)
 			chan.sendToAllAround(pp, tp);
 	}
 
-	public static void toDimension(FragileMsg msg, int dim) {
+	public static void toDimension(Msg msg, int dim) {
 		FMLProxyPacket pp = makePacket(msg);
 		if (pp != null)
 			chan.sendToDimension(pp, dim);
 	}
 
-	public static void toServer(FragileMsg msg) {
+	public static void toServer(Msg msg) {
 		FMLProxyPacket pp = makePacket(msg);
 		if (pp != null)
 			chan.sendToServer(pp);
 	}
 
-	private static FMLProxyPacket makePacket(FragileMsg fmsg) {
+	private static FMLProxyPacket makePacket(Msg fmsg) {
 		PacketBuffer pb = new PacketBuffer(Unpooled.buffer());
 		byte id = (byte) ids.indexOf(fmsg.getClass());
 		pb.writeByte(id);
 		try {
-			fmsg.saveBuffer(pb);
+			fmsg.encode(pb);
 		} catch (Exception e) {
 			MCFluxReport.sendException(e, "Creating a packet");
 			return null;
@@ -87,7 +85,7 @@ public enum MCFluxNetwork {
 			pb = new PacketBuffer(pp.payload());
 		try {
 			byte id = pb.readByte();
-			final FragileMsg fmsg = ids.get(id).newInstance();
+			final Msg fmsg = ids.get(id).newInstance();
 			if (!mc.isCallingFromMinecraftThread()) {
 				mc.addScheduledTask(new DecodeMsg(fmsg, pb, p, s));
 			}
@@ -110,12 +108,12 @@ public enum MCFluxNetwork {
 	}
 
 	static final class DecodeMsg implements java.lang.Runnable {
-		private final FragileMsg msg;
+		private final Msg msg;
 		private final PacketBuffer pbuf;
 		private final EntityPlayer player;
 		private final Side side;
 
-		DecodeMsg(FragileMsg fm, PacketBuffer pb, EntityPlayer p, Side s) {
+		DecodeMsg(Msg fm, PacketBuffer pb, EntityPlayer p, Side s) {
 			msg = fm;
 			pbuf = pb;
 			player = p;
@@ -124,7 +122,8 @@ public enum MCFluxNetwork {
 
 		public void run() {
 			try {
-				msg.processMsg(pbuf, MCFlux.PROXY.getSidedPlayer(player), side);
+				msg.decode(pbuf);
+				MCFlux.PROXY.processMsg(msg, player);
 			} catch (Exception e) {
 				MCFluxReport.sendException(e, "Decoding message (" + side + "-side)");
 			}

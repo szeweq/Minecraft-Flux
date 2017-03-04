@@ -34,7 +34,7 @@ import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.api.fluxwork.WorkState;
 import szewek.mcflux.network.MCFluxNetwork;
-import szewek.mcflux.network.msg.MsgFluidAmount;
+import szewek.mcflux.network.Msg;
 import szewek.mcflux.recipes.FluxGenRecipes;
 import szewek.mcflux.recipes.RecipeFluxGen;
 import szewek.mcflux.util.ForgeEnergyCompat;
@@ -73,11 +73,11 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 			items[1].grow(-rfgCat.usage);
 		if (rfgHot.usage > 0) {
 			tanks[0].substract(rfgHot.usage);
-			MCFluxNetwork.toDimension(MsgFluidAmount.with(pos, 0, tanks[0].fluid), world.provider.getDimension());
+			MCFluxNetwork.toDimension(Msg.fluidAmount(pos, 0, tanks[0].fluid), world.provider.getDimension());
 		}
 		if (rfgClean.usage > 0) {
 			tanks[1].substract(rfgClean.usage);
-			MCFluxNetwork.toDimension(MsgFluidAmount.with(pos, 1, tanks[1].fluid), world.provider.getDimension());
+			MCFluxNetwork.toDimension(Msg.fluidAmount(pos, 1, tanks[1].fluid), world.provider.getDimension());
 		}
 		isDirty = true;
 		vals[3] = 40 * rfgCat.factor;
@@ -234,7 +234,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 	@Override public void openInventory(EntityPlayer p) {
 		if (!world.isRemote && p instanceof EntityPlayerMP) {
 			for (int i = 0; i < tanks.length; i++)
-				MCFluxNetwork.to(MsgFluidAmount.with(pos, i, tanks[i].fluid), (EntityPlayerMP) p);
+				MCFluxNetwork.to(Msg.fluidAmount(pos, i, tanks[i].fluid), (EntityPlayerMP) p);
 		}
 	}
 
@@ -392,7 +392,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 			else
 				tanks[s].fluid.amount += l;
 			isDirty = true;
-			MCFluxNetwork.toDimension(MsgFluidAmount.with(pos, s, tanks[s].fluid), world.provider.getDimension());
+			MCFluxNetwork.toDimension(Msg.fluidAmount(pos, s, tanks[s].fluid), world.provider.getDimension());
 		}
 		return l;
 	}
