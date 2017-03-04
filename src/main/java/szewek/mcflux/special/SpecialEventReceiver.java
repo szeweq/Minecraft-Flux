@@ -11,7 +11,6 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class SpecialEventReceiver implements ICapabilityProvider, INBTSerializable<NBTBase> {
@@ -20,12 +19,12 @@ public final class SpecialEventReceiver implements ICapabilityProvider, INBTSeri
 
 	private LongSet received = new LongArraySet();
 
-	@Override public boolean hasCapability(@Nonnull Capability<?> cap, @Nullable EnumFacing f) {
+	@Override public boolean hasCapability(Capability<?> cap, @Nullable EnumFacing f) {
 		return cap == SELF_CAP;
 	}
 
 	@SuppressWarnings("unchecked")
-	@Nullable @Override public <T> T getCapability(@Nonnull Capability<T> cap, @Nullable EnumFacing f) {
+	@Nullable @Override public <T> T getCapability(Capability<T> cap, @Nullable EnumFacing f) {
 		return cap == SELF_CAP ? (T) this : null;
 	}
 

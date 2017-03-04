@@ -1,3 +1,12 @@
+## 2.5.1
+- Removed error messaging on entity's null world
+
+## 2.5.0
+- Added a config option to enable ItemStack wrapping
+- ItemStack wrapping is disabled by default
+- Rearranged some code for better performance
+- Added entity's null world check
+
 ## 2.4.4
 - Minor performance improvements
 - Improved Error Reporting

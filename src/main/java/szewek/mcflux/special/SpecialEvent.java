@@ -9,6 +9,8 @@ import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import szewek.mcflux.util.MCFluxReport;
 
+import javax.annotation.Nullable;
+
 public final class SpecialEvent {
 	public final String description;
 	final int colorBox, colorRibbon;
@@ -23,6 +25,7 @@ public final class SpecialEvent {
 		endTime = et;
 	}
 
+	@Nullable
 	static SpecialEvent fromJSON(JsonObject jo) {
 		SpecialEvent ev = null;
 		try {
@@ -69,7 +72,7 @@ public final class SpecialEvent {
 		final short meta;
 		final NBTTagCompound tag;
 
-		SpecialItem(String n, byte c, short m, String t) {
+		SpecialItem(String n, byte c, short m, @Nullable String t) {
 			name = n;
 			amount = c;
 			meta = m;
