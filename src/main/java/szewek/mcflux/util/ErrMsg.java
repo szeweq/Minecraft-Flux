@@ -136,14 +136,4 @@ public abstract class ErrMsg {
 			m.put("EM.NullObject", objectNull);
 		}
 	}
-
-	public static final class NullEntityWorld extends ErrMsg {
-		public NullEntityWorld(Class<?> cl) {
-			super("noentityworld", cl, new Throwable("Generated throwable"), "Null entity world (" + cl.getName() + ')');
-		}
-
-		@Override protected void printError() {
-			L.warn("An entity (" + cl.getName() + ") has no world set!");
-		}
-	}
 }

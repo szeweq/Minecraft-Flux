@@ -32,9 +32,7 @@ import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.network.Msg;
 import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.special.SpecialEventReceiver;
-import szewek.mcflux.util.ErrMsg;
 import szewek.mcflux.util.MCFluxLocation;
-import szewek.mcflux.util.MCFluxReport;
 
 @SuppressWarnings("unused") enum MCFluxEvents {
 	INSTANCE;
@@ -102,11 +100,8 @@ import szewek.mcflux.util.MCFluxReport;
 		if (ent instanceof EntityPlayer) {
 			e.addCapability(MF_SER, new SpecialEventReceiver());
 			e.addCapability(MF_PLAYER, new PlayerEnergy());
-		} else if (ent.world == null) {
-			MCFluxReport.addErrMsg(new ErrMsg.NullEntityWorld(ent.getClass()));
-		} else if (ent instanceof EntityPig || (ent.world.getDifficulty() != EnumDifficulty.PEACEFUL && ent instanceof EntityCreeper)) {
+		} else if (ent.world != null && (ent instanceof EntityPig || (ent.world.getDifficulty() != EnumDifficulty.PEACEFUL && ent instanceof EntityCreeper)))
 			e.addCapability(MF_ACTION, new EntityActionEnergy((EntityCreature) ent));
-		}
 	}
 
 	@SubscribeEvent
