@@ -8,7 +8,7 @@ import java.io.File;
 public enum MCFluxConfig {
 	;
 	public static int CFG_EU_VALUE = 4, WORLDCHUNK_CAP = 20000000, ENERGY_DIST_TRANS = 1000000, CHUNK_CHARGER_TRANS = 2000000, WET_TRANS = 4096, FURNACE_CAP = 50000, MOB_SPAWNER_USE = 500;
-	public static boolean ONLINE_ERROR_REPORT = true, UPDATE_CHECK = true, WRAP_ITEM_STACKS = false;
+	public static boolean ONLINE_ERROR_REPORT = true, UPDATE_CHECK = true, WRAP_ITEM_STACKS = false, SLEEP_WITH_LIGHT = false;
 	private static Configuration config;
 
 	public static void makeConfig(File file) {
@@ -33,6 +33,7 @@ public enum MCFluxConfig {
 		ONLINE_ERROR_REPORT = cfgBool("onlineErrorReport", true, "Reports all capability-related crashes made by Minedraft-Flux online");
 		UPDATE_CHECK = cfgBool("updateCheck", true, "Checks if a newer Minecraft-Flux version is available");
 		WRAP_ITEM_STACKS = cfgBool("wrapItemStacks", false, "Wraps Item Stacks so they can provide MF or Flavor Energy");
+		SLEEP_WITH_LIGHT = cfgBool("sleepWithLight", false, "Allow sleep with light if you are scared of darkness");
 		if (config.hasChanged())
 			config.save();
 	}

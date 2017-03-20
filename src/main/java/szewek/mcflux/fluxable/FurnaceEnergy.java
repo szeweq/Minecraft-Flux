@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import szewek.mcflux.U;
+import szewek.fl.FL;
 import szewek.mcflux.api.ex.EX;
 import szewek.mcflux.api.ex.EnergyCapable;
 import szewek.mcflux.util.ForgeEnergyCompat;
@@ -47,13 +47,13 @@ public final class FurnaceEnergy extends EnergyCapable {
 
 	@Override public boolean canInputEnergy() {
 		ItemStack is0 = furnace.getStackInSlot(0);
-		if (U.isItemEmpty(is0))
+		if (FL.isItemEmpty(is0))
 			return false;
 		ItemStack is = FurnaceRecipes.instance().getSmeltingResult(is0);
-		if (U.isItemEmpty(is))
+		if (FL.isItemEmpty(is))
 			return false;
 		ItemStack is2 = furnace.getStackInSlot(2);
-		if (U.isItemEmpty(is2))
+		if (FL.isItemEmpty(is2))
 			return true;
 		if (!is2.isItemEqual(is))
 			return false;

@@ -1,6 +1,8 @@
 package szewek.mcflux.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -42,5 +44,31 @@ public class BlockFluxGen extends BlockMCFluxContainer {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public void onBlockPlacedBy(World w, BlockPos bp, IBlockState ibs, EntityLivingBase placer, ItemStack stack) {
+		if (!w.isRemote)
+			updateRedstoneState(w, bp);
+	}
+
+	@Override
+	public void neighborChanged(IBlockState ibs, World w, BlockPos bp, Block b, BlockPos fromPos) {
+		if (!w.isRemote)
+			updateRedstoneState(w, bp);
+	}
+
+	private void updateRedstoneState(World w, BlockPos bp) {
+		TileEntityFluxGen tefg = (TileEntityFluxGen) w.getTileEntity(bp);
+		if (tefg != null) {
+			boolean b = tefg.getReceivedRedstone(), nb = false;
+			for (EnumFacing f : EnumFacing.VALUES)
+				if (w.getRedstonePower(bp.offset(f, 1), f) > 0) {
+					nb = true;
+					break;
+				}
+			if (b != nb)
+				tefg.setReceivedRedstone(nb);
+		}
 	}
 }

@@ -4,8 +4,9 @@ import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxProvider;
 import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxReceiver;
 import net.minecraft.util.EnumFacing;
 import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.wrapper.EnergyType;
 
-final class IFSided implements IEnergy {
+final class IFSided implements IEnergy, EnergyType.Converter {
 	private final EnumFacing face;
 	private final IFluxProvider provider;
 	private final IFluxReceiver receiver;
@@ -50,5 +51,9 @@ final class IFSided implements IEnergy {
 
 	@Override public boolean hasFullEnergy() {
 		return (provider != null && provider.getEnergyStored(face) == provider.getMaxEnergyStored(face)) || (receiver != null && receiver.getEnergyStored(face) == receiver.getMaxEnergyStored(face));
+	}
+
+	@Override public EnergyType getEnergyType() {
+		return EnergyType.IF;
 	}
 }

@@ -26,6 +26,7 @@ import szewek.mcflux.network.Msg;
 import szewek.mcflux.util.TransferType;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.function.IntBinaryOperator;
 
 import static szewek.mcflux.config.MCFluxConfig.CHUNK_CHARGER_TRANS;
@@ -52,6 +53,7 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 		return moduleId;
 	}
 
+	@Nullable
 	private IntBinaryOperator getModule(int i) {
 		switch (i) {
 			case 0: return this::moduleEnergyDistributor;
@@ -117,7 +119,7 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 	}
 
 	@Override
-	public boolean shouldRefresh(World w, BlockPos pos, @Nonnull IBlockState obs, @Nonnull IBlockState nbs) {
+	public boolean shouldRefresh(World w, BlockPos pos, IBlockState obs, IBlockState nbs) {
 		return obs.getBlock() != nbs.getBlock() || obs.getValue(BlockEnergyMachine.VARIANT) != nbs.getValue(BlockEnergyMachine.VARIANT);
 	}
 

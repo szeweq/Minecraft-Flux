@@ -26,6 +26,7 @@ mcflux.upchip.lvlmax=Osiągnąłeś ostatni poziom energii.
 mcflux.update.newversion=Nowa aktualizacja §eMinecraft-Flux§r została wydana (§e%s§r)!
 mcflux.gen=Generowanie %s MF/t
 mcflux.sleep.tooBright=Zgaś to światło!
+mcflux.convert=Konwersja z:
 
 item.mftool.name=Narzędzie MF
 item.fesniffer.name=Czujnik Zapachowej Energii

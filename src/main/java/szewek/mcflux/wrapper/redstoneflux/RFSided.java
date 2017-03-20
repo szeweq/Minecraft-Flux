@@ -5,8 +5,9 @@ import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.util.EnumFacing;
 import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.wrapper.EnergyType;
 
-final class RFSided implements IEnergy, net.minecraftforge.energy.IEnergyStorage {
+final class RFSided implements IEnergy, net.minecraftforge.energy.IEnergyStorage, EnergyType.Converter {
 	private final EnumFacing face;
 	private final IEnergyHandler handler;
 	private final IEnergyProvider provider;
@@ -77,5 +78,9 @@ final class RFSided implements IEnergy, net.minecraftforge.energy.IEnergyStorage
 
 	@Override public boolean hasFullEnergy() {
 		return handler.getEnergyStored(face) == handler.getMaxEnergyStored(face);
+	}
+
+	@Override public EnergyType getEnergyType() {
+		return EnergyType.RF;
 	}
 }

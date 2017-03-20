@@ -7,7 +7,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
-import szewek.mcflux.U;
+import szewek.fl.FL;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -94,7 +94,7 @@ public final class BuiltShapedRecipe implements IRecipe {
 				int zy = y + oy;
 				int my = mirrorY ? height - y - 1 : y;
 				ItemStack slot = inv.getStackInRowAndColumn(zx, zy);
-				boolean slotEmpty = U.isItemEmpty(slot);
+				boolean slotEmpty = FL.isItemEmpty(slot);
 				IX id = shapeCode[my][mx];
 				boolean matchEmpty = id == null;
 				if (matchEmpty) {

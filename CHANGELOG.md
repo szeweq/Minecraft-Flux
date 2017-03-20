@@ -1,3 +1,8 @@
+## 2.6.0
+- Flux Generator can be controlled by redstone signal
+- Added config option for "sleeping with light"
+- Set FL Library as a requirement
+
 ## 2.5.1
 - Removed error messaging on entity's null world
 

@@ -9,8 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import szewek.fl.FL;
 import szewek.mcflux.MCFluxResources;
-import szewek.mcflux.U;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -37,7 +37,7 @@ public class CommandSpecialGive extends CommandBase {
 				throw new CommandException("mcflux.cmd.sgive.noEvent", l);
 			ItemStack is = new ItemStack(MCFluxResources.SPECIAL);
 			is.setTagInfo("seid", new NBTTagLong(l));
-			U.giveItemToPlayer(is, player);
+			FL.giveItemToPlayer(is, player);
 		}
 	}
 

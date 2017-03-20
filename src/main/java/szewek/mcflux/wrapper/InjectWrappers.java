@@ -13,8 +13,8 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import szewek.fl.FL;
 import szewek.mcflux.L;
-import szewek.mcflux.U;
 import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.util.ErrMsg;
 import szewek.mcflux.util.MCFluxReport;
@@ -80,7 +80,7 @@ public enum InjectWrappers {
 	}
 
 	private static void wrapItemStack(AttachCapabilitiesEvent<?> att, ItemStack is) {
-		if (MCFluxConfig.WRAP_ITEM_STACKS && !U.isItemEmpty(is)) {
+		if (MCFluxConfig.WRAP_ITEM_STACKS && !FL.isItemEmpty(is)) {
 			Class<?> ic = is.getItem().getClass();
 			if (blacklisted(ic) || ItemBlock.class.isAssignableFrom(ic))
 				return;

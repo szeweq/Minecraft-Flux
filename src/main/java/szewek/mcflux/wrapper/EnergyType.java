@@ -1,7 +1,7 @@
 package szewek.mcflux.wrapper;
 
 public enum EnergyType {
-	FORGE_ENERGY("fe"), TESLA("tesla"), MEKANISM("mkj"), REBORN_CORE("rc"), EU("eu"), IF("if"), RF("rf"), NONE("");
+	FORGE_ENERGY("fe"), MEKANISM("mkj"), REBORN_CORE("rc"), EU("eu"), IF("if"), TESLA("tesla"), RF("rf"), NONE("");
 
 	public static final EnergyType[] ALL;
 
@@ -13,5 +13,9 @@ public enum EnergyType {
 
 	static {
 		ALL = values();
+	}
+
+	public interface Converter {
+		EnergyType getEnergyType();
 	}
 }

@@ -4,13 +4,14 @@ import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.util.EnumFacing;
+import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.ForgeEnergyCapable;
 
 import java.util.function.DoubleSupplier;
 
 import static szewek.mcflux.config.MCFluxConfig.CFG_EU_VALUE;
 
-final class EUSided extends ForgeEnergyCapable {
+final class EUSided extends ForgeEnergyCapable implements EnergyType.Converter {
 	private final EnumFacing face;
 	private final DoubleSupplier capMethod, energyMethod;
 	private final IEnergySink sink;
@@ -88,5 +89,9 @@ final class EUSided extends ForgeEnergyCapable {
 
 	@Override public boolean hasFullEnergy() {
 		return energyMethod != null && capMethod != null && energyMethod.getAsDouble() == capMethod.getAsDouble();
+	}
+
+	@Override public EnergyType getEnergyType() {
+		return EnergyType.EU;
 	}
 }

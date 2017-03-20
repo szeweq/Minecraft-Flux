@@ -74,6 +74,7 @@ bintray {
 	}
 }
 repositories {
+	maven {url "http://dl.bintray.com/szewek/MC"}
 	maven {url "http://dvs1.progwml6.com/files/maven"}
 	//maven {url "http://mobiusstrip.eu/maven"}
 	maven {url "http://maven.ic2.player.to"}
@@ -82,6 +83,7 @@ repositories {
 }
 
 dependencies {
+	deobfCompile "szewek.fl:fl:1.0.1"
 	deobfCompile "mcjty.theoneprobe:TheOneProbe:1.1x-1.4.0-50"
 	deobfCompile "mezz.jei:jei_1.11.2:4.2.7.240"
 	//deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
@@ -113,6 +115,9 @@ curseforge {
 		changelog = file("CHANGELOG.md")
 		versionsMC.each {
 			addGameVersion it
+		}
+		relations {
+			requiredLibrary "fl"
 		}
 	}
 }

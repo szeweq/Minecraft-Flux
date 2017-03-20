@@ -3,8 +3,9 @@ package szewek.mcflux.wrapper.immersiveflux;
 import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxContainerItem;
 import net.minecraft.item.ItemStack;
 import szewek.mcflux.api.ex.EnergyCapable;
+import szewek.mcflux.wrapper.EnergyType;
 
-final class IFItemContainerWrapper extends EnergyCapable {
+final class IFItemContainerWrapper extends EnergyCapable implements EnergyType.Converter {
 	private final IFluxContainerItem item;
 	private final ItemStack stack;
 
@@ -47,5 +48,9 @@ final class IFItemContainerWrapper extends EnergyCapable {
 
 	@Override public boolean hasFullEnergy() {
 		return item.getEnergyStored(stack) == item.getMaxEnergyStored(stack);
+	}
+
+	@Override public EnergyType getEnergyType() {
+		return EnergyType.IF;
 	}
 }

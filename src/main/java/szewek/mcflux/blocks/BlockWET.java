@@ -14,7 +14,7 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import szewek.mcflux.U;
+import szewek.fl.FL;
 import szewek.mcflux.tileentities.TileEntityWET;
 
 import javax.annotation.Nullable;
@@ -44,7 +44,7 @@ public final class BlockWET extends BlockMCFluxContainer {
 
 	@Override
 	public boolean onBlockActivated(World w, BlockPos bp, IBlockState ibs, EntityPlayer p, EnumHand h, EnumFacing f, float x, float y, float z) {
-		boolean b = h == EnumHand.MAIN_HAND && U.isItemEmpty(p.getHeldItem(h));
+		boolean b = h == EnumHand.MAIN_HAND && FL.isItemEmpty(p.getHeldItem(h));
 		if (b && !w.isRemote)
 			w.setBlockState(bp, ibs.cycleProperty(MODE), 3);
 		return b;

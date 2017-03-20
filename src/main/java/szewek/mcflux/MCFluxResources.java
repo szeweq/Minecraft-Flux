@@ -5,23 +5,21 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import szewek.mcflux.blocks.*;
 import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
 import szewek.mcflux.blocks.itemblocks.ItemMCFluxBlock;
 import szewek.mcflux.items.*;
 import szewek.mcflux.recipes.FluxGenRecipes;
+import szewek.mcflux.recipes.IX;
+import szewek.mcflux.recipes.RecipeBuilder;
+import szewek.mcflux.recipes.RecipeItem;
 import szewek.mcflux.tileentities.TileEntityECharger;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 import szewek.mcflux.tileentities.TileEntityFluxGen;
 import szewek.mcflux.tileentities.TileEntityWET;
-import szewek.mcflux.recipes.IX;
 import szewek.mcflux.util.MCFluxLocation;
-import szewek.mcflux.recipes.RecipeBuilder;
-import szewek.mcflux.recipes.RecipeItem;
-
-import java.util.function.Function;
 
 import static szewek.mcflux.recipes.IX.*;
 
@@ -42,20 +40,45 @@ public enum MCFluxResources {
 
 	/** Current state (0 = untouched; 1 = after preInit; 2 = after init) */
 	private static byte state = 0;
-	static void preInit() {
-		if (state > 0)
+	private static boolean created = false;
+
+	private static void createResources() {
+		if (created)
 			return;
-		state++;
+		created = true;
 		MFTOOL = item("mftool", new ItemMFTool());
 		FESNIFFER = item("fesniffer", new ItemFESniffer());
 		UPCHIP = item("upchip", new ItemUpChip());
 		ASSISTANT = item("fluxassistant", new ItemFluxAssistant());
 		SPECIAL = item("mfspecial", new ItemSpecial());
 		SIDED = new BlockSided("sided");
-		ENERGY_MACHINE = block("energy_machine", new BlockEnergyMachine(), ItemBlockEnergyMachine::new);
-		ECHARGER = block("echarger", new BlockEntityCharger(), ItemMCFluxBlock::new);
-		WET = block("wet", new BlockWET(), ItemMCFluxBlock::new);
-		FLUXGEN = block("fluxgen", new BlockFluxGen(), ItemMCFluxBlock::new);
+		ENERGY_MACHINE = block("energy_machine", new BlockEnergyMachine());
+		ECHARGER = block("echarger", new BlockEntityCharger());
+		WET = block("wet", new BlockWET());
+		FLUXGEN = block("fluxgen", new BlockFluxGen());
+	}
+
+	static void items(IForgeRegistry<Item> ifr) {
+		createResources();
+		ifr.registerAll(MFTOOL, FESNIFFER, UPCHIP, ASSISTANT, SPECIAL);
+		ifr.registerAll(
+				item("energy_machine", new ItemBlockEnergyMachine(ENERGY_MACHINE)),
+				item("echarger", new ItemMCFluxBlock(ECHARGER)),
+				item("wet", new ItemMCFluxBlock(WET)),
+				item("fluxgen", new ItemMCFluxBlock(FLUXGEN))
+		);
+	}
+	static void blocks(IForgeRegistry<Block> ifr) {
+		createResources();
+		ifr.registerAll(ENERGY_MACHINE, ECHARGER, WET, FLUXGEN);
+	}
+
+	static void preInit() {
+		if (state > 0)
+			return;
+		state++;
+		items(GameRegistry.findRegistry(Item.class));
+		blocks(GameRegistry.findRegistry(Block.class));
 		GameRegistry.registerTileEntity(TileEntityEnergyMachine.class, "mcflux:emachine");
 		GameRegistry.registerTileEntity(TileEntityECharger.class, "mcflux:echarger");
 		GameRegistry.registerTileEntity(TileEntityWET.class, "mcflux:wet");
@@ -138,15 +161,12 @@ public enum MCFluxResources {
 	}
 
 	private static <T extends Item> T item(String name, T i) {
-		i.setUnlocalizedName(name).setCreativeTab(MCFlux.MCFLUX_TAB);
-		return GameRegistry.register(i, new MCFluxLocation(name));
+		i.setUnlocalizedName(name).setCreativeTab(MCFlux.MCFLUX_TAB).setRegistryName(new MCFluxLocation(name));
+		return i;
 	}
 
-	private static <T extends Block> T block(String name, T b, Function<Block, ItemBlock> ibfn) {
-		MCFluxLocation rs = new MCFluxLocation(name);
-		b.setUnlocalizedName(name).setCreativeTab(MCFlux.MCFLUX_TAB);
-		GameRegistry.register(b, rs);
-		GameRegistry.register(ibfn.apply(b), rs);
+	private static <T extends Block> T block(String name, T b) {
+		b.setUnlocalizedName(name).setCreativeTab(MCFlux.MCFLUX_TAB).setRegistryName(new MCFluxLocation(name));
 		return b;
 	}
 }

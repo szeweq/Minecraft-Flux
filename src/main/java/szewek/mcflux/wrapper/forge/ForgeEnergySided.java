@@ -5,8 +5,9 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import szewek.mcflux.api.ex.IEnergy;
+import szewek.mcflux.wrapper.EnergyType;
 
-final class ForgeEnergySided implements IEnergy {
+final class ForgeEnergySided implements IEnergy, EnergyType.Converter {
 	private final IEnergyStorage storage;
 	private final boolean notEmpty;
 
@@ -45,5 +46,9 @@ final class ForgeEnergySided implements IEnergy {
 
 	@Override public boolean hasFullEnergy() {
 		return notEmpty && storage.getEnergyStored() == storage.getMaxEnergyStored();
+	}
+
+	@Override public EnergyType getEnergyType() {
+		return EnergyType.FORGE_ENERGY;
 	}
 }

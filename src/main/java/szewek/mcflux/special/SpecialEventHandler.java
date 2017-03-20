@@ -8,9 +8,10 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import szewek.mcflux.L;
-import szewek.mcflux.network.MCFluxNetUtil;
+import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.util.MCFluxReport;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public enum SpecialEventHandler {
@@ -40,7 +41,7 @@ public enum SpecialEventHandler {
 			synchronized (eventLock) {
 				EVENT_STATUS = EventStatus.DOWNLOADING;
 			}
-			JsonObject jo = MCFluxNetUtil.downloadGistJSON("c5cf89068b75c66b47abefd5a9c55480", "events.json");
+			JsonObject jo = MCFluxNetwork.downloadGistJSON("c5cf89068b75c66b47abefd5a9c55480", "events.json");
 			JsonObject jev = jo.getAsJsonObject("events");
 			if (jev != null) {
 				events.clear();
@@ -79,7 +80,7 @@ public enum SpecialEventHandler {
 		return events.keySet().toLongArray();
 	}
 
-	public static SpecialEvent getEvent(long l) {
+	@Nullable public static SpecialEvent getEvent(long l) {
 		return events.get(l);
 	}
 

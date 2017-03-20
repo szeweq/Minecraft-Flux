@@ -1,11 +1,13 @@
 package szewek.mcflux;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.tileentity.TileEntity;
@@ -24,9 +26,12 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.*;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.network.Msg;
@@ -34,7 +39,7 @@ import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.special.SpecialEventReceiver;
 import szewek.mcflux.util.MCFluxLocation;
 
-@SuppressWarnings("unused") enum MCFluxEvents {
+@SuppressWarnings("unused") @Mod.EventBusSubscriber(modid = R.MF_NAME) enum MCFluxEvents {
 	INSTANCE;
 
 	private static final MCFluxLocation
@@ -44,6 +49,16 @@ import szewek.mcflux.util.MCFluxLocation;
 			MF_ACTION = new MCFluxLocation("ActionEnergy"),
 			MF_FURNACE = new MCFluxLocation("FurnaceEnergy"),
 			MF_MOB_SPAWNER = new MCFluxLocation("MobSpawnerEnergy");
+
+	@SubscribeEvent
+	public void registerItems(RegistryEvent.Register<Item> e) {
+		MCFluxResources.items(e.getRegistry());
+	}
+
+	@SubscribeEvent
+	public void registerBlocks(RegistryEvent.Register<Block> e) {
+		MCFluxResources.blocks(e.getRegistry());
+	}
 
 	@SubscribeEvent
 	public void onLootTableLoad(LootTableLoadEvent e) {
@@ -81,6 +96,8 @@ import szewek.mcflux.util.MCFluxLocation;
 
 	@SubscribeEvent
 	public void whyCantPlayerSleep(PlayerSleepInBedEvent e) {
+		if (MCFluxConfig.SLEEP_WITH_LIGHT)
+			return;
 		EntityPlayer p = e.getEntityPlayer();
 		int l = p.world.getLightFor(EnumSkyBlock.BLOCK, e.getPos());
 		if (l > 9) {

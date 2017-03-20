@@ -6,9 +6,10 @@ import net.darkhax.tesla.api.ITeslaProducer;
 import net.darkhax.tesla.lib.TeslaUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.ForgeEnergyCapable;
 
-final class TeslaSided extends ForgeEnergyCapable {
+final class TeslaSided extends ForgeEnergyCapable implements EnergyType.Converter {
 	private final EnumFacing face;
 	private final ITeslaHolder holder;
 	private final ITeslaConsumer consumer;
@@ -50,5 +51,9 @@ final class TeslaSided extends ForgeEnergyCapable {
 
 	@Override public boolean hasFullEnergy() {
 		return holder != null && holder.getStoredPower() == holder.getCapacity();
+	}
+
+	@Override public EnergyType getEnergyType() {
+		return EnergyType.TESLA;
 	}
 }

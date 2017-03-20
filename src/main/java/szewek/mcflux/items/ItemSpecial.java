@@ -11,7 +11,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import szewek.mcflux.U;
+import szewek.fl.FL;
 import szewek.mcflux.special.SpecialEvent;
 import szewek.mcflux.special.SpecialEventHandler;
 
@@ -48,7 +48,7 @@ public final class ItemSpecial extends ItemMCFlux {
 			for (ItemStack item : items) {
 				if (item == null)
 					continue;
-				U.giveItemToPlayer(item, mp);
+				FL.giveItemToPlayer(item, mp);
 			}
 			is.grow(-1);
 			mp.sendMessage(new TextComponentTranslation("mcflux.special.desc", se.description));

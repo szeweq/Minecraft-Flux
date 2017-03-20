@@ -4,7 +4,7 @@ import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
-import szewek.mcflux.U;
+import szewek.fl.FL;
 import szewek.mcflux.recipes.BuiltShapedRecipe;
 
 import javax.annotation.Nonnull;
@@ -23,7 +23,7 @@ public final class BuiltShapedRecipeHandler implements IRecipeHandler<BuiltShape
 	}
 
 	@Override public boolean isRecipeValid(@Nonnull BuiltShapedRecipe recipe) {
-		return !U.isItemEmpty(recipe.getRecipeOutput());
+		return !FL.isItemEmpty(recipe.getRecipeOutput());
 	}
 
 	@Nonnull @Override

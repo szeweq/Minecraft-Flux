@@ -5,6 +5,9 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import szewek.fl.gui.FLGui;
+import szewek.fl.gui.GuiContainerFL;
+import szewek.fl.gui.GuiRect;
 import szewek.mcflux.U;
 import szewek.mcflux.containers.ContainerFluxGen;
 import szewek.mcflux.tileentities.TileEntityFluxGen;
@@ -12,7 +15,7 @@ import szewek.mcflux.util.MCFluxLocation;
 
 import java.util.Arrays;
 
-public final class GuiFluxGen extends GuiContainerMCFlux {
+public final class GuiFluxGen extends GuiContainerFL {
 	private static final MCFluxLocation tex = new MCFluxLocation("textures/gui/fluxgen.png");
 	private static final GuiRect
 			workRect = new GuiRect(86, 34,4,18),
@@ -43,8 +46,8 @@ public final class GuiFluxGen extends GuiContainerMCFlux {
 		GlStateManager.translate(guiX, guiY, 0);
 		drawGuiBar(workRect, fluxGen.getWorkFill(), 0xFFA8A8A8, 0xFFEFEFEF, false, false);
 		drawGuiBar(energyRect, fluxGen.getEnergyFill(), 0xFFA82121, 0xFFEF4242, true, true);
-		drawFluidStack(hotFluidRect, fsHot, TileEntityFluxGen.fluidCap);
-		drawFluidStack(cleanFluidRect, fsClean, TileEntityFluxGen.fluidCap);
+		FLGui.drawFluidStack(mc, hotFluidRect, zLevel, fsHot, TileEntityFluxGen.fluidCap);
+		FLGui.drawFluidStack(mc, cleanFluidRect, zLevel, fsClean, TileEntityFluxGen.fluidCap);
 		mc.renderEngine.bindTexture(tex);
 		drawTexturedModalRect(47, 21, 176, 0, 16, 43);
 		drawTexturedModalRect(113, 21, 176, 0, 16, 43);
@@ -63,7 +66,7 @@ public final class GuiFluxGen extends GuiContainerMCFlux {
 		if (energyRect.contains(mx, my)) {
 			drawHoveringText(Arrays.asList(U.formatMF(fluxGen), I18n.format("mcflux.gen", fluxGen.getField(3))), mx, my, fontRenderer);
 		}
-		drawFluidStackInfo(hotFluidRect, fsHot, TileEntityFluxGen.fluidCap, mx, my);
-		drawFluidStackInfo(cleanFluidRect, fsClean, TileEntityFluxGen.fluidCap, mx, my);
+		displayFluidInfo(hotFluidRect, fsHot, TileEntityFluxGen.fluidCap, mx, my);
+		displayFluidInfo(cleanFluidRect, fsClean, TileEntityFluxGen.fluidCap, mx, my);
 	}
 }

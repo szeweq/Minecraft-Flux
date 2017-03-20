@@ -6,10 +6,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import szewek.mcflux.api.ex.EnergyCapable;
+import szewek.mcflux.wrapper.EnergyType;
 
 import javax.annotation.Nullable;
 
-final class RFItemContainerWrapper extends EnergyCapable implements net.minecraftforge.energy.IEnergyStorage {
+final class RFItemContainerWrapper extends EnergyCapable implements net.minecraftforge.energy.IEnergyStorage, EnergyType.Converter {
 	private final IEnergyContainerItem item;
 	private final ItemStack stack;
 
@@ -86,5 +87,9 @@ final class RFItemContainerWrapper extends EnergyCapable implements net.minecraf
 
 	@Override public boolean hasFullEnergy() {
 		return item.getEnergyStored(stack) == item.getMaxEnergyStored(stack);
+	}
+
+	@Override public EnergyType getEnergyType() {
+		return EnergyType.RF;
 	}
 }

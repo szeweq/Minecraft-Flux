@@ -49,9 +49,9 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 	private int[] vals = new int[5];
 	protected long energy;
 	private int tickCount = 0;
-	private boolean isDirty = false;
+	private boolean isDirty = false, isReady = false, receivedRedstone = false;
 	private final ItemStack[] items = U.makeFilledArray(new ItemStack[2], ItemStack.EMPTY);
-	private final FluidStorage[] tanks = new FluidStorage[] {new FluidStorage(fluidCap, true, false), new FluidStorage(fluidCap, true, false)};
+	private final FluidStorage[] tanks = new FluidStorage[]{new FluidStorage(fluidCap, true, false), new FluidStorage(fluidCap, true, false)};
 	private final ForgeEnergyCompat fec = new ForgeEnergyCompat(this);
 
 	private int getWorkTicks() {
@@ -89,20 +89,31 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 	@Override public void update() {
 		if (world.isRemote)
 			return;
-		if (workState != WorkState.WORKING && TileEntityFurnace.getItemBurnTime(items[0]) <= 0)
-			workState = WorkState.LAZY;
-		else if (workState != WorkState.WORKING || vals[1] >= vals[2]) {
-			vals[1] = 0;
-			vals[2] = getWorkTicks();
-			workState = WorkState.WORKING;
-		} else if (energy + vals[3] <= maxEnergy) {
-			energy += vals[3];
-			vals[0] = (int) energy;
-			vals[1] += vals[4];
-			if (vals[2] <= vals[1]) {
-				vals[2] = 0;
-				vals[3] = 0;
-				workState = WorkState.FINISHED;
+		if (!isReady) {
+			for (EnumFacing f : EnumFacing.VALUES) {
+				if (world.getRedstonePower(pos.offset(f, 1), f) > 0) {
+					receivedRedstone = true;
+					break;
+				}
+			}
+			isReady = true;
+		}
+		if (!receivedRedstone) {
+			if (workState != WorkState.WORKING && TileEntityFurnace.getItemBurnTime(items[0]) <= 0)
+				workState = WorkState.LAZY;
+			else if (workState != WorkState.WORKING || vals[1] >= vals[2]) {
+				vals[1] = 0;
+				vals[2] = getWorkTicks();
+				workState = WorkState.WORKING;
+			} else if (energy + vals[3] <= maxEnergy) {
+				energy += vals[3];
+				vals[0] = (int) energy;
+				vals[1] += vals[4];
+				if (vals[2] <= vals[1]) {
+					vals[2] = 0;
+					vals[3] = 0;
+					workState = WorkState.FINISHED;
+				}
 			}
 		}
 		tickCount++;
@@ -121,6 +132,14 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 		}
 		if (isDirty)
 			markDirty();
+	}
+
+	public boolean getReceivedRedstone() {
+		return receivedRedstone;
+	}
+
+	public void setReceivedRedstone(boolean b) {
+		receivedRedstone = b;
 	}
 
 	public float getWorkFill() {

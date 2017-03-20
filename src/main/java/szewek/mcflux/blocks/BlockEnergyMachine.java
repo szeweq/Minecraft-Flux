@@ -18,7 +18,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import szewek.mcflux.U;
+import szewek.fl.FL;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public final class BlockEnergyMachine extends BlockMCFluxContainer {
 
 	@Override
 	public boolean onBlockActivated(World w, BlockPos bp, IBlockState ibs, EntityPlayer p, EnumHand h, EnumFacing f, float x, float y, float z) {
-		boolean b = h == EnumHand.MAIN_HAND && U.isItemEmpty(p.getHeldItem(h));
+		boolean b = h == EnumHand.MAIN_HAND && FL.isItemEmpty(p.getHeldItem(h));
 		if (b && !w.isRemote) {
 			TileEntity te = w.getTileEntity(bp);
 			if (te != null && te instanceof TileEntityEnergyMachine)

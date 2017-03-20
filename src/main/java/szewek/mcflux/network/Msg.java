@@ -20,10 +20,10 @@ import szewek.mcflux.util.TransferType;
 import java.io.IOException;
 
 public abstract class Msg {
-	protected boolean broken = true;
+	boolean broken = true;
 
-	public abstract void decode(PacketBuffer pb) throws IOException;
-	public abstract void encode(PacketBuffer pb) throws IOException;
+	abstract void decode(PacketBuffer pb) throws IOException;
+	abstract void encode(PacketBuffer pb) throws IOException;
 	public void msgServer(EntityPlayer p) {}
 	@SideOnly(Side.CLIENT) public void msgClient(EntityPlayer p) {}
 
@@ -60,7 +60,7 @@ public abstract class Msg {
 		private BlockPos pos = null;
 		private TransferType[] sides = null;
 
-		@Override public void decode(PacketBuffer pb) throws IOException {
+		@Override void decode(PacketBuffer pb) throws IOException {
 			if (pb.readableBytes() < 8) {
 				L.warn("Msg.Update incomplete");
 				return;
@@ -75,7 +75,7 @@ public abstract class Msg {
 			broken = false;
 		}
 
-		@Override public void encode(PacketBuffer pb) throws IOException {
+		@Override void encode(PacketBuffer pb) throws IOException {
 			pb.writeLong(pos.toLong());
 			if (sides != null)
 				for (int i = 0; i < 6; i++)
@@ -101,7 +101,7 @@ public abstract class Msg {
 	static class NewVersion extends Msg {
 		private String version = null;
 
-		@Override public void decode(PacketBuffer pb) throws IOException {
+		@Override void decode(PacketBuffer pb) throws IOException {
 			if (pb.readableBytes() < 2) {
 				L.warn("Incompatible length");
 				return;
@@ -110,7 +110,7 @@ public abstract class Msg {
 			broken = false;
 		}
 
-		@Override public void encode(PacketBuffer pb) throws IOException {
+		@Override void encode(PacketBuffer pb) throws IOException {
 			pb.writeString(version);
 		}
 
@@ -124,7 +124,7 @@ public abstract class Msg {
 		private Fluid fluid = null;
 		private int id, amount;
 
-		@Override public void decode(PacketBuffer pb) throws IOException {
+		@Override void decode(PacketBuffer pb) throws IOException {
 			pos = BlockPos.fromLong(pb.readLong());
 			id = pb.readInt();
 			amount = pb.readInt();
@@ -133,7 +133,7 @@ public abstract class Msg {
 			broken = false;
 		}
 
-		@Override public void encode(PacketBuffer pb) throws IOException {
+		@Override void encode(PacketBuffer pb) throws IOException {
 			pb.writeLong(pos.toLong());
 			pb.writeInt(id);
 			pb.writeInt(amount);

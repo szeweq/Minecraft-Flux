@@ -20,7 +20,6 @@ import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.gui.MCFluxGuiHandler;
-import szewek.mcflux.network.MCFluxNetUtil;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.special.CommandSpecialGive;
 import szewek.mcflux.special.SpecialEventHandler;
@@ -69,9 +68,7 @@ public final class MCFlux {
 		cm.register(WorldChunkEnergy.class, CapStorage.getNBTStorage(), WorldChunkEnergy::new);
 		cm.register(PlayerEnergy.class, CapStorage.getNBTStorage(), PlayerEnergy::new);
 		cm.register(SpecialEventReceiver.class, CapStorage.getNBTStorage(), SpecialEventReceiver::new);
-		EVENT_BUS.register(MCFluxEvents.INSTANCE);
 		MCFluxResources.preInit();
-		MCFLUX_TAB.init();
 		PROXY.preInit();
 		MCFluxReport.listAllConflictingMods();
 		registerAllInjects(e.getAsmData());
@@ -136,7 +133,7 @@ public final class MCFlux {
 	private static void updateCheck() {
 		ComparableVersion ccv = new ComparableVersion(R.MF_VERSION);
 		try {
-			JsonObject je = MCFluxNetUtil.downloadGistJSON("97a48d6a61b29171938abf2f6bf9f985", "versions.json");
+			JsonObject je = MCFluxNetwork.downloadGistJSON("97a48d6a61b29171938abf2f6bf9f985", "versions.json");
 			String v = je.getAsJsonObject("mc").getAsJsonPrimitive(Loader.MC_VERSION).getAsString();
 			if (new ComparableVersion(v).compareTo(ccv) > 0) {
 				L.info("A newer Minecraft-Flux version is available (" + v + ")");
