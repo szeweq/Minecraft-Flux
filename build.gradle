@@ -22,6 +22,7 @@ idea { module { inheritOutputDirs = true } }
 
 String[] versionsMC = ["1.11.2"]
 String versionForge = "13.20.0.2228"
+String FLVersion = "1.0.2"
 
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
@@ -41,8 +42,9 @@ archivesBaseName = "mcflux"
 minecraft {
 	version = versionsMC[0] + "-" + versionForge
 	runDir = "run"
-	mappings = "snapshot_20170212"
+	mappings = "snapshot_20170402"
 	replace "@VERSION@", project.version
+	replace "@FLVERSION@", FLVersion
 	replaceIn "R.java"
 }
 
@@ -83,7 +85,7 @@ repositories {
 }
 
 dependencies {
-	deobfCompile "szewek.fl:fl:1.0.1"
+	deobfCompile "szewek.fl:fl:" + FLVersion
 	deobfCompile "mcjty.theoneprobe:TheOneProbe:1.1x-1.4.0-50"
 	deobfCompile "mezz.jei:jei_1.11.2:4.2.7.240"
 	//deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"

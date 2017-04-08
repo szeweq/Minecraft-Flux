@@ -105,7 +105,7 @@ public enum InjectWrappers {
 	@SubscribeEvent
 	public void wrapEntity(AttachCapabilitiesEvent<Entity> att) {
 		Entity ent = att.getObject();
-		if (ent instanceof EntityItem || ent instanceof IProjectile || (ent.world.getDifficulty() == EnumDifficulty.PEACEFUL && ent instanceof EntityMob))
+		if (ent instanceof EntityItem || ent instanceof IProjectile || (ent.world != null && ent.world.getDifficulty() == EnumDifficulty.PEACEFUL && ent instanceof EntityMob))
 			return;
 		wrap(att);
 	}
