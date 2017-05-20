@@ -18,8 +18,6 @@ public final class IFInjectRegistry implements IInjectRegistry {
 	@Override
 	public void registerInjects() {
 		InjectCollector ic = InjectWrappers.getCollector();
-		if (ic == null)
-			return;
 		ic.addTileWrapperInject(IFInjectRegistry::wrapIFTile);
 		ic.addItemWrapperInject(IFInjectRegistry::wrapIFItem);
 	}

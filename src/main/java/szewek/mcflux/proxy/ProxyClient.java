@@ -46,4 +46,8 @@ public final class ProxyClient extends ProxyCommon {
 	@Override public void processMsg(Msg msg, EntityPlayer p) {
 		msg.msgClient(p == null ? Minecraft.getMinecraft().player : p);
 	}
+
+	@Override public String side() {
+		return "CLIENT";
+	}
 }

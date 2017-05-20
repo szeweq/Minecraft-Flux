@@ -20,8 +20,6 @@ public final class ProjectEInjectRegistry implements IInjectRegistry {
 
 	@Override public void registerInjects() {
 		InjectCollector ic = InjectWrappers.getCollector();
-		if (ic == null)
-			return;
 		ic.addTileWrapperInject(ProjectEInjectRegistry::wrapEMCTile);
 		ic.addItemWrapperInject(ProjectEInjectRegistry::wrapEMCItem);
 	}

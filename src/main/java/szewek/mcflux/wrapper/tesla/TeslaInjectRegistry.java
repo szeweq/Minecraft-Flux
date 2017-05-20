@@ -15,8 +15,6 @@ import szewek.mcflux.wrapper.*;
 public final class TeslaInjectRegistry implements IInjectRegistry {
 	@Override public void registerInjects() {
 		InjectCollector ic = InjectWrappers.getCollector();
-		if (ic == null)
-			return;
 		ic.addTileWrapperInject(TeslaInjectRegistry::wrapGlobal);
 		ic.addEntityWrapperInject(TeslaInjectRegistry::wrapGlobal);
 		ic.addItemWrapperInject(TeslaInjectRegistry::wrapGlobal);

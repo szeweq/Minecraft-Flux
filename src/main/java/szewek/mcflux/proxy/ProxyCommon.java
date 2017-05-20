@@ -11,4 +11,8 @@ public class ProxyCommon {
 	public void processMsg(Msg msg, EntityPlayer p) {
 		msg.msgServer(p);
 	}
+
+	public String side() {
+		return "SERVER";
+	}
 }

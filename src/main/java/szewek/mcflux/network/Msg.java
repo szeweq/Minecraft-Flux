@@ -92,6 +92,9 @@ public abstract class Msg {
 		}
 
 		@SideOnly(Side.CLIENT) @Override public void msgClient(EntityPlayer p) {
+			if (sides.length != 6) {
+				return;
+			}
 			TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
 			if (te != null && te instanceof TileEntityEnergyMachine)
 				((TileEntityEnergyMachine) te).updateTransferSides(sides);

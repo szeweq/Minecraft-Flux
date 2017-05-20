@@ -8,22 +8,34 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-public final class InjectCollector {
-	Set<BiConsumer<TileEntity, WrapperRegistry>> tileInjects = new HashSet<>();
-	Set<BiConsumer<ItemStack, WrapperRegistry>> itemInjects = new HashSet<>();
-	Set<BiConsumer<Entity, WrapperRegistry>> entityInjects = new HashSet<>();
+public interface InjectCollector {
+	void addTileWrapperInject(BiConsumer<TileEntity, WrapperRegistry> bc);
+	void addItemWrapperInject(BiConsumer<ItemStack, WrapperRegistry> bc);
+	void addEntityWrapperInject(BiConsumer<Entity, WrapperRegistry> bc);
 
-	InjectCollector() {}
+	final class Impl implements InjectCollector {
+		Set<BiConsumer<TileEntity, WrapperRegistry>> tileInjects = new HashSet<>();
+		Set<BiConsumer<ItemStack, WrapperRegistry>> itemInjects = new HashSet<>();
+		Set<BiConsumer<Entity, WrapperRegistry>> entityInjects = new HashSet<>();
 
-	public void addTileWrapperInject(BiConsumer<TileEntity, WrapperRegistry> bc) {
-		tileInjects.add(bc);
+		Impl() {}
+
+		public void addTileWrapperInject(BiConsumer<TileEntity, WrapperRegistry> bc) {
+			tileInjects.add(bc);
+		}
+		public void addItemWrapperInject(BiConsumer<ItemStack, WrapperRegistry> bc) {
+			itemInjects.add(bc);
+		}
+		public void addEntityWrapperInject(BiConsumer<Entity, WrapperRegistry> bc) {
+			entityInjects.add(bc);
+		}
 	}
 
-	public void addItemWrapperInject(BiConsumer<ItemStack, WrapperRegistry> bc) {
-		itemInjects.add(bc);
-	}
+	final class Dummy implements InjectCollector {
+		Dummy() {}
 
-	public void addEntityWrapperInject(BiConsumer<Entity, WrapperRegistry> bc) {
-		entityInjects.add(bc);
+		public void addTileWrapperInject(BiConsumer<TileEntity, WrapperRegistry> bc) {}
+		public void addItemWrapperInject(BiConsumer<ItemStack, WrapperRegistry> bc) {}
+		public void addEntityWrapperInject(BiConsumer<Entity, WrapperRegistry> bc) {}
 	}
 }

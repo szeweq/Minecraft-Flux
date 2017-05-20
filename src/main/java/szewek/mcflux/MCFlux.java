@@ -34,7 +34,7 @@ import java.util.Set;
 import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
 @SuppressWarnings("unused")
-@Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true, guiFactory = R.GUI_FACTORY, dependencies = R.MF_DEPENDENCIES)
+@Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true, guiFactory = R.GUI_FACTORY, dependencies = R.MF_DEPS)
 public final class MCFlux {
 	private static File MC_DIR;
 	static String NEWER_VERSION = "";

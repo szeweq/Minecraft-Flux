@@ -19,6 +19,7 @@ import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.util.ErrMsg;
 import szewek.mcflux.util.MCFluxReport;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,22 +29,25 @@ import java.util.function.BiConsumer;
 public enum InjectWrappers {
 	EVENTS;
 	private static final WrapperThread wth = new WrapperThread();
-	private static InjectCollector collect = new InjectCollector();
+	private static InjectCollector collect = new InjectCollector.Impl();
 	private static BiConsumer<TileEntity, WrapperRegistry>[] injTile = null;
 	private static BiConsumer<ItemStack, WrapperRegistry>[] injItem = null;
 	private static BiConsumer<Entity, WrapperRegistry>[] injEntity = null;
 	private static final List<MCFluxWrapper> wrappers = Collections.synchronizedList(new ArrayList<>());
 
-	public static InjectCollector getCollector() {
+	@Nonnull public static InjectCollector getCollector() {
 		return collect;
 	}
 
 	@SuppressWarnings("unchecked")
 	public static void init() {
-		injTile = collect.tileInjects.toArray(new BiConsumer[collect.tileInjects.size()]);
-		injItem = collect.itemInjects.toArray(new BiConsumer[collect.itemInjects.size()]);
-		injEntity = collect.entityInjects.toArray(new BiConsumer[collect.entityInjects.size()]);
-		collect = null;
+		if (collect instanceof InjectCollector.Impl) {
+			InjectCollector.Impl cimpl = (InjectCollector.Impl) collect;
+			injTile = cimpl.tileInjects.toArray(new BiConsumer[cimpl.tileInjects.size()]);
+			injItem = cimpl.itemInjects.toArray(new BiConsumer[cimpl.itemInjects.size()]);
+			injEntity = cimpl.entityInjects.toArray(new BiConsumer[cimpl.entityInjects.size()]);
+		}
+		collect = new InjectCollector.Dummy();
 		wth.start();
 		L.info("Tile[" + injTile.length + "]; Item[" + injItem.length + "]; Entity[" + injEntity.length + "]");
 	}

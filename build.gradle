@@ -22,7 +22,7 @@ idea { module { inheritOutputDirs = true } }
 
 String[] versionsMC = ["1.11.2"]
 String versionForge = "13.20.0.2228"
-String FLVersion = "1.0.2"
+String MFReq = "MF_DEPS = \"required-after:fl@[1.0.2,)\""
 
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
@@ -44,7 +44,7 @@ minecraft {
 	runDir = "run"
 	mappings = "snapshot_20170402"
 	replace "@VERSION@", project.version
-	replace "@FLVERSION@", FLVersion
+	replace "MF_DEPS = \"\"", MFReq
 	replaceIn "R.java"
 }
 

@@ -3,6 +3,7 @@ package szewek.mcflux.util;
 import com.rollbar.Rollbar;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import szewek.mcflux.L;
@@ -24,7 +25,9 @@ public enum MCFluxReport {
 	private static final DateFormat fileDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 
 	public static void init() {
-		rollbar.getCustom().putAll(Collections.singletonMap("Mods", Loader.instance().getIndexedModList().keySet().toArray()));
+		Map<String, Object> cm = rollbar.getCustom();
+		cm.put("Forge", ForgeVersion.getVersion());
+		cm.putAll(Collections.singletonMap("Mods", Loader.instance().getIndexedModList().keySet().toArray()));
 	}
 
 	public static void handleErrors() {

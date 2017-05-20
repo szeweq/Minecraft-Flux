@@ -8,8 +8,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import szewek.mcflux.api.fe.Flavored;
 import szewek.mcflux.api.fe.FlavoredImmutable;
 import szewek.mcflux.util.*;
-import szewek.mcflux.util.ErrMsg;
-import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
 import szewek.mcflux.wrapper.WrapperRegistry;
 
@@ -21,10 +19,7 @@ public final class RootsInjectRegistry implements IInjectRegistry {
 	static final Flavored[] manaFill = new Flavored[]{new FlavoredImmutable(MANA, null)};
 
 	@Override public void registerInjects() {
-		InjectCollector ic = InjectWrappers.getCollector();
-		if (ic == null)
-			return;
-		ic.addEntityWrapperInject(RootsInjectRegistry::wrapGlobal);
+		InjectWrappers.getCollector().addEntityWrapperInject(RootsInjectRegistry::wrapGlobal);
 	}
 
 	private static <T extends ICapabilityProvider> void wrapGlobal(T icp, WrapperRegistry reg) {

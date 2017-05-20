@@ -138,7 +138,7 @@ public enum MCFluxNetwork {
 				msg.decode(pbuf);
 				MCFlux.PROXY.processMsg(msg, player);
 			} catch (Exception e) {
-				MCFluxReport.sendException(e, "Decoding message (" + side + "-side)");
+				MCFluxReport.sendException(e, "Decoding message (" + side + "-side) with PROXY " + MCFlux.PROXY.side());
 			}
 		}
 	}

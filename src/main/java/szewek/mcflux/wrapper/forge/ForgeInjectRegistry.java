@@ -16,8 +16,6 @@ import szewek.mcflux.wrapper.*;
 public final class ForgeInjectRegistry implements IInjectRegistry {
 	@Override public void registerInjects() {
 		InjectCollector ic = InjectWrappers.getCollector();
-		if (ic == null)
-			return;
 		ic.addTileWrapperInject(ForgeInjectRegistry::wrapGlobal);
 		ic.addEntityWrapperInject(ForgeInjectRegistry::wrapGlobal);
 		ic.addItemWrapperInject(ForgeInjectRegistry::wrapGlobal);

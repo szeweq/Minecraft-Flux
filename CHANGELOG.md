@@ -1,3 +1,7 @@
+## 2.6.2
+- New Flux (Energy) Generator texture
+- Wrapper collection improvements
+
 ## 2.6.0
 - Flux Generator can be controlled by redstone signal
 - Added config option for "sleeping with light"

@@ -15,8 +15,6 @@ public final class EUInjectRegistry implements IInjectRegistry {
 	@Override
 	public void registerInjects() {
 		InjectCollector ic = InjectWrappers.getCollector();
-		if (ic == null)
-			return;
 		MinecraftForge.EVENT_BUS.register(EUEnergyEvents.INSTANCE);
 		CapabilityManager.INSTANCE.register(EUTileCapabilityProvider.class, CapStorage.getEmpty(), EUTileCapabilityProvider::new);
 		ic.addTileWrapperInject(EUInjectRegistry::wrapEUTile);
