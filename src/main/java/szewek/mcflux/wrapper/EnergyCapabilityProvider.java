@@ -25,9 +25,8 @@ public class EnergyCapabilityProvider implements ICapabilityProvider {
 	public EnergyCapabilityProvider(ICapabilityProvider icp, BiFunction<ICapabilityProvider, EnumFacing, IEnergy> newside, Predicate<EnumFacing> cf) {
 		broken = false;
 		if (icp != null && newside != null) {
-			for (int i = 0; i < U.FANCY_FACING.length; i++) {
+			for (int i = 0; i < U.FANCY_FACING.length; i++)
 				sides[i] = newside.apply(icp, U.FANCY_FACING[i]);
-			}
 			if (sides[6] != null && sides[6] instanceof net.minecraftforge.energy.IEnergyStorage)
 				forgeCompatible = true;
 		}

@@ -17,7 +17,7 @@ import szewek.mcflux.wrapper.WrapperRegistry;
 public final class RFInjectRegistry implements IInjectRegistry {
 	@Override
 	public void registerInjects() {
-		InjectCollector ic = InjectWrappers.getCollector();
+		final InjectCollector ic = InjectWrappers.getCollector();
 		ic.addTileWrapperInject(RFInjectRegistry::wrapRFTile);
 		ic.addItemWrapperInject(RFInjectRegistry::wrapRFItem);
 	}

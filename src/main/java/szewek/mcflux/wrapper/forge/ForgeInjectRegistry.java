@@ -5,17 +5,13 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import szewek.mcflux.U;
 import szewek.mcflux.tileentities.TileEntityFluxGen;
-import szewek.mcflux.util.MCFluxReport;
-import szewek.mcflux.util.IInjectRegistry;
-import szewek.mcflux.util.InjectCond;
-import szewek.mcflux.util.InjectRegistry;
-import szewek.mcflux.util.ErrMsg;
+import szewek.mcflux.util.*;
 import szewek.mcflux.wrapper.*;
 
 @InjectRegistry(requires = InjectCond.CLASS, args = "net.minecraftforge.energy.IEnergyStorage")
 public final class ForgeInjectRegistry implements IInjectRegistry {
 	@Override public void registerInjects() {
-		InjectCollector ic = InjectWrappers.getCollector();
+		final InjectCollector ic = InjectWrappers.getCollector();
 		ic.addTileWrapperInject(ForgeInjectRegistry::wrapGlobal);
 		ic.addEntityWrapperInject(ForgeInjectRegistry::wrapGlobal);
 		ic.addItemWrapperInject(ForgeInjectRegistry::wrapGlobal);

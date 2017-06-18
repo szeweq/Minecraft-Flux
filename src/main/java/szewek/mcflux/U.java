@@ -20,8 +20,7 @@ import java.lang.reflect.Method;
 
 import static net.minecraft.util.EnumFacing.*;
 
-public enum U {
-	;
+public final class U {
 	public static final EnumFacing[] FANCY_FACING = new EnumFacing[] {DOWN, UP, NORTH, SOUTH, WEST, EAST, null};
 
 	public static String formatMF(IEnergy ie) {
@@ -101,4 +100,6 @@ public enum U {
 		}
 		return m;
 	}
+
+	private U() {}
 }

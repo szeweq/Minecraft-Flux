@@ -73,7 +73,7 @@ public enum MCFluxNetwork {
 	}
 
 	private static FMLProxyPacket makePacket(Msg fmsg) {
-		PacketBuffer pb = new PacketBuffer(Unpooled.buffer());
+		final PacketBuffer pb = new PacketBuffer(Unpooled.buffer());
 		byte id = (byte) ids.indexOf(fmsg.getClass());
 		pb.writeByte(id);
 		try {
@@ -101,7 +101,7 @@ public enum MCFluxNetwork {
 	}
 
 	public static JsonObject downloadGistJSON(String hash, String name) throws IOException {
-		URL url = new URL("https", "gist.githubusercontent.com", 443, "/Szewek/" + hash + "/raw/" + name, null);
+		final URL url = new URL("https", "gist.githubusercontent.com", 443, "/Szewek/" + hash + "/raw/" + name, null);
 		HttpURLConnection huc = (HttpURLConnection) url.openConnection();
 		InputStreamReader isr = new InputStreamReader(huc.getInputStream());
 		return new JsonParser().parse(isr).getAsJsonObject();
@@ -109,14 +109,14 @@ public enum MCFluxNetwork {
 
 	@SubscribeEvent
 	public void serverPacket(FMLNetworkEvent.ServerCustomPacketEvent e) {
-		EntityPlayer p = ((NetHandlerPlayServer) e.getHandler()).player;
+		final EntityPlayer p = ((NetHandlerPlayServer) e.getHandler()).player;
 		processMsg(e.getPacket(), p, p.getServer(), Side.SERVER);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void clientPacket(FMLNetworkEvent.ClientCustomPacketEvent e) {
-		Minecraft mc = Minecraft.getMinecraft();
+		final Minecraft mc = Minecraft.getMinecraft();
 		processMsg(e.getPacket(), mc.player, mc, Side.CLIENT);
 	}
 

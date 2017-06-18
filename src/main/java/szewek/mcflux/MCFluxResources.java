@@ -23,8 +23,7 @@ import szewek.mcflux.util.MCFluxLocation;
 
 import static szewek.mcflux.recipes.IX.*;
 
-public enum MCFluxResources {
-	;
+public final class MCFluxResources {
 	// ITEMS
 	public static ItemMFTool MFTOOL;
 	public static ItemFESniffer FESNIFFER;
@@ -169,4 +168,6 @@ public enum MCFluxResources {
 		b.setUnlocalizedName(name).setCreativeTab(MCFlux.MCFLUX_TAB).setRegistryName(new MCFluxLocation(name));
 		return b;
 	}
+
+	private MCFluxResources() {}
 }

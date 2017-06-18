@@ -7,8 +7,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nullable;
 
-public enum CapStorage {
-	;
+public final class CapStorage {
 	private static final Capability.IStorage<?> EMPTY = new Capability.IStorage<Object>() {
 		@Override
 		public NBTBase writeNBT(Capability<Object> cap, Object t, EnumFacing side) {
@@ -40,4 +39,6 @@ public enum CapStorage {
 	public static <T extends INBTSerializable<NBTBase>> Capability.IStorage<T> getNBTStorage() {
 		return (Capability.IStorage<T>) NBT_STORAGE;
 	}
+
+	private CapStorage() {}
 }

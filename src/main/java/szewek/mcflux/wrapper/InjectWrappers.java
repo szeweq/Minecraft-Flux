@@ -20,9 +20,7 @@ import szewek.mcflux.util.ErrMsg;
 import szewek.mcflux.util.MCFluxReport;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiConsumer;
 
 @SuppressWarnings("unused")
@@ -33,7 +31,7 @@ public enum InjectWrappers {
 	private static BiConsumer<TileEntity, WrapperRegistry>[] injTile = null;
 	private static BiConsumer<ItemStack, WrapperRegistry>[] injItem = null;
 	private static BiConsumer<Entity, WrapperRegistry>[] injEntity = null;
-	private static final List<MCFluxWrapper> wrappers = Collections.synchronizedList(new ArrayList<>());
+	private static final ConcurrentLinkedQueue<MCFluxWrapper> wrq = new ConcurrentLinkedQueue<>();
 
 	@Nonnull public static InjectCollector getCollector() {
 		return collect;
@@ -53,16 +51,16 @@ public enum InjectWrappers {
 	}
 
 	private static boolean blacklisted(Class<?> cl) {
-		String cn = cl.getName();
+		final String cn = cl.getName();
 		return cn.startsWith("szewek.") || cn.startsWith("net.minecraft.");
 	}
 
 	@SuppressWarnings("unchecked")
 	private static <T> void findWrappers(MCFluxWrapper w, BiConsumer<T, WrapperRegistry>[] iwis) {
-		T t = (T) w.mainObject;
+		final T t = (T) w.mainObject;
 		if (t == null)
 			return;
-		WrapperRegistry reg = new WrapperRegistry();
+		final WrapperRegistry reg = new WrapperRegistry();
 		for (BiConsumer<T, WrapperRegistry> iwi : iwis)
 			iwi.accept(t, reg);
 		reg.resolve(EnergyType.ALL);
@@ -70,27 +68,27 @@ public enum InjectWrappers {
 	}
 
 	private static void wrap(AttachCapabilitiesEvent<?> att) {
-		Object t = att.getObject();
+		final Object t = att.getObject();
 		if (t == null) {
 			MCFluxReport.addErrMsg(new ErrMsg.NullInject((Class<?>) att.getGenericType()));
 			return;
 		}
-		Class<?> tcl = t.getClass();
+		final Class<?> tcl = t.getClass();
 		if (blacklisted(tcl))
 			return;
-		MCFluxWrapper w = new MCFluxWrapper(t);
+		final MCFluxWrapper w = new MCFluxWrapper(t);
 		att.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
-		wrappers.add(w);
+		wrq.offer(w);
 	}
 
 	private static void wrapItemStack(AttachCapabilitiesEvent<?> att, ItemStack is) {
 		if (MCFluxConfig.WRAP_ITEM_STACKS && !FL.isItemEmpty(is)) {
-			Class<?> ic = is.getItem().getClass();
+			final Class<?> ic = is.getItem().getClass();
 			if (blacklisted(ic) || ItemBlock.class.isAssignableFrom(ic))
 				return;
-			MCFluxWrapper w = new MCFluxWrapper(is);
+			final MCFluxWrapper w = new MCFluxWrapper(is);
 			att.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);
-			wrappers.add(w);
+			wrq.offer(w);
 		}
 	}
 
@@ -122,7 +120,7 @@ public enum InjectWrappers {
 
 	@SubscribeEvent
 	public void updateWrappers(TickEvent.WorldTickEvent wte) {
-		if (wte.phase == TickEvent.Phase.START && wrappers.size() > 0)
+		if (wte.phase == TickEvent.Phase.START && !wrq.isEmpty())
 			synchronized (wth) {
 				wth.notify();
 			}
@@ -140,23 +138,20 @@ public enum InjectWrappers {
 					synchronized (this) {
 						wait(0);
 					}
-					synchronized (wrappers) {
-						for (MCFluxWrapper w : wrappers)
-							try {
-								if (w == null)
-									MCFluxReport.addErrMsg(new ErrMsg.NullWrapper(false));
-								else if (w.mainObject == null)
-									MCFluxReport.addErrMsg(new ErrMsg.NullWrapper(true));
-								else if (w.mainObject instanceof TileEntity)
-									findWrappers(w, injTile);
-								else if (w.mainObject instanceof ItemStack)
-									findWrappers(w, injItem);
-								else if (w.mainObject instanceof Entity)
-									findWrappers(w, injEntity);
-							} catch (Exception e) {
-								MCFluxReport.sendException(e, "Wrapping an object");
-							}
-						wrappers.clear();
+					MCFluxWrapper w;
+					while((w = wrq.poll()) != null) {
+						try {
+							if (w.mainObject == null)
+								MCFluxReport.addErrMsg(new ErrMsg.NullWrapper(true));
+							else if (w.mainObject instanceof TileEntity)
+								findWrappers(w, injTile);
+							else if (w.mainObject instanceof ItemStack)
+								findWrappers(w, injItem);
+							else if (w.mainObject instanceof Entity)
+								findWrappers(w, injEntity);
+						} catch (Exception e) {
+							MCFluxReport.sendException(e, "Wrapping an object");
+						}
 					}
 				} catch (Exception e) {
 					MCFluxReport.sendException(e, "WrapperThread loop");

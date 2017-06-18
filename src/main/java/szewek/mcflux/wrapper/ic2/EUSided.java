@@ -54,7 +54,7 @@ final class EUSided extends ForgeEnergyCapable implements EnergyType.Converter {
 		if (amount < CFG_EU_VALUE)
 			return 0;
 		if (sink != null) {
-			long e = (long) sink.getDemandedEnergy() * CFG_EU_VALUE;
+			final long e = (long) sink.getDemandedEnergy() * CFG_EU_VALUE;
 			long r = amount - (amount % CFG_EU_VALUE);
 			if (r > e)
 				r = e;
@@ -71,7 +71,7 @@ final class EUSided extends ForgeEnergyCapable implements EnergyType.Converter {
 		if (amount < CFG_EU_VALUE)
 			return 0;
 		if (source != null) {
-			long e = (long) source.getOfferedEnergy() * CFG_EU_VALUE;
+			final long e = (long) source.getOfferedEnergy() * CFG_EU_VALUE;
 			long r = amount - (amount % CFG_EU_VALUE);
 			if (r > e)
 				r = e;

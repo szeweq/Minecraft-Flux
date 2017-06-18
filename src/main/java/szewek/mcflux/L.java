@@ -3,8 +3,7 @@ package szewek.mcflux;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
-public enum L {
-	;
+public final class L {
 	private static Logger l = net.minecraftforge.fml.common.FMLLog.getLogger();
 
 	static void prepare(Logger logger) {
@@ -26,4 +25,6 @@ public enum L {
 	public static void warn(Throwable t) {
 		l.log(Level.WARN, "Minecraft-Flux received an error", t);
 	}
+
+	private L() {}
 }

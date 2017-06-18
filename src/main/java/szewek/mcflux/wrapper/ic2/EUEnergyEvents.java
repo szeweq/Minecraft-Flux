@@ -36,9 +36,9 @@ enum EUEnergyEvents {
 	public void loadEnergyTile(EnergyTileLoadEvent e) {
 		if (broken)
 			return;
-		TileEntity te = e.getWorld().getTileEntity(EnergyNet.instance.getPos(e.tile));
+		final TileEntity te = e.getWorld().getTileEntity(EnergyNet.instance.getPos(e.tile));
 		if (te == null) return;
-		EUTileCapabilityProvider cap = te.getCapability(EUTileCapabilityProvider.SELF_CAP, null);
+		final EUTileCapabilityProvider cap = te.getCapability(EUTileCapabilityProvider.SELF_CAP, null);
 		if (cap != null) {
 			cap.updateEnergyTile(e.tile);
 			if (IC2_TEB.isInstance(te)) {
