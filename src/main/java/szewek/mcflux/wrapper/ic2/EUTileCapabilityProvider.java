@@ -77,6 +77,6 @@ final class EUTileCapabilityProvider implements ICapabilityProvider {
 	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
 		if (cap == SELF_CAP)
 			return (T) this;
-		return cap == EX.CAP_ENERGY && complete ? (T) sides[f == null ? 6 : f.getIndex()] : null;
+		return (cap == EX.CAP_ENERGY || cap == CapabilityEnergy.ENERGY) && complete ? (T) sides[f == null ? 6 : f.getIndex()] : null;
 	}
 }
