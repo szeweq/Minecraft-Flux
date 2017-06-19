@@ -13,8 +13,6 @@ after_deploy:
 - ./gradlew bintrayUpload
 deploy:
   provider: releases
-  edge:
-    branch: releases-fix
   skip_cleanup: true
   api_key:
     secure: gy4SQXZC9Naiy3sIB8biWHkNhdFm/61cgBuBgNosXowh/SrhdGI/e2hXv0qK6CZaMfn6Hff1SSTIa21xXCSq6hKEZqGEfIyG74i1OpbWiBQaqmXoibTT1obhUPKc9nspPLUilTD3Ggz6dkygb1G+y9CyhS0HdiWj+Hur8qER+D6RHBVpL16bK2OSkqvoZQve5rLcDyOfsvsq9C5vNYI4qGt8YBVgENLbHaCPeliyqGW7wGo/Uidx2uSGjAAal+zcvq+2UWnevsuzl9mcoi1r62Mk8EdpAjh3MiJ2nS8QrgnkgfKgMW3hI52Drs5sEqdBdveQ2HyNyOXcWaQVXjTnEFjV6CN59ZvfhA8SQyRrtC9JgOj25UmSStINdAmgCQQ5YFxF24yaf2ydHVsShq7IIAoJtFKvIgJjwOlmhB8RlFb3qr+DJH1OAlETaVRyqNDNG80s6VYZZMItgd/zLda9TtYjd2oia9BLkManGLtLCiLTqtT9qwPwgOUc4fryDe/lKP3k05kEAC8/d7e+7M8c//N+hUH2+W7wbb7fkqhAoPVt3u5/RO55UNJb/s1wdZOK/WVP5UYQS4Xgm02omkZh5BUhIqf9HaetiEsGn+un3wWtOni/8ZnJDE2gyxCHDGo15V4yJGUbSjVty7nu+DtIMg7aDXsEJfzsJsYq8Yw6P80=
