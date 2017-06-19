@@ -39,16 +39,4 @@ public class FluxGenRecipeJEI extends BlankRecipeWrapper {
 		mc.fontRenderer.drawString(type, typeX, 1, 0x404040, false);
 		mc.fontRenderer.drawString(factor, factorX, 51, 0x404040, false);
 	}
-
-	ItemStack getInputItem() {
-		return inputItem;
-	}
-
-	@Nullable FluidStack getInputFluid() {
-		return inputFluid;
-	}
-
-	int getSlot() {
-		return slot;
-	}
 }

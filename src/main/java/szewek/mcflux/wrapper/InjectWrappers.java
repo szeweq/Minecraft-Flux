@@ -14,7 +14,6 @@ import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import szewek.fl.FL;
-import szewek.mcflux.L;
 import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.util.ErrMsg;
 import szewek.mcflux.util.MCFluxReport;
@@ -45,12 +44,11 @@ public enum InjectWrappers {
 			injItem = cimpl.itemInjects.toArray(new BiConsumer[cimpl.itemInjects.size()]);
 			injEntity = cimpl.entityInjects.toArray(new BiConsumer[cimpl.entityInjects.size()]);
 		}
-		collect = new InjectCollector.Dummy();
+		collect = InjectCollector.DUMMY;
 		wth.start();
-		L.info("Tile[" + injTile.length + "]; Item[" + injItem.length + "]; Entity[" + injEntity.length + "]");
 	}
 
-	private static boolean blacklisted(Class<?> cl) {
+	private static boolean blacklisted(final Class<?> cl) {
 		final String cn = cl.getName();
 		return cn.startsWith("szewek.") || cn.startsWith("net.minecraft.");
 	}
@@ -73,8 +71,7 @@ public enum InjectWrappers {
 			MCFluxReport.addErrMsg(new ErrMsg.NullInject((Class<?>) att.getGenericType()));
 			return;
 		}
-		final Class<?> tcl = t.getClass();
-		if (blacklisted(tcl))
+		if (blacklisted(t.getClass()))
 			return;
 		final MCFluxWrapper w = new MCFluxWrapper(t);
 		att.addCapability(MCFluxWrapper.MCFLUX_WRAPPER, w);

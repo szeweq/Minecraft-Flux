@@ -62,9 +62,9 @@ import szewek.mcflux.util.MCFluxLocation;
 
 	@SubscribeEvent
 	public void onLootTableLoad(LootTableLoadEvent e) {
-		ResourceLocation rl = e.getName();
+		final ResourceLocation rl = e.getName();
 		if (rl.equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH) || rl.equals(LootTableList.CHESTS_ABANDONED_MINESHAFT) || rl.equals(LootTableList.CHESTS_JUNGLE_TEMPLE)) {
-			LootTable lt = e.getTable();
+			final LootTable lt = e.getTable();
 			LootPool lp = lt.getPool("pool0");
 			if (lp == null)
 				lp = lt.getPool("main");
@@ -79,13 +79,13 @@ import szewek.mcflux.util.MCFluxLocation;
 		if (MCFlux.UPDATE_CHECK_FINISHED && !MCFlux.NEWER_VERSION.isEmpty() && e.player instanceof EntityPlayerMP)
 			MCFluxNetwork.to(Msg.newVersion(MCFlux.NEWER_VERSION), (EntityPlayerMP) e.player);
 		if (SpecialEventHandler.getEventStatus() == SpecialEventHandler.EventStatus.DOWNLOADED) {
-			SpecialEventReceiver ser = e.player.getCapability(SpecialEventReceiver.SELF_CAP, null);
+			final SpecialEventReceiver ser = e.player.getCapability(SpecialEventReceiver.SELF_CAP, null);
 			if (ser != null) {
-				long[] seids = SpecialEventHandler.getEventIDs();
+				final long[] seids = SpecialEventHandler.getEventIDs();
 				for (long l : seids) {
 					if (ser.alreadyReceived(l))
 						continue;
-					ItemStack is = new ItemStack(MCFluxResources.SPECIAL);
+					final ItemStack is = new ItemStack(MCFluxResources.SPECIAL);
 					is.setTagInfo("seid", new NBTTagLong(l));
 					e.player.dropItem(is, false, true);
 					ser.addReceived(l);
@@ -98,7 +98,7 @@ import szewek.mcflux.util.MCFluxLocation;
 	public void whyCantPlayerSleep(PlayerSleepInBedEvent e) {
 		if (MCFluxConfig.SLEEP_WITH_LIGHT)
 			return;
-		EntityPlayer p = e.getEntityPlayer();
+		final EntityPlayer p = e.getEntityPlayer();
 		int l = p.world.getLightFor(EnumSkyBlock.BLOCK, e.getPos());
 		if (l > 9) {
 			e.setResult(EntityPlayer.SleepResult.OTHER_PROBLEM);
@@ -113,7 +113,7 @@ import szewek.mcflux.util.MCFluxLocation;
 
 	@SubscribeEvent
 	public void wrapEntity(AttachCapabilitiesEvent<Entity> e) {
-		Entity ent = e.getObject();
+		final Entity ent = e.getObject();
 		if (ent instanceof EntityPlayer) {
 			e.addCapability(MF_SER, new SpecialEventReceiver());
 			e.addCapability(MF_PLAYER, new PlayerEnergy());
@@ -123,7 +123,7 @@ import szewek.mcflux.util.MCFluxLocation;
 
 	@SubscribeEvent
 	public void wrapTile(AttachCapabilitiesEvent<TileEntity> e) {
-		TileEntity te = e.getObject();
+		final TileEntity te = e.getObject();
 		if (te instanceof TileEntityFurnace)
 			e.addCapability(MF_FURNACE, new FurnaceEnergy((TileEntityFurnace) te));
 		else if (te instanceof TileEntityMobSpawner)

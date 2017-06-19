@@ -25,7 +25,7 @@ public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEn
 			wetMode0 = new TextComponentTranslation("mcflux.wet.mode0"),
 			wetMode1 = new TextComponentTranslation("mcflux.wet.mode1"),
 			mfConvert = new TextComponentTranslation("mcflux.convert");
-	public static final String ID = R.MF_NAME + ":top_info";
+	private static final String ID = R.MF_NAME + ":top_info";
 	@Override
 	public void addProbeEntityInfo(ProbeMode mode, IProbeInfo info, EntityPlayer p, World w, Entity e, IProbeHitEntityData data) {
 		IEnergy ie = MCFluxAPI.getEnergySafely(e, null);
@@ -67,7 +67,7 @@ public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEn
 		if (ie == null)
 			return;
 		long en = ie.getEnergy(), ec = ie.getEnergyCapacity();
-		info.text(U.formatMF(ie)).progress(en, ec);
+		info.text(U.formatMF(ie)).progress(en, ec, info.defaultProgressStyle().filledColor(0xFFCC181E).alternateFilledColor(0xFFCC181E));
 		if (sneak && ie instanceof EnergyType.Converter) {
 			info.text(mfConvert.getUnformattedText() + ' ' + ((EnergyType.Converter) ie).getEnergyType());
 		}

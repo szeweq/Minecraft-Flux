@@ -5,8 +5,7 @@ import net.minecraftforge.common.config.Property;
 
 import java.io.File;
 
-public enum MCFluxConfig {
-	;
+public final class MCFluxConfig {
 	public static int CFG_EU_VALUE = 4, WORLDCHUNK_CAP = 20000000, ENERGY_DIST_TRANS = 1000000, CHUNK_CHARGER_TRANS = 2000000, WET_TRANS = 4096, FURNACE_CAP = 50000, MOB_SPAWNER_USE = 500;
 	public static boolean ONLINE_ERROR_REPORT = true, UPDATE_CHECK = true, WRAP_ITEM_STACKS = false, SLEEP_WITH_LIGHT = false;
 	private static Configuration config;
@@ -39,15 +38,17 @@ public enum MCFluxConfig {
 	}
 
 	private static int cfgInt(String name, int def, int min, int max, String comment) {
-		Property p = config.get(Configuration.CATEGORY_GENERAL, name, def, comment + " [default: " + def + "; " + min + " ~ " + max + ']', min, max);
+		final Property p = config.get(Configuration.CATEGORY_GENERAL, name, def, comment + " [default: " + def + "; " + min + " ~ " + max + ']', min, max);
 		p.setLanguageKey("mcflux.config." + name);
-		int pv = p.getInt(def);
+		final int pv = p.getInt(def);
 		return pv < min ? min : pv > max ? max : pv;
 	}
 
 	private static boolean cfgBool(String name, boolean def, String comment) {
-		Property p = config.get(Configuration.CATEGORY_GENERAL, name, def, comment + " [default: " + def + "]");
+		final Property p = config.get(Configuration.CATEGORY_GENERAL, name, def, comment + " [default: " + def + "]");
 		p.setLanguageKey("mcflux.config." + name);
 		return p.getBoolean(def);
 	}
+
+	private MCFluxConfig() {}
 }

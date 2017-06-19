@@ -1,3 +1,6 @@
+## 2.7.0
+This version contains a lot of minor fixes and improvements and it supports [FL](https://minecraft.curseforge.com/projects/fl) version 1.1.1 and above.
+
 ## 2.6.2
 - New Flux (Energy) Generator texture
 - Wrapper collection improvements

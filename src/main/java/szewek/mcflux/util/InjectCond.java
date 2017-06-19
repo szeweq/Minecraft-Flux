@@ -17,17 +17,14 @@ public enum InjectCond {
 					return false;
 				Map<String, ModContainer> modmap = Loader.instance().getIndexedModList();
 				for (String a : args) {
-					if (modmap.containsKey(a)) {
+					if (modmap.containsKey(a))
 						return true;
-					}
 				}
 				break;
 			case CLASS:
 				for (String a : args) {
-					Class<?> cl;
 					try {
-						cl = Class.forName(a);
-						if (cl != null)
+						if (Class.forName(a) != null)
 							return true;
 					} catch (ClassNotFoundException ignored) {}
 				}

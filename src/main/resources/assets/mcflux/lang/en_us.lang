@@ -15,7 +15,7 @@ mcflux.cmd.sgive.noEvent=There is no Special Event with ID %s.
 mcflux.special.desc=[§cMCFlux Event§r] %s
 mcflux.special.ended=[§cMCFlux Event§r] This event has ended!
 
-mcflux.container.gluxgen=Flux Generator
+mcflux.container.fluxgen=Flux Energy Generator
 
 mcflux.fluxgen.speed=Speed
 mcflux.fluxgen.time=Time

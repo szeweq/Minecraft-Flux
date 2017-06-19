@@ -2,7 +2,7 @@ package szewek.mcflux;
 
 public final class R {
 	public static final String
-		MF_VERSION = "@VERSION@",
+		MF_VERSION = "${version}",
 		MF_NAME = "mcflux",
 		MF_FULL_NAME = "Minecraft-Flux",
 		MF_DEPS = "",

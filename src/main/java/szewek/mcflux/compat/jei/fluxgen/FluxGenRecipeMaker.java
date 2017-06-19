@@ -4,16 +4,15 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import szewek.fl.recipes.RecipeItem;
 import szewek.mcflux.recipes.FluxGenRecipes;
 import szewek.mcflux.recipes.RecipeFluxGen;
-import szewek.mcflux.recipes.RecipeItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public enum FluxGenRecipeMaker {
-	;
+public final class FluxGenRecipeMaker {
 	public static List<FluxGenRecipeJEI> getFluxGenRecipes(IJeiHelpers hlp) {
 		IGuiHelper igh = hlp.getGuiHelper();
 		Map<RecipeItem, RecipeFluxGen> catalysts = FluxGenRecipes.getCatalysts();
@@ -41,4 +40,6 @@ public enum FluxGenRecipeMaker {
 			l.add(new FluxGenRecipeJEI(igh, ItemStack.EMPTY, fs, rfg.factor, s));
 		}
 	}
+
+	private FluxGenRecipeMaker() {}
 }

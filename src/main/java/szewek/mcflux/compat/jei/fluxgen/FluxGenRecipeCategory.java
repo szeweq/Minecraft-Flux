@@ -8,6 +8,7 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import net.minecraft.util.text.TextComponentTranslation;
+import szewek.mcflux.R;
 import szewek.mcflux.compat.jei.MCFluxJEIPlugin;
 import szewek.mcflux.tileentities.TileEntityFluxGen;
 import szewek.mcflux.util.MCFluxLocation;
@@ -18,7 +19,7 @@ public class FluxGenRecipeCategory extends BlankRecipeCategory<FluxGenRecipeJEI>
 	private final String locName;
 	public FluxGenRecipeCategory(IGuiHelper igh) {
 		bg = igh.createDrawable(bgLoc, 46, 14, 130 - 46, 72 - 14);
-		locName = new TextComponentTranslation("mcflux.container.fluxgen").getUnformattedText();
+		locName = new TextComponentTranslation("tile.fluxgen.name").getUnformattedComponentText();
 	}
 	@Override public String getUid() {
 		return MCFluxJEIPlugin.ID_FLUXGEN;
@@ -26,6 +27,11 @@ public class FluxGenRecipeCategory extends BlankRecipeCategory<FluxGenRecipeJEI>
 
 	@Override public String getTitle() {
 		return locName;
+	}
+
+	@Override
+	public String getModName() {
+		return R.MF_FULL_NAME;
 	}
 
 	@Override public IDrawable getBackground() {

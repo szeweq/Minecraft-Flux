@@ -50,7 +50,7 @@ public final class ContainerFluxGen extends Container {
 				int f = fluxGen.getField(i);
 				if (vals[i] != f) {
 					vals[i] = f;
-					icl.sendProgressBarUpdate(this, i, f);
+					icl.sendWindowProperty(this, i, f);
 				}
 			}
 		}

@@ -9,8 +9,16 @@ import java.util.Set;
 public final class MCFluxGuiFactory implements IModGuiFactory {
 
 	@Override
-	public void initialize(Minecraft mc) {
+	public void initialize(Minecraft mc) {}
 
+	@Override
+	public GuiScreen createConfigGui(GuiScreen parentScreen) {
+		return new MCFluxGuiConfig(parentScreen);
+	}
+
+	@Override
+	public boolean hasConfigGui() {
+		return true;
 	}
 
 	@Override

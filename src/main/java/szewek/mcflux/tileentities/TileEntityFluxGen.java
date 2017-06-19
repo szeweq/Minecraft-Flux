@@ -379,7 +379,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 		return writeToNBT(new NBTTagCompound());
 	}
 
-	@Nullable @Override public SPacketUpdateTileEntity getUpdatePacket() {
+	@Override public SPacketUpdateTileEntity getUpdatePacket() {
 		return new SPacketUpdateTileEntity(pos, getBlockMetadata(), writeToNBT(new NBTTagCompound()));
 	}
 

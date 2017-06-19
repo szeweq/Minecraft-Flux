@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import szewek.fl.recipes.RecipeItem;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,8 +30,8 @@ public enum FluxGenRecipes {
 		catalysts.put(new RecipeItem(Items.DRAGON_BREATH, 0, null), new RecipeFluxGen(60, 1));
 		catalysts.put(new RecipeItem(Items.NETHER_STAR, 0, null), new RecipeFluxGen(100, 1));
 		catalysts.put(new RecipeItem(Items.TOTEM, 0, null), new RecipeFluxGen(200, 1));
-		hotFluids.put(new FluidStack(FluidRegistry.LAVA, 0), new RecipeFluxGen(2, 100));
-		cleanFluids.put(new FluidStack(FluidRegistry.WATER, 0), new RecipeFluxGen(50, 100));
+		hotFluids.put(new FluidStack(FluidRegistry.LAVA, 0), new RecipeFluxGen(2, 200));
+		cleanFluids.put(new FluidStack(FluidRegistry.WATER, 0), new RecipeFluxGen(50, 200));
 	}
 
 	public static void addCatalyst(RecipeItem ri, int factor, int usage) {

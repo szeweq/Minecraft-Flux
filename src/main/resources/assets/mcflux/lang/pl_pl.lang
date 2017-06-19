@@ -3,7 +3,7 @@ mcflux.config.EUValue.tooltip=Ilość MF przeznaczona do konwersji z/na 1 EU (IC
 mcflux.config.energyDistTransfer.tooltip=Transfer energii na tik przez Dystrybutora Energii
 mcflux.config.furnaceCapacity.tooltip=Pojemność energii dla Pieca
 
-mcflux.container.fluxgen=Generator Fluksu
+mcflux.container.fluxgen=Generator Energii Fluksu
 
 mcflux.fluxgen.speed=Szybkość
 mcflux.fluxgen.time=Czas

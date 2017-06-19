@@ -13,6 +13,12 @@ public interface InjectCollector {
 	void addItemWrapperInject(BiConsumer<ItemStack, WrapperRegistry> bc);
 	void addEntityWrapperInject(BiConsumer<Entity, WrapperRegistry> bc);
 
+	final static InjectCollector DUMMY = new InjectCollector() {
+		public void addTileWrapperInject(BiConsumer<TileEntity, WrapperRegistry> bc) {}
+		public void addItemWrapperInject(BiConsumer<ItemStack, WrapperRegistry> bc) {}
+		public void addEntityWrapperInject(BiConsumer<Entity, WrapperRegistry> bc) {}
+	};
+
 	final class Impl implements InjectCollector {
 		Set<BiConsumer<TileEntity, WrapperRegistry>> tileInjects = new HashSet<>();
 		Set<BiConsumer<ItemStack, WrapperRegistry>> itemInjects = new HashSet<>();
@@ -29,13 +35,5 @@ public interface InjectCollector {
 		public void addEntityWrapperInject(BiConsumer<Entity, WrapperRegistry> bc) {
 			entityInjects.add(bc);
 		}
-	}
-
-	final class Dummy implements InjectCollector {
-		Dummy() {}
-
-		public void addTileWrapperInject(BiConsumer<TileEntity, WrapperRegistry> bc) {}
-		public void addItemWrapperInject(BiConsumer<ItemStack, WrapperRegistry> bc) {}
-		public void addEntityWrapperInject(BiConsumer<Entity, WrapperRegistry> bc) {}
 	}
 }

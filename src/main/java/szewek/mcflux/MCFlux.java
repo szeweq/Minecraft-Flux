@@ -9,7 +9,6 @@ import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
-import net.minecraftforge.oredict.RecipeSorter;
 import szewek.mcflux.api.ex.Battery;
 import szewek.mcflux.api.ex.EnergyNBTStorage;
 import szewek.mcflux.api.ex.IEnergy;
@@ -25,7 +24,6 @@ import szewek.mcflux.special.CommandSpecialGive;
 import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.special.SpecialEventReceiver;
 import szewek.mcflux.util.*;
-import szewek.mcflux.recipes.BuiltShapedRecipe;
 import szewek.mcflux.wrapper.InjectWrappers;
 
 import java.io.File;
@@ -77,7 +75,6 @@ public final class MCFlux {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
-		RecipeSorter.register("mcflux:builtRecipe", BuiltShapedRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 		MCFluxResources.init();
 		// Waila not available // FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
 		PROXY.init();
@@ -108,33 +105,32 @@ public final class MCFlux {
 
 	private void registerAllInjects(ASMDataTable asdt) {
 		L.info("Registering inject registries...");
-		Set<ASMDataTable.ASMData> aset = asdt.getAll(InjectRegistry.class.getCanonicalName());
+		final Set<ASMDataTable.ASMData> aset = asdt.getAll(InjectRegistry.class.getCanonicalName());
 		int cnt = 0;
 		for (ASMDataTable.ASMData data : aset) {
-			String cname = data.getClassName();
+			final String cname = data.getClassName();
 			if (!cname.equals(data.getObjectName())) continue;
-			Class<?> c = U.getClassSafely(cname);
+			final Class<?> c = U.getClassSafely(cname);
 			if (c == null)
 				continue;
-			InjectRegistry ann = c.getAnnotation(InjectRegistry.class);
+			final InjectRegistry ann = c.getAnnotation(InjectRegistry.class);
 			if (!ann.requires().check(ann.args()))
 				continue;
 			try {
-				IInjectRegistry iir = c.asSubclass(IInjectRegistry.class).newInstance();
+				final IInjectRegistry iir = c.asSubclass(IInjectRegistry.class).newInstance();
 				iir.registerInjects();
 				cnt++;
 			} catch (Exception e) {
 				MCFluxReport.sendException(e, "Registering Injects");
 			}
 		}
-		L.info("Registered " + cnt + " inject registries");
 	}
 
 	private static void updateCheck() {
-		ComparableVersion ccv = new ComparableVersion(R.MF_VERSION);
+		final ComparableVersion ccv = new ComparableVersion(R.MF_VERSION);
 		try {
-			JsonObject je = MCFluxNetwork.downloadGistJSON("97a48d6a61b29171938abf2f6bf9f985", "versions.json");
-			String v = je.getAsJsonObject("mc").getAsJsonPrimitive(Loader.MC_VERSION).getAsString();
+			final JsonObject je = MCFluxNetwork.downloadGistJSON("97a48d6a61b29171938abf2f6bf9f985", "versions.json");
+			final String v = je.getAsJsonObject("mc").getAsJsonPrimitive(Loader.MC_VERSION).getAsString();
 			if (new ComparableVersion(v).compareTo(ccv) > 0) {
 				L.info("A newer Minecraft-Flux version is available (" + v + ")");
 				NEWER_VERSION = v;

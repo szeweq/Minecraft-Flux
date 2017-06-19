@@ -12,7 +12,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import szewek.mcflux.L;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 import szewek.mcflux.tileentities.TileEntityFluxGen;
 import szewek.mcflux.util.TransferType;
@@ -61,10 +60,8 @@ public abstract class Msg {
 		private TransferType[] sides = null;
 
 		@Override void decode(PacketBuffer pb) throws IOException {
-			if (pb.readableBytes() < 8) {
-				L.warn("Msg.Update incomplete");
-				return;
-			}
+			if (pb.readableBytes() < 8)
+				throw new IOException("Msg.Update incomplete - too few readable bytes");
 			pos = BlockPos.fromLong(pb.readLong());
 			if (pb.readableBytes() == 14) {
 				sides = new TransferType[6];
@@ -105,10 +102,8 @@ public abstract class Msg {
 		private String version = null;
 
 		@Override void decode(PacketBuffer pb) throws IOException {
-			if (pb.readableBytes() < 2) {
-				L.warn("Incompatible length");
-				return;
-			}
+			if (pb.readableBytes() < 2)
+				throw new IOException("Msg.NewVersion incomplete - too few readable bytes");
 			version = pb.readString(32);
 			broken = false;
 		}

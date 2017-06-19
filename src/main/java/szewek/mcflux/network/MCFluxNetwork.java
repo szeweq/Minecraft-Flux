@@ -74,7 +74,7 @@ public enum MCFluxNetwork {
 
 	private static FMLProxyPacket makePacket(Msg fmsg) {
 		final PacketBuffer pb = new PacketBuffer(Unpooled.buffer());
-		byte id = (byte) ids.indexOf(fmsg.getClass());
+		final byte id = (byte) ids.indexOf(fmsg.getClass());
 		pb.writeByte(id);
 		try {
 			fmsg.encode(pb);
@@ -90,10 +90,11 @@ public enum MCFluxNetwork {
 		if (pb == null)
 			pb = new PacketBuffer(pp.payload());
 		try {
-			byte id = pb.readByte();
+			final byte id = pb.readByte();
 			final Msg fmsg = ids.get(id).newInstance();
 			if (!mc.isCallingFromMinecraftThread()) {
-				mc.addScheduledTask(new DecodeMsg(fmsg, pb, p, s));
+				fmsg.decode(pb);
+				mc.addScheduledTask(new DecodeMsg(fmsg, p, s));
 			}
 		} catch (Exception x) {
 			MCFluxReport.sendException(x, "Processing message (" + s + "-side)");
@@ -122,20 +123,17 @@ public enum MCFluxNetwork {
 
 	static final class DecodeMsg implements java.lang.Runnable {
 		private final Msg msg;
-		private final PacketBuffer pbuf;
 		private final EntityPlayer player;
 		private final Side side;
 
-		DecodeMsg(Msg fm, PacketBuffer pb, EntityPlayer p, Side s) {
+		DecodeMsg(Msg fm, EntityPlayer p, Side s) {
 			msg = fm;
-			pbuf = pb;
 			player = p;
 			side = s;
 		}
 
 		public void run() {
 			try {
-				msg.decode(pbuf);
 				MCFlux.PROXY.processMsg(msg, player);
 			} catch (Exception e) {
 				MCFluxReport.sendException(e, "Decoding message (" + side + "-side) with PROXY " + MCFlux.PROXY.side());

@@ -21,9 +21,9 @@ sourceCompatibility = targetCompatibility = 1.8
 idea { module { inheritOutputDirs = true } }
 
 String[] versionsMC = ["1.11.2"]
-String versionForge = "13.20.0.2228"
-String FLVersion = "1.0.2"
-String MFReq = "MF_DEPS = \"required-after:fl@[${FLVersion},)\""
+String versionForge = "13.20.0.2315"
+String FLVersion = "1.1.1"
+String MFReq = "MF_DEPS = \"required-after:fl@[${FLVersion},),required-after:jei@[4.5.0,)\""
 
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
@@ -31,8 +31,15 @@ task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	classifier = "dev"
 }
 task sourcesJar(type: Jar, dependsOn: "sourceJar") {
-	from sourceSets.main.allJava
+	from (sourceSets.main.allJava) {
+		include "szewek/mcflux/R.java"
+		expand 'version': project.version
+	}
+	from (sourceSets.main.allJava) {
+		exclude "szewek/mcflux/R.java"
+	}
 	from sourceSets.api.allJava
+	from sourceSets.main.resources
 	classifier = "sources"
 }
 String ttag = System.getenv("TRAVIS_TAG")
@@ -43,8 +50,8 @@ archivesBaseName = "mcflux"
 minecraft {
 	version = versionsMC[0] + "-" + versionForge
 	runDir = "run"
-	mappings = "snapshot_20170402"
-	replace "@VERSION@", project.version
+	mappings = "snapshot_20170611"
+	replace '\${version}', project.version
 	replace "MF_DEPS = \"\"", MFReq
 	replaceIn "R.java"
 }
@@ -88,7 +95,7 @@ repositories {
 dependencies {
 	deobfCompile "szewek.fl:fl:" + FLVersion
 	deobfCompile "mcjty.theoneprobe:TheOneProbe:1.1x-1.4.0-50"
-	deobfCompile "mezz.jei:jei_1.11.2:4.4.1.285"
+	deobfCompile "mezz.jei:jei_1.11.2:4.5.0.287"
 	//deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
 	deobfCompile "net.industrial-craft:industrialcraft-2:2.6.54-ex110:api"
 	deobfCompile "net.darkhax.tesla:Tesla:1.11-1.3.0.51"

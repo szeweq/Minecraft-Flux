@@ -20,12 +20,12 @@ public final class CapStorage {
 
 	private static final Capability.IStorage<INBTSerializable<NBTBase>> NBT_STORAGE = new Capability.IStorage<INBTSerializable<NBTBase>>() {
 		@Nullable @Override
-		public NBTBase writeNBT(Capability<INBTSerializable<NBTBase>> capability, INBTSerializable<NBTBase> instance, EnumFacing side) {
+		public NBTBase writeNBT(Capability<INBTSerializable<NBTBase>> cap, INBTSerializable<NBTBase> instance, EnumFacing side) {
 			return instance.serializeNBT();
 		}
 
 		@Override
-		public void readNBT(Capability<INBTSerializable<NBTBase>> capability, INBTSerializable<NBTBase> instance, EnumFacing side, NBTBase nbt) {
+		public void readNBT(Capability<INBTSerializable<NBTBase>> cap, INBTSerializable<NBTBase> instance, EnumFacing side, NBTBase nbt) {
 			instance.deserializeNBT(nbt);
 		}
 	};
