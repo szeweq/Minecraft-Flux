@@ -23,7 +23,7 @@ idea { module { inheritOutputDirs = true } }
 String[] versionsMC = ["1.11.2"]
 String versionForge = "13.20.0.2315"
 String FLVersion = "1.1.1"
-String MFReq = "MF_DEPS = \"required-after:fl@[${FLVersion},),required-after:jei@[4.5.0,)\""
+String MFReq = "MF_DEPS = \"required-after:fl@[${FLVersion},);required-after:jei@[4.5.0,)\""
 
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
