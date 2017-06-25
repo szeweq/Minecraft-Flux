@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -56,6 +57,16 @@ public class BlockFluxGen extends BlockMCFluxContainer {
 	public void neighborChanged(IBlockState ibs, World w, BlockPos bp, Block b, BlockPos fromPos) {
 		if (!w.isRemote)
 			updateRedstoneState(w, bp);
+	}
+
+	@Override
+	public void breakBlock(World w, BlockPos pos, IBlockState state) {
+		TileEntity te = w.getTileEntity(pos);
+		if (te instanceof TileEntityFluxGen) {
+			InventoryHelper.dropInventoryItems(w, pos, (TileEntityFluxGen) te);
+			w.updateComparatorOutputLevel(pos, this);
+		}
+		super.breakBlock(w, pos, state);
 	}
 
 	private void updateRedstoneState(World w, BlockPos bp) {

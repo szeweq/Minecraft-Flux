@@ -28,7 +28,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import szewek.mcflux.config.MCFluxConfig;
@@ -39,7 +38,8 @@ import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.special.SpecialEventReceiver;
 import szewek.mcflux.util.MCFluxLocation;
 
-@SuppressWarnings("unused") @Mod.EventBusSubscriber(modid = R.MF_NAME) enum MCFluxEvents {
+@SuppressWarnings("unused")
+enum MCFluxEvents {
 	INSTANCE;
 
 	private static final MCFluxLocation

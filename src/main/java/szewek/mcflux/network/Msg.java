@@ -12,19 +12,20 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import szewek.fl.network.FLNetMsg;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 import szewek.mcflux.tileentities.TileEntityFluxGen;
+import szewek.mcflux.util.MCFluxReport;
 import szewek.mcflux.util.TransferType;
 
 import java.io.IOException;
 
-public abstract class Msg {
-	boolean broken = true;
+public abstract class Msg extends FLNetMsg {
 
-	abstract void decode(PacketBuffer pb) throws IOException;
-	abstract void encode(PacketBuffer pb) throws IOException;
-	public void msgServer(EntityPlayer p) {}
-	@SideOnly(Side.CLIENT) public void msgClient(EntityPlayer p) {}
+	@Override
+	protected void exception(Exception x) {
+		MCFluxReport.sendException(x, "Msg Exception from: " + this.getClass().getName());
+	}
 
 	public static Msg update(BlockPos bp, TransferType[] tts) {
 		Update m = new Update();
@@ -55,15 +56,17 @@ public abstract class Msg {
 		return m;
 	}
 
-	static class Update extends Msg {
+	public static final class Update extends Msg {
 		private BlockPos pos = null;
 		private TransferType[] sides = null;
 
-		@Override void decode(PacketBuffer pb) throws IOException {
-			if (pb.readableBytes() < 8)
+		@Override
+		protected void decode(PacketBuffer pb) throws IOException {
+			final int rb = pb.readableBytes();
+			if (rb != 8 && rb != 14)
 				throw new IOException("Msg.Update incomplete - too few readable bytes");
 			pos = BlockPos.fromLong(pb.readLong());
-			if (pb.readableBytes() == 14) {
+			if (rb == 14) {
 				sides = new TransferType[6];
 				TransferType[] ttv = TransferType.values();
 				for (int i = 0; i < 6; i++)
@@ -72,14 +75,16 @@ public abstract class Msg {
 			broken = false;
 		}
 
-		@Override void encode(PacketBuffer pb) throws IOException {
+		@Override
+		protected void encode(PacketBuffer pb) throws IOException {
 			pb.writeLong(pos.toLong());
 			if (sides != null)
 				for (int i = 0; i < 6; i++)
 					pb.writeByte(sides[i].ord);
 		}
 
-		@Override public void msgServer(EntityPlayer p) {
+		@Override
+		protected void srvmsg(EntityPlayer p) {
 			EntityPlayerMP mp = (EntityPlayerMP) p;
 			if (mp != null) {
 				TileEntity te = mp.world.getTileEntity(pos);
@@ -88,8 +93,10 @@ public abstract class Msg {
 			}
 		}
 
-		@SideOnly(Side.CLIENT) @Override public void msgClient(EntityPlayer p) {
-			if (sides.length != 6) {
+		@SideOnly(Side.CLIENT)
+		@Override
+		protected void climsg(EntityPlayer p) {
+			if (sides == null || sides.length != 6) {
 				return;
 			}
 			TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
@@ -98,31 +105,36 @@ public abstract class Msg {
 		}
 	}
 
-	static class NewVersion extends Msg {
+	public static final class NewVersion extends Msg {
 		private String version = null;
 
-		@Override void decode(PacketBuffer pb) throws IOException {
+		@Override
+		protected void decode(PacketBuffer pb) throws IOException {
 			if (pb.readableBytes() < 2)
 				throw new IOException("Msg.NewVersion incomplete - too few readable bytes");
 			version = pb.readString(32);
 			broken = false;
 		}
 
-		@Override void encode(PacketBuffer pb) throws IOException {
+		@Override
+		protected void encode(PacketBuffer pb) throws IOException {
 			pb.writeString(version);
 		}
 
-		@SideOnly(Side.CLIENT) @Override public void msgClient(EntityPlayer p) {
+		@SideOnly(Side.CLIENT)
+		@Override
+		protected void climsg(EntityPlayer p) {
 			p.sendMessage(new TextComponentTranslation("mcflux.update.newversion", version));
 		}
 	}
 
-	static class FluidAmount extends Msg {
+	public static final class FluidAmount extends Msg {
 		private BlockPos pos;
 		private Fluid fluid = null;
 		private int id, amount;
 
-		@Override void decode(PacketBuffer pb) throws IOException {
+		@Override
+		protected void decode(PacketBuffer pb) throws IOException {
 			pos = BlockPos.fromLong(pb.readLong());
 			id = pb.readInt();
 			amount = pb.readInt();
@@ -131,7 +143,8 @@ public abstract class Msg {
 			broken = false;
 		}
 
-		@Override void encode(PacketBuffer pb) throws IOException {
+		@Override
+		protected void encode(PacketBuffer pb) throws IOException {
 			pb.writeLong(pos.toLong());
 			pb.writeInt(id);
 			pb.writeInt(amount);
@@ -139,7 +152,8 @@ public abstract class Msg {
 				pb.writeString(fluid.getName());
 		}
 
-		@SideOnly(Side.CLIENT) @Override public void msgClient(EntityPlayer p) {
+		@Override
+		protected void climsg(EntityPlayer p) {
 			TileEntity te = p.world.getTileEntity(pos);
 			if (te instanceof TileEntityFluxGen)
 				((TileEntityFluxGen) te).updateFluid(id, fluid, amount);

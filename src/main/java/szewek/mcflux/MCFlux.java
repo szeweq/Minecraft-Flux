@@ -1,6 +1,7 @@
 package szewek.mcflux;
 
 import com.google.gson.JsonObject;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -59,6 +60,7 @@ public final class MCFlux {
 			new Thread(MCFlux::updateCheck, "MCFlux Update Check").start();
 		SpecialEventHandler.getEvents();
 		MCFluxNetwork.registerAll();
+		MinecraftForge.EVENT_BUS.register(MCFluxEvents.INSTANCE);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new MCFluxGuiHandler());
 		CapabilityManager cm = CapabilityManager.INSTANCE;
 		cm.register(IEnergy.class, new EnergyNBTStorage(), Battery::new);
