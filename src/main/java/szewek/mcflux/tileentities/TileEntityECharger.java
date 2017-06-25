@@ -4,9 +4,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import szewek.fl.energy.IEnergy;
 import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
-import szewek.mcflux.api.ex.IEnergy;
 
 import java.util.ArrayList;
 import java.util.List;

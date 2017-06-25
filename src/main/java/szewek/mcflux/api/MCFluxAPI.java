@@ -2,15 +2,15 @@ package szewek.mcflux.api;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import szewek.mcflux.api.ex.EX;
-import szewek.mcflux.api.ex.IEnergy;
+import szewek.fl.FL;
+import szewek.fl.energy.IEnergy;
 
 public enum MCFluxAPI {
 	;
 
 	public static IEnergy getEnergySafely(ICapabilityProvider icp, EnumFacing f) {
 		try {
-			return icp.getCapability(EX.CAP_ENERGY, f);
+			return icp.getCapability(FL.ENERGY_CAP, f);
 		} catch (Exception ignored) {
 		}
 		return null;

@@ -10,9 +10,6 @@ import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
-import szewek.mcflux.api.ex.Battery;
-import szewek.mcflux.api.ex.EnergyNBTStorage;
-import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.api.fe.FlavorNBTStorage;
 import szewek.mcflux.api.fe.FlavoredStorage;
 import szewek.mcflux.api.fe.IFlavorEnergy;
@@ -63,7 +60,6 @@ public final class MCFlux {
 		MinecraftForge.EVENT_BUS.register(MCFluxEvents.INSTANCE);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new MCFluxGuiHandler());
 		CapabilityManager cm = CapabilityManager.INSTANCE;
-		cm.register(IEnergy.class, new EnergyNBTStorage(), Battery::new);
 		cm.register(IFlavorEnergy.class, new FlavorNBTStorage(), FlavoredStorage::new);
 		cm.register(WorldChunkEnergy.class, CapStorage.getNBTStorage(), WorldChunkEnergy::new);
 		cm.register(PlayerEnergy.class, CapStorage.getNBTStorage(), PlayerEnergy::new);

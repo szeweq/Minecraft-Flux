@@ -4,10 +4,9 @@ import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.util.EnumFacing;
-import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.wrapper.EnergyType;
 
-final class RFSided implements IEnergy, net.minecraftforge.energy.IEnergyStorage, EnergyType.Converter {
+final class RFSided implements net.minecraftforge.energy.IEnergyStorage, EnergyType.Converter, szewek.fl.energy.IEnergy {
 	private final EnumFacing face;
 	private final IEnergyHandler handler;
 	private final IEnergyProvider provider;

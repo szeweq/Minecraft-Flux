@@ -10,8 +10,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
-import szewek.mcflux.api.ex.EX;
+import szewek.fl.FL;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 import java.util.function.DoubleSupplier;
 
@@ -68,15 +69,15 @@ final class EUTileCapabilityProvider implements ICapabilityProvider {
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> cap, EnumFacing f) {
-		return cap == SELF_CAP || ((cap == EX.CAP_ENERGY || cap == CapabilityEnergy.ENERGY) && complete);
+	public boolean hasCapability(@Nonnull Capability<?> cap, EnumFacing f) {
+		return cap == SELF_CAP || ((cap == FL.ENERGY_CAP || cap == CapabilityEnergy.ENERGY) && complete);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getCapability(Capability<T> cap, EnumFacing f) {
+	public <T> T getCapability(@Nonnull Capability<T> cap, EnumFacing f) {
 		if (cap == SELF_CAP)
 			return (T) this;
-		return (cap == EX.CAP_ENERGY || cap == CapabilityEnergy.ENERGY) && complete ? (T) sides[f == null ? 6 : f.getIndex()] : null;
+		return (cap == FL.ENERGY_CAP || cap == CapabilityEnergy.ENERGY) && complete ? (T) sides[f == null ? 6 : f.getIndex()] : null;
 	}
 }

@@ -11,10 +11,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import szewek.fl.energy.Battery;
+import szewek.fl.energy.IEnergy;
 import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
-import szewek.mcflux.api.ex.Battery;
-import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 

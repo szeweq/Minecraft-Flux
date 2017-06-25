@@ -3,10 +3,9 @@ package szewek.mcflux.wrapper.immersiveflux;
 import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxProvider;
 import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxReceiver;
 import net.minecraft.util.EnumFacing;
-import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.wrapper.EnergyType;
 
-final class IFSided implements IEnergy, EnergyType.Converter {
+final class IFSided implements EnergyType.Converter, szewek.fl.energy.IEnergy {
 	private final EnumFacing face;
 	private final IFluxProvider provider;
 	private final IFluxReceiver receiver;

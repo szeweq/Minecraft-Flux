@@ -7,7 +7,7 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import szewek.mcflux.api.ex.EnergyCapable;
+import szewek.mcflux.util.EnergyCapable;
 
 public final class EntityActionEnergy extends EnergyCapable {
 	private boolean charged = false;

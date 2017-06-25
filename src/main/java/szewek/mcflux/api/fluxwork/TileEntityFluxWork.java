@@ -4,15 +4,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
-import szewek.mcflux.api.ex.EX;
-import szewek.mcflux.api.ex.IEnergy;
+import szewek.fl.FL;
 
 import javax.annotation.Nonnull;
 
 /**
  * TileEntity working cycle template.
  */
-public abstract class TileEntityFluxWork extends TileEntity implements IEnergy, ITickable {
+public abstract class TileEntityFluxWork extends TileEntity implements ITickable, szewek.fl.energy.IEnergy {
 	protected WorkState workState = WorkState.LAZY;
 	protected long energy, maxEnergy;
 	protected int workNeeded, workDone;
@@ -112,12 +111,12 @@ public abstract class TileEntityFluxWork extends TileEntity implements IEnergy, 
 
 	@Override
 	public boolean hasCapability(@Nonnull Capability<?> cap, EnumFacing f) {
-		return cap == EX.CAP_ENERGY || super.hasCapability(cap, f);
+		return cap == FL.ENERGY_CAP || super.hasCapability(cap, f);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(@Nonnull Capability<T> cap, EnumFacing f) {
-		return cap == EX.CAP_ENERGY? (T) this : super.getCapability(cap, f);
+		return cap == FL.ENERGY_CAP ? (T) this : super.getCapability(cap, f);
 	}
 }

@@ -1,6 +1,6 @@
 package szewek.mcflux.wrapper;
 
-import szewek.mcflux.api.ex.IEnergy;
+import szewek.fl.energy.IEnergy;
 
 public abstract class ForgeEnergyCapable implements IEnergy, net.minecraftforge.energy.IEnergyStorage {
 	@Override public int receiveEnergy(int maxReceive, boolean simulate) {

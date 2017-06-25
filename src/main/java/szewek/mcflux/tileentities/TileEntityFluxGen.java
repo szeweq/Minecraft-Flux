@@ -28,16 +28,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import szewek.fl.FL;
+import szewek.fl.energy.ForgeEnergyCompat;
+import szewek.fl.energy.IEnergy;
 import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
-import szewek.mcflux.api.ex.EX;
-import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.api.fluxwork.WorkState;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.network.Msg;
 import szewek.mcflux.recipes.FluxGenRecipes;
 import szewek.mcflux.recipes.RecipeFluxGen;
-import szewek.mcflux.util.ForgeEnergyCompat;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -151,12 +151,12 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 	}
 
 	@Override public boolean hasCapability(Capability<?> cap, @Nullable EnumFacing f) {
-		return cap == EX.CAP_ENERGY || cap == CapabilityEnergy.ENERGY || cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(cap, f);
+		return cap == FL.ENERGY_CAP || cap == CapabilityEnergy.ENERGY || cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(cap, f);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Nullable @Override public <T> T getCapability(Capability<T> cap, @Nullable EnumFacing f) {
-		if (cap == EX.CAP_ENERGY || cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+		if (cap == FL.ENERGY_CAP || cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return (T) this;
 		if (cap == CapabilityEnergy.ENERGY)
 			return (T) fec;

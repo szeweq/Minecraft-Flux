@@ -4,7 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import szewek.mcflux.api.ex.Battery;
+import szewek.fl.energy.Battery;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 
 import javax.annotation.Nonnull;

@@ -4,9 +4,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
+import szewek.fl.FL;
+import szewek.fl.energy.IEnergy;
 import szewek.mcflux.U;
-import szewek.mcflux.api.ex.EX;
-import szewek.mcflux.api.ex.IEnergy;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,7 +42,7 @@ public class EnergyCapabilityProvider implements ICapabilityProvider {
 	}
 
 	@Override public boolean hasCapability(@Nonnull Capability<?> cap, @Nullable EnumFacing f) {
-		return (cap == EX.CAP_ENERGY || (forgeCompatible && cap == CapabilityEnergy.ENERGY)) && !broken && canConnect(f);
+		return (cap == FL.ENERGY_CAP || (forgeCompatible && cap == CapabilityEnergy.ENERGY)) && !broken && canConnect(f);
 	}
 
 	@SuppressWarnings("unchecked")

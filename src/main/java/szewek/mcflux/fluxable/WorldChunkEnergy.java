@@ -13,7 +13,7 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.INBTSerializable;
-import szewek.mcflux.api.ex.Battery;
+import szewek.fl.energy.Battery;
 import szewek.mcflux.api.fe.FlavoredContainer;
 import szewek.mcflux.config.MCFluxConfig;
 

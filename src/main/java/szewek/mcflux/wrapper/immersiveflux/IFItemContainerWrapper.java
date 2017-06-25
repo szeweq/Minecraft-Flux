@@ -2,7 +2,7 @@ package szewek.mcflux.wrapper.immersiveflux;
 
 import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxContainerItem;
 import net.minecraft.item.ItemStack;
-import szewek.mcflux.api.ex.EnergyCapable;
+import szewek.mcflux.util.EnergyCapable;
 import szewek.mcflux.wrapper.EnergyType;
 
 final class IFItemContainerWrapper extends EnergyCapable implements EnergyType.Converter {

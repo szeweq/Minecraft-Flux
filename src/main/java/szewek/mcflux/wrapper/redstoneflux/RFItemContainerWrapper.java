@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import szewek.mcflux.api.ex.EnergyCapable;
+import szewek.mcflux.util.EnergyCapable;
 import szewek.mcflux.wrapper.EnergyType;
 
 import javax.annotation.Nullable;

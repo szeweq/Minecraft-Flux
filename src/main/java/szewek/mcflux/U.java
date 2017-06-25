@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import szewek.mcflux.api.ex.IEnergy;
+import szewek.fl.energy.IEnergy;
 import szewek.mcflux.api.fe.Flavored;
 import szewek.mcflux.api.fe.FlavoredMutable;
 import szewek.mcflux.api.fe.IFlavorEnergy;
@@ -24,12 +24,12 @@ public final class U {
 	public static final EnumFacing[] FANCY_FACING = new EnumFacing[] {DOWN, UP, NORTH, SOUTH, WEST, EAST, null};
 
 	public static String formatMF(IEnergy ie) {
-		return ie.getEnergy() + " / " + ie.getEnergyCapacity() + " MF";
+		return ie.getEnergy() + " / " + ie.getEnergyCapacity() + " F";
 	}
 
 	public static long transferEnergy(IEnergy from, IEnergy to, final long amount) {
 		if (from != null && to != null && from.canOutputEnergy() && to.canInputEnergy()) {
-			long r = to.inputEnergy(from.outputEnergy(amount, true), true);
+			final long r = to.inputEnergy(from.outputEnergy(amount, true), true);
 			if (r > 0)
 				return to.inputEnergy(from.outputEnergy(r, false), false);
 		}

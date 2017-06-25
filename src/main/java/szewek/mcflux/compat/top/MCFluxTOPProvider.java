@@ -9,11 +9,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import szewek.fl.energy.IEnergy;
 import szewek.mcflux.MCFluxResources;
 import szewek.mcflux.R;
 import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
-import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockWET;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
@@ -26,6 +26,14 @@ public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEn
 			wetMode1 = new TextComponentTranslation("mcflux.wet.mode1"),
 			mfConvert = new TextComponentTranslation("mcflux.convert");
 	private static final String ID = R.MF_NAME + ":top_info";
+	private static IProgressStyle fStyle = null;
+
+	private static IProgressStyle getFStyle(IProbeInfo info) {
+		if (fStyle == null)
+			fStyle = info.defaultProgressStyle().borderColor(0xFFC0C0C0).filledColor(0xFFDC181E).alternateFilledColor(0xFFDC181E).backgroundColor(0xFF4C080E).height(6).showText(false);
+		return fStyle;
+	}
+
 	@Override
 	public void addProbeEntityInfo(ProbeMode mode, IProbeInfo info, EntityPlayer p, World w, Entity e, IProbeHitEntityData data) {
 		IEnergy ie = MCFluxAPI.getEnergySafely(e, null);
@@ -67,7 +75,7 @@ public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEn
 		if (ie == null)
 			return;
 		long en = ie.getEnergy(), ec = ie.getEnergyCapacity();
-		info.text(U.formatMF(ie)).progress(en, ec, info.defaultProgressStyle().filledColor(0xFFCC181E).alternateFilledColor(0xFFCC181E));
+		info.text(U.formatMF(ie)).progress(en, ec, getFStyle(info));
 		if (sneak && ie instanceof EnergyType.Converter) {
 			info.text(mfConvert.getUnformattedText() + ' ' + ((EnergyType.Converter) ie).getEnergyType());
 		}

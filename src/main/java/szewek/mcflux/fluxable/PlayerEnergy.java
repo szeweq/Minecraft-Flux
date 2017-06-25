@@ -9,8 +9,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
-import szewek.mcflux.api.ex.EX;
-import szewek.mcflux.api.ex.IEnergy;
+import szewek.fl.FL;
+import szewek.fl.energy.IEnergy;
 
 import javax.annotation.Nonnull;
 
@@ -40,13 +40,13 @@ public final class PlayerEnergy implements IEnergy, ICapabilityProvider, INBTSer
 
 	@Override
 	public boolean hasCapability(@Nonnull Capability<?> cap, EnumFacing f) {
-		return cap == SELF_CAP || (maxEnergy > 0 && cap == EX.CAP_ENERGY);
+		return cap == SELF_CAP || (maxEnergy > 0 && cap == FL.ENERGY_CAP);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(@Nonnull Capability<T> cap, EnumFacing f) {
-		return cap == SELF_CAP || (maxEnergy > 0 && cap == EX.CAP_ENERGY) ? (T) this : null;
+		return cap == SELF_CAP || (maxEnergy > 0 && cap == FL.ENERGY_CAP) ? (T) this : null;
 	}
 
 	@Override

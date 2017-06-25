@@ -4,10 +4,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.wrapper.EnergyType;
 
-final class ForgeEnergySided implements IEnergy, EnergyType.Converter {
+final class ForgeEnergySided implements EnergyType.Converter, szewek.fl.energy.IEnergy {
 	private final IEnergyStorage storage;
 	private final boolean notEmpty;
 

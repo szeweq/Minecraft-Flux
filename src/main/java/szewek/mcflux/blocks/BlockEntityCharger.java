@@ -8,8 +8,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import szewek.fl.energy.IEnergy;
 import szewek.mcflux.api.MCFluxAPI;
-import szewek.mcflux.api.ex.IEnergy;
 import szewek.mcflux.tileentities.TileEntityECharger;
 
 import javax.annotation.Nullable;

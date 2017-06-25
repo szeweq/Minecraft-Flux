@@ -1,3 +1,11 @@
+## 2.8.0
+- Using FL (Flux Library) networking
+- Fixed invisible sub-blocks on sides of blocks (Energy Distributor, Chunk Charger, etc...)
+- Fixed new version notifications
+- Other networking fixes
+- Breaking Flux Energy Generator now drops items from inventory
+- Changed Energy API (uses new API from FL)
+
 ## 2.7.0
 This version contains a lot of minor fixes and improvements and it supports [FL](https://minecraft.curseforge.com/projects/fl) version 1.1.1 and above.
 

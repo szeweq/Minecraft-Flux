@@ -7,9 +7,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import szewek.fl.FL;
-import szewek.mcflux.api.ex.EX;
-import szewek.mcflux.api.ex.EnergyCapable;
-import szewek.mcflux.util.ForgeEnergyCompat;
+import szewek.fl.energy.ForgeEnergyCompat;
+import szewek.mcflux.util.EnergyCapable;
 
 import javax.annotation.Nullable;
 
@@ -24,7 +23,7 @@ public final class FurnaceEnergy extends EnergyCapable {
 	}
 
 	@Override public boolean hasCapability(Capability<?> cap, @Nullable EnumFacing f) {
-		return cap == EX.CAP_ENERGY || cap == CapabilityEnergy.ENERGY;
+		return cap == FL.ENERGY_CAP || cap == CapabilityEnergy.ENERGY;
 	}
 
 	@SuppressWarnings("unchecked")
