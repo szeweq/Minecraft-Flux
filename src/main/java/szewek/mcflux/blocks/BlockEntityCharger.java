@@ -12,8 +12,6 @@ import szewek.fl.energy.IEnergy;
 import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.tileentities.TileEntityECharger;
 
-import javax.annotation.Nullable;
-
 public final class BlockEntityCharger extends BlockMCFluxContainer {
 	private static final AxisAlignedBB DEF_AABB = new AxisAlignedBB(0.125, 0, 0.125, 0.875, 0.1875, 0.875);
 
@@ -22,7 +20,7 @@ public final class BlockEntityCharger extends BlockMCFluxContainer {
 		setHardness(0.5F);
 	}
 
-	@Nullable @Override public TileEntity createNewTileEntity(World worldIn, int meta) {
+	@Override public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityECharger();
 	}
 

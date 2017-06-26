@@ -49,10 +49,8 @@ public final class MCFlux {
 		L.prepare(e.getModLog());
 		MC_DIR = e.getModConfigurationDirectory().getParentFile();
 		MCFluxConfig.makeConfig(e.getSuggestedConfigurationFile());
-		if (R.MF_VERSION.charAt(0) == '@')
+		if (R.MF_VERSION.charAt(0) == '$')
 			L.warn("You are running Minecraft-Flux with an unknown version (development maybe?)");
-		else
-			L.info("Minecraft-Flux " + R.MF_VERSION);
 		if (MCFluxConfig.UPDATE_CHECK)
 			new Thread(MCFlux::updateCheck, "MCFlux Update Check").start();
 		SpecialEventHandler.getEvents();
@@ -66,7 +64,6 @@ public final class MCFlux {
 		cm.register(SpecialEventReceiver.class, CapStorage.getNBTStorage(), SpecialEventReceiver::new);
 		MCFluxResources.preInit();
 		PROXY.preInit();
-		MCFluxReport.listAllConflictingMods();
 		registerAllInjects(e.getAsmData());
 		InjectWrappers.init();
 	}

@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 import szewek.mcflux.L;
 import szewek.mcflux.R;
 
@@ -81,31 +80,6 @@ public final class MCFluxReport {
 		} else
 			L.info("No errors found!");
 		ps.close();
-	}
-
-	public static void listAllConflictingMods() {
-		String[] mods = new String[] {
-				"energysynergy",
-				"commoncapabilities"
-		};
-		Map<String, ModContainer> modmap = Loader.instance().getIndexedModList();
-		List<String> sl = new ArrayList<>();
-		for (String m : mods) {
-			if (modmap.containsKey(m)) {
-				sl.add(modmap.get(m).getName());
-			}
-		}
-		if (!sl.isEmpty()) {
-			StringBuilder sb = new StringBuilder("There are mods that can cause a conflict with Minecraft-Flux: ");
-			boolean comma = false;
-			for (String s : sl) {
-				sb.append(s);
-				if (comma)
-					sb.append(", ");
-				comma = true;
-			}
-			L.warn(sb.toString());
-		}
 	}
 
 	static final class Uncaught implements Thread.UncaughtExceptionHandler {
