@@ -1,0 +1,16 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+	"AAA",
+	"BCB",
+	"AAA"
+  ],
+  "key": {
+	"A": {"type": "forge:ore_dict", "ore": "ingotIron"},
+	"B": {"type": "minecraft:item", "item": "minecraft:dye", "data": 4},
+	"C": {"type": "minecraft:item", "item": "minecraft:glowstone"}
+  },
+  "result": {
+	"item": "mcflux:echarger"
+  }
+}

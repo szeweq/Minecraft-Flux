@@ -58,22 +58,20 @@ public final class WorldChunkEnergy implements ICapabilityProvider, INBTSerializ
 		long l = packLong(bx / 16, by / 16, bz / 16);
 		if (eChunks.containsKey(l)) {
 			return eChunks.get(l);
-		} else {
-			Battery bat = new Battery(MCFluxConfig.WORLDCHUNK_CAP);
-			eChunks.put(l, bat);
-			return bat;
 		}
+		Battery bat = new Battery(MCFluxConfig.WORLDCHUNK_CAP);
+		eChunks.put(l, bat);
+		return bat;
 	}
 
 	public FlavoredContainer getFlavorEnergyChunk(int bx, int by, int bz) {
 		long l = packLong(bx / 16, by / 16, bz / 16);
 		if (fChunks.containsKey(l)) {
 			return fChunks.get(l);
-		} else {
-			FlavoredContainer fc = new FlavoredContainer(MCFluxConfig.WORLDCHUNK_CAP / 4);
-			fChunks.put(l, fc);
-			return fc;
 		}
+		FlavoredContainer fc = new FlavoredContainer(MCFluxConfig.WORLDCHUNK_CAP / 4);
+		fChunks.put(l, fc);
+		return fc;
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package szewek.mcflux.compat.jei.fluxgen;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -10,7 +10,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 
-public class FluxGenRecipeJEI extends BlankRecipeWrapper {
+public class FluxGenRecipeJEI implements IRecipeWrapper {
 	final ItemStack inputItem;
 	final FluidStack inputFluid;
 	private final String type, factor;

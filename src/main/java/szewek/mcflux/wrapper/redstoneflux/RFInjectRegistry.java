@@ -1,7 +1,7 @@
 package szewek.mcflux.wrapper.redstoneflux;
 
-import cofh.api.energy.IEnergyContainerItem;
-import cofh.api.energy.IEnergyHandler;
+import cofh.redstoneflux.api.IEnergyContainerItem;
+import cofh.redstoneflux.api.IEnergyHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -13,7 +13,7 @@ import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
 import szewek.mcflux.wrapper.WrapperRegistry;
 
-@InjectRegistry(requires = InjectCond.CLASS, args = {"cofh.api.energy.IEnergyHandler"})
+@InjectRegistry(requires = InjectCond.MOD, args = {"redstoneflux"})
 public final class RFInjectRegistry implements IInjectRegistry {
 	@Override
 	public void registerInjects() {

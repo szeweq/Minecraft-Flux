@@ -1,7 +1,8 @@
 package szewek.mcflux.compat.top;
 
 import mcjty.theoneprobe.api.ITheOneProbe;
-import szewek.mcflux.L;
+
+import static szewek.mcflux.MCFlux.L;
 
 public final class TOPInit implements com.google.common.base.Function<ITheOneProbe, Void> {
 

@@ -1,8 +1,8 @@
 package szewek.mcflux.wrapper.redstoneflux;
 
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyProvider;
-import cofh.api.energy.IEnergyReceiver;
+import cofh.redstoneflux.api.IEnergyHandler;
+import cofh.redstoneflux.api.IEnergyProvider;
+import cofh.redstoneflux.api.IEnergyReceiver;
 import net.minecraft.util.EnumFacing;
 import szewek.mcflux.wrapper.EnergyCapabilityProvider;
 

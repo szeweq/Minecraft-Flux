@@ -1,7 +1,7 @@
 package szewek.mcflux.compat.jei;
 
-import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
 import static szewek.mcflux.MCFluxResources.*;
 
 @JEIPlugin
-public final class MCFluxJEIPlugin extends BlankModPlugin {
+public final class MCFluxJEIPlugin implements IModPlugin {
 	public static final String ID_FLUXGEN = "mcflux.fluxgen";
 
 	@Override

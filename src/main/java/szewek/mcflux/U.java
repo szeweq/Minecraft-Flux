@@ -65,6 +65,7 @@ public final class U {
 	public static void registerItemMultiModels(Item item, int m) {
 		net.minecraft.util.ResourceLocation rl = item.getRegistryName();
 		final String dom = rl.getResourceDomain();
+		MCFlux.L.info("MULTI MODELS for" + rl);
 		for (int i = 0; i < m; i++) {
 			ItemStack is = new ItemStack(item, 1, i);
 			ModelResourceLocation mrl = new ModelResourceLocation(dom + ':' + item.getUnlocalizedName(is).substring(5), "inventory");

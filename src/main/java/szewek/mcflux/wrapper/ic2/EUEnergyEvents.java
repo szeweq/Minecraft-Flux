@@ -4,11 +4,12 @@ import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import szewek.mcflux.L;
 import szewek.mcflux.U;
 import szewek.mcflux.util.MCFluxReport;
 
 import java.lang.reflect.Method;
+
+import static szewek.mcflux.MCFlux.L;
 
 enum EUEnergyEvents {
 	INSTANCE;

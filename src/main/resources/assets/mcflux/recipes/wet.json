@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+	"ABA",
+	"CDC",
+	"AEA"
+  ],
+  "key": {
+	"A": {"type": "minecraft:item", "item": "minecraft:redstone"},
+	"B": {"type": "forge:ore_dict", "ore": "blockIron"},
+	"C": {"type": "forge:ore_dict", "ore": "ingotIron"},
+	"D": {"type": "minecraft:item", "item": "minecraft:redstone_block"},
+	"E": {"type": "minecraft:item", "item": "minecraft:comparator"}
+  },
+  "result": {
+	"item": "mcflux:wet"
+  }
+}

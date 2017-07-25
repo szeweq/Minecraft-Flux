@@ -7,7 +7,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.mcflux.U;
-import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.config.ConfigEvents;
 import szewek.mcflux.render.EnergyMachineRenderer;
 import szewek.mcflux.special.SpecialEventHandler;
@@ -22,7 +21,6 @@ public final class ProxyClient extends ProxyCommon {
 	public void preInit() {
 		MCFluxReport.handleErrors();
 		MinecraftForge.EVENT_BUS.register(new ConfigEvents());
-		U.registerItemMultiModels(Item.getItemFromBlock(ENERGY_MACHINE), BlockEnergyMachine.Variant.ALL_VARIANTS.length);
 	}
 
 	@Override
@@ -32,7 +30,6 @@ public final class ProxyClient extends ProxyCommon {
 				MFTOOL,
 				FESNIFFER,
 				UPCHIP,
-				ASSISTANT,
 				SPECIAL,
 				Item.getItemFromBlock(ECHARGER),
 				Item.getItemFromBlock(SIDED),

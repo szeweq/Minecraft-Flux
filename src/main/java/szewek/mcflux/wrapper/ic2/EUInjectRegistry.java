@@ -3,7 +3,6 @@ package szewek.mcflux.wrapper.ic2;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import szewek.mcflux.L;
 import szewek.mcflux.util.CapStorage;
 import szewek.mcflux.util.IInjectRegistry;
 import szewek.mcflux.util.InjectCond;
@@ -12,6 +11,8 @@ import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.InjectCollector;
 import szewek.mcflux.wrapper.InjectWrappers;
 import szewek.mcflux.wrapper.WrapperRegistry;
+
+import static szewek.mcflux.MCFlux.L;
 
 @InjectRegistry(requires = InjectCond.MOD, args = {"IC2", "IndustrialCraft 2"})
 public final class EUInjectRegistry implements IInjectRegistry {

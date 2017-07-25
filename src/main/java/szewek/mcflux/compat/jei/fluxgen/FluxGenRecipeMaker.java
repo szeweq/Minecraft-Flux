@@ -4,7 +4,7 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import szewek.fl.recipes.RecipeItem;
+import szewek.fl.util.RecipeItem;
 import szewek.mcflux.recipes.FluxGenRecipes;
 import szewek.mcflux.recipes.RecipeFluxGen;
 

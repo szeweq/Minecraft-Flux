@@ -1,0 +1,16 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+	"A A",
+	" B ",
+	"A A"
+  ],
+  "key": {
+	"A": {"type": "minecraft:item", "item": "minecraft:redstone_block"},
+	"B": {"type": "minecraft:item", "item": "mcflux:energy_machine", "data": 0}
+  },
+  "result": {
+	"item": "mcflux:energy_machine",
+	"data": 1
+  }
+}

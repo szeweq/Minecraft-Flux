@@ -110,12 +110,6 @@ public enum InjectWrappers {
 	}
 
 	@SubscribeEvent
-	public void wrapItem(AttachCapabilitiesEvent.Item ei) {
-		if (Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START))
-			wrapItemStack(ei, ei.getItemStack());
-	}
-
-	@SubscribeEvent
 	public void updateWrappers(TickEvent.WorldTickEvent wte) {
 		if (wte.phase == TickEvent.Phase.START && !wrq.isEmpty())
 			synchronized (wth) {

@@ -7,12 +7,13 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import szewek.mcflux.L;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.util.MCFluxReport;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+
+import static szewek.mcflux.MCFlux.L;
 
 public enum SpecialEventHandler {
 	;

@@ -1,0 +1,12 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": ["ABC"],
+  "key": {
+	"A": {"type": "forge:ore_dict", "ore": "blockIron"},
+	"B": {"type": "minecraft:item", "item": "minecraft:furnace"},
+	"C": {"type": "minecraft:item", "item": "minecraft:redstone_block"}
+  },
+  "result": {
+	"item": "mcflux:fluxgen"
+  }
+}

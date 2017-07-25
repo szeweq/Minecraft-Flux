@@ -1,0 +1,16 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+	"A A",
+	"BCB",
+	"A A"
+  ],
+  "key": {
+	"A": {"type": "forge:ore_dict", "ore": "nuggetGold"},
+	"B": {"type": "minecraft:item", "item": "minecraft:redstone_block"},
+	"C": {"type": "forge:ore_dict", "ore": "nuggetIron"}
+  },
+  "result": {
+	"item": "mcflux:mftool"
+  }
+}

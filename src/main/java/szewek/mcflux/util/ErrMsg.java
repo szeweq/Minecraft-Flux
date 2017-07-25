@@ -2,10 +2,11 @@ package szewek.mcflux.util;
 
 import com.rollbar.Rollbar;
 import net.minecraft.util.EnumFacing;
-import szewek.mcflux.L;
 import szewek.mcflux.wrapper.MCFluxWrapper;
 
 import java.util.*;
+
+import static szewek.mcflux.MCFlux.L;
 
 public abstract class ErrMsg {
 	private static final long ERRORS_TIME = 15000;

@@ -10,12 +10,10 @@ import szewek.mcflux.wrapper.EnergyType;
 import szewek.mcflux.wrapper.ForgeEnergyCapable;
 
 final class TeslaSided extends ForgeEnergyCapable implements EnergyType.Converter {
-	private final EnumFacing face;
 	private final ITeslaHolder holder;
 	private final ITeslaConsumer consumer;
 	private final ITeslaProducer producer;
-	public TeslaSided(ICapabilityProvider provider, EnumFacing f) {
-		face = f;
+	TeslaSided(ICapabilityProvider provider, EnumFacing f) {
 		holder = TeslaUtils.getTeslaHolder(provider, f);
 		consumer = TeslaUtils.getTeslaConsumer(provider, f);
 		producer = TeslaUtils.getTeslaProducer(provider, f);

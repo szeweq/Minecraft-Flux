@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -35,8 +36,9 @@ public final class BlockSided extends Block {
 		super(Material.ROCK);
 		MCFluxLocation rs = new MCFluxLocation(name);
 		setUnlocalizedName(name);
-		GameRegistry.register(this, rs);
-		GameRegistry.register(new ItemBlock(this), rs);
+		setRegistryName(rs);
+		GameRegistry.findRegistry(Block.class).register(this);
+		GameRegistry.findRegistry(Item.class).register((new ItemBlock(this)).setRegistryName(rs));
 	}
 
 	@Override public int getMetaFromState(IBlockState state) {

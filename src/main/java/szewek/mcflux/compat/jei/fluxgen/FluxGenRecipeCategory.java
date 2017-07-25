@@ -6,14 +6,14 @@ import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeCategory;
+import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.util.text.TextComponentTranslation;
 import szewek.mcflux.R;
 import szewek.mcflux.compat.jei.MCFluxJEIPlugin;
 import szewek.mcflux.tileentities.TileEntityFluxGen;
 import szewek.mcflux.util.MCFluxLocation;
 
-public class FluxGenRecipeCategory extends BlankRecipeCategory<FluxGenRecipeJEI> {
+public class FluxGenRecipeCategory implements IRecipeCategory<FluxGenRecipeJEI> {
 	private final static MCFluxLocation bgLoc = new MCFluxLocation("textures/gui/fluxgen.png");
 	private final IDrawable bg;
 	private final String locName;

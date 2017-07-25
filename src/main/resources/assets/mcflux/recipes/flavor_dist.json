@@ -1,0 +1,17 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+	" A ",
+	"ABA",
+	" A "
+  ],
+  "key": {
+	"A": {"type": "forge:ore_dict", "ore": "ingotGold"},
+	"B": {"type": "minecraft:item", "item": "minecraft:ender_eye"}
+  },
+  "result": {
+	"item": "mcflux:energy_machine",
+	"data": 2,
+	"count": 2
+  }
+}

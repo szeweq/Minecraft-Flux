@@ -1,7 +1,6 @@
 package szewek.mcflux;
 
 import com.google.gson.JsonObject;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -10,6 +9,7 @@ import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
+import org.apache.logging.log4j.Logger;
 import szewek.mcflux.api.fe.FlavorNBTStorage;
 import szewek.mcflux.api.fe.FlavoredStorage;
 import szewek.mcflux.api.fe.IFlavorEnergy;
@@ -36,6 +36,8 @@ public final class MCFlux {
 	static String NEWER_VERSION = "";
 	static boolean UPDATE_CHECK_FINISHED = false;
 	static final MCFluxCreativeTab MCFLUX_TAB = new MCFluxCreativeTab();
+	public static Logger L = null;
+
 	@SidedProxy(modId = R.MF_NAME, serverSide = R.PROXY_SERVER, clientSide = R.PROXY_CLIENT)
 	public static szewek.mcflux.proxy.ProxyCommon PROXY = null;
 
@@ -46,7 +48,7 @@ public final class MCFlux {
 	public void preInit(FMLPreInitializationEvent e) {
 		MCFluxReport.init();
 		MCFluxReport.handleErrors();
-		L.prepare(e.getModLog());
+		L = e.getModLog();
 		MC_DIR = e.getModConfigurationDirectory().getParentFile();
 		MCFluxConfig.makeConfig(e.getSuggestedConfigurationFile());
 		if (R.MF_VERSION.charAt(0) == '$')
@@ -55,7 +57,6 @@ public final class MCFlux {
 			new Thread(MCFlux::updateCheck, "MCFlux Update Check").start();
 		SpecialEventHandler.getEvents();
 		MCFluxNetwork.registerAll();
-		MinecraftForge.EVENT_BUS.register(MCFluxEvents.INSTANCE);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new MCFluxGuiHandler());
 		CapabilityManager cm = CapabilityManager.INSTANCE;
 		cm.register(IFlavorEnergy.class, new FlavorNBTStorage(), FlavoredStorage::new);

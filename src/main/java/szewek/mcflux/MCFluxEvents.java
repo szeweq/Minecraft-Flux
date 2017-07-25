@@ -24,12 +24,16 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.*;
 import szewek.mcflux.network.MCFluxNetwork;
@@ -38,9 +42,10 @@ import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.special.SpecialEventReceiver;
 import szewek.mcflux.util.MCFluxLocation;
 
-@SuppressWarnings("unused")
-enum MCFluxEvents {
-	INSTANCE;
+import static szewek.mcflux.MCFluxResources.ENERGY_MACHINE;
+
+@Mod.EventBusSubscriber
+public final class MCFluxEvents {
 
 	private static final MCFluxLocation
 			MF_WORLD_CHUNK = new MCFluxLocation("wce"),
@@ -51,17 +56,17 @@ enum MCFluxEvents {
 			MF_MOB_SPAWNER = new MCFluxLocation("MobSpawnerEnergy");
 
 	@SubscribeEvent
-	public void registerItems(RegistryEvent.Register<Item> e) {
+	public static void registerItems(RegistryEvent.Register<Item> e) {
 		MCFluxResources.items(e.getRegistry());
 	}
 
 	@SubscribeEvent
-	public void registerBlocks(RegistryEvent.Register<Block> e) {
+	public static void registerBlocks(RegistryEvent.Register<Block> e) {
 		MCFluxResources.blocks(e.getRegistry());
 	}
 
 	@SubscribeEvent
-	public void onLootTableLoad(LootTableLoadEvent e) {
+	public static void onLootTableLoad(LootTableLoadEvent e) {
 		final ResourceLocation rl = e.getName();
 		if (rl.equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH) || rl.equals(LootTableList.CHESTS_ABANDONED_MINESHAFT) || rl.equals(LootTableList.CHESTS_JUNGLE_TEMPLE)) {
 			final LootTable lt = e.getTable();
@@ -75,7 +80,7 @@ enum MCFluxEvents {
 	}
 
 	@SubscribeEvent
-	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent e) {
+	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent e) {
 		if (MCFlux.UPDATE_CHECK_FINISHED && !MCFlux.NEWER_VERSION.isEmpty() && e.player instanceof EntityPlayerMP)
 			MCFluxNetwork.to(Msg.newVersion(MCFlux.NEWER_VERSION), (EntityPlayerMP) e.player);
 		if (SpecialEventHandler.getEventStatus() == SpecialEventHandler.EventStatus.DOWNLOADED) {
@@ -95,7 +100,7 @@ enum MCFluxEvents {
 	}
 
 	@SubscribeEvent
-	public void whyCantPlayerSleep(PlayerSleepInBedEvent e) {
+	public static void whyCantPlayerSleep(PlayerSleepInBedEvent e) {
 		if (MCFluxConfig.SLEEP_WITH_LIGHT)
 			return;
 		final EntityPlayer p = e.getEntityPlayer();
@@ -107,12 +112,12 @@ enum MCFluxEvents {
 	}
 
 	@SubscribeEvent
-	public void wrapWCE(AttachCapabilitiesEvent<World> e) {
+	public static void wrapWCE(AttachCapabilitiesEvent<World> e) {
 		e.addCapability(MF_WORLD_CHUNK, new WorldChunkEnergy());
 	}
 
 	@SubscribeEvent
-	public void wrapEntity(AttachCapabilitiesEvent<Entity> e) {
+	public static void wrapEntity(AttachCapabilitiesEvent<Entity> e) {
 		final Entity ent = e.getObject();
 		if (ent instanceof EntityPlayer) {
 			e.addCapability(MF_SER, new SpecialEventReceiver());
@@ -122,11 +127,20 @@ enum MCFluxEvents {
 	}
 
 	@SubscribeEvent
-	public void wrapTile(AttachCapabilitiesEvent<TileEntity> e) {
+	public static void wrapTile(AttachCapabilitiesEvent<TileEntity> e) {
 		final TileEntity te = e.getObject();
 		if (te instanceof TileEntityFurnace)
 			e.addCapability(MF_FURNACE, new FurnaceEnergy((TileEntityFurnace) te));
 		else if (te instanceof TileEntityMobSpawner)
 			e.addCapability(MF_MOB_SPAWNER, new MobSpawnerEnergy((TileEntityMobSpawner) te));
+	}
+
+	@Mod.EventBusSubscriber(Side.CLIENT)
+	public static final class ClientOnly {
+		@SubscribeEvent
+		public static void registerModels(ModelRegistryEvent e) {
+			Item iem = Item.getItemFromBlock(ENERGY_MACHINE);
+			U.registerItemMultiModels(iem, BlockEnergyMachine.Variant.ALL_VARIANTS.length);
+		}
 	}
 }

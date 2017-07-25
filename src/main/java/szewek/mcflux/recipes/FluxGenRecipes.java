@@ -8,7 +8,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-import szewek.fl.recipes.RecipeItem;
+import szewek.fl.util.RecipeItem;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,7 +29,7 @@ public enum FluxGenRecipes {
 		catalysts.put(new RecipeItem(Items.BLAZE_POWDER, 0, null), new RecipeFluxGen(4, 1));
 		catalysts.put(new RecipeItem(Items.DRAGON_BREATH, 0, null), new RecipeFluxGen(60, 1));
 		catalysts.put(new RecipeItem(Items.NETHER_STAR, 0, null), new RecipeFluxGen(100, 1));
-		catalysts.put(new RecipeItem(Items.TOTEM, 0, null), new RecipeFluxGen(200, 1));
+		catalysts.put(new RecipeItem(Items.TOTEM_OF_UNDYING, 0, null), new RecipeFluxGen(200, 1));
 		hotFluids.put(new FluidStack(FluidRegistry.LAVA, 0), new RecipeFluxGen(2, 200));
 		cleanFluids.put(new FluidStack(FluidRegistry.WATER, 0), new RecipeFluxGen(50, 200));
 	}
@@ -69,7 +69,7 @@ public enum FluxGenRecipes {
 		if (INSTANCE.catalysts.containsKey(ri))
 			return true;
 		for (RecipeItem mri : INSTANCE.catalysts.keySet()) {
-			if (mri.matchesStack(is, false))
+			if (mri.matchesStack(is))
 				return true;
 		}
 		return false;
@@ -82,7 +82,7 @@ public enum FluxGenRecipes {
 		if (INSTANCE.catalysts.containsKey(ri))
 			return INSTANCE.catalysts.get(ri);
 		for (RecipeItem mri : INSTANCE.catalysts.keySet()) {
-			if (mri.matchesStack(is, false))
+			if (mri.matchesStack(is))
 				return INSTANCE.catalysts.get(mri);
 		}
 		return DEFAULT;
