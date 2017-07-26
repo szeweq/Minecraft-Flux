@@ -129,7 +129,7 @@ curseforge {
 		}
 		relations {
 			requiredLibrary "fl"
-			optionalLibrary "redstoneflux"
+			optionalLibrary "redstone-flux"
 		}
 	}
 }
