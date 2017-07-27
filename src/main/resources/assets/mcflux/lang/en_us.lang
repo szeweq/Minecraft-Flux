@@ -41,7 +41,6 @@ mcflux.update.newversion=A new update for §eMinecraft-Flux§r was released (§e
 mcflux.wet.mode0=ONE TO ALL
 mcflux.wet.mode1=ALL TO ONE
 mcflux.gen=Generating %s MF/t
-mcflux.sleep.tooBright=You may not rest now, there is too bright light
 mcflux.convert=Converting from:
 
 itemGroup.mcflux=Minecraft-Flux

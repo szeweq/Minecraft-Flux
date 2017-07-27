@@ -14,9 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
@@ -27,10 +25,8 @@ import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.*;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.network.Msg;
@@ -91,18 +87,6 @@ enum MCFluxEvents {
 					ser.addReceived(l);
 				}
 			}
-		}
-	}
-
-	@SubscribeEvent
-	public void whyCantPlayerSleep(PlayerSleepInBedEvent e) {
-		if (MCFluxConfig.SLEEP_WITH_LIGHT)
-			return;
-		final EntityPlayer p = e.getEntityPlayer();
-		int l = p.world.getLightFor(EnumSkyBlock.BLOCK, e.getPos());
-		if (l > 9) {
-			e.setResult(EntityPlayer.SleepResult.OTHER_PROBLEM);
-			p.sendStatusMessage(new TextComponentTranslation("mcflux.sleep.tooBright"), true);
 		}
 	}
 
