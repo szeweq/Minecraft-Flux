@@ -13,14 +13,14 @@ Check [CurseForge page](https://minecraft.curseforge.com/projects/minecraft-flux
 ```gradle
 // NOT IN BUILDSCRIPT
 repositories {
-    // Here you can place dependency repositories
     maven {
-        url "http://dl.bintray.com/szewek/MC"
+        name = "CurseForge"
+        url = "https://minecraft.curseforge.com/api/maven/"
     }
 }
 dependencies {
     // Here you can add dependencies
-    deobfCompile "szewek.mcflux:mcflux:<VERSION>:dev"
+    deobfCompile "minecraft-flux:mcflux:<VERSION>"
 }
 ```
 Replace `<VERSION>` with a release version.

@@ -28,7 +28,7 @@ String MFReq = "MF_DEPS = \"required-after:fl@[${FLVersion},);after:jei@[4.7.0,)
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	from sourceSets.main.output
 	from sourceSets.api.output
-	classifier = "dev"
+	classifier = "deobf"
 }
 task sourcesJar(type: Jar, dependsOn: "sourceJar") {
 	from (sourceSets.main.allJava) {
@@ -69,20 +69,6 @@ publishing {
 	}
 }
 
-bintray {
-	user = System.getenv("BINTRAY_USER")
-	key = System.getenv("BINTRAY_KEY")
-	publications = ["MCFluxPublish"]
-	publish = true
-	override = false
-	pkg {
-		repo = "MC"
-		name = project.group
-		version {
-			name = project.version
-		}
-	}
-}
 repositories {
 	maven {url "http://minecraft.curseforge.com/api/maven"}
 	maven {url "http://maven.covers1624.net"}
@@ -131,6 +117,8 @@ curseforge {
 			requiredLibrary "fl"
 			optionalLibrary "redstone-flux"
 		}
+		addArtifact sourcesJar
+		addArtifact deobfJar
 	}
 }
 artifacts {
