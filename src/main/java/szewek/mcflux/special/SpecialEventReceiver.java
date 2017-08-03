@@ -29,6 +29,7 @@ public final class SpecialEventReceiver implements ICapabilityProvider, INBTSeri
 	}
 
 	@Override public NBTBase serializeNBT() {
+		SpecialEventHandler.serNBT.add();
 		NBTTagList nbt = new NBTTagList();
 		for (long l : received) {
 			nbt.appendTag(new NBTTagLong(l));
@@ -38,6 +39,7 @@ public final class SpecialEventReceiver implements ICapabilityProvider, INBTSeri
 
 	@Override public void deserializeNBT(NBTBase nbt) {
 		if (nbt != null && nbt instanceof NBTTagList) {
+			SpecialEventHandler.deserNBT.add();
 			NBTTagList nbtl = (NBTTagList) nbt;
 			for (int i = 0; i < nbtl.tagCount(); i++) {
 				NBTTagLong ln = (NBTTagLong) nbtl.get(i);

@@ -12,11 +12,6 @@ import szewek.fl.energy.IEnergy;
 import szewek.mcflux.api.fe.Flavored;
 import szewek.mcflux.api.fe.FlavoredMutable;
 import szewek.mcflux.api.fe.IFlavorEnergy;
-import szewek.mcflux.util.MCFluxReport;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.lang.reflect.Method;
 
 import static net.minecraft.util.EnumFacing.*;
 
@@ -71,35 +66,6 @@ public final class U {
 			ModelResourceLocation mrl = new ModelResourceLocation(dom + ':' + item.getUnlocalizedName(is).substring(5), "inventory");
 			net.minecraftforge.client.model.ModelLoader.setCustomModelResourceLocation(item, i, mrl);
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T[] makeFilledArray(T[] t, @Nonnull T fill) {
-		for (int i = 0, l = t.length; i < l; i++)
-			t[i] = fill;
-		return t;
-	}
-
-	@Nullable
-	public static Class<?> getClassSafely(String name) {
-		Class<?> c = null;
-		try {
-			c = Class.forName(name);
-		} catch (ClassNotFoundException e) {
-			MCFluxReport.sendException(e, "Getting class");
-		}
-		return c;
-	}
-
-	@Nullable
-	public static Method getMethodSafely(Class<?> cl, String name, Class<?>... cargs) {
-		Method m = null;
-		try {
-			m = cl.getDeclaredMethod(name, cargs);
-		} catch (Exception e) {
-			MCFluxReport.sendException(e, "Getting method");
-		}
-		return m;
 	}
 
 	private U() {}

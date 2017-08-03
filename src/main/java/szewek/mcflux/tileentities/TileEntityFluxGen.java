@@ -50,7 +50,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 	protected long energy;
 	private int tickCount = 0;
 	private boolean isDirty = false, isReady = false, receivedRedstone = false;
-	private final ItemStack[] items = U.makeFilledArray(new ItemStack[2], ItemStack.EMPTY);
+	private final ItemStack[] items = szewek.fl.util.JavaUtils.makeFilledArray(new ItemStack[2], ItemStack.EMPTY);
 	private final FluidStorage[] tanks = new FluidStorage[]{new FluidStorage(fluidCap, true, false), new FluidStorage(fluidCap, true, false)};
 	private final ForgeEnergyCompat fec = new ForgeEnergyCompat(this);
 

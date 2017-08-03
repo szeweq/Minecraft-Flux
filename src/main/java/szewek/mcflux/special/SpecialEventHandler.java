@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import szewek.fl.test.NamedCounters;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.util.MCFluxReport;
 
@@ -15,13 +16,15 @@ import java.util.Map;
 
 import static szewek.mcflux.MCFlux.L;
 
-public enum SpecialEventHandler {
-	;
+public final class SpecialEventHandler {
 	private static final long TIME = 300000;
 	private static final Long2ObjectMap<SpecialEvent> events = Long2ObjectMaps.synchronize(new Long2ObjectArrayMap<>());
 	private static final Object eventLock = new Object();
 	private static EventStatus EVENT_STATUS = EventStatus.READY2DOWNLOAD;
 	private static long lastUpdate = -1;
+	static final NamedCounters.Counter
+			deserNBT = NamedCounters.getCounter("SER NBT Deserializing"),
+			serNBT = NamedCounters.getCounter("SER NBT Serializing");
 
 	public static EventStatus getEventStatus() {
 		synchronized (eventLock) {
@@ -29,7 +32,14 @@ public enum SpecialEventHandler {
 		}
 	}
 
+	private static void checkCount(String name, NamedCounters.Counter c) {
+		if (!c.expect(1, 0))
+			MCFluxReport.sendException(new Exception("Expected count minimum of 1, got " + c.getCount()), name);
+	}
+
 	public static void getEvents() {
+		NamedCounters.addConsumer(deserNBT, SpecialEventHandler::checkCount);
+		NamedCounters.addConsumer(serNBT, SpecialEventHandler::checkCount);
 		synchronized (eventLock) {
 			if (System.currentTimeMillis() / TIME > lastUpdate)
 				new Thread(SpecialEventHandler::downloadEvents, "MCFlux Download Events").start();
@@ -84,6 +94,8 @@ public enum SpecialEventHandler {
 	@Nullable public static SpecialEvent getEvent(long l) {
 		return events.get(l);
 	}
+
+	private SpecialEventHandler() {}
 
 	public enum EventStatus {
 		READY2DOWNLOAD, DOWNLOADING, DOWNLOADED, NOT_AVAILABLE;

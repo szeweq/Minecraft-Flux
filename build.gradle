@@ -22,7 +22,7 @@ idea { module { inheritOutputDirs = true } }
 
 String[] versionsMC = ["1.12"]
 String versionForge = "14.21.1.2415"
-String FLVersion = "2.0.1"
+String FLVersion = "2.1.1"
 String MFReq = "MF_DEPS = \"required-after:fl@[${FLVersion},);after:jei@[4.7.0,)\""
 
 task deobfJar(type: Jar, dependsOn: "reobfJar") {

@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
 import org.apache.logging.log4j.Logger;
+import szewek.fl.util.JavaUtils;
 import szewek.mcflux.api.fe.FlavorNBTStorage;
 import szewek.mcflux.api.fe.FlavoredStorage;
 import szewek.mcflux.api.fe.IFlavorEnergy;
@@ -72,7 +73,6 @@ public final class MCFlux {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
 		MCFluxResources.init();
-		// Waila not available // FMLInterModComms.sendMessage("Waila", "register", R.WAILA_REGISTER);
 		PROXY.init();
 	}
 
@@ -106,7 +106,7 @@ public final class MCFlux {
 		for (ASMDataTable.ASMData data : aset) {
 			final String cname = data.getClassName();
 			if (!cname.equals(data.getObjectName())) continue;
-			final Class<?> c = U.getClassSafely(cname);
+			final Class<?> c = JavaUtils.getClassSafely(cname);
 			if (c == null)
 				continue;
 			final InjectRegistry ann = c.getAnnotation(InjectRegistry.class);

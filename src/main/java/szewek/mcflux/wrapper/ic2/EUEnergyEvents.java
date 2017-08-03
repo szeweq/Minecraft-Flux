@@ -4,7 +4,7 @@ import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import szewek.mcflux.U;
+import szewek.fl.util.JavaUtils;
 import szewek.mcflux.util.MCFluxReport;
 
 import java.lang.reflect.Method;
@@ -19,14 +19,14 @@ enum EUEnergyEvents {
 	private final boolean broken;
 
 	EUEnergyEvents() {
-		IC2_TEB = U.getClassSafely("ic2.core.block.TileEntityBlock");
-		IC2_ENERGY = U.getClassSafely("ic2.core.block.comp.Energy");
+		IC2_TEB = JavaUtils.getClassSafely("ic2.core.block.TileEntityBlock");
+		IC2_ENERGY = JavaUtils.getClassSafely("ic2.core.block.comp.Energy");
 		if (IC2_TEB == null || IC2_ENERGY == null) {
 			COMPONENT = CAPACITY = ENERGY = null;
 		} else {
-			COMPONENT = U.getMethodSafely(IC2_TEB, "getComponent", Class.class);
-			CAPACITY = U.getMethodSafely(IC2_ENERGY, "getCapacity");
-			ENERGY = U.getMethodSafely(IC2_ENERGY, "getEnergy");
+			COMPONENT = JavaUtils.getMethodSafely(IC2_TEB, "getComponent", Class.class);
+			CAPACITY = JavaUtils.getMethodSafely(IC2_ENERGY, "getCapacity");
+			ENERGY = JavaUtils.getMethodSafely(IC2_ENERGY, "getEnergy");
 		}
 		broken = COMPONENT == null || CAPACITY == null || ENERGY == null;
 		if (broken)
