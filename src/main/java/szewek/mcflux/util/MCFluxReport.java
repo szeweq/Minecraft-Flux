@@ -53,9 +53,9 @@ public final class MCFluxReport {
 	}
 
 	public static void reportAll(File dirf) throws IOException {
-		File f = new File(dirf, "mcflux-" + fileDate.format(new Date()) + ".log.gz");
-		PrintStream ps = new PrintStream(new GZIPOutputStream(new FileOutputStream(f)));
 		if (!errMsgs.isEmpty()) {
+			File f = new File(dirf, "mcflux-" + fileDate.format(new Date()) + ".log.gz");
+			PrintStream ps = new PrintStream(new GZIPOutputStream(new FileOutputStream(f)));
 			ps.println("== START OF ERROR MESSAGES");
 			for (ErrMsg em : errMsgs.values()) {
 				ps.println("+-- ErrMsg: " + em);
@@ -78,9 +78,9 @@ public final class MCFluxReport {
 			}
 			ps.println("== END OF ERROR MESSAGES");
 			errMsgs.clear();
+			ps.close();
 		} else
 			L.info("No errors found!");
-		ps.close();
 	}
 
 	static final class Uncaught implements Thread.UncaughtExceptionHandler {

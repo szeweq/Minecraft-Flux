@@ -37,7 +37,7 @@ public final class ItemSpecial extends ItemMCFlux {
 			EntityPlayerMP mp = (EntityPlayerMP) elb;
 			NBTTagCompound nbt = is.getTagCompound();
 			assert nbt != null;
-			SpecialEvent se = SpecialEventHandler.getEvent(nbt.getLong("seid"));
+			SpecialEvent se = SpecialEventHandler.getEvent(nbt.getInteger("seid"));
 			if (se == null)
 				return is;
 			if (se.endTime <= System.currentTimeMillis() / 60000) {

@@ -1,10 +1,11 @@
 package szewek.mcflux.special;
 
-import it.unimi.dsi.fastutil.longs.LongArraySet;
-import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.ints.IntArraySet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTPrimitive;
+import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -17,7 +18,7 @@ public final class SpecialEventReceiver implements ICapabilityProvider, INBTSeri
 	@CapabilityInject(SpecialEventReceiver.class)
 	public static Capability<SpecialEventReceiver> SELF_CAP = null;
 
-	private LongSet received = new LongArraySet();
+	private IntSet received = new IntArraySet();
 
 	@Override public boolean hasCapability(Capability<?> cap, @Nullable EnumFacing f) {
 		return cap == SELF_CAP;
@@ -30,31 +31,38 @@ public final class SpecialEventReceiver implements ICapabilityProvider, INBTSeri
 
 	@Override public NBTBase serializeNBT() {
 		SpecialEventHandler.serNBT.add();
-		NBTTagList nbt = new NBTTagList();
-		for (long l : received) {
-			nbt.appendTag(new NBTTagLong(l));
-		}
-		return nbt;
+		return new NBTTagIntArray(received.toIntArray());
 	}
 
 	@Override public void deserializeNBT(NBTBase nbt) {
-		if (nbt != null && nbt instanceof NBTTagList) {
-			SpecialEventHandler.deserNBT.add();
+		if (nbt == null) {
+			return;
+		}
+		SpecialEventHandler.deserNBT.add();
+		// NEW NBT DESERIALIZING
+		if (nbt instanceof NBTTagIntArray) {
+			int[] ia = ((NBTTagIntArray) nbt).getIntArray();
+			for (int i : ia) {
+				received.add(i);
+			}
+		}
+		// OLD NBT DESERIALIZING
+		else if (nbt instanceof NBTTagList) {
 			NBTTagList nbtl = (NBTTagList) nbt;
 			for (int i = 0; i < nbtl.tagCount(); i++) {
-				NBTTagLong ln = (NBTTagLong) nbtl.get(i);
-				if (ln != null) {
-					received.add(ln.getLong());
+				NBTBase nb = nbtl.get(i);
+				if (nb instanceof NBTPrimitive) {
+					received.add(((NBTPrimitive) nb).getInt());
 				}
 			}
 		}
 	}
 
-	public void addReceived(long l) {
+	public void addReceived(int l) {
 		received.add(l);
 	}
 
-	public boolean alreadyReceived(long l) {
+	public boolean alreadyReceived(int l) {
 		return received.contains(l);
 	}
 }

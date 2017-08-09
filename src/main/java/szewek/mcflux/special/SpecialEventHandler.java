@@ -2,9 +2,9 @@ package szewek.mcflux.special;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import szewek.fl.test.NamedCounters;
@@ -18,13 +18,13 @@ import static szewek.mcflux.MCFlux.L;
 
 public final class SpecialEventHandler {
 	private static final long TIME = 300000;
-	private static final Long2ObjectMap<SpecialEvent> events = Long2ObjectMaps.synchronize(new Long2ObjectArrayMap<>());
+	private static final Int2ObjectMap<SpecialEvent> events = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
 	private static final Object eventLock = new Object();
 	private static EventStatus EVENT_STATUS = EventStatus.READY2DOWNLOAD;
 	private static long lastUpdate = -1;
 	static final NamedCounters.Counter
-			deserNBT = NamedCounters.getCounter("SER NBT Deserializing"),
-			serNBT = NamedCounters.getCounter("SER NBT Serializing");
+			deserNBT = NamedCounters.getCounter("SER <- NBT"),
+			serNBT = NamedCounters.getCounter("SER -> NBT");
 
 	public static EventStatus getEventStatus() {
 		synchronized (eventLock) {
@@ -61,7 +61,7 @@ public final class SpecialEventHandler {
 					JsonElement je = jee.getValue();
 					SpecialEvent se = SpecialEvent.fromJSON(je.getAsJsonObject());
 					if (se != null) {
-						events.put(Long.valueOf(id).longValue(), se);
+						events.put(Integer.valueOf(id).intValue(), se);
 					}
 				}
 			}
@@ -81,17 +81,17 @@ public final class SpecialEventHandler {
 			NBTTagCompound nbt = is.getTagCompound();
 			if (nbt == null)
 				return 0x808080;
-			SpecialEvent se = events.get(nbt.getLong("seid"));
+			SpecialEvent se = events.get(nbt.getInteger("seid"));
 			return se == null ? 0x404040 : tint == 0 ? se.colorBox : se.colorRibbon;
 		}
 		return 0x202020;
 	}
 
-	public static long[] getEventIDs() {
-		return events.keySet().toLongArray();
+	public static int[] getEventIDs() {
+		return events.keySet().toIntArray();
 	}
 
-	@Nullable public static SpecialEvent getEvent(long l) {
+	@Nullable public static SpecialEvent getEvent(int l) {
 		return events.get(l);
 	}
 

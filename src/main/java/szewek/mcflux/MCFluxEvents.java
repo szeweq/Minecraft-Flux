@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -82,12 +82,12 @@ public final class MCFluxEvents {
 		if (SpecialEventHandler.getEventStatus() == SpecialEventHandler.EventStatus.DOWNLOADED) {
 			final SpecialEventReceiver ser = e.player.getCapability(SpecialEventReceiver.SELF_CAP, null);
 			if (ser != null) {
-				final long[] seids = SpecialEventHandler.getEventIDs();
-				for (long l : seids) {
+				final int[] seids = SpecialEventHandler.getEventIDs();
+				for (int l : seids) {
 					if (ser.alreadyReceived(l))
 						continue;
 					final ItemStack is = new ItemStack(MCFluxResources.SPECIAL);
-					is.setTagInfo("seid", new NBTTagLong(l));
+					is.setTagInfo("seid", new NBTTagInt(l));
 					e.player.dropItem(is, false, true);
 					ser.addReceived(l);
 				}

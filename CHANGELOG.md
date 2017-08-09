@@ -1,3 +1,10 @@
+## 3.1.1
+- Minecraft-Flux won't create a log file if there are no errors caught
+- Changed Special Gift NBT serialization
+
+## 3.1.0
+- Checking if Special Gifts are saved
+
 ## 3.0.0
 - Built for Minecraft 1.12
 - Support for new Redstone Flux API

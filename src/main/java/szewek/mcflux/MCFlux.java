@@ -102,7 +102,6 @@ public final class MCFlux {
 	private void registerAllInjects(ASMDataTable asdt) {
 		L.info("Registering inject registries...");
 		final Set<ASMDataTable.ASMData> aset = asdt.getAll(InjectRegistry.class.getCanonicalName());
-		int cnt = 0;
 		for (ASMDataTable.ASMData data : aset) {
 			final String cname = data.getClassName();
 			if (!cname.equals(data.getObjectName())) continue;
@@ -115,7 +114,6 @@ public final class MCFlux {
 			try {
 				final IInjectRegistry iir = c.asSubclass(IInjectRegistry.class).newInstance();
 				iir.registerInjects();
-				cnt++;
 			} catch (Exception e) {
 				MCFluxReport.sendException(e, "Registering Injects");
 			}
