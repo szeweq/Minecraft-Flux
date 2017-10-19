@@ -8,7 +8,6 @@ import szewek.fl.util.RecipeItem;
 import szewek.mcflux.blocks.*;
 import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
 import szewek.mcflux.blocks.itemblocks.ItemMCFluxBlock;
-import szewek.mcflux.items.ItemFESniffer;
 import szewek.mcflux.items.ItemMFTool;
 import szewek.mcflux.items.ItemSpecial;
 import szewek.mcflux.items.ItemUpChip;
@@ -21,7 +20,6 @@ import szewek.mcflux.tileentities.TileEntityWET;
 public final class MCFluxResources {
 	// ITEMS
 	public static ItemMFTool MFTOOL;
-	public static ItemFESniffer FESNIFFER;
 	public static ItemUpChip UPCHIP;
 	public static ItemSpecial SPECIAL;
 	// BLOCKS
@@ -40,7 +38,6 @@ public final class MCFluxResources {
 			return;
 		created = true;
 		MFTOOL = item("mftool", new ItemMFTool());
-		FESNIFFER = item("fesniffer", new ItemFESniffer());
 		UPCHIP = item("upchip", new ItemUpChip());
 		SPECIAL = item("mfspecial", new ItemSpecial());
 		SIDED = new BlockSided("sided");
@@ -52,7 +49,7 @@ public final class MCFluxResources {
 
 	static void items(IForgeRegistry<Item> ifr) {
 		createResources();
-		ifr.registerAll(MFTOOL, FESNIFFER, UPCHIP, SPECIAL);
+		ifr.registerAll(MFTOOL, UPCHIP, SPECIAL);
 		ifr.registerAll(
 				item("energy_machine", new ItemBlockEnergyMachine(ENERGY_MACHINE)),
 				item("echarger", new ItemMCFluxBlock(ECHARGER)),

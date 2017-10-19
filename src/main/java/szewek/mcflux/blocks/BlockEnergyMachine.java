@@ -97,7 +97,7 @@ public final class BlockEnergyMachine extends BlockMCFluxContainer {
 	}
 
 	public enum Variant implements IStringSerializable {
-		ENERGY_DIST("energy_dist"), CHUNK_CHARGER("chunk_charger"), FLAVOR_DIST("flavor_dist"), CHUNK_SPRAYER("chunk_sprayer");
+		ENERGY_DIST("energy_dist"), CHUNK_CHARGER("chunk_charger");
 
 		public static final Variant[] ALL_VARIANTS;
 		public final String name;

@@ -3,9 +3,9 @@ package szewek.mcflux.util;
 public enum TransferType {
 	NONE, INPUT, OUTPUT;
 	
-	public final int ord;
+	public final byte ord;
 	
 	TransferType() {
-		ord = ordinal();
+		ord = (byte) ordinal();
 	}
 }

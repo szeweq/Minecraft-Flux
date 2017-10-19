@@ -5,7 +5,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import szewek.fl.energy.IEnergy;
-import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
 
 import java.util.ArrayList;
@@ -25,9 +24,11 @@ public final class TileEntityECharger extends TileEntityWCEAware implements ITic
 		if (sideIndex == -1)
 			return;
 		for (IEnergy ie : chargeables) {
-			long t;
+			long t = 0;
 			do {
-				t = U.transferEnergy(esrc, ie, 4000);
+				if (esrc != null) {
+					t = esrc.to(ie, 4000);
+				}
 				if (esrc == null || esrc.hasNoEnergy())
 					nextSource();
 			} while (t == 0 && sideIndex != -1);

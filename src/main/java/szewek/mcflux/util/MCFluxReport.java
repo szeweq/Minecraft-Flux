@@ -13,20 +13,23 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 import static szewek.mcflux.MCFlux.L;
 
 public final class MCFluxReport {
-	private static final Rollbar rollbar = new Rollbar(R.MF_ACCESS_TOKEN, R.MF_ENVIRONMENT, null, R.MF_VERSION, null, null, null, null, null, null, null, new HashMap<>(), null, null, null, null);
+	private static final Rollbar rollbar = new Rollbar(R.MF_ACCESS_TOKEN, R.MF_ENVIRONMENT, null, R.MF_VERSION, System.getProperty("os.name"), null, null, null, null, null, null, new HashMap<>(), null, null, null, null);
 	private static final Int2ObjectMap<ErrMsg> errMsgs = new Int2ObjectOpenHashMap<>();
 	private static final DateFormat fileDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 
 	public static void init() {
 		Map<String, Object> cm = rollbar.getCustom();
 		cm.put("Forge", ForgeVersion.getVersion());
-		cm.putAll(Collections.singletonMap("Mods", Loader.instance().getIndexedModList().keySet().toArray()));
+		cm.put("Mods", Loader.instance().getIndexedModList().keySet().toArray());
 	}
 
 	public static void handleErrors() {

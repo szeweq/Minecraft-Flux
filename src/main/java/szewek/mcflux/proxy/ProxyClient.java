@@ -28,7 +28,6 @@ public final class ProxyClient extends ProxyCommon {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEnergyMachine.class, new EnergyMachineRenderer());
 		U.registerItemModels(
 				MFTOOL,
-				FESNIFFER,
 				UPCHIP,
 				SPECIAL,
 				Item.getItemFromBlock(ECHARGER),

@@ -5,7 +5,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import szewek.fl.energy.IEnergy;
-import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.config.MCFluxConfig;
 
@@ -47,11 +46,11 @@ public final class TileEntityWET extends TileEntityWCEAware implements ITickable
 		}
 		for (IEnergy ue : elist) {
 			if (out) {
-				U.transferEnergy(ue, se, MCFluxConfig.WET_TRANS);
+				ue.to(se, MCFluxConfig.WET_TRANS);
 				if (se.hasFullEnergy())
 					break;
 			} else {
-				U.transferEnergy(se, ue, MCFluxConfig.WET_TRANS);
+				se.to(ue, MCFluxConfig.WET_TRANS);
 				if (se.hasNoEnergy())
 					break;
 			}

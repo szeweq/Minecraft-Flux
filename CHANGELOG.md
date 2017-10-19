@@ -1,3 +1,7 @@
+## 3.2.0
+- Flavor Energy API is removed. Use Taste API from FL.
+- Flux Generator now uses its own Energy Transfer method (new feature from FL, slightly increases performance)
+
 ## 3.1.1
 - Minecraft-Flux won't create a log file if there are no errors caught
 - Changed Special Gift NBT serialization

@@ -14,7 +14,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import szewek.fl.energy.Battery;
-import szewek.mcflux.api.fe.FlavoredContainer;
 import szewek.mcflux.config.MCFluxConfig;
 
 import javax.annotation.Nonnull;
@@ -29,7 +28,6 @@ public final class WorldChunkEnergy implements ICapabilityProvider, INBTSerializ
 	private static final long X_MASK = (1L << X_BITS) - 1L, Y_MASK = (1L << Y_BITS) - 1L, Z_MASK = (1L << Z_BITS) - 1L;
 
 	private Long2ObjectMap<Battery> eChunks = new Long2ObjectOpenHashMap<>();
-	private Long2ObjectMap<FlavoredContainer> fChunks = new Long2ObjectOpenHashMap<>();
 
 	private static long packLong(int x, int y, int z) {
 		return ((long) x & X_MASK) << X_SHIFT | ((long) y & Y_MASK) << Y_SHIFT | ((long) z & Z_MASK);
@@ -64,31 +62,17 @@ public final class WorldChunkEnergy implements ICapabilityProvider, INBTSerializ
 		return bat;
 	}
 
-	public FlavoredContainer getFlavorEnergyChunk(int bx, int by, int bz) {
-		long l = packLong(bx / 16, by / 16, bz / 16);
-		if (fChunks.containsKey(l)) {
-			return fChunks.get(l);
-		}
-		FlavoredContainer fc = new FlavoredContainer(MCFluxConfig.WORLDCHUNK_CAP / 4);
-		fChunks.put(l, fc);
-		return fc;
-	}
-
 	@Override
 	public NBTBase serializeNBT() {
 		NBTTagList nbtl = new NBTTagList();
 		LongSet poss = new LongArraySet();
 		poss.addAll(eChunks.keySet());
-		poss.addAll(fChunks.keySet());
 		for (long l : poss) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setLong("cp", l);
 			Battery e = eChunks.get(l);
 			if (e != null)
 				nbt.setTag("e", e.serializeNBT());
-			FlavoredContainer cf = fChunks.get(l);
-			if (cf != null)
-				nbt.setTag("fe", cf.serializeNBT());
 			nbtl.appendTag(nbt);
 		}
 		return nbtl;
@@ -114,11 +98,6 @@ public final class WorldChunkEnergy implements ICapabilityProvider, INBTSerializ
 						Battery eb = new Battery(MCFluxConfig.WORLDCHUNK_CAP);
 						eb.deserializeNBT(nbt.getTag("e"));
 						eChunks.put(l, eb);
-					}
-					if (nbt.hasKey("fe")) {
-						FlavoredContainer cf = new FlavoredContainer(MCFluxConfig.WORLDCHUNK_CAP / 4);
-						cf.deserializeNBT(nbt.getTag("fe"));
-						fChunks.put(l, cf);
 					}
 				}
 			}

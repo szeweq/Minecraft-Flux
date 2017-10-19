@@ -12,12 +12,7 @@ import net.minecraft.world.World;
 import szewek.fl.energy.Battery;
 import szewek.fl.energy.IEnergy;
 import szewek.mcflux.MCFluxResources;
-import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
-import szewek.mcflux.api.fe.FE;
-import szewek.mcflux.api.fe.Flavored;
-import szewek.mcflux.api.fe.FlavoredContainer;
-import szewek.mcflux.api.fe.IFlavorEnergy;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockSided;
 import szewek.mcflux.config.MCFluxConfig;
@@ -32,7 +27,6 @@ import java.util.function.IntBinaryOperator;
 import static szewek.mcflux.config.MCFluxConfig.CHUNK_CHARGER_TRANS;
 
 public final class TileEntityEnergyMachine extends TileEntityWCEAware implements ITickable {
-	private FlavoredContainer cnt = null;
 	private boolean oddTick = true, clientUpdate = true, serverUpdate = false;
 	private TransferType[] sideTransfer = new TransferType[]{TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};
 	private long[] sideValues = new long[]{0, 0, 0, 0, 0, 0};
@@ -58,8 +52,6 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 		switch (i) {
 			case 0: return this::moduleEnergyDistributor;
 			case 1: return this::moduleChunkCharger;
-			case 2: return this::moduleFlavorDistributor;
-			case 3: return this::moduleChunkSprayer;
 		}
 		return null;
 	}
@@ -80,7 +72,7 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 			MCFluxNetwork.toDimension(Msg.update(pos, sideTransfer), world.provider.getDimension());
 			serverUpdate = false;
 		}
-		if (!world.isRemote && ((moduleId < 2 && bat != null) || cnt != null)) {
+		if (!world.isRemote && bat != null) {
 			int i = oddTick ? 0 : 3, m = i + 3;
 			for (int j = i; j < m; j++)
 				sideValues[j] = 0;
@@ -137,13 +129,6 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 		return true;
 	}
 
-	@Override protected boolean updateVariables() {
-		if ((updateMode & 3) != 0 && pos != null) {
-			cnt = world != null && !world.isRemote ? wce.getFlavorEnergyChunk(pos.getX(), pos.getY(), pos.getZ()) : null;
-		}
-		return true;
-	}
-
 	public void switchSideTransfer(EnumFacing f) {
 		int s = f.getIndex();
 		int v = (sideTransfer[s].ord + 1) % 3;
@@ -164,7 +149,7 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 	public void updateTransferSides(TransferType[] tts) {
 		for (int i = 0; i < 6; i++) {
 			sideTransfer[i] = tts[i];
-			cachedState = cachedState.withProperty(BlockSided.sideFromId(i), tts[i].ord);
+			cachedState = cachedState.withProperty(BlockSided.sideFromId(i), (int) tts[i].ord);
 		}
 	}
 
@@ -183,10 +168,10 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 				continue;
 			switch (tt) {
 				case INPUT:
-					sideValues[i] = U.transferEnergy(ea, bat, MCFluxConfig.ENERGY_DIST_TRANS * 2) / 2;
+					sideValues[i] = ea.to(bat, MCFluxConfig.ENERGY_DIST_TRANS * 2) / 2;
 					break;
 				case OUTPUT:
-					sideValues[i] = U.transferEnergy(bat, ea, MCFluxConfig.ENERGY_DIST_TRANS * 2) / 2;
+					sideValues[i] = bat.to(ea, MCFluxConfig.ENERGY_DIST_TRANS * 2) / 2;
 					break;
 			}
 		}
@@ -205,69 +190,10 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 				continue;
 			switch (tt) {
 				case INPUT:
-					sideValues[i] = U.transferEnergy(ebc, bat, CHUNK_CHARGER_TRANS * 2) / 2;
+					sideValues[i] = ebc.to(bat, CHUNK_CHARGER_TRANS * 2) / 2;
 					break;
 				case OUTPUT:
-					sideValues[i] = U.transferEnergy(bat, ebc, CHUNK_CHARGER_TRANS * 2) / 2;
-					break;
-				default:
-			}
-		}
-		return 0;
-	}
-
-	private int moduleFlavorDistributor(int i, int m) {
-		for (; i < m; i++) {
-			TransferType tt = sideTransfer[i];
-			if (tt == TransferType.NONE)
-				continue;
-			EnumFacing f = EnumFacing.VALUES[i];
-			TileEntity te = world.getTileEntity(pos.offset(f, 1));
-			if (te == null)
-				continue;
-			f = f.getOpposite();
-			IFlavorEnergy fea = te.getCapability(FE.CAP_FLAVOR_ENERGY, f);
-			if (fea == null)
-				continue;
-			Flavored[] lfl;
-			switch (tt) {
-				case INPUT:
-					lfl = fea.allFlavorsAcceptable();
-					for (Flavored fl : lfl)
-						U.transferFlavorEnergy(fea, cnt, fl, CHUNK_CHARGER_TRANS * 2);
-					break;
-				case OUTPUT:
-					lfl = fea.allFlavorsContained();
-					for (Flavored fl : lfl)
-						U.transferFlavorEnergy(cnt, fea, fl, CHUNK_CHARGER_TRANS * 2);
-					break;
-				default:
-			}
-		}
-		return 0;
-	}
-
-	private int moduleChunkSprayer(int i, int m) {
-		for (; i < m; i++) {
-			TransferType tt = sideTransfer[i];
-			if (tt == TransferType.NONE)
-				continue;
-			EnumFacing f = EnumFacing.VALUES[i];
-			BlockPos bpc = pos.offset(f, 16);
-			FlavoredContainer efc = wce.getFlavorEnergyChunk(bpc.getX(), bpc.getY(), bpc.getZ());
-			if (efc == null)
-				continue;
-			Flavored[] lfl;
-			switch (tt) {
-				case INPUT:
-					lfl = efc.allFlavorsContained();
-					for (Flavored fl : lfl)
-						U.transferFlavorEnergy(efc, cnt, fl, CHUNK_CHARGER_TRANS * 2);
-					break;
-				case OUTPUT:
-					lfl = cnt.allFlavorsContained();
-					for (Flavored fl : lfl)
-						U.transferFlavorEnergy(cnt, efc, fl, CHUNK_CHARGER_TRANS * 2);
+					sideValues[i] = bat.to(ebc, CHUNK_CHARGER_TRANS * 2) / 2;
 					break;
 				default:
 			}

@@ -35,25 +35,21 @@ public final class SpecialEventReceiver implements ICapabilityProvider, INBTSeri
 	}
 
 	@Override public void deserializeNBT(NBTBase nbt) {
-		if (nbt == null) {
+		if (nbt == null)
 			return;
-		}
-		SpecialEventHandler.deserNBT.add();
 		// NEW NBT DESERIALIZING
 		if (nbt instanceof NBTTagIntArray) {
 			int[] ia = ((NBTTagIntArray) nbt).getIntArray();
-			for (int i : ia) {
+			for (int i : ia)
 				received.add(i);
-			}
 		}
 		// OLD NBT DESERIALIZING
 		else if (nbt instanceof NBTTagList) {
 			NBTTagList nbtl = (NBTTagList) nbt;
 			for (int i = 0; i < nbtl.tagCount(); i++) {
 				NBTBase nb = nbtl.get(i);
-				if (nb instanceof NBTPrimitive) {
+				if (nb instanceof NBTPrimitive)
 					received.add(((NBTPrimitive) nb).getInt());
-				}
 			}
 		}
 	}

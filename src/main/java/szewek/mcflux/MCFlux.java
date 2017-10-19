@@ -11,9 +11,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
 import org.apache.logging.log4j.Logger;
 import szewek.fl.util.JavaUtils;
-import szewek.mcflux.api.fe.FlavorNBTStorage;
-import szewek.mcflux.api.fe.FlavoredStorage;
-import szewek.mcflux.api.fe.IFlavorEnergy;
 import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
@@ -60,7 +57,6 @@ public final class MCFlux {
 		MCFluxNetwork.registerAll();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new MCFluxGuiHandler());
 		CapabilityManager cm = CapabilityManager.INSTANCE;
-		cm.register(IFlavorEnergy.class, new FlavorNBTStorage(), FlavoredStorage::new);
 		cm.register(WorldChunkEnergy.class, CapStorage.getNBTStorage(), WorldChunkEnergy::new);
 		cm.register(PlayerEnergy.class, CapStorage.getNBTStorage(), PlayerEnergy::new);
 		cm.register(SpecialEventReceiver.class, CapStorage.getNBTStorage(), SpecialEventReceiver::new);

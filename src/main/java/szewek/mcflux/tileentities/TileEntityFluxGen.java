@@ -31,7 +31,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import szewek.fl.FL;
 import szewek.fl.energy.ForgeEnergyCompat;
 import szewek.fl.energy.IEnergy;
-import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.api.fluxwork.WorkState;
 import szewek.mcflux.network.MCFluxNetwork;
@@ -127,7 +126,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 				IEnergy ie = MCFluxAPI.getEnergySafely(te, f.getOpposite());
 				if (ie == null)
 					continue;
-				U.transferEnergy(this, ie, 40000);
+				to(ie, 40000);
 			}
 		}
 		if (isDirty)
@@ -200,6 +199,22 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 
 	@Override public boolean hasFullEnergy() {
 		return energy == maxEnergy;
+	}
+
+	@Override
+	public long to(IEnergy ie, long amount) {
+		if (amount > 0 && ie != null && ie.canInputEnergy()) {
+			if (amount > energy)
+				amount = energy;
+			final long r = ie.inputEnergy(amount, true);
+			if (r > 0) {
+				energy -= r;
+				vals[0] = (int) energy;
+				isDirty = true;
+				return ie.inputEnergy(r, false);
+			}
+		}
+		return 0;
 	}
 
 	@Override public int getSlots() {
@@ -321,7 +336,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 	}
 
 	private void checkSlot(int s) {
-		if (0 > s && s > items.length)
+		if (s < 0 || s >= items.length)
 			throw new RuntimeException("Getting slot " + s + " outside range [0," + items.length + ")");
 	}
 
