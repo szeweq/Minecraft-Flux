@@ -14,18 +14,16 @@ import szewek.fl.util.JavaUtils;
 import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
+import szewek.mcflux.fluxcompat.FluxCompat;
 import szewek.mcflux.gui.MCFluxGuiHandler;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.special.CommandSpecialGive;
 import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.special.SpecialEventReceiver;
 import szewek.mcflux.util.*;
-import szewek.mcflux.wrapper.InjectWrappers;
 
 import java.io.File;
 import java.util.Set;
-
-import static net.minecraftforge.common.MinecraftForge.EVENT_BUS;
 
 @SuppressWarnings("unused")
 @Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true, guiFactory = R.GUI_FACTORY, dependencies = R.MF_DEPS)
@@ -62,8 +60,8 @@ public final class MCFlux {
 		cm.register(SpecialEventReceiver.class, CapStorage.getNBTStorage(), SpecialEventReceiver::new);
 		MCFluxResources.preInit();
 		PROXY.preInit();
-		registerAllInjects(e.getAsmData());
-		InjectWrappers.init();
+		JavaUtils.eachAnnotatedClasses(e.getAsmData(), FluxCompat.Addon.class, FluxCompat::addAddon);
+		FluxCompat.init();
 	}
 
 	@Mod.EventHandler
@@ -74,7 +72,6 @@ public final class MCFlux {
 
 	@Mod.EventHandler
 	public void loadComplete(FMLLoadCompleteEvent e) {
-		EVENT_BUS.register(InjectWrappers.EVENTS);
 	}
 
 	@Mod.EventHandler

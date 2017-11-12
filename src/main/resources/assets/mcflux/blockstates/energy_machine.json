@@ -1,6 +1,4 @@
 {"variants": {
 	"variant=energy_dist": {"model": "mcflux:energy_dist"},
-	"variant=chunk_charger": {"model": "mcflux:chunk_charger"},
-	"variant=flavor_dist": {"model": "mcflux:flavor_dist"},
-	"variant=chunk_sprayer": {"model": "mcflux:chunk_sprayer"}
+	"variant=chunk_charger": {"model": "mcflux:chunk_charger"}
 }}

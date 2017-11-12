@@ -1,3 +1,9 @@
+## 3.3.0
+- New FluxCompat API (more lightweight than old energy compatibility)
+- Registering all FluxCompat addons
+- Removed old energy wrapping
+- MF Tool can now check compatible energy type from other mods
+
 ## 3.2.0
 - Flavor Energy API is removed. Use Taste API from FL.
 - Flux Generator now uses its own Energy Transfer method (new feature from FL, slightly increases performance)

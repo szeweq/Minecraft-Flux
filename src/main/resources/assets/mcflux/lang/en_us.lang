@@ -15,6 +15,8 @@ mcflux.cmd.sgive.noEvent=There is no Special Event with ID %s.
 mcflux.special.desc=[§cMCFlux Event§r] %s
 mcflux.special.ended=[§cMCFlux Event§r] This event has ended!
 
+mcflux.fluxcompat.type=Energy Type: %s
+
 mcflux.container.fluxgen=Flux Energy Generator
 
 mcflux.fluxgen.speed=Speed
@@ -37,7 +39,7 @@ mcflux.worldchunk=World Chunk
 mcflux.upchip.installed=Chip installed
 mcflux.upchip.lvlup=You reached energy level %s.
 mcflux.upchip.lvlmax=You reached the final level.
-mcflux.update.newversion=A new update for §eMinecraft-Flux§r was released (§e%s§r)!
+mcflux.update.newversion=§e[CLICK ME]§r A new update for §eMinecraft-Flux§r was released (§e%s§r)!
 mcflux.wet.mode0=ONE TO ALL
 mcflux.wet.mode1=ALL TO ONE
 mcflux.gen=Generating %s MF/t

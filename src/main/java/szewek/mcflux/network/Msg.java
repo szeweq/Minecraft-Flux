@@ -7,12 +7,14 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import szewek.fl.network.FLNetMsg;
+import szewek.mcflux.R;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 import szewek.mcflux.tileentities.TileEntityFluxGen;
 import szewek.mcflux.util.MCFluxReport;
@@ -124,7 +126,9 @@ public abstract class Msg extends FLNetMsg {
 		@SideOnly(Side.CLIENT)
 		@Override
 		protected void climsg(EntityPlayer p) {
-			p.sendMessage(new TextComponentTranslation("mcflux.update.newversion", version));
+			final TextComponentTranslation tt = new TextComponentTranslation("mcflux.update.newversion", version);
+			tt.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, R.MF_URL));
+			p.sendMessage(tt);
 		}
 	}
 

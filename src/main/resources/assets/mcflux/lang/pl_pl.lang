@@ -3,6 +3,8 @@ mcflux.config.EUValue.tooltip=Ilość MF przeznaczona do konwersji z/na 1 EU (IC
 mcflux.config.energyDistTransfer.tooltip=Transfer energii na tik przez Dystrybutora Energii
 mcflux.config.furnaceCapacity.tooltip=Pojemność energii dla Pieca
 
+mcflux.fluxcompat.type=Typ energii: %s
+
 mcflux.container.fluxgen=Generator Energii Fluksu
 
 mcflux.fluxgen.speed=Szybkość
@@ -23,7 +25,7 @@ mcflux.mfcompatible=Kompatybilny z MF
 mcflux.upchip.installed=Chip zainstalowany
 mcflux.upchip.lvlup=Osiągnąłeś poziom energii %s.
 mcflux.upchip.lvlmax=Osiągnąłeś ostatni poziom energii.
-mcflux.update.newversion=Nowa aktualizacja §eMinecraft-Flux§r została wydana (§e%s§r)!
+mcflux.update.newversion=§e[KLIKNIJ MNIE]§r Nowa aktualizacja §eMinecraft-Flux§r została wydana (§e%s§r)!
 mcflux.gen=Generowanie %s MF/t
 mcflux.convert=Konwersja z:
 

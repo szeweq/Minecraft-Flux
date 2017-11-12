@@ -7,15 +7,12 @@ buildscript {
 	dependencies {
 		classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
 		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.9"
-		classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7"
 	}
 }
 
 
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "com.matthewprenger.cursegradle"
-apply plugin: "com.jfrog.bintray"
-apply plugin: "maven-publish"
 
 sourceCompatibility = targetCompatibility = 1.8
 
@@ -23,7 +20,7 @@ idea { module { inheritOutputDirs = true } }
 
 String[] versionsMC = ["1.12"]
 String versionForge = "14.21.1.2415"
-String FLVersion = "2.2.1"
+String FLVersion = "2.3.1"
 String MFReq = "MF_DEPS = \"required-after:fl@[${FLVersion},);after:jei@[4.7.0,)\""
 
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
@@ -57,19 +54,6 @@ minecraft {
 	replaceIn "R.java"
 }
 
-publishing {
-	publications {
-		MCFluxPublish(MavenPublication) {
-			from components.java
-			artifact deobfJar
-			artifact sourcesJar
-			groupId project.group
-			artifactId project.archivesBaseName
-			version project.version
-		}
-	}
-}
-
 repositories {
 	maven {url "http://minecraft.curseforge.com/api/maven"}
 	maven {url "http://maven.covers1624.net"}
@@ -86,7 +70,7 @@ dependencies {
 	deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.15-8:api"
 	deobfCompile "mezz.jei:jei_1.12:4.7.2.77"
 	//deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
-	deobfCompile "net.industrial-craft:industrialcraft-2:2.6.54-ex110:api"
+	deobfCompile "net.industrial-craft:industrialcraft-2:2.8.27-ex112:api"
 	deobfCompile "net.darkhax.tesla:Tesla-1.12:1.0.60"
 }
 

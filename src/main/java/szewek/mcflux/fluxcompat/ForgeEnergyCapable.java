@@ -1,4 +1,4 @@
-package szewek.mcflux.wrapper;
+package szewek.mcflux.fluxcompat;
 
 import szewek.fl.energy.IEnergy;
 

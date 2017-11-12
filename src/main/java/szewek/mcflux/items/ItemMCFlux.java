@@ -11,8 +11,10 @@ import java.util.List;
 
 public class ItemMCFlux extends Item {
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18n.format(getUnlocalizedName(stack) + ".desc"));
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+	public void addInformation(ItemStack stack, @Nullable World w, List<String> tooltip, ITooltipFlag flagIn) {
+		final String key = getUnlocalizedName(stack) + ".desc";
+		if (I18n.hasKey(key))
+			tooltip.add(I18n.format(key));
+		super.addInformation(stack, w, tooltip, flagIn);
 	}
 }

@@ -17,7 +17,7 @@ import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockWET;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
-import szewek.mcflux.wrapper.EnergyType;
+import szewek.mcflux.fluxcompat.FluxCompat;
 
 public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEntityProvider {
 	private static final TextComponentTranslation
@@ -76,8 +76,8 @@ public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEn
 			return;
 		long en = ie.getEnergy(), ec = ie.getEnergyCapacity();
 		info.text(U.formatMF(ie)).progress(en, ec, getFStyle(info));
-		if (sneak && ie instanceof EnergyType.Converter) {
-			info.text(mfConvert.getUnformattedText() + ' ' + ((EnergyType.Converter) ie).getEnergyType());
+		if (sneak && ie instanceof FluxCompat.Convert) {
+			info.text(mfConvert.getUnformattedText() + ' ' + ((FluxCompat.Convert) ie).getEnergyType());
 		}
 	}
 }

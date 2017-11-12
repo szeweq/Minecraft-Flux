@@ -16,6 +16,7 @@ import szewek.fl.energy.IEnergy;
 import szewek.mcflux.U;
 import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
+import szewek.mcflux.fluxcompat.FluxCompat;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
 public final class ItemMFTool extends ItemMCFlux {
@@ -50,6 +51,9 @@ public final class ItemMFTool extends ItemMCFlux {
 				p.sendMessage(tcb);
 				if (ie != null)
 					p.sendMessage(new TextComponentTranslation("mcflux.energystat", U.formatMF(ie)));
+				if (ie instanceof FluxCompat.Convert)
+					p.sendMessage(new TextComponentTranslation("mcflux.fluxcompat.type", ((FluxCompat.Convert) ie).getEnergyType().name()));
+
 			} else {
 				WorldChunkEnergy wce = w.getCapability(WorldChunkEnergy.CAP_WCE, null);
 				if (wce != null) {
@@ -78,6 +82,8 @@ public final class ItemMFTool extends ItemMCFlux {
 				long nc = ie.getEnergyCapacity();
 				p.sendMessage(nc == 1 ? textEnergyUnknown : new TextComponentTranslation("mcflux.energystat", U.formatMF(ie)));
 			}
+			if (ie instanceof FluxCompat.Convert)
+				p.sendMessage(new TextComponentTranslation("mcflux.fluxcompat.type", ((FluxCompat.Convert) ie).getEnergyType().name()));
 			return true;
 		}
 		return false;

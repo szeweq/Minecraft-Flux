@@ -2,7 +2,7 @@ package szewek.mcflux.util;
 
 import com.rollbar.Rollbar;
 import net.minecraft.util.EnumFacing;
-import szewek.mcflux.wrapper.MCFluxWrapper;
+import szewek.mcflux.fluxcompat.LazyEnergyCapProvider;
 
 import java.util.*;
 
@@ -123,7 +123,7 @@ public abstract class ErrMsg {
 	public static final class NullWrapper extends ErrMsg {
 		private final boolean objectNull;
 		public NullWrapper(boolean obj) {
-			super("wrapper", MCFluxWrapper.class, null, "Null wrapp" + (obj ? "ed object" : "er"));
+			super("wrapper", LazyEnergyCapProvider.class, null, "Null wrapp" + (obj ? "ed object" : "er"));
 			objectNull = obj;
 			if (obj)
 				cachedHash++;

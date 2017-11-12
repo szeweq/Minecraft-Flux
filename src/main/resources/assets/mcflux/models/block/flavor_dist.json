@@ -1,4 +1,0 @@
-{
-  "parent": "mcflux:block/emachine_core",
-  "textures": {"0": "mcflux:blocks/flavor_dist"}
-}
