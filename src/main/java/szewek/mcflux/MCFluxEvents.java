@@ -123,7 +123,7 @@ public final class MCFluxEvents {
 	public static final class ClientOnly {
 		@SubscribeEvent
 		public static void registerModels(ModelRegistryEvent e) {
-			Item iem = Item.getItemFromBlock(ENERGY_MACHINE);
+			final Item iem = Item.getItemFromBlock(ENERGY_MACHINE);
 			U.registerItemMultiModels(iem, BlockEnergyMachine.Variant.ALL_VARIANTS.length);
 		}
 	}

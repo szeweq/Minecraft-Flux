@@ -46,8 +46,8 @@ public final class MCFluxNetwork {
 
 	public static JsonObject downloadGistJSON(String hash, String name) throws IOException {
 		final URL url = new URL("https", "gist.githubusercontent.com", 443, "/Szewek/" + hash + "/raw/" + name, null);
-		HttpURLConnection huc = (HttpURLConnection) url.openConnection();
-		InputStreamReader isr = new InputStreamReader(huc.getInputStream());
+		final HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+		final InputStreamReader isr = new InputStreamReader(huc.getInputStream());
 		return new JsonParser().parse(isr).getAsJsonObject();
 	}
 

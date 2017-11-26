@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandSpecialGive extends CommandBase {
+public final class CommandSpecialGive extends CommandBase {
 	@Override public String getName() {
 		return "sgive";
 	}
@@ -30,12 +30,12 @@ public class CommandSpecialGive extends CommandBase {
 		if (args.length < 2)
 			throw new WrongUsageException("mcflux.cmd.sgive.usage");
 		else {
-			EntityPlayer player = getEntity(server, sender, args[0], EntityPlayer.class);
-			int l = parseInt(args[1]);
-			SpecialEvent se = SpecialEventHandler.getEvent(l);
+			final EntityPlayer player = getEntity(server, sender, args[0], EntityPlayer.class);
+			final int l = parseInt(args[1]);
+			final SpecialEvent se = SpecialEventHandler.getEvent(l);
 			if (se == null)
 				throw new CommandException("mcflux.cmd.sgive.noEvent", l);
-			ItemStack is = new ItemStack(MCFluxResources.SPECIAL);
+			final ItemStack is = new ItemStack(MCFluxResources.SPECIAL);
 			is.setTagInfo("seid", new NBTTagInt(l));
 			FL.giveItemToPlayer(is, player);
 		}

@@ -10,6 +10,9 @@ public enum MCFluxAPI {
 
 	public static IEnergy getEnergySafely(ICapabilityProvider icp, EnumFacing f) {
 		try {
+			if (icp instanceof IEnergy) {
+				return (IEnergy) icp;
+			}
 			return icp.getCapability(FL.ENERGY_CAP, f);
 		} catch (Exception ignored) {
 		}

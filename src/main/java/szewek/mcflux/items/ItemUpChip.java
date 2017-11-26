@@ -38,7 +38,7 @@ public final class ItemUpChip extends ItemMCFlux {
 	@Override
 	public ItemStack onItemUseFinish(ItemStack is, World w, EntityLivingBase elb) {
 		if (!w.isRemote && elb instanceof EntityPlayerMP) {
-			EntityPlayerMP mp = (EntityPlayerMP) elb;
+			final EntityPlayerMP mp = (EntityPlayerMP) elb;
 			PlayerEnergy pe = mp.getCapability(PlayerEnergy.SELF_CAP, null);
 			if (pe == null)
 				return is;

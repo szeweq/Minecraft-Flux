@@ -18,9 +18,6 @@ import net.minecraft.world.World;
 import szewek.fl.FL;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public final class BlockEnergyMachine extends BlockMCFluxContainer {
 	private static final AxisAlignedBB DEF_AABB = new AxisAlignedBB(0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
 	public static final PropertyEnum<Variant> VARIANT = PropertyEnum.create("variant", Variant.class);
@@ -31,10 +28,8 @@ public final class BlockEnergyMachine extends BlockMCFluxContainer {
 	}
 
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		List<ItemStack> list = new ArrayList<>();
-		list.add(new ItemStack(this, 1, state.getValue(VARIANT).ordinal()));
-		return list;
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		drops.add(new ItemStack(this, 1, state.getValue(VARIANT).ordinal()));
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public final class ItemMFTool extends ItemMCFlux {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer p, World w, BlockPos pos, EnumHand h, EnumFacing f, float x, float y, float z) {
 		if (!w.isRemote) {
-			TileEntity te = w.getTileEntity(pos);
+			final TileEntity te = w.getTileEntity(pos);
 			if (te != null) {
 				if (te instanceof TileEntityEnergyMachine) {
 					TileEntityEnergyMachine teem = (TileEntityEnergyMachine) te;
@@ -73,7 +73,7 @@ public final class ItemMFTool extends ItemMCFlux {
 	@Override
 	public boolean itemInteractionForEntity(ItemStack is, EntityPlayer p, EntityLivingBase elb, EnumHand h) {
 		if (!elb.world.isRemote) {
-			IEnergy ie = MCFluxAPI.getEnergySafely(elb, null);
+			final IEnergy ie = MCFluxAPI.getEnergySafely(elb, null);
 			TextComponentTranslation tcb = textEntity.createCopy();
 			tcb.appendSibling(ie != null ? textIsCompat : textNoCompat);
 			tcb.appendSibling(new TextComponentTranslation("mcflux.entitycompat.end"));

@@ -30,7 +30,7 @@ public abstract class Msg extends FLNetMsg {
 	}
 
 	public static Msg update(BlockPos bp, TransferType[] tts) {
-		Update m = new Update();
+		final Update m = new Update();
 		m.pos = bp;
 		m.sides = tts;
 		m.broken = false;
@@ -38,14 +38,14 @@ public abstract class Msg extends FLNetMsg {
 	}
 
 	public static Msg newVersion(String v) {
-		NewVersion m = new NewVersion();
+		final NewVersion m = new NewVersion();
 		m.version = v;
 		m.broken = false;
 		return m;
 	}
 
 	public static Msg fluidAmount(BlockPos bp, int id, FluidStack fs) {
-		FluidAmount m = new FluidAmount();
+		final FluidAmount m = new FluidAmount();
 		m.pos = bp;
 		m.id = id;
 		if (fs == null)

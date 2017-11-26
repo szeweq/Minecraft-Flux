@@ -21,7 +21,7 @@ public final class U {
 
 	@SideOnly(Side.CLIENT)
 	public static void registerItemModels(Item... items) {
-			ItemModelMesher imm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+			final ItemModelMesher imm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		for (Item i : items) {
 			ModelResourceLocation mrl = new ModelResourceLocation(i.getRegistryName(), "inventory");
 			imm.register(i, 0, mrl);
@@ -30,7 +30,7 @@ public final class U {
 	
 	@SideOnly(Side.CLIENT)
 	public static void registerItemMultiModels(Item item, int m) {
-		net.minecraft.util.ResourceLocation rl = item.getRegistryName();
+		final net.minecraft.util.ResourceLocation rl = item.getRegistryName();
 		final String dom = rl.getResourceDomain();
 		MCFlux.L.info("MULTI MODELS for " + rl);
 		for (int i = 0; i < m; i++) {

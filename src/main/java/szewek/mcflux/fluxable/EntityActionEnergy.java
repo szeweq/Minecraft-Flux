@@ -39,7 +39,7 @@ public final class EntityActionEnergy extends EnergyCapable {
 	public long inputEnergy(long amount, boolean simulate) {
 		if (!simulate && !charged) {
 			if (creature instanceof EntityPig) {
-				EntityPigZombie pigman = new EntityPigZombie(creature.world);
+				final EntityPigZombie pigman = new EntityPigZombie(creature.world);
 				pigman.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_AXE));
 				pigman.setLocationAndAngles(creature.posX, creature.posY, creature.posZ, creature.rotationYaw, creature.rotationPitch);
 				pigman.setNoAI(creature.isAIDisabled());

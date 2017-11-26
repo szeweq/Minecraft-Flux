@@ -39,24 +39,24 @@ public enum FluxGenRecipes {
 	}
 
 	public void addCatalyst(String s, int factor, int usage) {
-		NonNullList<ItemStack> nis = OreDictionary.getOres(s, false);
+		final NonNullList<ItemStack> nis = OreDictionary.getOres(s, false);
 		if (nis.isEmpty())
 			return;
-		RecipeFluxGen rfg = new RecipeFluxGen(factor, usage);
+		final RecipeFluxGen rfg = new RecipeFluxGen(factor, usage);
 		for (ItemStack is : nis) {
 			catalysts.put(new RecipeItem(is.getItem(), is.getItemDamage(), null), rfg);
 		}
 	}
 
 	public void addHotFluid(String s, int factor, int usage) {
-		FluidStack fs = FluidRegistry.getFluidStack(s, 0);
+		final FluidStack fs = FluidRegistry.getFluidStack(s, 0);
 		if (fs == null)
 			return;
 		hotFluids.put(fs, new RecipeFluxGen(factor, usage));
 	}
 
 	public void addCleanFluid(String s, int factor, int usage) {
-		FluidStack fs = FluidRegistry.getFluidStack(s, 0);
+		final FluidStack fs = FluidRegistry.getFluidStack(s, 0);
 		if (fs == null)
 			return;
 		cleanFluids.put(fs, new RecipeFluxGen(factor, usage));
@@ -65,7 +65,7 @@ public enum FluxGenRecipes {
 	public static boolean isCatalyst(ItemStack is) {
 		if (is.isEmpty())
 			return false;
-		RecipeItem ri = new RecipeItem(is.getItem(), is.getItemDamage(), null);
+		final RecipeItem ri = new RecipeItem(is.getItem(), is.getItemDamage(), null);
 		if (INSTANCE.catalysts.containsKey(ri))
 			return true;
 		for (RecipeItem mri : INSTANCE.catalysts.keySet()) {
@@ -78,7 +78,7 @@ public enum FluxGenRecipes {
 	public static RecipeFluxGen getCatalyst(ItemStack is) {
 		if (is.isEmpty())
 			return DEFAULT;
-		RecipeItem ri = new RecipeItem(is.getItem(), is.getItemDamage(), null);
+		final RecipeItem ri = new RecipeItem(is.getItem(), is.getItemDamage(), null);
 		if (INSTANCE.catalysts.containsKey(ri))
 			return INSTANCE.catalysts.get(ri);
 		for (RecipeItem mri : INSTANCE.catalysts.keySet()) {
@@ -109,7 +109,7 @@ public enum FluxGenRecipes {
 			return false;
 		if (m.containsKey(fs))
 			return true;
-		Fluid fl = fs.getFluid();
+		final Fluid fl = fs.getFluid();
 		for (FluidStack mfs : m.keySet()) {
 			if (mfs.getFluid() == fl)
 				return true;
@@ -123,7 +123,7 @@ public enum FluxGenRecipes {
 			return DEFAULT;
 		if (m.containsKey(fs))
 			return m.get(fs);
-		Fluid fl = fs.getFluid();
+		final Fluid fl = fs.getFluid();
 		for (FluidStack mfs : m.keySet()) {
 			if (mfs.getFluid() == fl)
 				return m.get(mfs);

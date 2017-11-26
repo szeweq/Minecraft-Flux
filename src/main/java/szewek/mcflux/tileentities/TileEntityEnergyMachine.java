@@ -28,8 +28,8 @@ import static szewek.mcflux.config.MCFluxConfig.CHUNK_CHARGER_TRANS;
 
 public final class TileEntityEnergyMachine extends TileEntityWCEAware implements ITickable {
 	private boolean oddTick = true, clientUpdate = true, serverUpdate = false;
-	private TransferType[] sideTransfer = new TransferType[]{TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};
-	private long[] sideValues = new long[]{0, 0, 0, 0, 0, 0};
+	private final TransferType[] sideTransfer = new TransferType[]{TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};
+	private final long[] sideValues = new long[]{0, 0, 0, 0, 0, 0};
 	private IBlockState cachedState = MCFluxResources.SIDED.getDefaultState();
 	private IntBinaryOperator module;
 	private int moduleId;

@@ -45,7 +45,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 	public static final int fluidCap = 4000;
 	private static final long maxEnergy = 500000;
 	private WorkState workState = WorkState.LAZY;
-	private int[] vals = new int[5];
+	private final int[] vals = new int[5];
 	protected long energy;
 	private int tickCount = 0;
 	private boolean isDirty = false, isReady = false, receivedRedstone = false;

@@ -35,7 +35,7 @@ public final class FurnaceEnergy extends EnergyCapable {
 
 	@Override
 	public long getEnergy() {
-		int e = furnace.getField(0);
+		final int e = furnace.getField(0);
 		return e > FURNACE_CAP ? FURNACE_CAP : e;
 	}
 

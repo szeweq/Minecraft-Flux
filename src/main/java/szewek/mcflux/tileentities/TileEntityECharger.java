@@ -12,7 +12,7 @@ import java.util.List;
 
 public final class TileEntityECharger extends TileEntityWCEAware implements ITickable {
 	private int sideIndex = -1;
-	private IEnergy[] sides = new IEnergy[6];
+	private final IEnergy[] sides = new IEnergy[6];
 	private IEnergy esrc = null;
 	private List<IEnergy> chargeables = new ArrayList<>();
 
