@@ -5,12 +5,13 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.versioning.ComparableVersion;
 import org.apache.logging.log4j.Logger;
+import szewek.fl.util.CapStorage;
 import szewek.fl.util.JavaUtils;
+import szewek.mcflux.compat.top.TOPInit;
 import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
@@ -20,10 +21,10 @@ import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.special.CommandSpecialGive;
 import szewek.mcflux.special.SpecialEventHandler;
 import szewek.mcflux.special.SpecialEventReceiver;
-import szewek.mcflux.util.*;
+import szewek.mcflux.util.MCFluxCreativeTab;
+import szewek.mcflux.util.MCFluxReport;
 
 import java.io.File;
-import java.util.Set;
 
 @SuppressWarnings("unused")
 @Mod(modid = R.MF_NAME, name = R.MF_FULL_NAME, version = R.MF_VERSION, useMetadata = true, guiFactory = R.GUI_FACTORY, dependencies = R.MF_DEPS)
@@ -62,16 +63,13 @@ public final class MCFlux {
 		PROXY.preInit();
 		JavaUtils.eachAnnotatedClasses(e.getAsmData(), FluxCompat.Addon.class, FluxCompat::addAddon);
 		FluxCompat.init();
+		FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", TOPInit.class.getName());
 	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent e) {
 		MCFluxResources.init();
 		PROXY.init();
-	}
-
-	@Mod.EventHandler
-	public void loadComplete(FMLLoadCompleteEvent e) {
 	}
 
 	@Mod.EventHandler
@@ -89,27 +87,6 @@ public final class MCFlux {
 			MCFluxReport.reportAll(MC_DIR);
 		} catch (Exception x) {
 			MCFluxReport.sendException(x, "Creating a report");
-		}
-	}
-
-	private void registerAllInjects(ASMDataTable asdt) {
-		L.info("Registering inject registries...");
-		final Set<ASMDataTable.ASMData> aset = asdt.getAll(InjectRegistry.class.getCanonicalName());
-		for (ASMDataTable.ASMData data : aset) {
-			final String cname = data.getClassName();
-			if (!cname.equals(data.getObjectName())) continue;
-			final Class<?> c = JavaUtils.getClassSafely(cname);
-			if (c == null)
-				continue;
-			final InjectRegistry ann = c.getAnnotation(InjectRegistry.class);
-			if (!ann.requires().check(ann.args()))
-				continue;
-			try {
-				final IInjectRegistry iir = c.asSubclass(IInjectRegistry.class).newInstance();
-				iir.registerInjects();
-			} catch (Exception e) {
-				MCFluxReport.sendException(e, "Registering Injects");
-			}
 		}
 	}
 
