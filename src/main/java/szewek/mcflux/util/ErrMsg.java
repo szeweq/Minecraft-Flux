@@ -72,7 +72,7 @@ public abstract class ErrMsg {
 		m.put("EM.Name", name);
 		m.put("EM.Class", cl.getName());
 		addInfo(m);
-		rb.warning(msgThrown, m, getClass().getName() + ": " + msgThrown.getMessage());
+		rb.warning(msgThrown, m, getClass().getName() + ": " + (msgThrown != null ? msgThrown.getMessage() : "[No MSG thrown]"));
 	}
 
 	protected void addInfo(Map<String, Object> m) {}
