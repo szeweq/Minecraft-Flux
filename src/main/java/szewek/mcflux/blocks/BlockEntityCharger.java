@@ -8,11 +8,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import szewek.fl.FLU;
+import szewek.fl.block.BlockContainerModeled;
 import szewek.fl.energy.IEnergy;
-import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.tileentities.TileEntityECharger;
 
-public final class BlockEntityCharger extends BlockMCFluxContainer {
+public final class BlockEntityCharger extends BlockContainerModeled {
 	private static final AxisAlignedBB DEF_AABB = new AxisAlignedBB(0.125, 0, 0.125, 0.875, 0.1875, 0.875);
 
 	public BlockEntityCharger() {
@@ -67,7 +68,7 @@ public final class BlockEntityCharger extends BlockMCFluxContainer {
 		boolean crossX = inX != pinX;
 		boolean crossZ = inZ != pinZ;
 		TileEntityECharger teec = (TileEntityECharger) w.getTileEntity(pos);
-		IEnergy ie = MCFluxAPI.getEnergySafely(e, null);
+		IEnergy ie = FLU.getEnergySafely(e, null);
 		if (teec == null || ie == null)
 			return;
 		if (inX && inZ) {

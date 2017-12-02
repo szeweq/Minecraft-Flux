@@ -4,13 +4,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import szewek.fl.FLU;
+import szewek.fl.annotations.NamedResource;
 import szewek.fl.energy.IEnergy;
-import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.config.MCFluxConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NamedResource("mcflux:wet")
 public final class TileEntityWET extends TileEntityWCEAware implements ITickable {
 	private EnumFacing face = null, faceOpposite = null;
 	private boolean out = false;
@@ -29,7 +31,7 @@ public final class TileEntityWET extends TileEntityWCEAware implements ITickable
 			te = world.getTileEntity(cbp);
 			if (te == null)
 				continue;
-			IEnergy ie = MCFluxAPI.getEnergySafely(te, faceOpposite);
+			IEnergy ie = FLU.getEnergySafely(te, faceOpposite);
 			if (ie != null)
 				elist.add(ie);
 		}
@@ -37,7 +39,7 @@ public final class TileEntityWET extends TileEntityWCEAware implements ITickable
 			return;
 		te = world.getTileEntity(upos);
 		if (te != null)
-			se = MCFluxAPI.getEnergySafely(te, face);
+			se = FLU.getEnergySafely(te, face);
 		if (se == null) {
 			if (bat != null)
 				se = bat;

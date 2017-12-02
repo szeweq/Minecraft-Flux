@@ -9,10 +9,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import szewek.fl.FLU;
+import szewek.fl.annotations.NamedResource;
 import szewek.fl.energy.Battery;
 import szewek.fl.energy.IEnergy;
 import szewek.mcflux.MCFluxResources;
-import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockSided;
 import szewek.mcflux.config.MCFluxConfig;
@@ -26,6 +27,7 @@ import java.util.function.IntBinaryOperator;
 
 import static szewek.mcflux.config.MCFluxConfig.CHUNK_CHARGER_TRANS;
 
+@NamedResource("mcflux:emachine")
 public final class TileEntityEnergyMachine extends TileEntityWCEAware implements ITickable {
 	private boolean oddTick = true, clientUpdate = true, serverUpdate = false;
 	private final TransferType[] sideTransfer = new TransferType[]{TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE, TransferType.NONE};
@@ -163,7 +165,7 @@ public final class TileEntityEnergyMachine extends TileEntityWCEAware implements
 			if (te == null)
 				continue;
 			f = f.getOpposite();
-			IEnergy ea = MCFluxAPI.getEnergySafely(te, f);
+			IEnergy ea = FLU.getEnergySafely(te, f);
 			if (ea == null)
 				continue;
 			switch (tt) {

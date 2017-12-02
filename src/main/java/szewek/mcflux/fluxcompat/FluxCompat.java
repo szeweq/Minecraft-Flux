@@ -58,7 +58,10 @@ public final class FluxCompat {
 	}
 
 	static void findActiveEnergy(LazyEnergyCapProvider lecp) {
-		if (blacklisted(lecp.lazyObject)) return;
+		if (blacklisted(lecp.lazyObject)) {
+			lecp.setNotEnergy();
+			return;
+		}
 		lq.offer(lecp);
 		synchronized (th) {
 			th.notify();
@@ -75,14 +78,14 @@ public final class FluxCompat {
 				return;
 			}
 		}
-		lecp.notEnergy = true;
+		lecp.setNotEnergy();
 	}
 
 	@SubscribeEvent
 	public static void tileCompat(AttachCapabilitiesEvent<TileEntity> ace) {
 		if (Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START)) {
 			final TileEntity te = ace.getObject();
-			if (te == null) return;
+			if (te == null || blacklisted(te)) return;
 			ace.addCapability(COMPAT, new LazyEnergyCapProvider(te));
 		}
 	}

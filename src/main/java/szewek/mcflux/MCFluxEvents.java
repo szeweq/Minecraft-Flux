@@ -53,12 +53,14 @@ public final class MCFluxEvents {
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> e) {
-		MCFluxResources.items(e.getRegistry());
+		MCFluxResources.addResources();
+		MCFluxResources.PR.registerItems(e.getRegistry());
 	}
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> e) {
-		MCFluxResources.blocks(e.getRegistry());
+		MCFluxResources.addResources();
+		MCFluxResources.PR.registerBlocks(e.getRegistry());
 	}
 
 	@SubscribeEvent

@@ -1,9 +1,6 @@
 package szewek.mcflux.util;
 
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
-
-import java.util.Map;
+import szewek.fl.FLU;
 
 public enum InjectCond {
 	NONE, MOD, CLASS;
@@ -13,20 +10,14 @@ public enum InjectCond {
 			case NONE:
 				return true;
 			case MOD:
-				if (args.length == 0)
-					return false;
-				Map<String, ModContainer> modmap = Loader.instance().getIndexedModList();
-				for (String a : args) {
-					if (modmap.containsKey(a))
-						return true;
-				}
-				break;
+				return args.length != 0 && FLU.loadedMods(args);
 			case CLASS:
 				for (String a : args) {
 					try {
 						if (Class.forName(a) != null)
 							return true;
-					} catch (ClassNotFoundException ignored) {}
+					} catch (ClassNotFoundException ignored) {
+					}
 				}
 				break;
 		}

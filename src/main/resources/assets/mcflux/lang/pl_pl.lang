@@ -29,14 +29,14 @@ mcflux.update.newversion=§e[KLIKNIJ MNIE]§r Nowa aktualizacja §eMinecraft-Flu
 mcflux.gen=Generowanie %s MF/t
 mcflux.convert=Konwersja z:
 
-item.mftool.name=Narzędzie MF
-item.fesniffer.name=Czujnik Zapachowej Energii
-item.upchip.name=Chip Aktualizacji MF
-item.upchip.desc=Mniam!
-item.fluxassistant.name=Asystent Flux [WIP]
+item.mcflux:mftool.name=Narzędzie MF
+item.mcflux:fesniffer.name=Czujnik Zapachowej Energii
+item.mcflux:upchip.name=Chip Aktualizacji MF
+item.mcflux:upchip.desc=Mniam!
+item.mcflux:fluxassistant.name=Asystent Flux [WIP]
 
-tile.energy_dist.name=Dystrybutor Energii
-tile.flavor_dist.name=Dystrybutor Zapachowej Energii
-tile.echarger.name=Ładowarka Istot
-tile.wet.name=Bezprzewodowy Przenośnik Energii
-tile.fluxgen.name=Generator Energii Fluksu
+tile.mcflux:energy_dist.name=Dystrybutor Energii
+tile.mcflux:flavor_dist.name=Dystrybutor Zapachowej Energii
+tile.mcflux:echarger.name=Ładowarka Istot
+tile.mcflux:wet.name=Bezprzewodowy Przenośnik Energii
+tile.mcflux:fluxgen.name=Generator Energii Fluksu

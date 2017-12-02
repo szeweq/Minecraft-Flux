@@ -29,10 +29,11 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import szewek.fl.FL;
+import szewek.fl.FLU;
+import szewek.fl.annotations.NamedResource;
 import szewek.fl.energy.ForgeEnergyCompat;
 import szewek.fl.energy.IEnergy;
-import szewek.mcflux.api.MCFluxAPI;
-import szewek.mcflux.api.fluxwork.WorkState;
+import szewek.fl.fluxwork.WorkState;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.network.Msg;
 import szewek.mcflux.recipes.FluxGenRecipes;
@@ -41,6 +42,7 @@ import szewek.mcflux.recipes.RecipeFluxGen;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@NamedResource("mcflux:fluxgen")
 public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInventory, IItemHandler, IFluidHandler, ITickable {
 	public static final int fluidCap = 4000;
 	private static final long maxEnergy = 500000;
@@ -123,7 +125,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 				TileEntity te = world.getTileEntity(bp);
 				if (te == null)
 					continue;
-				IEnergy ie = MCFluxAPI.getEnergySafely(te, f.getOpposite());
+				IEnergy ie = FLU.getEnergySafely(te, f.getOpposite());
 				if (ie == null)
 					continue;
 				to(ie, 40000);

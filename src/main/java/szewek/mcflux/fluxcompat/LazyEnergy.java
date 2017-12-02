@@ -3,6 +3,7 @@ package szewek.mcflux.fluxcompat;
 import szewek.fl.energy.IEnergy;
 
 public final class LazyEnergy extends ForgeEnergyCapable implements FluxCompat.Convert {
+	boolean notEnergy = false;
 	IEnergy ie;
 
 	@Override
@@ -41,6 +42,6 @@ public final class LazyEnergy extends ForgeEnergyCapable implements FluxCompat.C
 
 	@Override
 	public EnergyType getEnergyType() {
-		return EnergyType.LAZY;
+		return notEnergy ? EnergyType.NONE : EnergyType.LAZY;
 	}
 }

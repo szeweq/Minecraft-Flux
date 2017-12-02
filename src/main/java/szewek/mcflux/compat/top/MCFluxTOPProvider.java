@@ -9,13 +9,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import szewek.fl.FLU;
 import szewek.fl.energy.IEnergy;
 import szewek.mcflux.MCFluxResources;
 import szewek.mcflux.R;
 import szewek.mcflux.U;
-import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.blocks.BlockEnergyMachine;
 import szewek.mcflux.blocks.BlockWET;
+import szewek.mcflux.config.MCFluxConfig;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.fluxcompat.FluxCompat;
 
@@ -36,7 +37,7 @@ public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEn
 
 	@Override
 	public void addProbeEntityInfo(ProbeMode mode, IProbeInfo info, EntityPlayer p, World w, Entity e, IProbeHitEntityData data) {
-		IEnergy ie = MCFluxAPI.getEnergySafely(e, null);
+		IEnergy ie = FLU.getEnergySafely(e, null);
 		if (ie != null) {
 			long en = ie.getEnergy(), ec = ie.getEnergyCapacity();
 			if (ec == 1)
@@ -67,7 +68,7 @@ public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEn
 		} else {
 			TileEntity te = w.getTileEntity(bp);
 			if (te != null)
-				displayMF(info, MCFluxAPI.getEnergySafely(te, data.getSideHit()), p.isSneaking());
+				displayMF(info, FLU.getEnergySafely(te, data.getSideHit()), p.isSneaking());
 		}
 	}
 
@@ -75,9 +76,10 @@ public final class MCFluxTOPProvider implements IProbeInfoProvider, IProbeInfoEn
 		if (ie == null)
 			return;
 		long en = ie.getEnergy(), ec = ie.getEnergyCapacity();
-		info.text(U.formatMF(ie)).progress(en, ec, getFStyle(info));
-		if (sneak && ie instanceof FluxCompat.Convert) {
+		boolean fcc = ie instanceof FluxCompat.Convert;
+		if (MCFluxConfig.SHOW_FLUXCOMPAT || !fcc)
+			info.text(U.formatMF(ie)).progress(en, ec, getFStyle(info));
+		if (sneak && fcc)
 			info.text(mfConvert.getUnformattedText() + ' ' + ((FluxCompat.Convert) ie).getEnergyType());
-		}
 	}
 }

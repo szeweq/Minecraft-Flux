@@ -4,12 +4,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import szewek.fl.FLU;
+import szewek.fl.annotations.NamedResource;
 import szewek.fl.energy.IEnergy;
-import szewek.mcflux.api.MCFluxAPI;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NamedResource("mcflux:echarger")
 public final class TileEntityECharger extends TileEntityWCEAware implements ITickable {
 	private int sideIndex = -1;
 	private final IEnergy[] sides = new IEnergy[6];
@@ -50,7 +52,7 @@ public final class TileEntityECharger extends TileEntityWCEAware implements ITic
 			BlockPos bp = pos.offset(f, 1);
 			TileEntity te = world.getTileEntity(bp);
 			if (te != null) {
-				esrc = MCFluxAPI.getEnergySafely(te, f.getOpposite());
+				esrc = FLU.getEnergySafely(te, f.getOpposite());
 				if (esrc != null)
 					sides[f.getIndex()] = esrc;
 			}

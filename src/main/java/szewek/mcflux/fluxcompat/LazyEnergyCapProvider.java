@@ -67,4 +67,11 @@ public class LazyEnergyCapProvider implements ICapabilityProvider {
 		compatFE = fe;
 		lazyObject = null;
 	}
+
+	void setNotEnergy() {
+		notEnergy = true;
+		for (int i = 0; i < 7; i++)
+			lazySides[i] = null;
+			//lazySides[i].notEnergy = true;
+	}
 }

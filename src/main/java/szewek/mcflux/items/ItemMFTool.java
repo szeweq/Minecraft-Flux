@@ -11,10 +11,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import szewek.fl.FLU;
 import szewek.fl.energy.Battery;
 import szewek.fl.energy.IEnergy;
 import szewek.mcflux.U;
-import szewek.mcflux.api.MCFluxAPI;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.fluxcompat.FluxCompat;
 import szewek.mcflux.tileentities.TileEntityEnergyMachine;
@@ -45,7 +45,7 @@ public final class ItemMFTool extends ItemMCFlux {
 						p.sendMessage(new TextComponentTranslation("mcflux.transfer", ((TileEntityEnergyMachine) te).getTransferSide(f)));
 					return EnumActionResult.SUCCESS;
 				}
-				IEnergy ie = MCFluxAPI.getEnergySafely(te, f);
+				IEnergy ie = FLU.getEnergySafely(te, f);
 				TextComponentTranslation tcb = textBlock.createCopy();
 				tcb.appendSibling(ie != null ? textIsCompat : textNoCompat).appendSibling(new TextComponentTranslation("mcflux.blockcompat.end", f));
 				p.sendMessage(tcb);
@@ -66,6 +66,8 @@ public final class ItemMFTool extends ItemMCFlux {
 				}
 			}
 			return EnumActionResult.SUCCESS;
+		} else if (p.isSneaking()) {
+			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.PASS;
 	}
@@ -73,7 +75,7 @@ public final class ItemMFTool extends ItemMCFlux {
 	@Override
 	public boolean itemInteractionForEntity(ItemStack is, EntityPlayer p, EntityLivingBase elb, EnumHand h) {
 		if (!elb.world.isRemote) {
-			final IEnergy ie = MCFluxAPI.getEnergySafely(elb, null);
+			final IEnergy ie = FLU.getEnergySafely(elb, null);
 			TextComponentTranslation tcb = textEntity.createCopy();
 			tcb.appendSibling(ie != null ? textIsCompat : textNoCompat);
 			tcb.appendSibling(new TextComponentTranslation("mcflux.entitycompat.end"));

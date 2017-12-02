@@ -1,9 +1,6 @@
 package szewek.mcflux;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
+import szewek.fl.util.PreRegister;
 import szewek.fl.util.RecipeItem;
 import szewek.mcflux.blocks.*;
 import szewek.mcflux.blocks.itemblocks.ItemBlockEnergyMachine;
@@ -32,44 +29,38 @@ public final class MCFluxResources {
 	/** Current state (0 = untouched; 1 = after preInit; 2 = after init) */
 	private static byte state = 0;
 	private static boolean created = false;
+	static final PreRegister PR = new PreRegister("mcflux", MCFlux.MCFLUX_TAB);
 
-	private static void createResources() {
+	static void addResources() {
 		if (created)
 			return;
 		created = true;
-		MFTOOL = item("mftool", new ItemMFTool());
-		UPCHIP = item("upchip", new ItemUpChip());
-		SPECIAL = item("mfspecial", new ItemSpecial());
 		SIDED = new BlockSided("sided");
-		ENERGY_MACHINE = block("energy_machine", new BlockEnergyMachine());
-		ECHARGER = block("echarger", new BlockEntityCharger());
-		WET = block("wet", new BlockWET());
-		FLUXGEN = block("fluxgen", new BlockFluxGen());
+		PR
+				.item("mftool", MFTOOL = new ItemMFTool())
+				.item("upchip", UPCHIP = new ItemUpChip())
+				.item("mfspecial", SPECIAL = new ItemSpecial())
+				.block("energy_machine", ENERGY_MACHINE = new BlockEnergyMachine())
+				.block("echarger", ECHARGER = new BlockEntityCharger())
+				.block("wet", WET = new BlockWET())
+				.block("fluxgen", FLUXGEN = new BlockFluxGen())
+				.item("echarger", new ItemMCFluxBlock(ECHARGER))
+				.item("wet", new ItemMCFluxBlock(WET))
+				.item("fluxgen", new ItemMCFluxBlock(FLUXGEN));
+		new ItemBlockEnergyMachine(ENERGY_MACHINE, MCFlux.MCFLUX_TAB);
 	}
 
-	static void items(IForgeRegistry<Item> ifr) {
-		createResources();
-		ifr.registerAll(MFTOOL, UPCHIP, SPECIAL);
-		ifr.registerAll(
-				item("energy_machine", new ItemBlockEnergyMachine(ENERGY_MACHINE)),
-				item("echarger", new ItemMCFluxBlock(ECHARGER)),
-				item("wet", new ItemMCFluxBlock(WET)),
-				item("fluxgen", new ItemMCFluxBlock(FLUXGEN))
-		);
-	}
-	static void blocks(IForgeRegistry<Block> ifr) {
-		createResources();
-		ifr.registerAll(ENERGY_MACHINE, ECHARGER, WET, FLUXGEN);
-	}
-
+	@SuppressWarnings("unchecked")
 	static void preInit() {
 		if (state > 0)
 			return;
 		state++;
-		GameRegistry.registerTileEntity(TileEntityEnergyMachine.class, "mcflux:emachine");
-		GameRegistry.registerTileEntity(TileEntityECharger.class, "mcflux:echarger");
-		GameRegistry.registerTileEntity(TileEntityWET.class, "mcflux:wet");
-		GameRegistry.registerTileEntity(TileEntityFluxGen.class, "mcflux:fluxgen");
+		PR.tileEntityClasses(new Class[]{
+				TileEntityEnergyMachine.class,
+				TileEntityECharger.class,
+				TileEntityWET.class,
+				TileEntityFluxGen.class
+		});
 	}
 
 	static void init() {
@@ -77,18 +68,6 @@ public final class MCFluxResources {
 			return;
 		state++;
 		FluxGenRecipes.addCatalyst(new RecipeItem(UPCHIP, 0, null), 2, 0);
-	}
-
-	private static <T extends Item> T item(String name, T i) {
-		final String rn = R.MF_NAME + ':' + name;
-		i.setUnlocalizedName(name).setCreativeTab(MCFlux.MCFLUX_TAB).setRegistryName(rn);
-		return i;
-	}
-
-	private static <T extends Block> T block(String name, T b) {
-		final String rn = R.MF_NAME + ':' + name;
-		b.setUnlocalizedName(name).setCreativeTab(MCFlux.MCFLUX_TAB).setRegistryName(rn);
-		return b;
 	}
 
 	private MCFluxResources() {}

@@ -14,13 +14,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import szewek.fl.block.BlockContainerModeled;
 import szewek.mcflux.MCFlux;
 import szewek.mcflux.R;
 import szewek.mcflux.tileentities.TileEntityFluxGen;
 
 import javax.annotation.Nullable;
 
-public class BlockFluxGen extends BlockMCFluxContainer {
+public class BlockFluxGen extends BlockContainerModeled {
 
 	public BlockFluxGen() {
 		super();

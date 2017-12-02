@@ -43,7 +43,6 @@ public final class MCFlux {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
-		MCFluxReport.init();
 		MCFluxReport.handleErrors();
 		L = e.getModLog();
 		MC_DIR = e.getModConfigurationDirectory().getParentFile();

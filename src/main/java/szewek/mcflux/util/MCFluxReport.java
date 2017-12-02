@@ -1,6 +1,7 @@
 package szewek.mcflux.util;
 
-import com.rollbar.Rollbar;
+import com.rollbar.notifier.Rollbar;
+import com.rollbar.notifier.config.ConfigBuilder;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraftforge.common.ForgeVersion;
@@ -22,20 +23,24 @@ import java.util.zip.GZIPOutputStream;
 import static szewek.mcflux.MCFlux.L;
 
 public final class MCFluxReport {
-	private static final Rollbar rollbar = new Rollbar(R.MF_ACCESS_TOKEN, R.MF_ENVIRONMENT, null, R.MF_VERSION, System.getProperty("os.name"), null, null, null, null, null, null, new HashMap<>(), null, null, null, null);
+	private static final Rollbar rollbar = new Rollbar(ConfigBuilder.withAccessToken(R.MF_ACCESS_TOKEN)
+			.environment(R.MF_ENVIRONMENT)
+			.codeVersion(R.MF_VERSION)
+			.custom(MCFluxReport::addCustomInfo)
+			.platform(System.getProperty("os.name"))
+			.build());
 	private static final Int2ObjectMap<ErrMsg> errMsgs = new Int2ObjectOpenHashMap<>();
 	private static final DateFormat fileDate = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 
-	public static void init() {
-		Map<String, Object> cm = rollbar.getCustom();
+	private static Map<String, Object> addCustomInfo() {
+		Map<String, Object> cm = new HashMap<>();
 		cm.put("Forge", ForgeVersion.getVersion());
 		cm.put("Mods", Loader.instance().getIndexedModList().keySet().toArray());
+		return cm;
 	}
 
 	public static void handleErrors() {
-		Thread t = Thread.currentThread();
-		Thread.UncaughtExceptionHandler ueh = t.getUncaughtExceptionHandler();
-		t.setUncaughtExceptionHandler(new Uncaught(ueh));
+		rollbar.handleUncaughtErrors();
 	}
 
 	public static void sendException(Throwable th, String n) {
@@ -84,22 +89,6 @@ public final class MCFluxReport {
 			ps.close();
 		} else
 			L.info("No errors found!");
-	}
-
-	static final class Uncaught implements Thread.UncaughtExceptionHandler {
-		private final Thread.UncaughtExceptionHandler ueh;
-
-		Uncaught(Thread.UncaughtExceptionHandler ueh) {
-			this.ueh = ueh;
-		}
-
-		@Override public void uncaughtException(Thread t, Throwable e) {
-			rollbar.error(e, "Uncaught Exception from [" + t.getName() + "]: " + e.getMessage());
-			if (ueh != null && !ueh.equals(this))
-				ueh.uncaughtException(t, e);
-			else
-				t.getThreadGroup().uncaughtException(t, e);
-		}
 	}
 
 	private MCFluxReport() {}

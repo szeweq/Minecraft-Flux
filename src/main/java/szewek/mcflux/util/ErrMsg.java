@@ -1,6 +1,6 @@
 package szewek.mcflux.util;
 
-import com.rollbar.Rollbar;
+import com.rollbar.notifier.Rollbar;
 import net.minecraft.util.EnumFacing;
 import szewek.mcflux.fluxcompat.LazyEnergyCapProvider;
 
@@ -106,17 +106,6 @@ public abstract class ErrMsg {
 
 		@Override public String makeInfo() {
 			return super.makeInfo() + "\n| Side: " + (face != null ? face : "none");
-		}
-	}
-
-	public static final class NullInject extends ErrMsg {
-		public NullInject(Class<?> cl) {
-			super("nullinject", cl, new Throwable("Generated throwable"), "Null inject (" + cl.getName() + ')');
-		}
-
-		@Override protected void printError() {
-			L.warn("An object with type \"" + cl.getName() + "\" is null! Minecraft-Flux can't inject any capability into an empty object");
-			L.warn(msgThrown);
 		}
 	}
 

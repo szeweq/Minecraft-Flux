@@ -15,11 +15,10 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import szewek.fl.FL;
+import szewek.fl.block.BlockContainerModeled;
 import szewek.mcflux.tileentities.TileEntityWET;
 
-import javax.annotation.Nullable;
-
-public final class BlockWET extends BlockMCFluxContainer {
+public final class BlockWET extends BlockContainerModeled {
 	private static final PropertyDirection FACING = PropertyDirection.create("f");
 	public static final PropertyInteger MODE = PropertyInteger.create("m", 0, 1);
 
@@ -28,7 +27,7 @@ public final class BlockWET extends BlockMCFluxContainer {
 		setHardness(1);
 	}
 
-	@Nullable @Override public TileEntity createNewTileEntity(World w, int meta) {
+	@Override public TileEntity createNewTileEntity(World w, int meta) {
 		return new TileEntityWET();
 	}
 
