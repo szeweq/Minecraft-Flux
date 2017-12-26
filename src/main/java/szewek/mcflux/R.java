@@ -8,6 +8,7 @@ public final class R {
 		MF_URL = "https://minecraft.curseforge.com/projects/minecraft-flux",
 		MF_DEPS = "",
 		MF_PKG = "szewek.mcflux",
+		MF_FLC_KEY = "EaIaD392qp12ZLzxNb2PpSewadmHuSQZf4UsK03JVmM",
 		MF_ACCESS_TOKEN = "65a919ed8de14b019f9f51200635c4d6",
 		MF_ENVIRONMENT = "production",
 		GUI_FACTORY = MF_PKG + ".gui.MCFluxGuiFactory",

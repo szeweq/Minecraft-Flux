@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import szewek.fl.test.NamedCounters;
+import szewek.mcflux.network.CloudUtils;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.util.MCFluxReport;
 
@@ -39,7 +40,7 @@ public final class SpecialEventHandler {
 		NamedCounters.addConsumer(serNBT, SpecialEventHandler::checkCount);
 		synchronized (eventLock) {
 			if (System.currentTimeMillis() / TIME > lastUpdate)
-				new Thread(SpecialEventHandler::downloadEvents, "MCFlux Download Events").start();
+				CloudUtils.executeTask(SpecialEventHandler::downloadEvents);
 		}
 	}
 

@@ -11,15 +11,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-public class LazyEnergyCapProvider implements ICapabilityProvider {
+public final class LazyEnergyCapProvider implements ICapabilityProvider {
 	private final IEnergy[] sides = new IEnergy[7];
-	private final LazyEnergy[] lazySides = new LazyEnergy[7];
-	protected ICapabilityProvider lazyObject = null;
-	protected boolean compatFE = false, notEnergy = false;
+	ICapabilityProvider lazyObject = null;
+	private boolean compatFE = false, notEnergy = false;
 	private Predicate<EnumFacing> connectFunc;
 
-	public LazyEnergyCapProvider(ICapabilityProvider lo) {
-		for (int i = 0; i < 7; i++) lazySides[i] = new LazyEnergy();
+	LazyEnergyCapProvider(ICapabilityProvider lo) {
+		for (int i = 0; i < 7; i++) sides[i] = new LazyEnergy();
 		lazyObject = lo;
 	}
 
@@ -29,7 +28,7 @@ public class LazyEnergyCapProvider implements ICapabilityProvider {
 			if (connectFunc != null) return connectFunc.test(f);
 			if (notEnergy) return false;
 			final int n = f == null ? 6 : f.getIndex();
-			if (sides[n] == null) FluxCompat.findActiveEnergy(this);
+			if (sides[n] instanceof LazyEnergy) FluxCompat.findActiveEnergy(this);
 			return true;
 		}
 		return false;
@@ -40,7 +39,7 @@ public class LazyEnergyCapProvider implements ICapabilityProvider {
 	@Override
 	public <T> T getCapability(@Nonnull Capability<T> cap, @Nullable EnumFacing f) {
 		final int n = f == null ? 6 : f.getIndex();
-		return hasCapability(cap, f) ? (T) (sides[n] == null ? lazySides[n] : sides[n]) : null;
+		return hasCapability(cap, f) ? (T) sides[n] : null;
 	}
 
 	public ICapabilityProvider getObject() {
@@ -52,13 +51,19 @@ public class LazyEnergyCapProvider implements ICapabilityProvider {
 			case 0:
 				if (ies.length < 7) return;
 				for (int i = 0; i < 7; i++) {
-					sides[i] = lazySides[i].ie = ies[i];
+					LazyEnergy le = ((LazyEnergy) sides[i]);
+					if (le != null)
+						le.ie = ies[i];
+					sides[i] = ies[i];
 				}
 				break;
 			case 7:
 				for (int i = 0; i < 7; i++) {
 					int x = l[i];
-					sides[i] = lazySides[i].ie = ies[x];
+					LazyEnergy le = ((LazyEnergy) sides[i]);
+					if (le != null)
+						le.ie = ies[x];
+					sides[i] = ies[x];
 				}
 				break;
 			default:
@@ -71,7 +76,7 @@ public class LazyEnergyCapProvider implements ICapabilityProvider {
 	void setNotEnergy() {
 		notEnergy = true;
 		for (int i = 0; i < 7; i++)
-			lazySides[i] = null;
-			//lazySides[i].notEnergy = true;
+			sides[i] = null;
+			//sides[i].notEnergy = true;
 	}
 }

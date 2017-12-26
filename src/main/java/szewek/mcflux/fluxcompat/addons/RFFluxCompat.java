@@ -11,6 +11,7 @@ import szewek.mcflux.U;
 import szewek.mcflux.fluxcompat.EnergyType;
 import szewek.mcflux.fluxcompat.FluxCompat;
 import szewek.mcflux.fluxcompat.LazyEnergyCapProvider;
+import szewek.mcflux.network.CloudUtils;
 import szewek.mcflux.util.InjectCond;
 
 @FluxCompat.Addon(requires = InjectCond.MOD, args = {"redstoneflux"})
@@ -33,6 +34,7 @@ public class RFFluxCompat implements FluxCompat.Lookup {
 			ets[i] = new EnergyTile(eh, ep, er, f);
 		}
 		lecp.update(ets, new int[0], eh::canConnectEnergy, true);
+		CloudUtils.reportEnergy(eh.getClass(), null, "rf");
 	}
 
 	private static final class EnergyTile implements IEnergy, FluxCompat.Convert, IEnergyStorage {

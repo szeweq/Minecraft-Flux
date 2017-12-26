@@ -17,6 +17,7 @@ import szewek.mcflux.fluxable.PlayerEnergy;
 import szewek.mcflux.fluxable.WorldChunkEnergy;
 import szewek.mcflux.fluxcompat.FluxCompat;
 import szewek.mcflux.gui.MCFluxGuiHandler;
+import szewek.mcflux.network.CloudUtils;
 import szewek.mcflux.network.MCFluxNetwork;
 import szewek.mcflux.special.CommandSpecialGive;
 import szewek.mcflux.special.SpecialEventHandler;
@@ -49,8 +50,9 @@ public final class MCFlux {
 		MCFluxConfig.makeConfig(e.getSuggestedConfigurationFile());
 		if (R.MF_VERSION.charAt(0) == '$')
 			L.warn("You are running Minecraft-Flux with an unknown version (development maybe?)");
+		CloudUtils.init();
 		if (MCFluxConfig.UPDATE_CHECK)
-			new Thread(MCFlux::updateCheck, "MCFlux Update Check").start();
+			CloudUtils.executeTask(MCFlux::updateCheck);
 		SpecialEventHandler.getEvents();
 		MCFluxNetwork.registerAll();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new MCFluxGuiHandler());

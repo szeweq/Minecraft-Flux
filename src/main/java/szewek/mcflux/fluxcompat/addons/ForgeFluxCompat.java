@@ -9,6 +9,7 @@ import szewek.mcflux.U;
 import szewek.mcflux.fluxcompat.EnergyType;
 import szewek.mcflux.fluxcompat.FluxCompat;
 import szewek.mcflux.fluxcompat.LazyEnergyCapProvider;
+import szewek.mcflux.network.CloudUtils;
 import szewek.mcflux.tileentities.TileEntityFluxGen;
 import szewek.mcflux.util.ErrMsg;
 import szewek.mcflux.util.InjectCond;
@@ -53,6 +54,8 @@ public final class ForgeFluxCompat implements FluxCompat.Lookup {
 			s[i] = x++;
 		}
 		lecp.update(es, s, null, false);
+		if (es[0] != null && es[0].storage != null)
+			CloudUtils.reportEnergy(icp.getClass(), es[0].storage.getClass(), "forge");
 	}
 
 	private static final class Energy implements IEnergy, FluxCompat.Convert {

@@ -11,6 +11,7 @@ import szewek.mcflux.fluxcompat.EnergyType;
 import szewek.mcflux.fluxcompat.FluxCompat;
 import szewek.mcflux.fluxcompat.ForgeEnergyCapable;
 import szewek.mcflux.fluxcompat.LazyEnergyCapProvider;
+import szewek.mcflux.network.CloudUtils;
 import szewek.mcflux.util.ErrMsg;
 import szewek.mcflux.util.InjectCond;
 import szewek.mcflux.util.MCFluxReport;
@@ -43,6 +44,7 @@ public class TeslaFluxCompat implements FluxCompat.Lookup {
 			es[i] = new Energy(icp, f);
 		}
 		lecp.update(es, new int[0], null, true);
+		CloudUtils.reportEnergy(icp.getClass(), es[0].holder.getClass(), "tesla");
 	}
 
 	private static final class Energy extends ForgeEnergyCapable implements FluxCompat.Convert {

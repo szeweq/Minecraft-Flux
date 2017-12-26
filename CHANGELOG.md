@@ -1,3 +1,9 @@
+## 3.11.0
+- CloudUtils (now Minecraft-Flux is using FLCloud API)
+
+## 3.10.0
+- Most of utility functions were moved to FL
+
 ## 3.3.0
 - New FluxCompat API (more lightweight than old energy compatibility)
 - Registering all FluxCompat addons
