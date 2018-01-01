@@ -13,8 +13,9 @@ import java.util.function.Predicate;
 
 public final class LazyEnergyCapProvider implements ICapabilityProvider {
 	private final IEnergy[] sides = new IEnergy[7];
-	ICapabilityProvider lazyObject = null;
-	private boolean compatFE = false, notEnergy = false;
+	ICapabilityProvider lazyObject;
+	Status status = Status.CREATED;
+	private boolean compatFE = false;
 	private Predicate<EnumFacing> connectFunc;
 
 	LazyEnergyCapProvider(ICapabilityProvider lo) {
@@ -24,11 +25,10 @@ public final class LazyEnergyCapProvider implements ICapabilityProvider {
 
 	@Override
 	public boolean hasCapability(@Nonnull Capability<?> cap, @Nullable EnumFacing f) {
-		if (cap == FL.ENERGY_CAP || (compatFE && cap == CapabilityEnergy.ENERGY)) {
+		if (status != Status.NOT_ENERGY && (cap == FL.ENERGY_CAP || (compatFE && cap == CapabilityEnergy.ENERGY))) {
 			if (connectFunc != null) return connectFunc.test(f);
-			if (notEnergy) return false;
-			final int n = f == null ? 6 : f.getIndex();
-			if (sides[n] instanceof LazyEnergy) FluxCompat.findActiveEnergy(this);
+			if (status == Status.CREATED && sides[f == null ? 6 : f.getIndex()] instanceof LazyEnergy)
+				FluxCompat.findActiveEnergy(this);
 			return true;
 		}
 		return false;
@@ -70,13 +70,18 @@ public final class LazyEnergyCapProvider implements ICapabilityProvider {
 		}
 		if (func != null) connectFunc = func;
 		compatFE = fe;
+		status = Status.READY;
 		lazyObject = null;
 	}
 
 	void setNotEnergy() {
-		notEnergy = true;
+		status = Status.NOT_ENERGY;
 		for (int i = 0; i < 7; i++)
 			sides[i] = null;
 			//sides[i].notEnergy = true;
+	}
+
+	enum Status {
+		CREATED, ACTIVATED, READY, NOT_ENERGY;
 	}
 }

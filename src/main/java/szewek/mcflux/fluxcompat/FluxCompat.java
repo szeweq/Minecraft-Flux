@@ -62,6 +62,7 @@ public final class FluxCompat {
 			lecp.setNotEnergy();
 			return;
 		}
+		lecp.status = LazyEnergyCapProvider.Status.ACTIVATED;
 		lq.offer(lecp);
 		synchronized (th) {
 			th.notify();
@@ -103,7 +104,7 @@ public final class FluxCompat {
 				}
 				LazyEnergyCapProvider l;
 				while ((l = lq.poll()) != null)
-					if (l.lazyObject == null) MCFluxReport.addErrMsg(new ErrMsg.NullWrapper(true));
+					if (l.lazyObject == null && l.status != LazyEnergyCapProvider.Status.READY) MCFluxReport.addErrMsg(new ErrMsg.NullWrapper(true));
 					else FluxCompat.findCompat(l);
 			} catch (Exception e) {
 				MCFluxReport.sendException(e, "FluxCompat Thread loop");

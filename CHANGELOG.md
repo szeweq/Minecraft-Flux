@@ -1,29 +1,10 @@
+## 3.11.1
+- Major FluxCompat fixes
+
 ## 3.11.0
 - CloudUtils (now Minecraft-Flux is using FLCloud API)
 
 ## 3.10.0
 - Most of utility functions were moved to FL
 
-## 3.3.0
-- New FluxCompat API (more lightweight than old energy compatibility)
-- Registering all FluxCompat addons
-- Removed old energy wrapping
-- MF Tool can now check compatible energy type from other mods
-
-## 3.2.0
-- Flavor Energy API is removed. Use Taste API from FL.
-- Flux Generator now uses its own Energy Transfer method (new feature from FL, slightly increases performance)
-
-## 3.1.1
-- Minecraft-Flux won't create a log file if there are no errors caught
-- Changed Special Gift NBT serialization
-
-## 3.1.0
-- Checking if Special Gifts are saved
-
-## 3.0.0
-- Built for Minecraft 1.12
-- Support for new Redstone Flux API
-- Changed some recipes
-
-**Before 3.0.0:** See [2.8.0 CHANGELOG](https://github.com/Szewek/Minecraft-Flux/blob/2.8.0/CHANGELOG.md).
+**Before 3.10.0:** See [3.3.0 CHANGELOG](https://github.com/Szewek/Minecraft-Flux/blob/3.3.0/CHANGELOG.md).

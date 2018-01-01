@@ -20,7 +20,7 @@ public final class ForgeFluxCompat implements FluxCompat.Lookup {
 	@Override
 	public void lookFor(LazyEnergyCapProvider lecp, FluxCompat.Registry r) {
 		final ICapabilityProvider icp = lecp.getObject();
-		if (icp == null || icp instanceof TileEntityFluxGen) return;
+		if (icp == null || icp instanceof TileEntityFluxGen || blacklist(icp)) return;
 		EnumFacing f = null;
 		try {
 			for (int i = 0; i < U.FANCY_FACING.length; i++) {
@@ -56,6 +56,10 @@ public final class ForgeFluxCompat implements FluxCompat.Lookup {
 		lecp.update(es, s, null, false);
 		if (es[0] != null && es[0].storage != null)
 			CloudUtils.reportEnergy(icp.getClass(), es[0].storage.getClass(), "forge");
+	}
+
+	private static boolean blacklist(Object o) {
+		return o.getClass().getName().startsWith("ic2.core");
 	}
 
 	private static final class Energy implements IEnergy, FluxCompat.Convert {
