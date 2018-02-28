@@ -88,7 +88,7 @@ public class IC2FluxCompat implements FluxCompat.Lookup {
 		CloudUtils.reportEnergy(cp.getClass(), et.getClass(), "ic2");
 	}
 
-	private static DoubleSupplier doubleFunc(Method m, Object o) {
+	private static DoubleSupplier doubleFunc(final Method m, final Object o) {
 		return () -> {
 			try {
 				return (double) m.invoke(o);

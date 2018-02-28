@@ -24,6 +24,11 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 public final class FluxCompat {
+	private static final String[] BLIST_PKG = {
+			"szewek.",
+			"net.minecraft.",
+			"cofh.thermaldynamics.duct."
+	};
 	private static final MCFluxLocation COMPAT = new MCFluxLocation("fluxcompat");
 	private static final Thread th = new Thread();
 	private static final ConcurrentLinkedQueue<LazyEnergyCapProvider> lq = new ConcurrentLinkedQueue<>();
@@ -54,7 +59,11 @@ public final class FluxCompat {
 
 	private static boolean blacklisted(final Object o) {
 		final String cn = o.getClass().getName();
-		return cn.startsWith("szewek.") || cn.startsWith("net.minecraft.");
+		for (String s : BLIST_PKG) {
+			if (cn.startsWith(s, 0))
+				return true;
+		}
+		return cn.endsWith("Cable");
 	}
 
 	static void findActiveEnergy(LazyEnergyCapProvider lecp) {

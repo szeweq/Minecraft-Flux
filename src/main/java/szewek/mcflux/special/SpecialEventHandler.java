@@ -23,7 +23,7 @@ public final class SpecialEventHandler {
 	private static final Object eventLock = new Object();
 	private static EventStatus EVENT_STATUS = EventStatus.READY2DOWNLOAD;
 	private static long lastUpdate = -1;
-	static final NamedCounters.Counter serNBT = NamedCounters.getCounter("SER -> NBT");
+	static final NamedCounters.Counter serNBT = NamedCounters.getCounter("SER to NBT");
 
 	public static EventStatus getEventStatus() {
 		synchronized (eventLock) {

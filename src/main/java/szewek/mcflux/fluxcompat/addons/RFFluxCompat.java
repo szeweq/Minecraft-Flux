@@ -28,86 +28,92 @@ public class RFFluxCompat implements FluxCompat.Lookup {
 		if (eh == null) return;
 		final IEnergyProvider ep = eh instanceof IEnergyProvider ? (IEnergyProvider) eh : null;
 		final IEnergyReceiver er = eh instanceof IEnergyReceiver ? (IEnergyReceiver) eh : null;
+		final RFDelegate rfd = new RFDelegate(eh, ep, er);
 		final EnergyTile[] ets = new EnergyTile[7];
-		for (int i = 0; i < U.FANCY_FACING.length; i++) {
-			EnumFacing f = U.FANCY_FACING[i];
-			ets[i] = new EnergyTile(eh, ep, er, f);
-		}
+		for (int i = 0; i < U.FANCY_FACING.length; i++) ets[i] = new EnergyTile(rfd, U.FANCY_FACING[i]);
 		lecp.update(ets, new int[0], eh::canConnectEnergy, true);
 		CloudUtils.reportEnergy(eh.getClass(), null, "rf");
 	}
 
-	private static final class EnergyTile implements IEnergy, FluxCompat.Convert, IEnergyStorage {
-		private final EnumFacing face;
+	private static final class RFDelegate {
 		private final IEnergyHandler handler;
 		private final IEnergyProvider provider;
 		private final IEnergyReceiver receiver;
 
-		EnergyTile(IEnergyHandler h, IEnergyProvider p, IEnergyReceiver r, EnumFacing f) {
-			face = f;
+		private RFDelegate(IEnergyHandler h, IEnergyProvider p, IEnergyReceiver r) {
 			handler = h;
 			provider = p;
 			receiver = r;
 		}
+	}
+
+	private static final class EnergyTile implements IEnergy, FluxCompat.Convert, IEnergyStorage {
+		private final EnumFacing face;
+		private final RFDelegate delegate;
+
+		EnergyTile(RFDelegate rfd, EnumFacing f) {
+			face = f;
+			delegate = rfd;
+		}
 
 		@Override
 		public long getEnergy() {
-			return handler.getEnergyStored(face);
+			return delegate.handler.getEnergyStored(face);
 		}
 
 		@Override
 		public long getEnergyCapacity() {
-			return handler.getMaxEnergyStored(face);
+			return delegate.handler.getMaxEnergyStored(face);
 		}
 
 		@Override public boolean canInputEnergy() {
-			return receiver != null;
+			return delegate.receiver != null;
 		}
 
 		@Override public boolean canOutputEnergy() {
-			return provider != null;
+			return delegate.provider != null;
 		}
 
 		@Override
 		public long inputEnergy(long amount, boolean sim) {
-			return receiver != null ? receiver.receiveEnergy(face, amount > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) amount, sim) : 0;
+			return delegate.receiver != null ? delegate.receiver.receiveEnergy(face, amount > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) amount, sim) : 0;
 		}
 
 		@Override
 		public long outputEnergy(long amount, boolean sim) {
-			return provider != null ? provider.extractEnergy(face, amount > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) amount, sim) : 0;
+			return delegate.provider != null ? delegate.provider.extractEnergy(face, amount > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) amount, sim) : 0;
 		}
 
 		@Override public int receiveEnergy(int maxReceive, boolean simulate) {
-			return receiver != null ? receiver.receiveEnergy(face, maxReceive, simulate) : 0;
+			return delegate.receiver != null ? delegate.receiver.receiveEnergy(face, maxReceive, simulate) : 0;
 		}
 
 		@Override public int extractEnergy(int maxExtract, boolean simulate) {
-			return provider != null ? provider.extractEnergy(face, maxExtract, simulate): 0;
+			return delegate.provider != null ? delegate.provider.extractEnergy(face, maxExtract, simulate): 0;
 		}
 
 		@Override public int getEnergyStored() {
-			return handler.getEnergyStored(face);
+			return delegate.handler.getEnergyStored(face);
 		}
 
 		@Override public int getMaxEnergyStored() {
-			return handler.getMaxEnergyStored(face);
+			return delegate.handler.getMaxEnergyStored(face);
 		}
 
 		@Override public boolean canExtract() {
-			return provider != null;
+			return delegate.provider != null;
 		}
 
 		@Override public boolean canReceive() {
-			return receiver != null;
+			return delegate.receiver != null;
 		}
 
 		@Override public boolean hasNoEnergy() {
-			return handler.getEnergyStored(face) == 0;
+			return delegate.handler.getEnergyStored(face) == 0;
 		}
 
 		@Override public boolean hasFullEnergy() {
-			return handler.getEnergyStored(face) == handler.getMaxEnergyStored(face);
+			return delegate.handler.getEnergyStored(face) == delegate.handler.getMaxEnergyStored(face);
 		}
 
 		@Override

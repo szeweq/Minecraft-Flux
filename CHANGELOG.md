@@ -1,3 +1,7 @@
+## 3.11.2
+- Minor FluxCompat improvements
+- Blacklisting energy cables
+
 ## 3.11.1
 - Major FluxCompat fixes
 

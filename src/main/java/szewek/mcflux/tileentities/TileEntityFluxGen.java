@@ -107,8 +107,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 				vals[2] = getWorkTicks();
 				workState = WorkState.WORKING;
 			} else if (energy + vals[3] <= maxEnergy) {
-				energy += vals[3];
-				vals[0] = (int) energy;
+				vals[0] = (int) (energy += vals[3]);
 				vals[1] += vals[4];
 				if (vals[2] <= vals[1]) {
 					vals[2] = 0;
@@ -188,8 +187,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 		if (amount > energy)
 			amount = energy;
 		if (!sim) {
-			energy -= amount;
-			vals[0] = (int) energy;
+			vals[0] = (int) (energy -= amount);
 			isDirty = true;
 		}
 		return amount;
@@ -210,8 +208,7 @@ public final class TileEntityFluxGen extends TileEntity implements IEnergy, IInv
 				amount = energy;
 			final long r = ie.inputEnergy(amount, true);
 			if (r > 0) {
-				energy -= r;
-				vals[0] = (int) energy;
+				vals[0] = (int) (energy -= r);
 				isDirty = true;
 				return ie.inputEnergy(r, false);
 			}
