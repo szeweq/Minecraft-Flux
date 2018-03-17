@@ -7,20 +7,27 @@ buildscript {
 	dependencies {
 		classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
 		classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.9"
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.30"
 	}
 }
 
-
+apply plugin: "kotlin"
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "com.matthewprenger.cursegradle"
 
-sourceCompatibility = targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = "1.8"
+compileJava {
+	sourceCompatibility = targetCompatibility = "1.8"
+}
+compileKotlin {
+	sourceCompatibility = targetCompatibility = "1.8"
+}
 
 idea { module { inheritOutputDirs = true } }
 
 String[] versionsMC = ["1.12.2"]
 String versionForge = "14.23.1.2562"
-String FLVersion = "2.11.1"
+String FLVersion = "2.20.6"
 String MFReq = "MF_DEPS = \"required-after:fl@[${FLVersion},);after:jei@[4.7.0,)\""
 
 task deobfJar(type: Jar, dependsOn: "reobfJar") {
@@ -29,15 +36,15 @@ task deobfJar(type: Jar, dependsOn: "reobfJar") {
 	classifier = "deobf"
 }
 task sourcesJar(type: Jar, dependsOn: "sourceJar") {
-	from (sourceSets.main.allJava) {
+	from (sourceSets.main.allSource) {
 		include "szewek/mcflux/R.java"
 		expand 'version': project.version
 	}
-	from (sourceSets.main.allJava) {
+	from (sourceSets.main.allSource) {
 		exclude "szewek/mcflux/R.java"
 	}
-	from sourceSets.api.allJava
-	from sourceSets.main.resources
+	from sourceSets.api.allSource
+	from sourceSets.main.allSource
 	classifier = "sources"
 }
 String ttag = System.getenv("TRAVIS_TAG")
@@ -48,13 +55,15 @@ archivesBaseName = "mcflux"
 minecraft {
 	version = versionsMC[0] + "-" + versionForge
 	runDir = "run"
-	mappings = "snapshot_20171201"
+	mappings = "snapshot_20180301"
 	replace '\${version}', project.version
-	replace "MF_DEPS = \"\"", MFReq
+	replace "MF_DEPS = \"required-after:fl\"", MFReq
 	replaceIn "R.java"
 }
 
 repositories {
+	jcenter()
+	maven {url "http://maven.shadowfacts.net/"}
 	maven {url "http://minecraft.curseforge.com/api/maven"}
 	maven {url "http://maven.covers1624.net"}
 	maven {url "http://dvs1.progwml6.com/files/maven"}
@@ -65,6 +74,7 @@ repositories {
 }
 
 dependencies {
+	compile group: "net.shadowfacts", name: "Forgelin", version: "1.6.0"
 	deobfCompile "fl:fl:" + FLVersion
 	deobfCompile "cofh:RedstoneFlux:1.12-2.0.1.2:universal"
 	deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.15-8:api"
@@ -92,13 +102,14 @@ curseforge {
 	apiKey = cfkey ? cfkey : ""
 	project {
 		id = "248942"
-		releaseType = "release"
+		releaseType = "beta"
 		changelogType = "markdown"
 		changelog = file("CHANGELOG.md")
 		versionsMC.each {
 			addGameVersion it
 		}
 		relations {
+			requiredLibrary "shadowfacts-forgelin"
 			requiredLibrary "fl"
 			optionalLibrary "redstone-flux"
 		}
