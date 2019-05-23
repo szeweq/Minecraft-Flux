@@ -1,5 +1,6 @@
 ![Minecraft Flux Logo](https://raw.githubusercontent.com/Szewek/Minecraft-Flux/master/mcflux.png)
 # Minecraft-Flux [![Build Status](https://travis-ci.org/Szewek/Minecraft-Flux.svg?branch=master)](https://travis-ci.org/Szewek/Minecraft-Flux) [![CurseForge](http://cf.way2muchnoise.eu/full_248942_downloads.svg)](http://minecraft.curseforge.com/projects/minecraft-flux)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSzewek%2FMinecraft-Flux.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FSzewek%2FMinecraft-Flux?ref=badge_shield)
 An open energy distribution system for Minecraft mods. **NOW WITH IC2 SUPPORT**
 
 1 Minecraft Flux (MF) = 1 RF = 1 any other RF-based unit
@@ -35,3 +36,6 @@ Replace `<VERSION>` with a release version.
 - [ ] Add compatibility for RF-like mods and libraries (few mods left)
 - [ ] Mixing Flavors
 - [ ] Compatibility for non-RF mods
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FSzewek%2FMinecraft-Flux.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FSzewek%2FMinecraft-Flux?ref=badge_large)
