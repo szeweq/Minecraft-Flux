@@ -16,7 +16,6 @@ import szewek.mcflux.fluxcompat.EnergyType
 import szewek.mcflux.fluxcompat.FluxCompat
 import szewek.mcflux.fluxcompat.ForgeEnergyCapable
 import szewek.mcflux.fluxcompat.LazyEnergyCapProvider
-import szewek.mcflux.network.CloudUtils
 import szewek.mcflux.util.InjectCond
 import szewek.mcflux.util.MCFluxReport
 import java.lang.reflect.Method
@@ -85,7 +84,6 @@ class IC2FluxCompat : FluxCompat.Lookup {
 			es[i] = EnergyTile(eud, f)
 		}
 		lecp.update(es, IntArray(0), null, true)
-		CloudUtils.reportEnergy(cp.javaClass, et.javaClass, "ic2")
 	}
 
 	private fun doubleFunc(m: Method?, o: Any?): DoubleSupplier {

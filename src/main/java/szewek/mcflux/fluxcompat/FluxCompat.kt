@@ -18,7 +18,7 @@ import javax.annotation.meta.TypeQualifierNickname
 object FluxCompat {
 	private val BLIST_PKG = arrayOf("szewek.", "net.minecraft.", "cofh.thermaldynamics.duct.")
 	private val COMPAT = MCFluxLocation("fluxcompat")
-	private val thl = java.lang.Object()
+	private val thl = Object()
 	private val th = Thread()
 	private val lq = ConcurrentLinkedQueue<LazyEnergyCapProvider>()
 	private var compatLookups: Array<Lookup>? = null
@@ -40,7 +40,7 @@ object FluxCompat {
 		if (!(Lookup::class.java.isAssignableFrom(c) && a.requires.check(a.args))) return
 		val lc = c as Class<out Lookup>
 		try {
-			lset!!.add(lc.newInstance())
+			lset!!.add(lc.getDeclaredConstructor().newInstance())
 		} catch (e: Exception) {
 			MCFluxReport.sendException(e, "Adding FluxCompat addons")
 		}
@@ -104,7 +104,7 @@ object FluxCompat {
 						if (l.obj == null && l.status !== LazyEnergyCapProvider.Status.READY)
 							MCFluxReport.addErrMsg(ErrMsg.NullWrapper(true))
 						else
-							FluxCompat.findCompat(l)
+							findCompat(l)
 						l = lq.poll()
 					}
 				} catch (e: Exception) {

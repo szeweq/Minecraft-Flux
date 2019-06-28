@@ -1,3 +1,7 @@
+## 3.12.0
+- Dropped Tesla support
+- Removed FLCloud API methods
+
 ## 3.11.2
 - Minor FluxCompat improvements
 - Blacklisting energy cables
@@ -8,7 +12,4 @@
 ## 3.11.0
 - CloudUtils (now Minecraft-Flux is using FLCloud API)
 
-## 3.10.0
-- Most of utility functions were moved to FL
-
-**Before 3.10.0:** See [3.3.0 CHANGELOG](https://github.com/Szewek/Minecraft-Flux/blob/3.3.0/CHANGELOG.md).
+**Before 3.11.0:** See [3.11.0 CHANGELOG](https://github.com/Szewek/Minecraft-Flux/blob/3.11.0/CHANGELOG.md).

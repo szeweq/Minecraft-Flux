@@ -37,7 +37,6 @@ class MCFlux {
 		MCFluxConfig.makeConfig(e.suggestedConfigurationFile)
 		if (R.MF_VERSION[0] == '$')
 			L!!.warn("You are running Minecraft-Flux with an unknown version (development maybe?)")
-		CloudUtils.init()
 		if (MCFluxConfig.UPDATE_CHECK)
 			CloudUtils.executeTask(::updateCheck)
 		SpecialEventHandler.getEvents()

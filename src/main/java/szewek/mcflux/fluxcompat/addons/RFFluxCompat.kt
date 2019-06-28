@@ -10,7 +10,6 @@ import szewek.mcflux.U
 import szewek.mcflux.fluxcompat.EnergyType
 import szewek.mcflux.fluxcompat.FluxCompat
 import szewek.mcflux.fluxcompat.LazyEnergyCapProvider
-import szewek.mcflux.network.CloudUtils
 import szewek.mcflux.util.InjectCond
 import java.util.function.Predicate
 
@@ -30,7 +29,6 @@ class RFFluxCompat : FluxCompat.Lookup {
 		val ets = arrayOfNulls<IEnergy>(7)
 		for (i in 0 until U.FANCY_FACING.size) ets[i] = EnergyTile(rfd, U.FANCY_FACING[i])
 		lecp.update(ets, IntArray(0), Predicate { eh.canConnectEnergy(it) }, true)
-		CloudUtils.reportEnergy(eh.javaClass, null, "rf")
 	}
 
 	private class RFDelegate internal constructor(internal val handler: IEnergyHandler, internal val provider: IEnergyProvider?, internal val receiver: IEnergyReceiver?)

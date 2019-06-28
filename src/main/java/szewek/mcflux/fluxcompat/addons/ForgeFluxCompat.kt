@@ -8,7 +8,6 @@ import szewek.mcflux.U
 import szewek.mcflux.fluxcompat.EnergyType
 import szewek.mcflux.fluxcompat.FluxCompat
 import szewek.mcflux.fluxcompat.LazyEnergyCapProvider
-import szewek.mcflux.network.CloudUtils
 import szewek.mcflux.tileentities.TileEntityFluxGen
 import szewek.mcflux.util.ErrMsg
 import szewek.mcflux.util.InjectCond
@@ -55,8 +54,6 @@ class ForgeFluxCompat : FluxCompat.Lookup {
 			i++
 		}
 		lecp.update(es, s, null, false)
-		if (es[0] != null && (es[0] as Energy).storage != null)
-			CloudUtils.reportEnergy(icp!!.javaClass, (es[0] as Energy).storage!!.javaClass, "forge")
 	}
 
 	private fun blacklist(o: Any): Boolean {

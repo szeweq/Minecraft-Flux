@@ -33,8 +33,7 @@ class LazyEnergyCapProvider internal constructor(lo: ICapabilityProvider) : ICap
 	}
 
 	override fun <T> getCapability(cap: Capability<T>, f: EnumFacing?): T? {
-		val n = f?.index ?: 6
-		return if (hasCapability(cap, f)) sides[n] as T else null
+		return if (hasCapability(cap, f)) sides[f?.index ?: 6] as T else null
 	}
 
 	fun update(ies: Array<IEnergy?>, l: IntArray, func: Predicate<EnumFacing?>?, fe: Boolean) {
@@ -62,9 +61,7 @@ class LazyEnergyCapProvider internal constructor(lo: ICapabilityProvider) : ICap
 
 	internal fun setNotEnergy() {
 		status = Status.NOT_ENERGY
-		for (i in 0..6)
-			sides[i] = null
-		//sides[i].notEnergy = true;
+		for (i in 0..6) sides[i] = null
 	}
 
 	internal enum class Status {
