@@ -58,10 +58,10 @@ class TileEntityFluxGen : TileEntity(), IEnergy, IInventory, IItemHandler, IFlui
 			val rfgCat = FluxGenRecipes.getCatalyst(items[1])
 			if (rfgCat.usage > items[1].count)
 				return 0
-			val rfgHot = FluxGenRecipes.getHotFluid(tanks[0].fluid!!)
+			val rfgHot = FluxGenRecipes.getHotFluid(tanks[0].fluid)
 			if (rfgHot.usage > tanks[0].amount)
 				return 0
-			val rfgClean = FluxGenRecipes.getCleanFluid(tanks[1].fluid!!)
+			val rfgClean = FluxGenRecipes.getCleanFluid(tanks[1].fluid)
 			if (rfgClean.usage > tanks[1].amount)
 				return 0
 			items[0].grow(-1)
@@ -236,7 +236,7 @@ class TileEntityFluxGen : TileEntity(), IEnergy, IInventory, IItemHandler, IFlui
 	override fun setField(id: Int, value: Int) {
 		vals[id] = value
 		if (id == 0)
-			energy = value.toLong()
+			nrg = value.toLong()
 	}
 
 	override fun getFieldCount() = vals.size

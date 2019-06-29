@@ -17,7 +17,7 @@ class FluxGenRecipeCategory(igh: IGuiHelper) : IRecipeCategory<FluxGenRecipeJEI>
 
 	init {
 		bg = igh.createDrawable(bgLoc, 46, 14, 130 - 46, 72 - 14)
-		locName = TextComponentTranslation("tile.fluxgen.name").unformattedComponentText
+		locName = TextComponentTranslation("tile.mcflux:fluxgen.name").unformattedComponentText
 	}
 
 	override fun getUid() = MCFluxJEIPlugin.ID_FLUXGEN

@@ -82,9 +82,9 @@ object FluxGenRecipes {
 
 	fun isCleanFluid(fs: FluidStack) = isFluid(fs, cfluids)
 
-	fun getHotFluid(fs: FluidStack) = getFluid(fs, hfluids)
+	fun getHotFluid(fs: FluidStack?) = getFluid(fs, hfluids)
 
-	fun getCleanFluid(fs: FluidStack) = getFluid(fs, cfluids)
+	fun getCleanFluid(fs: FluidStack?) = getFluid(fs, cfluids)
 
 	private fun isFluid(fs: FluidStack?, m: Map<FluidStack, RecipeFluxGen>): Boolean {
 		if (fs == null)
@@ -103,11 +103,11 @@ object FluxGenRecipes {
 		if (fs == null)
 			return DEFAULT
 		if (m.containsKey(fs))
-			return m[fs]!!
+			return m[fs] ?: DEFAULT
 		val fl = fs.fluid
 		for (mfs in m.keys) {
 			if (mfs.fluid === fl)
-				return m[mfs]!!
+				return m[mfs] ?: DEFAULT
 		}
 		return DEFAULT
 	}

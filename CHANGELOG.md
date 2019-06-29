@@ -1,3 +1,7 @@
+## 3.12.1
+- Fixed Flux Generator crash while checking fluid
+- Fixed old Flux Generator name in JEI category
+
 ## 3.12.0
 - Dropped Tesla support
 - Removed FLCloud API methods
